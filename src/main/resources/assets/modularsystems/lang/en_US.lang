@@ -1,1 +1,10 @@
 itemGroup.tabModularSystems=Modular Systems
+
+tile.modularsystems:blockFurnaceCore.name=Modular Furnace Core
+tile.modularsystems:blockFurnaceCoreActive.name=Modular Furnace Core
+tile.modularsystems:blockFurnaceCraftingUpgradeInactive.name=Modular Furnace Crafting Upgrade
+tile.modularsystems:blockFurnaceCraftingUpgradeActive.name=Modular Furnace Crafting Upgrade
+tile.modularsystems:blockFurnaceIOBlock.name=Modular Furnace I/O
+tile.modularsystems:blockFurnaceIOBlockActive.name=Modular Furnace I/O
+tile.modularsystems:blockFurnaceAdditionInactive.name=Modular Furnace Addition
+tile.modularsystems:blockFurnaceAdditionActive.name=Modular Furnace Addition

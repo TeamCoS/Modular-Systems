@@ -12,7 +12,7 @@ public class BlockCrafterInactive extends Block {
     public BlockCrafterInactive(Material par2Material) {
         super(par2Material);
         
-        setBlockName("modularsystems:blockFurnaceCraftingUPgradeInactive");
+        setBlockName("modularsystems:blockFurnaceCraftingUpgradeInactive");
         setStepSound(Block.soundTypeWood);
         setHardness(3.5f);
         setCreativeTab(ModularSystems.tabModularSystems);

@@ -20,7 +20,7 @@ public class GuiModularFurnaceEnabled extends GuiContainer
 {
     private TileEntityFurnaceCore tileEntity;
     
-    private static final ResourceLocation field_110410_t = new ResourceLocation("modularsystems:textures/crafter.png");
+    private static final ResourceLocation field_110410_t = new ResourceLocation("modularsystems:textures/furnace_crafting.png");
     private static final ResourceLocation infoPane = new ResourceLocation("modularsystems:textures/stats.png");
 
     public GuiModularFurnaceEnabled(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5, TileEntityFurnaceCore tileEntity)

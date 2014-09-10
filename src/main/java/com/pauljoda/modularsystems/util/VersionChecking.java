@@ -18,7 +18,7 @@ public class VersionChecking implements Runnable {
 	private static VersionChecking instance = new VersionChecking();
 
 	// The (publicly available) remote version number authority file
-	final static String REMOTE_VERSION_XML_FILE = "https://raw.githubusercontent.com/pauljoda/Modular-Furnace/master/VersionControl.xml";
+	final static String REMOTE_VERSION_XML_FILE = "https://raw.githubusercontent.com/pauljoda/Modular-Systems/master/VersionControl.xml";
 
 	static Properties remoteVersionProperties = new Properties();
 

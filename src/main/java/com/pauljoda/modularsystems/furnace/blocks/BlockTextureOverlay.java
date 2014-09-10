@@ -18,7 +18,6 @@ public class BlockTextureOverlay extends Block {
 	public BlockTextureOverlay(String string, String name, boolean bool) {
 		super(Material.glass);
 		setBlockName(name);
-		setCreativeTab(ModularSystems.tabModularSystems);
 		this.setHardness(3.5F);
 		this.setStepSound(soundTypeGlass);	
 		this.setLightOpacity(0);
