@@ -26,6 +26,9 @@ public class GeneralSettings {
 	public static String textureName;
 	public static boolean useOverlay;
 	
+	//Storage
+	public static int maxExpansionSize;
+	
 	public static final String DISPLAY_VERSION_RESULT_CONFIGNAME = "version_check.display_results";
 	public static final boolean DISPLAY_VERSION_RESULT_DEFAULT = true;
 
@@ -54,7 +57,7 @@ public class GeneralSettings {
 			LAST_DISCOVERED_VERSION = config.get(Configuration.CATEGORY_GENERAL, LAST_DISCOVERED_VERSION_CONFIGNAME, LAST_DISCOVERED_VERSION_DEFAULT).getString();
 			LAST_DISCOVERED_VERSION_TYPE = config.get(Configuration.CATEGORY_GENERAL, LAST_DISCOVERED_VERSION_TYPE_CONFIGNAME, LAST_DISCOVERED_VERSION_TYPE_DEFAULT).getString();
 
-			bannedBlocks = config.get("Settings", "Banned Block Unlocalized Names",
+			bannedBlocks = config.get("Settings, Modular Furnace", "Banned Block Unlocalized Names",
 					new String[] 	{Blocks.log.getUnlocalizedName(), Blocks.planks.getUnlocalizedName(),
 					Blocks.dirt.getUnlocalizedName(), Blocks.ice.getUnlocalizedName(),
 					Blocks.snow.getUnlocalizedName(), Blocks.bookshelf.getUnlocalizedName(),
@@ -65,10 +68,11 @@ public class GeneralSettings {
 					Blocks.diamond_ore.getUnlocalizedName(), Blocks.iron_ore.getUnlocalizedName(),
 					Blocks.emerald_ore.getUnlocalizedName(), Blocks.gold_ore.getUnlocalizedName(),}).getStringList();
 
-			useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use Vanilla Texture For Overlay?", false).getBoolean(true);
-			textureName = config.get(Configuration.CATEGORY_GENERAL, "Overlay Texture Name (from assets folder)", "hopper_top").getString();
-			useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use Overlay?", false).getBoolean(true);
+			useTextures = config.get("Settings, Modular Furnace", "Use Vanilla Texture For Overlay?", false).getBoolean(true);
+			textureName = config.get("Settings, Modular Furnace", "Overlay Texture Name (from assets folder)", "hopper_top").getString();
+			useTextures = config.get("Settings, Modular Furnace", "Use Overlay?", false).getBoolean(true);
 
+			maxExpansionSize = config.getInt("Settings, Modular Storage", "Max row expansion", 40, 7, 100, "This will manage the size of the inventory allocation");
 		}
 		catch (Exception e) {
 			FMLLog.log(Level.FATAL, e, Reference.MOD_NAME + " has had a problem loading its general configuration");

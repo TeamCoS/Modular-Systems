@@ -1,5 +1,9 @@
 package com.pauljoda.modularsystems.storage.tiles;
 
+import java.util.List;
+
+import com.pauljoda.modularsystems.core.util.GeneralSettings;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -15,10 +19,12 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityStorageCore extends TileEntity implements IInventory {
 
 	public ItemStack[] inv;
+	public int inventoryRows = 6;
+	private final int MAX_EXPANSIONS = GeneralSettings.maxExpansionSize;
 
 	public TileEntityStorageCore()
 	{
-		inv = new ItemStack[400];
+		inv = new ItemStack[11 * MAX_EXPANSIONS];
 	}
 
 	@Override
@@ -91,6 +97,9 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
+		
+		this.inventoryRows = tagCompound.getInteger("Rows");
+		
 		NBTTagList itemsTag = tagCompound.getTagList("Items", 10);
 		this.inv = new ItemStack[getSizeInventory()];
 		for (int i = 0; i < itemsTag.tagCount(); i++)
@@ -112,6 +121,8 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
+		
+		tagCompound.setInteger("Rows", this.inventoryRows);
 		
 		NBTTagList nbtTagList = new NBTTagList();
 		for (int i = 0; i < this.inv.length; i++) {
