@@ -10,23 +10,38 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
+import com.pauljoda.modularsystems.core.gui.StatisticsPanel;
+import com.pauljoda.modularsystems.core.lib.GuiColor;
+import com.pauljoda.modularsystems.core.lib.Strings;
+import com.pauljoda.modularsystems.core.util.VersionChecking;
 import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
-import com.pauljoda.modularsystems.lib.Strings;
-import com.pauljoda.modularsystems.util.VersionChecking;
 
 public class GuiModularFurnace extends GuiContainer
 {
 	private TileEntityFurnaceCore tileEntity;
-
+	private StatisticsPanel statsPanel;
 	private static final ResourceLocation background = new ResourceLocation("textures/gui/container/furnace.png");
-	private static final ResourceLocation infoPane = new ResourceLocation("modularsystems:textures/stats.png");
 
 	public GuiModularFurnace(InventoryPlayer playerInventory, TileEntityFurnaceCore tileEntity)
 	{
 		super(new ContainerModularFurnace(playerInventory, tileEntity));
 
 		this.tileEntity = tileEntity;
+		statsPanel = new StatisticsPanel(-60, 0);
+		
+		final double speedValue = tileEntity.getSpeed() / 8;
+		String speedText = String.format("%.1f", speedValue) + "x";
+
+		final double efficiencyValue = tileEntity.getScaledEfficiency();
+		String efficiencyText = String.format("%.1f", efficiencyValue) + "x";
+
+		final int multiplicity = tileEntity.smeltingMultiplier;
+		String multiplicityText = String.valueOf(multiplicity) + "x";
+		
+		statsPanel.addNode(240, 240, GuiColor.RED + speedText);
+		statsPanel.addNode(224, 240, GuiColor.GRAY + efficiencyText);
+		statsPanel.addNode(208, 240, GuiColor.GREEN + multiplicityText);
 	}
 
 	@Override
@@ -37,27 +52,11 @@ public class GuiModularFurnace extends GuiContainer
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
 
-		final double redStone = tileEntity.getSpeed() / 8;
-		String redStoneResult = String.format("%.2f", redStone) + "x";
-		final String redStoneWidth = "" + redStoneResult;
-
-		final double ironScale = tileEntity.getScaledEfficiency();
-		String ironResult = String.format("%.2f", ironScale) + "x";
-		final String iron = ironResult;
-
-		final int multiplicity = tileEntity.smeltingMultiplier;
-		String multiplicityText = String.valueOf(multiplicity) + "x";
-
-		fontRendererObj.drawString("Stats:", -48 , 6, 4210752);
-		fontRendererObj.drawString(iron, -48, 15 , 5000000);
-		fontRendererObj.drawString(redStoneWidth, -48, 24, 3999000);
-		fontRendererObj.drawString(multiplicityText, -48, 33, 4210752);
-
 		fontRendererObj.drawString(invTitle, xSize / 2 - fontRendererObj.getStringWidth(invTitle) / 2, 6, 4210752);
 
 		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
 
-
+		statsPanel.drawText(fontRendererObj);
 	}
 
 	@Override
@@ -83,14 +82,7 @@ public class GuiModularFurnace extends GuiContainer
 		i1 = tileEntity.getCookProgressScaled(24);
 		drawTexturedModalRect(x + 79, y + 34, 176, 14, i1 + 1, 16);
 
-		this.mc.getTextureManager().bindTexture(infoPane);
-		drawTexturedModalRect(x - 52, y, 0, 0, 50, 75);
-
-		if(VersionChecking.getResult() == VersionChecking.OUTDATED)
-		{
-			drawTexturedModalRect(x, y, 0, 240, 16, 16);
-
-		}
+		statsPanel.drawBackground(this.mc.getTextureManager(), width, height, xSize, ySize);
 	}
 
 	@Override

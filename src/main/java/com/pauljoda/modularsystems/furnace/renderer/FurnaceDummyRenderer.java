@@ -11,9 +11,9 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
-import com.pauljoda.modularsystems.managers.BlockManager;
-import com.pauljoda.modularsystems.proxy.ClientProxy;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;

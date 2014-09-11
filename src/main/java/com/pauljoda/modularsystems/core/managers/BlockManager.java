@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.managers;
+package com.pauljoda.modularsystems.core.managers;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -7,7 +7,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
-import com.pauljoda.modularsystems.ModularSystems;
+import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.util.GeneralSettings;
 import com.pauljoda.modularsystems.furnace.blocks.BlockCrafterActive;
 import com.pauljoda.modularsystems.furnace.blocks.BlockCrafterInactive;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceAddition;
@@ -17,7 +18,7 @@ import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummy;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIOActive;
 import com.pauljoda.modularsystems.furnace.blocks.BlockTextureOverlay;
-import com.pauljoda.modularsystems.util.GeneralSettings;
+import com.pauljoda.modularsystems.storage.blocks.BlockStorageCore;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -34,6 +35,9 @@ public class BlockManager {
 	public static Block furnaceAddition;
 	public static Block furnaceAdditionActive;
 	public static Block overLayTexture;
+	
+	//Storage
+	public static Block storageCore;
 
 	public static void registerBlocks()
 	{
@@ -51,6 +55,9 @@ public class BlockManager {
 			overLayTexture = new BlockTextureOverlay(GeneralSettings.textureName, "overLayTexture", true);
 		else
 			overLayTexture = new BlockTextureOverlay("modularsystems:custom_overlay", "overLayTexture", true);
+	
+		//Storage
+		storageCore = new BlockStorageCore();
 	}
 	
 	public static void register()
@@ -66,6 +73,9 @@ public class BlockManager {
 		GameRegistry.registerBlock(furnaceAddition, "modularsystems:blockFurnaceAddition");
 		GameRegistry.registerBlock(furnaceAdditionActive, "modularsystems:blockFurnaceAdditionActive");
 		GameRegistry.registerBlock(overLayTexture, "modularsystems:overLayTexture");
+	
+		//Storage
+		GameRegistry.registerBlock(storageCore, "modularsystems:blockStorageCore");
 	}
 	
 	public static void registerCraftingRecipes()

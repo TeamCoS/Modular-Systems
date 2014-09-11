@@ -1,8 +1,8 @@
-package com.pauljoda.modularsystems.util;
+package com.pauljoda.modularsystems.core.util;
 
 import org.apache.logging.log4j.Level;
 
-import com.pauljoda.modularsystems.lib.Reference;
+import com.pauljoda.modularsystems.core.lib.Reference;
 
 import cpw.mods.fml.common.FMLLog;
 

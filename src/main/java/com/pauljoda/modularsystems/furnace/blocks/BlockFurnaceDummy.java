@@ -13,9 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
-import com.pauljoda.modularsystems.proxy.ClientProxy;
 
 public class BlockFurnaceDummy extends BlockContainer
 {

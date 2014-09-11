@@ -13,10 +13,10 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
+import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
-import com.pauljoda.modularsystems.managers.BlockManager;
-import com.pauljoda.modularsystems.proxy.ClientProxy;
 
 public class BlockFurnaceDummyIOActive extends BlockContainer
 {

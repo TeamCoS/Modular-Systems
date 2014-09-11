@@ -23,9 +23,9 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 
+import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
-import com.pauljoda.modularsystems.lib.Reference;
-import com.pauljoda.modularsystems.managers.BlockManager;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -402,6 +402,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 					else if(worldObj.getBlock(x, y, z) == BlockManager.furnaceAddition)
 					{
 						smeltingMultiplier++;
+						efficiencyMultiplier -= 2;
 						worldObj.setBlock(x, y, z, BlockManager.furnaceAdditionActive);
 						worldObj.markBlockForUpdate(x, y, z);
 						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getTileEntity(x, y, z);

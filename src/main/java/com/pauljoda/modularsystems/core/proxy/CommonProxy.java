@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.proxy;
+package com.pauljoda.modularsystems.core.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -8,6 +8,8 @@ import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnaceCrafter;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
+import com.pauljoda.modularsystems.storage.containers.ContainerModularStorage;
+import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -18,6 +20,7 @@ public class CommonProxy implements IGuiHandler
 	{
 		GameRegistry.registerTileEntity(TileEntityFurnaceCore.class, "modularsystems:tileEntityFurnaceCore");
 		GameRegistry.registerTileEntity(TileEntityFurnaceDummy.class, "modularsystems:tileEntityFurnaceDummy");
+		GameRegistry.registerTileEntity(TileEntityStorageCore.class, "modularsystems:tileEntityStorageCore");
 	}
 
 
@@ -27,6 +30,8 @@ public class CommonProxy implements IGuiHandler
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
 
 		if(tileEntity != null)
+		{
+			//Furnace
 			if(tileEntity instanceof TileEntityFurnaceCore)
 			{
 				TileEntityFurnaceCore tileEntity1 = (TileEntityFurnaceCore)world.getTileEntity(x, y, z);
@@ -39,7 +44,14 @@ public class CommonProxy implements IGuiHandler
 					return new ContainerModularFurnace(player.inventory, tileEntity1);
 				}
 			}
-
+			
+			//Storage
+			else if(tileEntity instanceof TileEntityStorageCore)
+			{
+				TileEntityStorageCore storageCore = (TileEntityStorageCore)world.getTileEntity(x, y, z);
+				return new ContainerModularStorage(player.inventory, storageCore);
+			}
+		}
 		
 		return null;
 	}

@@ -8,3 +8,5 @@ tile.modularsystems:blockFurnaceIOBlock.name=Modular Furnace I/O
 tile.modularsystems:blockFurnaceIOBlockActive.name=Modular Furnace I/O
 tile.modularsystems:blockFurnaceAdditionInactive.name=Modular Furnace Addition
 tile.modularsystems:blockFurnaceAdditionActive.name=Modular Furnace Addition
+
+tile.modularsystems:blockStorageCore.name=Modular Storage Core

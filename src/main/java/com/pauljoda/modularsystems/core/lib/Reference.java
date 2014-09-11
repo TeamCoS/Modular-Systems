@@ -1,18 +1,18 @@
-package com.pauljoda.modularsystems.lib;
+package com.pauljoda.modularsystems.core.lib;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.pauljoda.modularsystems.managers.BlockManager;
-import com.pauljoda.modularsystems.util.GeneralSettings;
+import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.util.GeneralSettings;
 
 public class Reference {
 
 	public static final String MOD_ID = "modularsystems";
 	public static final String MOD_NAME = "Modular Systems";
-	public static final String VERSION = "1.0";
+	public static final String VERSION = "1.1";
 	public static final String CHANNEL_NAME = MOD_ID;
 
 	//FURNACE: Blocks that are from my mod, used to prevent overlaying on reload
@@ -109,7 +109,7 @@ public class Reference {
 		else if(block == Blocks.redstone_block)
 			return -1;
 		else if(block == Blocks.diamond_block)
-			return 0.1;
+			return 1.2;
 		else if(block == Blocks.netherrack)
 			return -0.7;
 		else if(block == Blocks.stone)

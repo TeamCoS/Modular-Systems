@@ -2,7 +2,7 @@ package com.pauljoda.modularsystems.furnace.blocks;
 
 import java.util.Random;
 
-import com.pauljoda.modularsystems.ModularSystems;
+import com.pauljoda.modularsystems.core.ModularSystems;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

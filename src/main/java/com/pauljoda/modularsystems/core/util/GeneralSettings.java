@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.util;
+package com.pauljoda.modularsystems.core.util;
 
 import java.io.File;
 
@@ -8,7 +8,8 @@ import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-import com.pauljoda.modularsystems.lib.Reference;
+import com.pauljoda.modularsystems.core.lib.Reference;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Configuration;

@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.proxy;
+package com.pauljoda.modularsystems.core.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -8,6 +8,8 @@ import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnaceEnabled;
 import com.pauljoda.modularsystems.furnace.renderer.FurnaceDummyRenderer;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
+import com.pauljoda.modularsystems.storage.gui.GuiModularStorage;
+import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -24,11 +26,11 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z)
 	{
-
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
 
-
 		if(tileEntity != null)
+		{
+			//Furnace
 			if(tileEntity instanceof TileEntityFurnaceCore)
 			{
 				TileEntityFurnaceCore tileEntity1 = (TileEntityFurnaceCore)world.getTileEntity(x, y, z);
@@ -43,7 +45,14 @@ public class ClientProxy extends CommonProxy {
 					return new GuiModularFurnace(player.inventory, tileEntity1);
 				}
 			}
-		
+			
+			//Storage
+			else if(tileEntity instanceof TileEntityStorageCore)
+			{
+				TileEntityStorageCore storageCore = (TileEntityStorageCore)world.getTileEntity(x, y, z);
+				return new GuiModularStorage(player.inventory, storageCore, player);
+			}
+		}
 		return null;
 	}
 }

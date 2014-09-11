@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.lib;
+package com.pauljoda.modularsystems.core.lib;
 
 public class Colours {
     public static final String PURE_WHITE = "ffffff";

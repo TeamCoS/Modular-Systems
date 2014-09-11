@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems;
+package com.pauljoda.modularsystems.core;
 
 import java.io.File;
 
@@ -6,12 +6,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 
-import com.pauljoda.modularsystems.lib.Reference;
-import com.pauljoda.modularsystems.managers.BlockManager;
-import com.pauljoda.modularsystems.proxy.ClientProxy;
-import com.pauljoda.modularsystems.proxy.CommonProxy;
-import com.pauljoda.modularsystems.util.GeneralSettings;
-import com.pauljoda.modularsystems.util.VersionChecking;
+import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.proxy.ClientProxy;
+import com.pauljoda.modularsystems.core.proxy.CommonProxy;
+import com.pauljoda.modularsystems.core.util.GeneralSettings;
+import com.pauljoda.modularsystems.core.util.VersionChecking;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -32,7 +32,7 @@ public class ModularSystems {
 	@Instance(Reference.MOD_ID)
 	public static ModularSystems instance;
 
-	@SidedProxy( clientSide="com.pauljoda.modularsystems.proxy.ClientProxy", serverSide="com.pauljoda.modularsystems.proxy.CommonProxy")
+	@SidedProxy( clientSide="com.pauljoda.modularsystems.core.proxy.ClientProxy", serverSide="com.pauljoda.modularsystems.core.proxy.CommonProxy")
 	public static CommonProxy proxy;
 
 	//Creates the Creative Tab

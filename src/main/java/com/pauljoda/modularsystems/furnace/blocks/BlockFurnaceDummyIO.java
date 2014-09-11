@@ -4,8 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
-import com.pauljoda.modularsystems.ModularSystems;
-import com.pauljoda.modularsystems.proxy.ClientProxy;
+import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 
 public class BlockFurnaceDummyIO extends Block {
 
