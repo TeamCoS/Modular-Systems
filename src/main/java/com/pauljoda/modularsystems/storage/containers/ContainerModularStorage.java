@@ -81,9 +81,9 @@ public class ContainerModularStorage extends Container {
 
 	public void scrollTo(float index)
 	{
-		int i = 1;
+		int i = storageCore.inventoryRows - 6;
 		int j = (int)((double)(index * (float)i) + 0.5D);
-
+		System.out.println(j);
 		this.currentBottomRow = j;
 		if (j < 0)
 		{

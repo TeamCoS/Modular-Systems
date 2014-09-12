@@ -61,14 +61,13 @@ public class GuiModularStorage extends GuiContainer {
 	{
 		super.initGui();
 		this.chestItems = ((ContainerModularStorage)this.inventorySlots);
-		for (int i = 0; i < this.core.getSizeInventory(); ++i)
+		for (int i = 0; i < this.core.inventoryRows * 11; ++i)
 		{
 			ItemStack is = this.core.getStackInSlot(i);
 
 			this.itemList.add(is);
 			chestItems.itemList = this.itemList;
 		}
-		
 	}
 
 	@Override

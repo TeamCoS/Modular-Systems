@@ -23,6 +23,7 @@ public class BlockCrafterInactive extends Block {
     {
         blockIcon = iconRegister.registerIcon("crafting_table_top");
     }
+    
     @Override
 	public boolean renderAsNormalBlock()
 	{

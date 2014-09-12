@@ -19,6 +19,7 @@ import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIOActive;
 import com.pauljoda.modularsystems.furnace.blocks.BlockTextureOverlay;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageCore;
+import com.pauljoda.modularsystems.storage.blocks.BlockStorageExpansion;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -38,6 +39,7 @@ public class BlockManager {
 	
 	//Storage
 	public static Block storageCore;
+	public static Block storageExpansion;
 
 	public static void registerBlocks()
 	{
@@ -58,6 +60,7 @@ public class BlockManager {
 	
 		//Storage
 		storageCore = new BlockStorageCore();
+		storageExpansion = new BlockStorageExpansion();
 	}
 	
 	public static void register()
@@ -76,6 +79,7 @@ public class BlockManager {
 	
 		//Storage
 		GameRegistry.registerBlock(storageCore, "modularsystems:blockStorageCore");
+		GameRegistry.registerBlock(storageExpansion, "modularsystems:blockStorageExpansion");
 	}
 	
 	public static void registerCraftingRecipes()

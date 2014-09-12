@@ -19,8 +19,8 @@ import net.minecraft.world.World;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
-import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
+import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageExpansion;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -182,6 +182,12 @@ public class BlockStorageCore extends BlockContainer {
 			}
 		}
 
+		if(core.getAnchor() != null)
+		{
+			TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)world.getTileEntity(core.anchorX, core.anchorY, core.anchorZ);
+			expansion.invalidateCore();
+			world.markBlockForUpdate(core.anchorX, core.anchorY, core.anchorZ);
+		}
 		world.func_147453_f(x, y, z, par5);
 
 		super.breakBlock(world, x, y, z, par5, par6);

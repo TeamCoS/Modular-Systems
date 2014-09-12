@@ -10,6 +10,7 @@ import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
 import com.pauljoda.modularsystems.storage.containers.ContainerModularStorage;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
+import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageExpansion;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -21,6 +22,7 @@ public class CommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityFurnaceCore.class, "modularsystems:tileEntityFurnaceCore");
 		GameRegistry.registerTileEntity(TileEntityFurnaceDummy.class, "modularsystems:tileEntityFurnaceDummy");
 		GameRegistry.registerTileEntity(TileEntityStorageCore.class, "modularsystems:tileEntityStorageCore");
+		GameRegistry.registerTileEntity(TileEntityStorageExpansion.class, "modularsystems:tileEntityStorageExpansion");
 	}
 
 
