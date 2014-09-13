@@ -16,13 +16,13 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	public int coreX;
 	public int coreY;
 	public int coreZ;
-	
+
 	public int nextX;
 	public int nextY;
 	public int nextZ;
-	
+
 	public boolean isAnchor;
-	
+
 	public TileEntityStorageExpansion()
 	{}
 
@@ -30,27 +30,27 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	{
 		return (TileEntityStorageCore) worldObj.getTileEntity(coreX, coreY, coreZ);
 	}
-	
+
 	public void setCore(TileEntityStorageCore core)
 	{
 		coreX = core.xCoord;
 		coreY = core.yCoord;
 		coreZ = core.zCoord;
 	}
-	
+
 	public void setNext(TileEntityStorageExpansion next)
 	{
 		nextX = next.xCoord;
 		nextY = next.yCoord;
 		nextZ = next.zCoord;
 	}
-	
+
 	public void invalidateCore()
 	{
 		this.coreY = -100;
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
-	
+
 	public void invalidateExpansion()
 	{
 		if(getCore() != null)
@@ -60,7 +60,7 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 			getCore().setInventoryRows(core.inventoryRows - 1);
 			worldObj.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
 		}
-		
+
 		if(getNext() != null)
 		{
 			TileEntityStorageExpansion expansion = getNext();
@@ -68,12 +68,12 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 			expansion.invalidateCore();
 		}
 	}
-	
+
 	public TileEntityStorageExpansion getNext()
 	{
 		return (TileEntityStorageExpansion)worldObj.getTileEntity(nextX, nextY, nextZ);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
@@ -81,11 +81,11 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		coreX = tagCompound.getInteger("coreX");
 		coreY = tagCompound.getInteger("coreY");
 		coreZ = tagCompound.getInteger("coreZ");
-		
+
 		nextX = tagCompound.getInteger("nextX");
 		nextY = tagCompound.getInteger("nextY");
 		nextZ = tagCompound.getInteger("nextZ");
-		
+
 		isAnchor = tagCompound.getBoolean("isAnchor");
 	}
 
@@ -96,11 +96,11 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		tagCompound.setInteger("coreX", coreX);
 		tagCompound.setInteger("coreY", coreY);
 		tagCompound.setInteger("coreZ", coreZ);
-		
+
 		tagCompound.setInteger("nextX", nextX);
 		tagCompound.setInteger("nextY", nextY);
 		tagCompound.setInteger("nextZ", nextZ);
-		
+
 		tagCompound.setBoolean("isAnchor", isAnchor);
 	}
 
@@ -116,35 +116,51 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	{
 		readFromNBT(pkt.func_148857_g());
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
-		return getCore().getSizeInventory();
+		if(getCore() != null)
+			return getCore().getSizeInventory();
+		else 
+			return 0;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return getCore().getStackInSlot(i);
+		if(getCore() != null)
+			return getCore().getStackInSlot(i);
+		else
+			return null;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		return getCore().decrStackSize(i, j);
+		if(getCore() != null)
+			return getCore().decrStackSize(i, j);
+		else
+			return null;
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
-		return getCore().getStackInSlotOnClosing(i);
+		if(getCore() != null)
+			return getCore().getStackInSlotOnClosing(i);
+		else 
+			return null;
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		getCore().setInventorySlotContents(i, itemstack);
+		if(getCore() != null)
+			getCore().setInventorySlotContents(i, itemstack);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		return getCore().getInventoryStackLimit();
+		if(getCore() != null)
+			return getCore().getInventoryStackLimit();
+		else 
+			return 0;
 	}
 
 	@Override
@@ -154,17 +170,26 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return getCore().isItemValidForSlot(i, itemstack);
+		if(getCore() != null)
+			return getCore().isItemValidForSlot(i, itemstack);
+		else
+			return false;
 	}
 
 	@Override
 	public String getInventoryName() {
-		return getCore().getInventoryName();
+		if(getCore() != null)
+			return getCore().getInventoryName();
+		else
+			return null;
 	}
 
 	@Override
 	public boolean hasCustomInventoryName() {
-		return getCore().hasCustomInventoryName();
+		if(getCore() != null)
+			return getCore().hasCustomInventoryName();
+		else
+			return false;
 	}
 
 	@Override
