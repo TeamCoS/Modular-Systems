@@ -41,7 +41,7 @@ public class ModularSystems {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
-			return Item.getItemFromBlock(Blocks.crafting_table);
+			return Item.getItemFromBlock(BlockManager.furnaceCore);
 		}
 	};
 

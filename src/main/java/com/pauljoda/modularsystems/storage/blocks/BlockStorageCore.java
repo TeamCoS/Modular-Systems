@@ -182,12 +182,28 @@ public class BlockStorageCore extends BlockContainer {
 			}
 		}
 
-		if(core.getAnchor() != null)
+		//Find expansions and break
+		for(int i = -1; i <= 1; i++)
 		{
-			TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)world.getTileEntity(core.anchorX, core.anchorY, core.anchorZ);
-			expansion.invalidateCore();
-			world.markBlockForUpdate(core.anchorX, core.anchorY, core.anchorZ);
+			for(int j = -1; j <= 1; j++)
+			{
+				for(int k = -1; k <= 1; k++)
+				{
+					//Checks to make sure we are looking at only adjacent blocks
+					if(!(Math.abs(i) == 1 ? (Math.abs(j) == 0 && Math.abs(k) == 0) : ((Math.abs(j) == 1) ? Math.abs(k) == 0 : Math.abs(k) == 1)))
+						continue;
+
+					Block localBlock = world.getBlock(i + x, j + y, k + z);
+					if(localBlock == BlockManager.storageExpansion)
+					{
+						TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)world.getTileEntity(i + x, j + y, k + z);
+						expansion.invalidateExpansion();
+						expansion.invalidateCore();
+					}
+				}
+			}
 		}
+		
 		world.func_147453_f(x, y, z, par5);
 
 		super.breakBlock(world, x, y, z, par5, par6);

@@ -104,5 +104,16 @@ public class BlockManager {
 				"XxX",
 				"xCx",
 				"XxX", 'X', Items.iron_ingot, 'x', new ItemStack(Items.dye, 9, 4), 'C', Blocks.crafting_table); 
+		
+		CraftingManager.getInstance().addRecipe(new ItemStack(storageCore, 1),
+				"XxX",
+				"xCx",
+				"XxX", 'X', Blocks.log, 'x', Blocks.planks, 'C', Blocks.chest);
+		
+		CraftingManager.getInstance().addRecipe(new ItemStack(storageExpansion, 1),
+				"XXX",
+				"XxX",
+				"XXX", 'X', Items.stick, 'x', Blocks.chest);
+	
 	}
 }

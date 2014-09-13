@@ -1,5 +1,7 @@
 package com.pauljoda.modularsystems.storage.tiles;
 
+import com.pauljoda.modularsystems.storage.blocks.BlockStorageExpansion;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -15,12 +17,12 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	public int coreY;
 	public int coreZ;
 	
-	public boolean isAnchor;
-	
 	public int nextX;
 	public int nextY;
 	public int nextZ;
-
+	
+	public boolean isAnchor;
+	
 	public TileEntityStorageExpansion()
 	{}
 
@@ -46,7 +48,27 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	public void invalidateCore()
 	{
 		this.coreY = -100;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
+	
+	public void invalidateExpansion()
+	{
+		if(getCore() != null)
+		{
+			TileEntityStorageCore core = getCore();
+			core.dropItems(xCoord, yCoord, zCoord);
+			getCore().setInventoryRows(core.inventoryRows - 1);
+			worldObj.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
+		}
+		
+		if(getNext() != null)
+		{
+			TileEntityStorageExpansion expansion = getNext();
+			expansion.invalidateExpansion();
+			expansion.invalidateCore();
+		}
+	}
+	
 	public TileEntityStorageExpansion getNext()
 	{
 		return (TileEntityStorageExpansion)worldObj.getTileEntity(nextX, nextY, nextZ);
@@ -60,11 +82,11 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		coreY = tagCompound.getInteger("coreY");
 		coreZ = tagCompound.getInteger("coreZ");
 		
-		isAnchor = tagCompound.getBoolean("isAnchor");
-		
 		nextX = tagCompound.getInteger("nextX");
 		nextY = tagCompound.getInteger("nextY");
 		nextZ = tagCompound.getInteger("nextZ");
+		
+		isAnchor = tagCompound.getBoolean("isAnchor");
 	}
 
 	@Override
@@ -75,11 +97,11 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		tagCompound.setInteger("coreY", coreY);
 		tagCompound.setInteger("coreZ", coreZ);
 		
-		tagCompound.setBoolean("isAnchor", isAnchor);
-		
 		tagCompound.setInteger("nextX", nextX);
 		tagCompound.setInteger("nextY", nextY);
 		tagCompound.setInteger("nextZ", nextZ);
+		
+		tagCompound.setBoolean("isAnchor", isAnchor);
 	}
 
 	@Override

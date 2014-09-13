@@ -24,26 +24,11 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 	public int inventoryRows = 6;
 	private final int MAX_EXPANSIONS = GeneralSettings.maxExpansionSize;
 
-	public int anchorX;
-	public int anchorY;
-	public int anchorZ;
-	
 	public TileEntityStorageCore()
 	{
 		inv = new ItemStack[11 * MAX_EXPANSIONS];
 	}
 
-	public TileEntityStorageExpansion getAnchor()
-	{
-		return (TileEntityStorageExpansion)worldObj.getTileEntity(anchorX, anchorY, anchorZ);
-	}
-	
-	public void setAnchor(TileEntityStorageExpansion expansion)
-	{
-		anchorX = expansion.xCoord;
-		anchorY = expansion.yCoord;
-		anchorZ = expansion.zCoord;
-	}
 	public void dropItems(int x, int y, int z)
 	{
 		for (int i1 = inventoryRows * 11 - 11; i1 < inventoryRows * 11; ++i1)
@@ -82,7 +67,7 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 			}
 		}
 	}
-	
+
 	public void setInventoryRows(int i)
 	{
 		this.inventoryRows = i;
@@ -151,20 +136,15 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this &&
-				player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
+		return true;
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		
+
 		this.inventoryRows = tagCompound.getInteger("Rows");
-		
-		this.anchorX = tagCompound.getInteger("AnchorX");
-		this.anchorY = tagCompound.getInteger("AnchorY");
-		this.anchorZ = tagCompound.getInteger("AnchorZ");
-		
+
 		NBTTagList itemsTag = tagCompound.getTagList("Items", 10);
 		this.inv = new ItemStack[getSizeInventory()];
 		for (int i = 0; i < itemsTag.tagCount(); i++)
@@ -182,17 +162,13 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 			}
 		}
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		
+
 		tagCompound.setInteger("Rows", this.inventoryRows);
-		
-		tagCompound.setInteger("AnchorX", anchorX);
-		tagCompound.setInteger("AnchorY", anchorY);
-		tagCompound.setInteger("AnchorZ", anchorZ);
-		
+
 		NBTTagList nbtTagList = new NBTTagList();
 		for (int i = 0; i < this.inv.length; i++) {
 			if (this.inv[i] != null)
@@ -205,7 +181,7 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 		}
 		tagCompound.setTag("Items", nbtTagList);
 	}
-	
+
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbtTag = new NBTTagCompound();
@@ -218,7 +194,7 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 	{
 		readFromNBT(pkt.func_148857_g());
 	}
-	
+
 	@Override
 	public void openInventory() {
 		// TODO Auto-generated method stub
@@ -232,9 +208,11 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		if(i < this.inventoryRows * 11)
+			return true;
+		else
+			return false;
 	}
 
 	public void setGuiDisplayName(String displayName) { }
