@@ -14,7 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventory
 {
 	public int slot = 4;
-	TileEntityFurnaceCore tileEntityCore;
 	int coreX;
 	int coreY;
 	int coreZ;
@@ -30,15 +29,11 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 		coreX = core.xCoord;
 		coreY = core.yCoord;
 		coreZ = core.zCoord;
-		tileEntityCore = core;
 	}
 
 	public TileEntityFurnaceCore getCore()
 	{
-		if(tileEntityCore == null)
-			tileEntityCore = (TileEntityFurnaceCore)worldObj.getTileEntity(coreX, coreY, coreZ);
-
-		return tileEntityCore;
+		return (TileEntityFurnaceCore)worldObj.getTileEntity(coreX, coreY, coreZ);
 	}
 
 	@Override
@@ -68,7 +63,7 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 		tagCompound.setInteger("Icon", icon);
 		tagCompound.setInteger("Meta", metadata);
 	}
-	
+
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbtTag = new NBTTagCompound();
@@ -81,48 +76,64 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 	{
 		readFromNBT(pkt.func_148857_g());
 	}
-	
+
 	public Block getBlock()
 	{
 		if(Block.getBlockById(this.icon) == null)
 			return Blocks.cobblestone;
-		
+
 		return Block.getBlockById(this.icon);
 	}
-	
+
 	public int getMeta()
 	{
 		return metadata;
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
-		return tileEntityCore.getSizeInventory();
+		if(getCore() != null)
+			return getCore().getSizeInventory();
+		else
+			return 0;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return tileEntityCore.getStackInSlot(i);
+		if(getCore() != null)
+			return getCore().getStackInSlot(i);
+		else
+			return null;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		return tileEntityCore.decrStackSize(i, j);
+		if(getCore() != null)
+			return getCore().decrStackSize(i, j);
+		else
+			return null;
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
-		return tileEntityCore.getStackInSlotOnClosing(i);
+		if(getCore() != null)
+			return getCore().getStackInSlotOnClosing(i);
+		else
+			return null;
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		tileEntityCore.setInventorySlotContents(i, itemstack);
+		if(getCore() != null)
+			getCore().setInventorySlotContents(i, itemstack);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		return tileEntityCore.getInventoryStackLimit();
+		if(getCore() != null)
+			return getCore().getInventoryStackLimit();
+		else
+			return 0;
 	}
 
 	@Override
@@ -132,7 +143,10 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return tileEntityCore.isItemValidForSlot(i, itemstack);
+		if(getCore() != null)
+			return getCore().isItemValidForSlot(i, itemstack);
+		else
+			return false;
 	}
 
 	@Override
@@ -146,39 +160,52 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 			if(slot == 2)
 				var1 = 2;
 		}
+		if(getCore() != null)
+			return getCore().getAccessibleSlotsFromSide(var1);
+		else
+			return null;
 
-		tileEntityCore = this.getCore();
-		return tileEntityCore.getAccessibleSlotsFromSide(var1);
 	}
 
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		tileEntityCore = this.getCore();
-		return tileEntityCore.isItemValidForSlot(i, itemstack);
+		if(getCore() != null)
+			return getCore().isItemValidForSlot(i, itemstack);
+		else
+			return false;
 	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		tileEntityCore = this.getCore();
-		if(slot <= 3)
+		if(getCore() != null)
 		{
-			j = slot;
-			return tileEntityCore.canExtractItem(i, itemstack, j);
+			if(slot <= 3)
+			{
+				j = slot;
+				return getCore().canExtractItem(i, itemstack, j);
+			}
+			else
+			{
+				return getCore().canExtractItem(i, itemstack, j);
+			}
 		}
-		else
-		{
-			return tileEntityCore.canExtractItem(i, itemstack, j);
-		}
+		return false;
 	}
 
 	@Override
 	public String getInventoryName() {
-		return tileEntityCore.getInventoryName();
+		if(getCore() != null)
+			return getCore().getInventoryName();
+		else
+			return "";
 	}
 
 	@Override
 	public boolean hasCustomInventoryName() {
-		return tileEntityCore.hasCustomInventoryName();
+		if(getCore() != null)
+			return getCore().hasCustomInventoryName();
+		else
+			return false;
 	}
 
 	@Override
