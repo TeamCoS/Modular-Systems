@@ -21,7 +21,6 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	public int nextY;
 	public int nextZ;
 
-	public boolean isAnchor;
 
 	public TileEntityStorageExpansion()
 	{}
@@ -86,7 +85,6 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		nextY = tagCompound.getInteger("nextY");
 		nextZ = tagCompound.getInteger("nextZ");
 
-		isAnchor = tagCompound.getBoolean("isAnchor");
 	}
 
 	@Override
@@ -101,7 +99,6 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		tagCompound.setInteger("nextY", nextY);
 		tagCompound.setInteger("nextZ", nextZ);
 
-		tagCompound.setBoolean("isAnchor", isAnchor);
 	}
 
 	@Override

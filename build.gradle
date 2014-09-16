@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.10_v1.21"
+version = "1.7.10_v1.22"
 group= "com.pauljoda.modularsystems" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Modular Systems"
 
