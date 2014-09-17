@@ -14,6 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.util.GeneralSettings;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
@@ -40,6 +41,12 @@ public class BlockStorageExpansion extends BlockContainer {
 	{
 		blockIcon = par1IconRegister.registerIcon("modularsystems:chestSide");
 		errorIcon = par1IconRegister.registerIcon("modularsystems:chestSideError");
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta)
+	{
+		return meta == 0 ? blockIcon : errorIcon;
 	}
 
 	@Override
@@ -112,7 +119,7 @@ public class BlockStorageExpansion extends BlockContainer {
 							continue;
 
 						Block localBlock = world.getBlock(i + x, j + y, k + z);
-						if(localBlock == BlockManager.storageExpansion  && !registered)
+						if(isStorageExpansion(localBlock)  && !registered)
 						{
 							TileEntityStorageExpansion next = (TileEntityStorageExpansion)world.getTileEntity(i + x, j + y, k + z);
 
@@ -147,8 +154,16 @@ public class BlockStorageExpansion extends BlockContainer {
 		expansion.invalidateCore();
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
+	
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-		return new TileEntityStorageExpansion();
+		TileEntityStorageExpansion tile = new TileEntityStorageExpansion();
+		tile.setTileType(Reference.BASIC_STORAGE_EXPANSION);
+		return tile;
+	}
+	
+	public boolean isStorageExpansion(Block block)
+	{
+		return (block == BlockManager.storageExpansion || block == BlockManager.storageHoppingExpansion);
 	}
 }

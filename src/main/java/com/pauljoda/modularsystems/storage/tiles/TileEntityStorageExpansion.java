@@ -1,7 +1,10 @@
 package com.pauljoda.modularsystems.storage.tiles;
 
-import com.pauljoda.modularsystems.storage.blocks.BlockStorageExpansion;
+import java.util.List;
 
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -10,8 +13,11 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 
-public class TileEntityStorageExpansion extends TileEntity implements IInventory {
+import com.pauljoda.modularsystems.core.lib.Reference;
+
+public class TileEntityStorageExpansion extends TileEntity implements IInventory, IEntitySelector {
 
 	public int coreX;
 	public int coreY;
@@ -21,6 +27,7 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	public int nextY;
 	public int nextZ;
 
+	public int tileType;
 
 	public TileEntityStorageExpansion()
 	{}
@@ -47,6 +54,7 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	public void invalidateCore()
 	{
 		this.coreY = -100;
+		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
@@ -73,6 +81,11 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		return (TileEntityStorageExpansion)worldObj.getTileEntity(nextX, nextY, nextZ);
 	}
 
+	public void setTileType(int type)
+	{
+		this.tileType = type;
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
@@ -85,6 +98,7 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		nextY = tagCompound.getInteger("nextY");
 		nextZ = tagCompound.getInteger("nextZ");
 
+		tileType = tagCompound.getInteger("Type");
 	}
 
 	@Override
@@ -99,6 +113,7 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		tagCompound.setInteger("nextY", nextY);
 		tagCompound.setInteger("nextZ", nextZ);
 
+		tagCompound.setInteger("Type", tileType);
 	}
 
 	@Override
@@ -112,6 +127,101 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
 	{
 		readFromNBT(pkt.func_148857_g());
+	}
+
+
+	@Override
+	public void updateEntity()
+	{
+		switch(tileType)
+		{
+		case Reference.HOPPING_STORAGE_EXPANSION :
+			double range = 3.0D;
+			AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord - range, yCoord - range, zCoord - range, xCoord + range, yCoord + range, zCoord + range);
+			@SuppressWarnings("unchecked")
+			List<Entity> interestingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, bb);
+
+			for (Entity entity : interestingItems) {
+				double x = (xCoord + 0.5D - entity.posX);
+				double y = (yCoord + 0.5D - entity.posY);
+				double z = (zCoord + 0.5D - entity.posZ);
+
+				double distance = Math.sqrt(x * x + y * y + z * z);
+				if (distance < 1.1) {
+					onEntityCollidedWithBlock(entity);
+				} else {
+					double var11 = 1.0 - distance / 15.0;
+
+					if (var11 > 0.0D) {
+						var11 *= var11;
+						entity.motionX += x / distance * var11 * 0.05;
+						entity.motionY += y / distance * var11 * 0.2;
+						entity.motionZ += z / distance * var11 * 0.05;
+					}
+				}
+
+			}
+			break;
+		}
+	}
+
+	public void onEntityCollidedWithBlock(Entity entity) 
+	{
+		if (!worldObj.isRemote) 
+		{
+			if (entity instanceof EntityItem && !entity.isDead) 
+			{
+				EntityItem item = (EntityItem)entity;
+				ItemStack stack = item.getEntityItem().copy();
+				tryInsertSlot(stack);
+				if (stack.stackSize == 0) {
+					item.setDead();
+				} else {
+					item.setEntityItemStack(stack);
+				}
+			}
+		}
+	}
+
+	public void tryInsertSlot(ItemStack stack)
+	{
+		if(getCore() != null)
+		{
+			for(int i = 0; i < getCore().inventoryRows * 11; i++)
+			{
+				if(getCore().isItemValidForSlot(i, stack))
+				{
+					ItemStack targetStack = getCore().getStackInSlot(i);
+					if (targetStack == null) {
+						getCore().setInventorySlotContents(i, stack.copy());
+						stack.stackSize = 0;
+						markDirty();
+						return;
+					}
+					else if (getCore().isItemValidForSlot(i, stack) &&
+							areMergeCandidates(stack, targetStack)) {
+						int space = targetStack.getMaxStackSize()
+								- targetStack.stackSize;
+						int mergeAmount = Math.min(space, stack.stackSize);
+						ItemStack copy = targetStack.copy();
+						copy.stackSize += mergeAmount;
+						getCore().setInventorySlotContents(i, copy);
+						stack.stackSize -= mergeAmount;
+						markDirty();
+						return;
+					}
+				}
+
+			}
+		}
+	}
+
+	public static boolean areItemAndTagEqual(final ItemStack stackA, ItemStack stackB) {
+		return stackA.isItemEqual(stackB) && ItemStack.areItemStackTagsEqual(stackA, stackB);
+	}
+
+	public static boolean areMergeCandidates(ItemStack source, ItemStack target) {
+		return areItemAndTagEqual(source, target) && target.stackSize < target.getMaxStackSize();
 	}
 
 	@Override
@@ -195,5 +305,11 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 
 	@Override
 	public void closeInventory() {		
+	}
+
+	@Override
+	public boolean isEntityApplicable(Entity p_82704_1_) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

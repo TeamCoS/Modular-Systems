@@ -10,6 +10,9 @@ import com.pauljoda.modularsystems.core.util.GeneralSettings;
 
 public class Reference {
 
+	public static final int BASIC_STORAGE_EXPANSION = 0;
+	public static final int HOPPING_STORAGE_EXPANSION = 1;
+	
 	public static final String MOD_ID = "modularsystems";
 	public static final String MOD_NAME = "Modular Systems";
 	public static final String VERSION = "1.22";

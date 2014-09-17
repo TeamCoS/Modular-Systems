@@ -18,6 +18,7 @@ import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummy;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIOActive;
 import com.pauljoda.modularsystems.furnace.blocks.BlockTextureOverlay;
+import com.pauljoda.modularsystems.storage.blocks.BlockHoppingStorageExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageCore;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageExpansion;
 
@@ -40,6 +41,7 @@ public class BlockManager {
 	//Storage
 	public static Block storageCore;
 	public static Block storageExpansion;
+	public static Block storageHoppingExpansion;
 
 	public static void registerBlocks()
 	{
@@ -61,6 +63,7 @@ public class BlockManager {
 		//Storage
 		storageCore = new BlockStorageCore();
 		storageExpansion = new BlockStorageExpansion();
+		storageHoppingExpansion = new BlockHoppingStorageExpansion();
 	}
 	
 	public static void register()
@@ -80,6 +83,7 @@ public class BlockManager {
 		//Storage
 		GameRegistry.registerBlock(storageCore, "modularsystems:blockStorageCore");
 		GameRegistry.registerBlock(storageExpansion, "modularsystems:blockStorageExpansion");
+		GameRegistry.registerBlock(storageHoppingExpansion, "modularsystems:blockHoppingStorageExpansion");
 	}
 	
 	public static void registerCraftingRecipes()
@@ -114,6 +118,8 @@ public class BlockManager {
 				"XXX",
 				"XxX",
 				"XXX", 'X', Items.stick, 'x', Blocks.chest);
+		
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(storageHoppingExpansion, 1), storageExpansion, Items.ender_pearl, Blocks.hopper);
 	
 	}
 }
