@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -81,6 +82,42 @@ public class GuiModularStorage extends GuiContainer {
 		super.onGuiClosed();
 	}
 
+	 public void handleMouseInput()
+	    {
+	        super.handleMouseInput();
+	        int i = Mouse.getEventDWheel();
+
+	        if (i != 0 && this.needsScrollBars())
+	        {
+	            int j = this.chestItems.storageCore.inventoryRows - 6;
+
+	            if (i > 0)
+	            {
+	                i = 1;
+	            }
+
+	            if (i < 0)
+	            {
+	                i = -1;
+	            }
+
+	            this.currentScroll = (float)((double)this.currentScroll - (double)i / (double)j);
+
+	            if (this.currentScroll < 0.0F)
+	            {
+	                this.currentScroll = 0.0F;
+	            }
+
+	            if (this.currentScroll > 1.0F)
+	            {
+	                this.currentScroll = 1.0F;
+	            }
+
+	            this.chestItems.scrollTo(this.currentScroll);
+	            updateScreen();
+	        }
+	    }
+	 
 	@Override
 	public void drawScreen(int par1, int par2, float par3)
 	{

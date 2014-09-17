@@ -136,32 +136,36 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		switch(tileType)
 		{
 		case Reference.HOPPING_STORAGE_EXPANSION :
-			double range = 3.0D;
-			AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord - range, yCoord - range, zCoord - range, xCoord + range, yCoord + range, zCoord + range);
-			@SuppressWarnings("unchecked")
-			List<Entity> interestingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, bb);
+			if(getCore() != null)
+			{
+				double range = 3.0D;
+				AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord - range, yCoord - range, zCoord - range, xCoord + range, yCoord + range, zCoord + range);
+				@SuppressWarnings("unchecked")
+				List<Entity> interestingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, bb);
 
-			for (Entity entity : interestingItems) {
-				double x = (xCoord + 0.5D - entity.posX);
-				double y = (yCoord + 0.5D - entity.posY);
-				double z = (zCoord + 0.5D - entity.posZ);
+				for (Entity entity : interestingItems) {
+					double x = (xCoord + 0.5D - entity.posX);
+					double y = (yCoord + 0.5D - entity.posY);
+					double z = (zCoord + 0.5D - entity.posZ);
 
-				double distance = Math.sqrt(x * x + y * y + z * z);
-				if (distance < 1.1) {
-					onEntityCollidedWithBlock(entity);
-				} else {
-					double var11 = 1.0 - distance / 15.0;
+					double distance = Math.sqrt(x * x + y * y + z * z);
+					if (distance < 1.1) {
+						onEntityCollidedWithBlock(entity);
+					} else {
+						double var11 = 1.0 - distance / 15.0;
 
-					if (var11 > 0.0D) {
-						var11 *= var11;
-						entity.motionX += x / distance * var11 * 0.05;
-						entity.motionY += y / distance * var11 * 0.2;
-						entity.motionZ += z / distance * var11 * 0.05;
+						if (var11 > 0.0D) {
+							var11 *= var11;
+							entity.motionX += x / distance * var11 * 0.05;
+							entity.motionY += y / distance * var11 * 0.2;
+							entity.motionZ += z / distance * var11 * 0.05;
+						}
 					}
-				}
 
+				}
 			}
 			break;
+			
 		}
 	}
 
