@@ -165,6 +165,6 @@ public class BlockStorageExpansion extends BlockContainer {
 	public static boolean isStorageExpansion(Block block)
 	{
 		return (block == BlockManager.storageExpansion || block == BlockManager.storageHoppingExpansion 
-				|| block == BlockManager.storageArmorExpansion);
+				|| block == BlockManager.storageArmorExpansion || block == BlockManager.storageSmashingExpansion);
 	}
 }

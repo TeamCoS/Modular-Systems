@@ -3,8 +3,8 @@ package com.pauljoda.modularsystems.core;
 import java.io.File;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
@@ -12,6 +12,7 @@ import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
 import com.pauljoda.modularsystems.core.util.GeneralSettings;
 import com.pauljoda.modularsystems.core.util.VersionChecking;
+import com.pauljoda.modularsystems.fakeplayer.FakePlayerPool;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -59,6 +60,7 @@ public class ModularSystems {
 		BlockManager.register();
 		BlockManager.registerCraftingRecipes();
 		
+		MinecraftForge.EVENT_BUS.register(FakePlayerPool.instance);
 	}
 
 	@EventHandler

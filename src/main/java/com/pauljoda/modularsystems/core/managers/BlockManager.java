@@ -20,6 +20,7 @@ import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIOActive;
 import com.pauljoda.modularsystems.furnace.blocks.BlockTextureOverlay;
 import com.pauljoda.modularsystems.storage.blocks.BlockArmorStorageExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockHoppingStorageExpansion;
+import com.pauljoda.modularsystems.storage.blocks.BlockSmashingStorageExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageCore;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageExpansion;
 
@@ -44,6 +45,7 @@ public class BlockManager {
 	public static Block storageExpansion;
 	public static Block storageHoppingExpansion;
 	public static Block storageArmorExpansion;
+	public static Block storageSmashingExpansion;
 
 	public static void registerBlocks()
 	{
@@ -67,6 +69,7 @@ public class BlockManager {
 		storageExpansion = new BlockStorageExpansion();
 		storageHoppingExpansion = new BlockHoppingStorageExpansion();
 		storageArmorExpansion = new BlockArmorStorageExpansion();
+		storageSmashingExpansion = new BlockSmashingStorageExpansion();
 	}
 	
 	public static void register()
@@ -88,6 +91,7 @@ public class BlockManager {
 		GameRegistry.registerBlock(storageExpansion, "blockStorageExpansion");
 		GameRegistry.registerBlock(storageHoppingExpansion, "blockHoppingStorageExpansion");
 		GameRegistry.registerBlock(storageArmorExpansion, "blockArmorStorageExpansion");
+		GameRegistry.registerBlock(storageSmashingExpansion, "blockSmashingStorageExpansion");
 	}
 	
 	public static void registerCraftingRecipes()
@@ -128,6 +132,6 @@ public class BlockManager {
 		CraftingManager.getInstance().addRecipe(new ItemStack(storageArmorExpansion, 1),
 				" X ",
 				"XsX",
-				" X ", 'X', Items.leather, storageExpansion);
+				" X ", 'X', Items.leather, 's', storageExpansion);
 	}
 }

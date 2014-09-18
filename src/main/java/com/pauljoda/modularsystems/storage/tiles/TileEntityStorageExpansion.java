@@ -2,10 +2,14 @@ package com.pauljoda.modularsystems.storage.tiles;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,8 +18,15 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
 
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.fakeplayer.FakePlayerPool;
+import com.pauljoda.modularsystems.fakeplayer.FakePlayerPool.PlayerUser;
+import com.pauljoda.modularsystems.fakeplayer.ModularSystemsFakePlayer;
 
 public class TileEntityStorageExpansion extends TileEntity implements IInventory, IEntitySelector {
 
@@ -29,8 +40,9 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 
 	public int tileType;
 
+
 	public TileEntityStorageExpansion()
-	{}
+	{	}
 
 	public TileEntityStorageCore getCore()
 	{
@@ -135,40 +147,45 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	{
 		switch(tileType)
 		{
-		case Reference.HOPPING_STORAGE_EXPANSION :
-			if(getCore() != null)
-			{
-				double range = 3.0D;
-				AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord - range, yCoord - range, zCoord - range, xCoord + range, yCoord + range, zCoord + range);
-				@SuppressWarnings("unchecked")
-				List<Entity> interestingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, bb);
-
-				for (Entity entity : interestingItems) {
-					double x = (xCoord + 0.5D - entity.posX);
-					double y = (yCoord + 0.5D - entity.posY);
-					double z = (zCoord + 0.5D - entity.posZ);
-
-					double distance = Math.sqrt(x * x + y * y + z * z);
-					if (distance < 1.1) {
-						onEntityCollidedWithBlock(entity);
-					} else {
-						double var11 = 1.0 - distance / 15.0;
-
-						if (var11 > 0.0D) {
-							var11 *= var11;
-							entity.motionX += x / distance * var11 * 0.05;
-							entity.motionY += y / distance * var11 * 0.2;
-							entity.motionZ += z / distance * var11 * 0.05;
-						}
-					}
-
-				}
-			}
+		case Reference.SMASHING_STORAGE_EXPANSION :
+			hooverItems(1.0D, 0.1D);
 			break;
-			
+		case Reference.HOPPING_STORAGE_EXPANSION :
+			hooverItems(3.0D, 0.05D);
+			break;
 		}
 	}
 
+	public void hooverItems(double range, double speed)
+	{
+		if(getCore() != null)
+		{
+			AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord - range, yCoord - range, zCoord - range, xCoord + range, yCoord + range, zCoord + range);
+			@SuppressWarnings("unchecked")
+			List<Entity> interestingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, bb);
+
+			for (Entity entity : interestingItems) {
+				double x = (xCoord + 0.5D - entity.posX);
+				double y = (yCoord + 0.5D - entity.posY);
+				double z = (zCoord + 0.5D - entity.posZ);
+
+				double distance = Math.sqrt(x * x + y * y + z * z);
+				if (distance < 1.1) {
+					onEntityCollidedWithBlock(entity);
+				} else {
+					double var11 = 1.0 - distance / 15.0;
+
+					if (var11 > 0.0D) {
+						var11 *= var11;
+						entity.motionX += x / distance * var11 * speed;
+						entity.motionY += y / distance * var11 * speed * 4;
+						entity.motionZ += z / distance * var11 * speed;
+					}
+				}
+
+			}
+		}
+	}
 	public void onEntityCollidedWithBlock(Entity entity) 
 	{
 		if (!worldObj.isRemote) 
@@ -228,6 +245,83 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		return areItemAndTagEqual(source, target) && target.stackSize < target.getMaxStackSize();
 	}
 
+	public void tryBreakBlock()
+	{
+		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		meta -= 2;
+		if(getCore() != null)
+		{
+			int x = xCoord;
+			int y = yCoord;
+			int z = zCoord;
+			switch(meta)
+			{
+			case 0 :
+				y--;
+				break;
+			case 1 :
+				y++;
+				break;
+			case 2 :
+				z--;
+				break;
+			case 3 :
+				z++;
+				break;
+			case 4 :
+				x--;
+				break;
+			case 5 :
+				x++;
+				break;
+			}
+			breakBlock(x,y,z);
+		}
+	}
+	
+	private void breakBlock(int x, int y, int z) {
+		if (worldObj.isRemote) return;
+
+		if (worldObj.blockExists(x, y, z)) {
+			final Block block = worldObj.getBlock(x, y, z);
+			if (block != null) {
+				final int metadata = worldObj.getBlockMetadata(x, y, z);
+				if (block != Blocks.bedrock && block.getBlockHardness(worldObj, z, y, z) > -1.0F) {
+					breakBlock(x, y, z, block, metadata);
+				}
+			}
+		}
+	}
+
+	private void breakBlock(final int x, final int y, final int z, final Block block, final int metadata) {
+		if (!(worldObj instanceof WorldServer)) return;
+		FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
+			@Override
+			public void usePlayer(ModularSystemsFakePlayer fakePlayer) {
+				fakePlayer.inventory.currentItem = 0;
+				fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Items.diamond_pickaxe, 0, 0));
+
+				BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, blockMetadata, fakePlayer);
+				if (MinecraftForge.EVENT_BUS.post(event)) return;
+
+				if (ForgeHooks.canHarvestBlock(block, fakePlayer, metadata)) {
+					worldObj.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
+					worldObj.setBlockToAir(x, y, z);
+
+					List<ItemStack> items = block.getDrops(worldObj, x, y, z, metadata, 0);
+					if (items != null) {
+						for(ItemStack item : items)
+						{
+							EntityItem stack = new EntityItem(worldObj, x + 0.5D, y + 0.5D, z + 0.5D, new ItemStack(item.getItem(), item.stackSize, item.getItemDamage()));
+							worldObj.spawnEntityInWorld(stack);
+						}
+						
+					}
+				}
+			}
+		});
+	}
+	
 	@Override
 	public int getSizeInventory() {
 		if(getCore() != null)

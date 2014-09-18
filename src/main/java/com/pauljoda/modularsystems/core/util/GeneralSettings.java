@@ -20,6 +20,8 @@ public class GeneralSettings {
 
 	//Banned Blocks
 	public static String[] bannedBlocks;
+	
+	public static int fakePlayerMax;
 
 	//checks to see if we are using resource pack or not
 	public static boolean useTextures;
@@ -57,6 +59,7 @@ public class GeneralSettings {
 			LAST_DISCOVERED_VERSION = config.get(Configuration.CATEGORY_GENERAL, LAST_DISCOVERED_VERSION_CONFIGNAME, LAST_DISCOVERED_VERSION_DEFAULT).getString();
 			LAST_DISCOVERED_VERSION_TYPE = config.get(Configuration.CATEGORY_GENERAL, LAST_DISCOVERED_VERSION_TYPE_CONFIGNAME, LAST_DISCOVERED_VERSION_TYPE_DEFAULT).getString();
 
+			fakePlayerMax = config.getInt("Settings", "Fake Player Max", 10, 1, 100, "Adding more is not suggested");
 			bannedBlocks = config.get("Settings, Modular Furnace", "Banned Block Unlocalized Names",
 					new String[] 	{Blocks.log.getUnlocalizedName(), Blocks.planks.getUnlocalizedName(),
 					Blocks.dirt.getUnlocalizedName(), Blocks.ice.getUnlocalizedName(),

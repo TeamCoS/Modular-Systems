@@ -126,10 +126,8 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
 		int yCheck = yCoord;
 		int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
-		Block airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
 
-		//get hMin (Left)
-		while(airCheck == Blocks.air)
+		while(worldObj.isAirBlock(xCheck, yCheck, zCheck))
 		{
 			output++;
 			if(forwardZ)
@@ -137,7 +135,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 			else
 				zCheck = zCheck - depthMultiplier;
 
-			airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
 			if(output > maxSize)
 				return -1;
 		}
@@ -155,10 +152,8 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
 		int yCheck = yCoord;
 		int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
-		Block airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
 
-		//get hMin (Left)
-		while(airCheck == Blocks.air)
+		while(worldObj.isAirBlock(xCheck, yCheck, zCheck))
 		{
 			output++;
 			if(forwardZ)
@@ -166,7 +161,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 			else
 				zCheck = zCheck + depthMultiplier;
 
-			airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
 			if(output > maxSize)
 				return -1;
 		}
@@ -184,15 +178,12 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
 		int yCheck = yCoord;
 		int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
-		Block airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
 
-		//get hMin (Left)
-		while(airCheck == Blocks.air)
+		while(worldObj.isAirBlock(xCheck, yCheck, zCheck))
 		{
 			output++;
 			yCheck--;
 
-			airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
 			if(output > maxSize)
 				return -1;
 		}
@@ -210,15 +201,12 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
 		int yCheck = yCoord;
 		int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
-		Block airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
 
-		//get hMin (Left)
-		while(airCheck == Blocks.air)
+		while(worldObj.isAirBlock(xCheck, yCheck, zCheck))
 		{
 			output++;
 			yCheck++;
 
-			airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
 			if(output > maxSize)
 				return -1;
 		}
@@ -236,10 +224,8 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
 		int yCheck = yCoord;
 		int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
-		Block airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
 
-		//get hMin (Left)
-		while(airCheck == Blocks.air)
+		while(worldObj.isAirBlock(xCheck, yCheck, zCheck))
 		{
 			output++;
 			if(forwardZ)
@@ -247,7 +233,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 			else
 				xCheck = xCheck + depthMultiplier;
 
-			airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
 			if(output > maxSize)
 				return -1;
 		}
@@ -297,7 +282,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						continue;
 					if(vert == 0 && horiz == 0 && depth == 1)
 					{
-						if(blockId != Blocks.air)
+						if(!worldObj.isAirBlock(x, y, z))
 							return false;
 					}
 
@@ -307,18 +292,17 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						{
 							if(depth > 0 && depth < (depthVal + 1))
 							{
-								if(blockId == Blocks.air)
+								if(worldObj.isAirBlock(x, y, z))
 									continue;
 								else
 								{
-									worldObj.setBlock(x, y, z, Blocks.cobblestone);
 									return false;
 								}
 							}
 						}
 					}
 
-					if(blockId == Blocks.air || (Reference.isBadBlock(blockId) && !Reference.isModularTile(blockId.getUnlocalizedName())))
+					if(worldObj.isAirBlock(x, y, z) || (Reference.isBadBlock(blockId) && !Reference.isModularTile(blockId.getUnlocalizedName())))
 						return false;
 
 					if(!Reference.isValidBlock(blockId.getUnlocalizedName()))
@@ -388,7 +372,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 					}
 
-					
+
 
 					if(worldObj.getBlock(x, y, z) == BlockManager.furnaceCraftingUpgradeInactive)
 					{
