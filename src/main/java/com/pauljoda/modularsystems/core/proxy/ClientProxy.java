@@ -50,7 +50,7 @@ public class ClientProxy extends CommonProxy {
 			else if(tileEntity instanceof TileEntityStorageCore)
 			{
 				TileEntityStorageCore storageCore = (TileEntityStorageCore)world.getTileEntity(x, y, z);
-				return new GuiModularStorage(player.inventory, storageCore, player);
+				return new GuiModularStorage(player.inventory, storageCore, player, storageCore.hasArmorUpgrade());
 			}
 		}
 		return null;

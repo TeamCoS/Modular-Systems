@@ -2,8 +2,12 @@ package com.pauljoda.modularsystems.storage.tiles;
 
 import java.util.List;
 
+import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.util.GeneralSettings;
+import com.pauljoda.modularsystems.storage.blocks.BlockStorageExpansion;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -67,6 +71,38 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 			}
 		}
 	}
+	
+	public boolean hasArmorUpgrade()
+	{
+		for(int i = -1; i <= 1; i++)
+		{
+			for(int j = -1; j <= 1; j++)
+			{
+				for(int k = -1; k <= 1; k++)
+				{
+					//Checks to make sure we are looking at only adjacent blocks
+					if(!(Math.abs(i) == 1 ? (Math.abs(j) == 0 && Math.abs(k) == 0) : ((Math.abs(j) == 1) ? Math.abs(k) == 0 : Math.abs(k) == 1)))
+						continue;
+
+					Block localBlock = worldObj.getBlock(i + xCoord, j + yCoord, k + zCoord);
+					
+					if(localBlock == BlockManager.storageArmorExpansion)
+						return true;
+					else if(BlockStorageExpansion.isStorageExpansion(localBlock))
+					{
+						TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)worldObj.getTileEntity(i + xCoord, j + yCoord, k + zCoord);
+						while(expansion.getNext() != null)
+						{
+							expansion = expansion.getNext();
+							if(expansion.tileType == Reference.ARMOR_STORAGE_EXPANSION)
+								return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 
 	public void setInventoryRows(int i)
 	{
@@ -119,13 +155,11 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 
 	@Override
 	public String getInventoryName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean hasCustomInventoryName() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -197,14 +231,10 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 
 	@Override
 	public void openInventory() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void closeInventory() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

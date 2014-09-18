@@ -18,6 +18,7 @@ import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummy;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIOActive;
 import com.pauljoda.modularsystems.furnace.blocks.BlockTextureOverlay;
+import com.pauljoda.modularsystems.storage.blocks.BlockArmorStorageExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockHoppingStorageExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageCore;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageExpansion;
@@ -42,6 +43,7 @@ public class BlockManager {
 	public static Block storageCore;
 	public static Block storageExpansion;
 	public static Block storageHoppingExpansion;
+	public static Block storageArmorExpansion;
 
 	public static void registerBlocks()
 	{
@@ -64,26 +66,28 @@ public class BlockManager {
 		storageCore = new BlockStorageCore();
 		storageExpansion = new BlockStorageExpansion();
 		storageHoppingExpansion = new BlockHoppingStorageExpansion();
+		storageArmorExpansion = new BlockArmorStorageExpansion();
 	}
 	
 	public static void register()
 	{
 		//Furnace
-		GameRegistry.registerBlock(furnaceCore, "modularsystems:blockFurnaceCore");
-		GameRegistry.registerBlock(furnaceCoreActive, "modularsystems:blockFurnaceCoreActive");
-		GameRegistry.registerBlock(furnaceDummy, "modularsystems:blockFurnaceDummy");
-		GameRegistry.registerBlock(furnaceCraftingUpgradeInactive, "modularsystems:blockFurnaceCraftingUpgradeInactive");
-		GameRegistry.registerBlock(furnaceCraftingUpgradeActive, "modularsystems:blockFurnaceCraftingUpgradeActive");
-		GameRegistry.registerBlock(furnaceDummyIO, "modularsystems:blockFurnaceDummyIO");
-		GameRegistry.registerBlock(furnaceDummyActiveIO, "modularsystems:blockFurnaceDummyActiveIO");
-		GameRegistry.registerBlock(furnaceAddition, "modularsystems:blockFurnaceAddition");
-		GameRegistry.registerBlock(furnaceAdditionActive, "modularsystems:blockFurnaceAdditionActive");
-		GameRegistry.registerBlock(overLayTexture, "modularsystems:overLayTexture");
+		GameRegistry.registerBlock(furnaceCore, "blockFurnaceCore");
+		GameRegistry.registerBlock(furnaceCoreActive, "blockFurnaceCoreActive");
+		GameRegistry.registerBlock(furnaceDummy, "blockFurnaceDummy");
+		GameRegistry.registerBlock(furnaceCraftingUpgradeInactive, "blockFurnaceCraftingUpgradeInactive");
+		GameRegistry.registerBlock(furnaceCraftingUpgradeActive, "blockFurnaceCraftingUpgradeActive");
+		GameRegistry.registerBlock(furnaceDummyIO, "blockFurnaceDummyIO");
+		GameRegistry.registerBlock(furnaceDummyActiveIO, "blockFurnaceDummyActiveIO");
+		GameRegistry.registerBlock(furnaceAddition, "blockFurnaceAddition");
+		GameRegistry.registerBlock(furnaceAdditionActive, "blockFurnaceAdditionActive");
+		GameRegistry.registerBlock(overLayTexture, "overLayTexture");
 	
 		//Storage
-		GameRegistry.registerBlock(storageCore, "modularsystems:blockStorageCore");
-		GameRegistry.registerBlock(storageExpansion, "modularsystems:blockStorageExpansion");
-		GameRegistry.registerBlock(storageHoppingExpansion, "modularsystems:blockHoppingStorageExpansion");
+		GameRegistry.registerBlock(storageCore, "blockStorageCore");
+		GameRegistry.registerBlock(storageExpansion, "blockStorageExpansion");
+		GameRegistry.registerBlock(storageHoppingExpansion, "blockHoppingStorageExpansion");
+		GameRegistry.registerBlock(storageArmorExpansion, "blockArmorStorageExpansion");
 	}
 	
 	public static void registerCraftingRecipes()
@@ -120,6 +124,10 @@ public class BlockManager {
 				"XXX", 'X', Items.stick, 'x', Blocks.chest);
 		
 		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(storageHoppingExpansion, 1), storageExpansion, Items.ender_pearl, Blocks.hopper);
-	
+		
+		CraftingManager.getInstance().addRecipe(new ItemStack(storageArmorExpansion, 1),
+				" X ",
+				"XsX",
+				" X ", 'X', Items.leather, storageExpansion);
 	}
 }

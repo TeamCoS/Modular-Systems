@@ -58,6 +58,7 @@ public class ModularSystems {
 		BlockManager.registerBlocks();
 		BlockManager.register();
 		BlockManager.registerCraftingRecipes();
+		
 	}
 
 	@EventHandler

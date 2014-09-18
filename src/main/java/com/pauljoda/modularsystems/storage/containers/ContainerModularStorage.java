@@ -7,19 +7,28 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
+import com.pauljoda.modularsystems.core.util.SlotArmor;
 import com.pauljoda.modularsystems.storage.gui.GuiModularStorage;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerModularStorage extends Container {
 
 	public TileEntityStorageCore storageCore;
 	public List itemList = new ArrayList();
 	public int currentBottomRow = 0;
-	public ContainerModularStorage(InventoryPlayer playerInventory, TileEntityStorageCore tileEntityStorageCore)
+	public boolean hasArmorViewable;
+
+	public ContainerModularStorage(InventoryPlayer playerInventory, TileEntityStorageCore tileEntityStorageCore, final EntityPlayer thePlayer, boolean hasArmorUpgrade)
 	{
 		storageCore = tileEntityStorageCore;
+		hasArmorViewable = hasArmorUpgrade;
 
 		for (int i = 0; i < storageCore.inventoryRows; i++)
 		{
@@ -31,6 +40,16 @@ public class ContainerModularStorage extends Container {
 					addSlotToContainer(new Slot(tileEntityStorageCore, j + i * 11, -1000, -1000));
 			}
 		}
+
+		for (int i = 0; i < 4; ++i)
+		{
+			if(hasArmorViewable)
+				this.addSlotToContainer(new SlotArmor(playerInventory, playerInventory.getSizeInventory() - 1 - i, 199, 143 + i * 18, i, thePlayer));    
+			else
+				this.addSlotToContainer(new SlotArmor(playerInventory, playerInventory.getSizeInventory() - 1 - i, -1000, -1000, i, thePlayer));    
+
+		}
+
 		bindPlayerInventory(playerInventory);
 	}
 	protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
@@ -56,7 +75,7 @@ public class ContainerModularStorage extends Container {
 			stack = stackInSlot.copy();
 			//merges the item into player inventory since its in the tileEntity
 			if (slot < storageCore.inventoryRows * 11) {
-				if (!this.mergeItemStack(stackInSlot, storageCore.inventoryRows * 11, (storageCore.inventoryRows * 11) + 36, true)) {
+				if (!this.mergeItemStack(stackInSlot, (storageCore.inventoryRows * 11) + 4, (storageCore.inventoryRows * 11) + 40, true)) {
 					return null;
 				}
 			}
@@ -100,9 +119,9 @@ public class ContainerModularStorage extends Container {
 		{
 			for (int s = 0; s < 11; s++)
 			{
-					Slot slot = (Slot)this.inventorySlots.get((s + (f+j) * 11));
-					slot.xDisplayPosition = 8 + s * 18;
-					slot.yDisplayPosition = 18 + f * 18;
+				Slot slot = (Slot)this.inventorySlots.get((s + (f+j) * 11));
+				slot.xDisplayPosition = 8 + s * 18;
+				slot.yDisplayPosition = 18 + f * 18;
 			}
 		}
 	}

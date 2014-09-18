@@ -38,21 +38,23 @@ public class GuiModularStorage extends GuiContainer {
 	private ContainerModularStorage chestItems;
 	private InventoryPlayer inventory;
 	protected final EntityPlayer thePlayer;
+	private boolean armorViewable;
 	private StatisticsPanel statsPanel;
 
 	private static final ResourceLocation textureLocation = new ResourceLocation("modularsystems:textures/modular_storage_gui.png");
 
-	public GuiModularStorage(InventoryPlayer inventoryPlayer, TileEntityStorageCore tileEntity, EntityPlayer player) 
+	public GuiModularStorage(InventoryPlayer inventoryPlayer, TileEntityStorageCore tileEntity, EntityPlayer player, boolean hasArmorViewable) 
 	{
-		super(new ContainerModularStorage(inventoryPlayer, tileEntity));
+		super(new ContainerModularStorage(inventoryPlayer, tileEntity, player, hasArmorViewable));
 		this.core = tileEntity;
 		this.inventory = inventoryPlayer;
+		this.armorViewable = hasArmorViewable;
 		this.thePlayer = player;
 		this.xSize = 229;
 		this.ySize = 221;
 		this.allowUserInput = true;
 		statsPanel = new StatisticsPanel(-60, 0);
-		
+
 		statsPanel.addNode(240, 224, GuiColor.BLACK + String.valueOf(core.inventoryRows * 11));
 
 	}
@@ -82,42 +84,42 @@ public class GuiModularStorage extends GuiContainer {
 		super.onGuiClosed();
 	}
 
-	 public void handleMouseInput()
-	    {
-	        super.handleMouseInput();
-	        int i = Mouse.getEventDWheel();
+	public void handleMouseInput()
+	{
+		super.handleMouseInput();
+		int i = Mouse.getEventDWheel();
 
-	        if (i != 0 && this.needsScrollBars())
-	        {
-	            int j = this.chestItems.storageCore.inventoryRows - 6;
+		if (i != 0 && this.needsScrollBars())
+		{
+			int j = this.chestItems.storageCore.inventoryRows - 6;
 
-	            if (i > 0)
-	            {
-	                i = 1;
-	            }
+			if (i > 0)
+			{
+				i = 1;
+			}
 
-	            if (i < 0)
-	            {
-	                i = -1;
-	            }
+			if (i < 0)
+			{
+				i = -1;
+			}
 
-	            this.currentScroll = (float)((double)this.currentScroll - (double)i / (double)j);
+			this.currentScroll = (float)((double)this.currentScroll - (double)i / (double)j);
 
-	            if (this.currentScroll < 0.0F)
-	            {
-	                this.currentScroll = 0.0F;
-	            }
+			if (this.currentScroll < 0.0F)
+			{
+				this.currentScroll = 0.0F;
+			}
 
-	            if (this.currentScroll > 1.0F)
-	            {
-	                this.currentScroll = 1.0F;
-	            }
+			if (this.currentScroll > 1.0F)
+			{
+				this.currentScroll = 1.0F;
+			}
 
-	            this.chestItems.scrollTo(this.currentScroll);
-	            updateScreen();
-	        }
-	    }
-	 
+			this.chestItems.scrollTo(this.currentScroll);
+			updateScreen();
+		}
+	}
+
 	@Override
 	public void drawScreen(int par1, int par2, float par3)
 	{
@@ -203,6 +205,8 @@ public class GuiModularStorage extends GuiContainer {
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+		if(this.armorViewable)
+			this.drawTexturedModalRect(x + 194, y + 138, 230, 161, 26, 79);
 
 		int i1 = this.guiLeft + 210;
 		int k = this.guiTop + 18;

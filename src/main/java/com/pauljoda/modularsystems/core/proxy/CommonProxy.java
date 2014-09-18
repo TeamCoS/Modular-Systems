@@ -51,7 +51,7 @@ public class CommonProxy implements IGuiHandler
 			else if(tileEntity instanceof TileEntityStorageCore)
 			{
 				TileEntityStorageCore storageCore = (TileEntityStorageCore)world.getTileEntity(x, y, z);
-				return new ContainerModularStorage(player.inventory, storageCore);
+				return new ContainerModularStorage(player.inventory, storageCore, player, storageCore.hasArmorUpgrade());
 			}
 		}
 		

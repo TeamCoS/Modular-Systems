@@ -12,6 +12,7 @@ public class Reference {
 
 	public static final int BASIC_STORAGE_EXPANSION = 0;
 	public static final int HOPPING_STORAGE_EXPANSION = 1;
+	public static final int ARMOR_STORAGE_EXPANSION = 2;
 	
 	public static final String MOD_ID = "modularsystems";
 	public static final String MOD_NAME = "Modular Systems";
