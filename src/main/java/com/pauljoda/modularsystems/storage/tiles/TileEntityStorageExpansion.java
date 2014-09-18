@@ -23,12 +23,13 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 
+import com.pauljoda.modularsystems.core.ModularTileEntity;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.fakeplayer.FakePlayerPool;
 import com.pauljoda.modularsystems.fakeplayer.FakePlayerPool.PlayerUser;
 import com.pauljoda.modularsystems.fakeplayer.ModularSystemsFakePlayer;
 
-public class TileEntityStorageExpansion extends TileEntity implements IInventory, IEntitySelector {
+public class TileEntityStorageExpansion extends ModularTileEntity implements IInventory, IEntitySelector {
 
 	public int coreX;
 	public int coreY;
@@ -72,7 +73,7 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 
 	public void invalidateExpansion()
 	{
-		if(getCore() != null)
+		if(getCore() != null && this.tileType == Reference.BASIC_STORAGE_EXPANSION)
 		{
 			TileEntityStorageCore core = getCore();
 			core.dropItems(xCoord, yCoord, zCoord);
@@ -83,6 +84,7 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 		if(getNext() != null)
 		{
 			TileEntityStorageExpansion expansion = getNext();
+			nextY = -100;
 			expansion.invalidateExpansion();
 			expansion.invalidateCore();
 		}
@@ -129,30 +131,16 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound nbtTag = new NBTTagCompound();
-		this.writeToNBT(nbtTag);
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
-	{
-		readFromNBT(pkt.func_148857_g());
-	}
-
-
-	@Override
 	public void updateEntity()
 	{
-		switch(tileType)
+		if(!this.isPowered())
 		{
-		case Reference.SMASHING_STORAGE_EXPANSION :
-			hooverItems(1.0D, 0.1D);
-			break;
-		case Reference.HOPPING_STORAGE_EXPANSION :
-			hooverItems(3.0D, 0.05D);
-			break;
+			switch(tileType)
+			{
+			case Reference.HOPPING_STORAGE_EXPANSION :
+				hooverItems(3.0D, 0.05D);
+				break;
+			}
 		}
 	}
 
@@ -249,7 +237,7 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 	{
 		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		meta -= 2;
-		if(getCore() != null)
+		if(getCore() != null && !isPowered())
 		{
 			int x = xCoord;
 			int y = yCoord;
@@ -278,7 +266,7 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 			breakBlock(x,y,z);
 		}
 	}
-	
+
 	private void breakBlock(int x, int y, int z) {
 		if (worldObj.isRemote) return;
 
@@ -315,13 +303,13 @@ public class TileEntityStorageExpansion extends TileEntity implements IInventory
 							EntityItem stack = new EntityItem(worldObj, x + 0.5D, y + 0.5D, z + 0.5D, new ItemStack(item.getItem(), item.stackSize, item.getItemDamage()));
 							worldObj.spawnEntityInWorld(stack);
 						}
-						
+
 					}
 				}
 			}
 		});
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
 		if(getCore() != null)

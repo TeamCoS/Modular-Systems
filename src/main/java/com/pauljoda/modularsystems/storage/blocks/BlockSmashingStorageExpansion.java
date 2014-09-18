@@ -4,6 +4,7 @@ import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageExpansion;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockSmashingStorageExpansion extends BlockStorageExpansion {
+public class BlockSmashingStorageExpansion extends BlockBasicExpansion {
 
 	@SideOnly(Side.CLIENT)
 	private IIcon drillFace;
@@ -36,6 +37,7 @@ public class BlockSmashingStorageExpansion extends BlockStorageExpansion {
 		}
 		return super.onBlockActivated(world, x, y, z, player, metadata, faceLocationX, faceLocationY, faceLocationZ);
 	}
+	
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister par1IconRegister)
 	{
@@ -58,44 +60,7 @@ public class BlockSmashingStorageExpansion extends BlockStorageExpansion {
 
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLivingBase, ItemStack itemStack)
 	{
-		int l = MathHelper.floor_double((double)(entityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-
-		if (MathHelper.abs((float)entityLivingBase.posX - (float)x) < 2.0F && MathHelper.abs((float)entityLivingBase.posZ - (float)z) < 2.0F)
-		{
-			double d0 = entityLivingBase.posY + 1.82D - (double)entityLivingBase.yOffset;
-
-			if (d0 - (double)y > 2.0D)
-			{
-				world.setBlockMetadataWithNotify(x, y, z, 3, 2);
-			}
-
-			if ((double)y - d0 > 0.0D)
-			{
-				world.setBlockMetadataWithNotify(x, y, z, 2, 2);
-			}
-		}
-		else
-		{
-			if (l == 0)
-			{
-				world.setBlockMetadataWithNotify(x, y, z, 4, 2);
-			}
-
-			if (l == 1)
-			{
-				world.setBlockMetadataWithNotify(x, y, z, 7, 2);
-			}
-
-			if (l == 2)
-			{
-				world.setBlockMetadataWithNotify(x, y, z, 5, 2);
-			}
-
-			if (l == 3)
-			{
-				world.setBlockMetadataWithNotify(x, y, z, 6, 2);
-			}
-		}
+		world.setBlockMetadataWithNotify(x, y, z, BlockPistonBase.determineOrientation(world, x, y, z, entityLivingBase) + 2, 2);
 		super.onBlockPlacedBy(world, x, y, z, entityLivingBase, itemStack);
 	}
 	
@@ -104,6 +69,7 @@ public class BlockSmashingStorageExpansion extends BlockStorageExpansion {
     {
 		TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)world.getTileEntity(x, y, z);
 		expansion.tryBreakBlock();
+		super.onNeighborBlockChange(world, x, y, z, changedBlock);
     }
 	
 	@Override

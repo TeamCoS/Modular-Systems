@@ -10,7 +10,7 @@ import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageExpansion;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockArmorStorageExpansion extends BlockStorageExpansion {
+public class BlockArmorStorageExpansion extends BlockBasicExpansion {
 
 	public BlockArmorStorageExpansion() {
 		super();

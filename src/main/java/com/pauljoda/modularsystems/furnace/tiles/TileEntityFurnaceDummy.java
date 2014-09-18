@@ -1,5 +1,7 @@
 package com.pauljoda.modularsystems.furnace.tiles;
 
+import com.pauljoda.modularsystems.core.ModularTileEntity;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -11,7 +13,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventory
+public class TileEntityFurnaceDummy extends ModularTileEntity implements ISidedInventory
 {
 	public int slot = 4;
 	int coreX;
@@ -62,19 +64,6 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 		tagCompound.setInteger("Slot", slot);
 		tagCompound.setInteger("Icon", icon);
 		tagCompound.setInteger("Meta", metadata);
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound nbtTag = new NBTTagCompound();
-		this.writeToNBT(nbtTag);
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
-	{
-		readFromNBT(pkt.func_148857_g());
 	}
 
 	public Block getBlock()

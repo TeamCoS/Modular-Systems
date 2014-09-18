@@ -10,7 +10,8 @@ tile.modularsystems:blockFurnaceAdditionInactive.name=Modular Furnace Addition
 tile.modularsystems:blockFurnaceAdditionActive.name=Modular Furnace Addition
 
 tile.modularsystems:blockStorageCore.name=Modular Storage Core
-tile.modularsystems:blockStorageExpansion.name=Modular Storage Expansion
+tile.modularsystems:blockBasicExpansion.name=Modular Storage Basic Expansion
+tile.modularsystems:blockStorageExpansion.name=Modular Storage Capacity Expansion
 tile.modularsystems:blockHoppingStorageExpansion.name=Modular Storage Hopping Expansion
 tile.modularsystems:blockArmorStorageExpansion.name=Modular Storage Armor Expansion 
 tile.modularsystems:blockSmashingStorageExpansion.name=Modular Storage Smashing Expansion 

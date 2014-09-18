@@ -23,6 +23,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 
+import com.pauljoda.modularsystems.core.ModularTileEntity;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
@@ -31,7 +32,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
+public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedInventory
 {
 	//Automation related 
 	private static final int[] slots_top = new int[] {0};
@@ -915,18 +916,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 	}
 
-	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound nbtTag = new NBTTagCompound();
-		this.writeToNBT(nbtTag);
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
-	{
-		readFromNBT(pkt.func_148857_g());
-	}
 	public boolean isBurning()
 	{
 		return furnaceBurnTime > 0;

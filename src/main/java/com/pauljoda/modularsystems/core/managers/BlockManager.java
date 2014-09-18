@@ -19,10 +19,11 @@ import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIOActive;
 import com.pauljoda.modularsystems.furnace.blocks.BlockTextureOverlay;
 import com.pauljoda.modularsystems.storage.blocks.BlockArmorStorageExpansion;
+import com.pauljoda.modularsystems.storage.blocks.BlockBasicExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockHoppingStorageExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockSmashingStorageExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageCore;
-import com.pauljoda.modularsystems.storage.blocks.BlockStorageExpansion;
+import com.pauljoda.modularsystems.storage.blocks.BlockCapacityExpansion;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -42,6 +43,7 @@ public class BlockManager {
 	
 	//Storage
 	public static Block storageCore;
+	public static Block basicExpansion;
 	public static Block storageExpansion;
 	public static Block storageHoppingExpansion;
 	public static Block storageArmorExpansion;
@@ -66,7 +68,8 @@ public class BlockManager {
 	
 		//Storage
 		storageCore = new BlockStorageCore();
-		storageExpansion = new BlockStorageExpansion();
+		basicExpansion = new BlockBasicExpansion();
+		storageExpansion = new BlockCapacityExpansion();
 		storageHoppingExpansion = new BlockHoppingStorageExpansion();
 		storageArmorExpansion = new BlockArmorStorageExpansion();
 		storageSmashingExpansion = new BlockSmashingStorageExpansion();
@@ -88,6 +91,7 @@ public class BlockManager {
 	
 		//Storage
 		GameRegistry.registerBlock(storageCore, "blockStorageCore");
+		GameRegistry.registerBlock(basicExpansion, "blockBasicExpansion");
 		GameRegistry.registerBlock(storageExpansion, "blockStorageExpansion");
 		GameRegistry.registerBlock(storageHoppingExpansion, "blockHoppingStorageExpansion");
 		GameRegistry.registerBlock(storageArmorExpansion, "blockArmorStorageExpansion");
@@ -117,21 +121,29 @@ public class BlockManager {
 				"xCx",
 				"XxX", 'X', Items.iron_ingot, 'x', new ItemStack(Items.dye, 9, 4), 'C', Blocks.crafting_table); 
 		
+		//Storage
 		CraftingManager.getInstance().addRecipe(new ItemStack(storageCore, 1),
 				"XxX",
 				"xCx",
 				"XxX", 'X', Blocks.log, 'x', Blocks.planks, 'C', Blocks.chest);
 		
-		CraftingManager.getInstance().addRecipe(new ItemStack(storageExpansion, 1),
+		CraftingManager.getInstance().addRecipe(new ItemStack(basicExpansion, 1),
 				"XXX",
 				"XxX",
-				"XXX", 'X', Items.stick, 'x', Blocks.chest);
+				"XXX", 'X', Blocks.planks, 'x', Items.string);
 		
-		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(storageHoppingExpansion, 1), storageExpansion, Items.ender_pearl, Blocks.hopper);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(storageExpansion, 1), basicExpansion, Blocks.chest);
+		
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(storageHoppingExpansion, 1), basicExpansion, Items.ender_pearl, Blocks.hopper);
 		
 		CraftingManager.getInstance().addRecipe(new ItemStack(storageArmorExpansion, 1),
 				" X ",
 				"XsX",
-				" X ", 'X', Items.leather, 's', storageExpansion);
+				" X ", 'X', Items.leather, 's', basicExpansion);
+		
+		CraftingManager.getInstance().addRecipe(new ItemStack(storageSmashingExpansion, 1),
+				" X ",
+				"XsX",
+				" X ", 'X', Items.diamond_pickaxe, 's', basicExpansion);
 	}
 }

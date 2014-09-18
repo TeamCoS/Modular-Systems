@@ -13,7 +13,7 @@ import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageExpansion;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockHoppingStorageExpansion extends BlockStorageExpansion {
+public class BlockHoppingStorageExpansion extends BlockBasicExpansion {
 
 	public BlockHoppingStorageExpansion() {
 		super();

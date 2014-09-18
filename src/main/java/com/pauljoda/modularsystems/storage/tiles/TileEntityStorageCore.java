@@ -2,10 +2,11 @@ package com.pauljoda.modularsystems.storage.tiles;
 
 import java.util.List;
 
+import com.pauljoda.modularsystems.core.ModularTileEntity;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.util.GeneralSettings;
-import com.pauljoda.modularsystems.storage.blocks.BlockStorageExpansion;
+import com.pauljoda.modularsystems.storage.blocks.BlockCapacityExpansion;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
@@ -22,7 +23,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class TileEntityStorageCore extends TileEntity implements IInventory {
+public class TileEntityStorageCore extends ModularTileEntity implements IInventory {
 
 	public ItemStack[] inv;
 	public int inventoryRows = 6;
@@ -88,7 +89,7 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 					
 					if(localBlock == BlockManager.storageArmorExpansion)
 						return true;
-					else if(BlockStorageExpansion.isStorageExpansion(localBlock))
+					else if(BlockCapacityExpansion.isStorageExpansion(localBlock))
 					{
 						TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)worldObj.getTileEntity(i + xCoord, j + yCoord, k + zCoord);
 						while(expansion.getNext() != null)
@@ -214,19 +215,6 @@ public class TileEntityStorageCore extends TileEntity implements IInventory {
 			}
 		}
 		tagCompound.setTag("Items", nbtTagList);
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound nbtTag = new NBTTagCompound();
-		this.writeToNBT(nbtTag);
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
-	{
-		readFromNBT(pkt.func_148857_g());
 	}
 
 	@Override

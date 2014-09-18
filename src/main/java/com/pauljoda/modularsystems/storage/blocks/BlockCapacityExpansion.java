@@ -23,17 +23,11 @@ import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageExpansion;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockStorageExpansion extends BlockContainer {
+public class BlockCapacityExpansion extends BlockBasicExpansion {
 
-	@SideOnly(Side.CLIENT)
-	public IIcon errorIcon;
-
-	public BlockStorageExpansion() {
-		super(Material.wood);
+	public BlockCapacityExpansion() {
+		super();
 		setBlockName("modularsystems:blockStorageExpansion");
-		setStepSound(Block.soundTypeWood);
-		setHardness(3.5f);
-		setCreativeTab(ModularSystems.tabModularSystems);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -43,35 +37,6 @@ public class BlockStorageExpansion extends BlockContainer {
 		errorIcon = par1IconRegister.registerIcon("modularsystems:chestSideError");
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return meta == 0 ? blockIcon : errorIcon;
-	}
-
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
-	{
-		if(player.isSneaking())
-			return false;
-
-		TileEntityStorageExpansion dummy = (TileEntityStorageExpansion)world.getTileEntity(x, y, z);
-
-		if(dummy != null && dummy.getCore() != null)
-		{
-			TileEntityStorageCore core = dummy.getCore();
-			return core.getBlockType().onBlockActivated(world, core.xCoord, core.yCoord, core.zCoord, player, par6, par7, par8, par9);
-		}
-
-		if(dummy.getCore() == null)
-		{
-			dummy.invalidateCore();
-			if(world.isRemote)
-				player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "Could not locate core, please replace this block"));
-		}
-		return true;
-	}
-
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase par5EntityLivingBase, ItemStack itemstack)
 	{
@@ -117,13 +82,16 @@ public class BlockStorageExpansion extends BlockContainer {
 						//Checks to make sure we are looking at only adjacent blocks
 						if(!(Math.abs(i) == 1 ? (Math.abs(j) == 0 && Math.abs(k) == 0) : ((Math.abs(j) == 1) ? Math.abs(k) == 0 : Math.abs(k) == 1)))
 							continue;
+						
+						if(i == 0 && j == 0 && k == 0)
+							continue;
 
 						Block localBlock = world.getBlock(i + x, j + y, k + z);
 						if(isStorageExpansion(localBlock)  && !registered)
 						{
 							TileEntityStorageExpansion next = (TileEntityStorageExpansion)world.getTileEntity(i + x, j + y, k + z);
 
-							if(next.getCore() != null)
+							if(next.getCore() != null && next.getNext() == null)
 							{
 								TileEntityStorageCore core = (TileEntityStorageCore)next.getCore();
 								if(core.inventoryRows < GeneralSettings.maxExpansionSize)
@@ -138,33 +106,19 @@ public class BlockStorageExpansion extends BlockContainer {
 									break;
 								}
 							}
+							else
+								world.setBlockMetadataWithNotify(x, y, z, 1, 2);
 						}
 					}
 				}
 			}
 		}
-		super.onBlockPlacedBy(world, x, y, z, par5EntityLivingBase, itemstack);
 	}
 
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block par5, int par6)
-	{
-		TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)world.getTileEntity(x, y, z);
-		expansion.invalidateExpansion();
-		expansion.invalidateCore();
-		super.breakBlock(world, x, y, z, par5, par6);
-	}
-	
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 		TileEntityStorageExpansion tile = new TileEntityStorageExpansion();
 		tile.setTileType(Reference.BASIC_STORAGE_EXPANSION);
 		return tile;
-	}
-	
-	public static boolean isStorageExpansion(Block block)
-	{
-		return (block == BlockManager.storageExpansion || block == BlockManager.storageHoppingExpansion 
-				|| block == BlockManager.storageArmorExpansion || block == BlockManager.storageSmashingExpansion);
 	}
 }
