@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnaceCrafter;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
@@ -51,7 +52,7 @@ public class CommonProxy implements IGuiHandler
 			else if(tileEntity instanceof TileEntityStorageCore)
 			{
 				TileEntityStorageCore storageCore = (TileEntityStorageCore)world.getTileEntity(x, y, z);
-				return new ContainerModularStorage(player.inventory, storageCore, player, storageCore.hasArmorUpgrade());
+				return new ContainerModularStorage(player.inventory, storageCore, player, storageCore.hasSpecificUpgrade(Reference.ARMOR_STORAGE_EXPANSION));
 			}
 		}
 		

@@ -5,28 +5,29 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.pauljoda.modularsystems.core.GeneralSettings;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
-import com.pauljoda.modularsystems.core.util.GeneralSettings;
 
 public class Reference {
 
 	public static final int BASIC_EXPANSION = 0;
-	public static final int BASIC_STORAGE_EXPANSION = 1;
+	public static final int STORAGE_EXPANSION = 1;
 	public static final int HOPPING_STORAGE_EXPANSION = 2;
 	public static final int ARMOR_STORAGE_EXPANSION = 3;
 	public static final int SMASHING_STORAGE_EXPANSION = 4;
+	public static final int SORTING_STORAGE_EXPANSION = 5;
 	
 	public static final String MOD_ID = "modularsystems";
 	public static final String MOD_NAME = "Modular Systems";
-	public static final String VERSION = "1.3";
+	public static final String VERSION = "1.32";
 	public static final String CHANNEL_NAME = MOD_ID;
 
 	//FURNACE: Blocks that are from my mod, used to prevent overlaying on reload
 	public static String[] modularTiles = 
 		{BlockManager.furnaceDummy.getUnlocalizedName(),
-		BlockManager.furnaceCraftingUpgradeActive.getUnlocalizedName(),
-		BlockManager.furnaceDummyActiveIO.getUnlocalizedName(),
-		BlockManager.furnaceAdditionActive.getUnlocalizedName()
+		BlockManager.furnaceCraftingUpgrade.getUnlocalizedName(),
+		BlockManager.furnaceDummyIO.getUnlocalizedName(),
+		BlockManager.furnaceAddition.getUnlocalizedName()
 		};
 
 	//FURNACE: Checks if the block is valid to form furnace
@@ -41,7 +42,7 @@ public class Reference {
 			}
 		}
 
-		if(blockId.equals(BlockManager.furnaceCraftingUpgradeInactive.getUnlocalizedName()) || blockId.equals(BlockManager.furnaceDummyIO.getUnlocalizedName()) || blockId.equals(Blocks.redstone_block.getUnlocalizedName()) || blockId.equals(BlockManager.furnaceAddition.getUnlocalizedName()))
+		if(blockId.equals(BlockManager.furnaceCraftingUpgrade.getUnlocalizedName()) || blockId.equals(BlockManager.furnaceDummyIO.getUnlocalizedName()) || blockId.equals(Blocks.redstone_block.getUnlocalizedName()) || blockId.equals(BlockManager.furnaceAddition.getUnlocalizedName()))
 			return true;
 
 		return true;
@@ -60,7 +61,7 @@ public class Reference {
 	//FURNACE
 	public static boolean isBadBlock(Block blockId) {
 
-		if(blockId == BlockManager.furnaceCraftingUpgradeInactive || blockId == BlockManager.furnaceCraftingUpgradeActive || blockId == BlockManager.furnaceDummyIO || blockId == Blocks.redstone_block || blockId == BlockManager.furnaceAddition || blockId == BlockManager.furnaceAdditionActive)
+		if(blockId == BlockManager.furnaceCraftingUpgrade || blockId == BlockManager.furnaceDummyIO || blockId == Blocks.redstone_block || blockId == BlockManager.furnaceAddition || blockId == BlockManager.furnaceAddition)
 			return false;
 
 		if(blockId.hasTileEntity(0))

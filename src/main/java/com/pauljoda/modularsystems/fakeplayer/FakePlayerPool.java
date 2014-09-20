@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.WorldEvent;
 
-import com.pauljoda.modularsystems.core.util.GeneralSettings;
-import com.pauljoda.modularsystems.core.util.LogHelper;
+import com.pauljoda.modularsystems.core.GeneralSettings;
+import com.pauljoda.modularsystems.core.helper.LogHelper;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 

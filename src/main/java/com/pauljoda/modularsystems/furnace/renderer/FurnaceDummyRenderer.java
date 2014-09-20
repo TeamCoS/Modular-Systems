@@ -84,7 +84,7 @@ public class FurnaceDummyRenderer implements ISimpleBlockRenderingHandler {
 
 		IIcon output;
 
-		if(block == BlockManager.furnaceCore || block == BlockManager.furnaceCraftingUpgradeInactive || block == BlockManager.furnaceDummyIO || block == BlockManager.furnaceAddition)
+		if(block == BlockManager.furnaceCore || block == BlockManager.furnaceCraftingUpgrade || block == BlockManager.furnaceDummyIO || block == BlockManager.furnaceAddition)
 			output = renderer.getBlockIconFromSideAndMetadata(BlockManager.overLayTexture, 0, 0);
 		else 
 			output = renderer.getBlockIconFromSideAndMetadata(block, 0,0);
@@ -109,13 +109,13 @@ public class FurnaceDummyRenderer implements ISimpleBlockRenderingHandler {
 
 			}
 
-			if(block == BlockManager.furnaceDummyActiveIO || block == BlockManager.furnaceDummyIO)
+			if(block == BlockManager.furnaceDummyIO)
 				renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
 
-			if(block == BlockManager.furnaceCraftingUpgradeActive || block == BlockManager.furnaceCraftingUpgradeInactive)
+			if(block == BlockManager.furnaceCraftingUpgrade)
 				renderer.renderBlockUsingTexture(Blocks.crafting_table, x, y, z, Blocks.crafting_table.getIcon(1, 0));
 
-			if(block == BlockManager.furnaceAddition || block == BlockManager.furnaceAdditionActive)
+			if(block == BlockManager.furnaceAddition)
 				renderer.renderBlockUsingTexture(Blocks.furnace, x, y, z, Blocks.furnace.getIcon(2, 0));
 
 			if(block == BlockManager.furnaceCore)

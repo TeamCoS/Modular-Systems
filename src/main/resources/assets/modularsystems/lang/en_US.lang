@@ -2,12 +2,10 @@ itemGroup.tabModularSystems=Modular Systems
 
 tile.modularsystems:blockFurnaceCore.name=Modular Furnace Core
 tile.modularsystems:blockFurnaceCoreActive.name=Modular Furnace Core
-tile.modularsystems:blockFurnaceCraftingUpgradeInactive.name=Modular Furnace Crafting Upgrade
-tile.modularsystems:blockFurnaceCraftingUpgradeActive.name=Modular Furnace Crafting Upgrade
-tile.modularsystems:blockFurnaceIOBlock.name=Modular Furnace I/O
-tile.modularsystems:blockFurnaceIOBlockActive.name=Modular Furnace I/O
-tile.modularsystems:blockFurnaceAdditionInactive.name=Modular Furnace Addition
-tile.modularsystems:blockFurnaceAdditionActive.name=Modular Furnace Addition
+tile.modularsystems:blockFurnaceDummy.name=Modular Furnace Dummy
+tile.modularsystems:blockFurnaceCraftingUpgrade.name=Modular Furnace Crafting Upgrade
+tile.modularsystems:blockFurnaceIO.name=Modular Furnace I/O
+tile.modularsystems:blockFurnaceAddition.name=Modular Furnace Addition
 
 tile.modularsystems:blockStorageCore.name=Modular Storage Core
 tile.modularsystems:blockBasicExpansion.name=Modular Storage Basic Expansion
@@ -15,3 +13,4 @@ tile.modularsystems:blockStorageExpansion.name=Modular Storage Capacity Expansio
 tile.modularsystems:blockHoppingStorageExpansion.name=Modular Storage Hopping Expansion
 tile.modularsystems:blockArmorStorageExpansion.name=Modular Storage Armor Expansion 
 tile.modularsystems:blockSmashingStorageExpansion.name=Modular Storage Smashing Expansion 
+tile.modularsystems:blockSortingStorageExpansion.name=Modular Storage Sorting Expansion

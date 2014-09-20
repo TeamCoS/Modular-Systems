@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,10 +15,14 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.VersionChecking;
+import com.pauljoda.modularsystems.core.abstracts.TexturedButton;
 import com.pauljoda.modularsystems.core.gui.StatisticsPanel;
 import com.pauljoda.modularsystems.core.lib.GuiColor;
+import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.lib.Strings;
-import com.pauljoda.modularsystems.core.util.VersionChecking;
+import com.pauljoda.modularsystems.core.network.StorageSortPacket;
 import com.pauljoda.modularsystems.storage.containers.ContainerModularStorage;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
 
@@ -35,11 +39,12 @@ public class GuiModularStorage extends GuiContainer {
 	private boolean hasScrollBar = true;
 	private List itemList = new ArrayList();
 	public static TileEntityStorageCore core;
-	private ContainerModularStorage chestItems;
+	private ContainerModularStorage containerModularStorage;
 	private InventoryPlayer inventory;
 	protected final EntityPlayer thePlayer;
 	private boolean armorViewable;
 	private StatisticsPanel statsPanel;
+	private boolean toggleSort = false;
 
 	private static final ResourceLocation textureLocation = new ResourceLocation("modularsystems:textures/modular_storage_gui.png");
 
@@ -63,16 +68,39 @@ public class GuiModularStorage extends GuiContainer {
 	public void initGui()
 	{
 		super.initGui();
-		this.chestItems = ((ContainerModularStorage)this.inventorySlots);
+		this.containerModularStorage = ((ContainerModularStorage)this.inventorySlots);
 		for (int i = 0; i < this.core.inventoryRows * 11; ++i)
 		{
 			ItemStack is = this.core.getStackInSlot(i);
 
 			this.itemList.add(is);
-			chestItems.itemList = this.itemList;
+			containerModularStorage.itemList = this.itemList;
+		}
+		int x = (width - xSize) / 2;
+		int y = (height - ySize) / 2;
+
+		if(containerModularStorage.storageCore.hasSpecificUpgrade(Reference.SORTING_STORAGE_EXPANSION))
+		{
+			this.buttonList.add(new TexturedButton(0, x + xSize - 34, y + 5, 10, 10, 10, 0));
+			this.buttonList.add(new TexturedButton(1, x + xSize - 46, y + 5, 10, 10, 20, 0));
 		}
 	}
 
+	@Override
+	public void actionPerformed(GuiButton button)
+	{
+		switch(button.id)
+		{
+		case 0 : 
+			StorageSortPacket packet = new StorageSortPacket(0);
+			ModularSystems.packetPipeline.sendToServer(packet);
+			break;
+		case 1 : 
+			StorageSortPacket packet1 = new StorageSortPacket(1);
+			ModularSystems.packetPipeline.sendToServer(packet1);
+			break;
+		}
+	}
 	@Override
 	public void updateScreen()
 	{
@@ -88,10 +116,9 @@ public class GuiModularStorage extends GuiContainer {
 	{
 		super.handleMouseInput();
 		int i = Mouse.getEventDWheel();
-
 		if (i != 0 && this.needsScrollBars())
 		{
-			int j = this.chestItems.storageCore.inventoryRows - 6;
+			int j = this.containerModularStorage.storageCore.inventoryRows - 6;
 
 			if (i > 0)
 			{
@@ -115,14 +142,36 @@ public class GuiModularStorage extends GuiContainer {
 				this.currentScroll = 1.0F;
 			}
 
-			this.chestItems.scrollTo(this.currentScroll);
+			this.containerModularStorage.scrollTo(this.currentScroll);
 			updateScreen();
 		}
 	}
 
+	protected void mouseClicked(int par1, int par2, int par3)
+	{
+		super.mouseClicked(par1, par2, par3);
+		if(par3 == 2)
+		{
+			if(toggleSort)
+			{
+				StorageSortPacket packet = new StorageSortPacket(0);
+				ModularSystems.packetPipeline.sendToServer(packet);
+				toggleSort = false;
+			}
+			else
+			{
+				StorageSortPacket packet1 = new StorageSortPacket(1);
+				ModularSystems.packetPipeline.sendToServer(packet1);
+				toggleSort = true;
+			}
+
+		}
+	}
 	@Override
 	public void drawScreen(int par1, int par2, float par3)
 	{
+		super.drawScreen(par1, par2, par3);
+
 		boolean flag = Mouse.isButtonDown(0);
 		int k = this.guiLeft;
 		int l = this.guiTop;
@@ -158,7 +207,7 @@ public class GuiModularStorage extends GuiContainer {
 					this.currentScroll = 1.0F;
 				}
 
-				this.chestItems.scrollTo(this.currentScroll);
+				this.containerModularStorage.scrollTo(this.currentScroll);
 			}
 		}
 		this.updateScreen();
@@ -173,7 +222,6 @@ public class GuiModularStorage extends GuiContainer {
 				drawHoveringText(temp, par1, par2, fontRendererObj); 
 			}
 		}
-		super.drawScreen(par1, par2, par3);
 	}
 
 	private boolean needsScrollBars()

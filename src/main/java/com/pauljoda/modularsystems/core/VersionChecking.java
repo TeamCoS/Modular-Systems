@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core.util;
+package com.pauljoda.modularsystems.core;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -7,6 +7,7 @@ import java.util.Properties;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
 
+import com.pauljoda.modularsystems.core.helper.LogHelper;
 import com.pauljoda.modularsystems.core.lib.Colours;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.lib.Strings;

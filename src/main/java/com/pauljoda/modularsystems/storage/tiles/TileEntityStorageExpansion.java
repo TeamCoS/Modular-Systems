@@ -1,9 +1,9 @@
 package com.pauljoda.modularsystems.storage.tiles;
 
+import java.util.EnumMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -13,18 +13,18 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent;
 
-import com.pauljoda.modularsystems.core.ModularTileEntity;
+import com.google.common.collect.Maps;
+import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.util.WorldUtil;
 import com.pauljoda.modularsystems.fakeplayer.FakePlayerPool;
 import com.pauljoda.modularsystems.fakeplayer.FakePlayerPool.PlayerUser;
 import com.pauljoda.modularsystems.fakeplayer.ModularSystemsFakePlayer;
@@ -35,9 +35,17 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 	public int coreY;
 	public int coreZ;
 
-	public int nextX;
-	public int nextY;
-	public int nextZ;
+	public int childX;
+	public int childY;
+	public int childZ;
+
+	public int siblingX;
+	public int siblingY;
+	public int siblingZ;
+
+	public int parentX;
+	public int parentY;
+	public int parentZ;
 
 	public int tileType;
 
@@ -57,13 +65,41 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 		coreZ = core.zCoord;
 	}
 
-	public void setNext(TileEntityStorageExpansion next)
+	public void setChild(TileEntityStorageExpansion next)
 	{
-		nextX = next.xCoord;
-		nextY = next.yCoord;
-		nextZ = next.zCoord;
+		childX = next.xCoord;
+		childY = next.yCoord;
+		childZ = next.zCoord;
 	}
 
+	public TileEntityStorageExpansion getChild()
+	{
+		return (TileEntityStorageExpansion)worldObj.getTileEntity(childX, childY, childZ);
+	}
+
+	public void setParent(TileEntityStorageExpansion par)
+	{
+		parentX = par.xCoord;
+		parentY = par.yCoord;
+		parentZ = par.zCoord;
+	}
+
+	public TileEntityStorageExpansion getParent()
+	{
+		return (TileEntityStorageExpansion)worldObj.getTileEntity(parentX, parentY, parentZ);
+	}
+
+	public void setSibling(TileEntityStorageExpansion expand)
+	{
+		siblingX = expand.xCoord;
+		siblingY = expand.yCoord;
+		siblingZ = expand.zCoord;
+	}
+
+	public TileEntityStorageExpansion getSibling()
+	{
+		return (TileEntityStorageExpansion)worldObj.getTileEntity(siblingX, siblingY, siblingZ);
+	}
 	public void invalidateCore()
 	{
 		this.coreY = -100;
@@ -73,7 +109,7 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 
 	public void invalidateExpansion()
 	{
-		if(getCore() != null && this.tileType == Reference.BASIC_STORAGE_EXPANSION)
+		if(getCore() != null && this.tileType == Reference.STORAGE_EXPANSION)
 		{
 			TileEntityStorageCore core = getCore();
 			core.dropItems(xCoord, yCoord, zCoord);
@@ -81,18 +117,43 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 			worldObj.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
 		}
 
-		if(getNext() != null)
+		if(getParent() != null)
 		{
-			TileEntityStorageExpansion expansion = getNext();
-			nextY = -100;
-			expansion.invalidateExpansion();
-			expansion.invalidateCore();
+			TileEntityStorageExpansion parent = getParent();
+			if(parent.getChild() != null && !WorldUtil.areTilesSame(parent.getChild(), this) && getSibling() != null)
+			{
+				TileEntityStorageExpansion beforeSibling = parent.getChild();
+				
+				while(beforeSibling.getSibling() != null && !WorldUtil.areTilesSame(beforeSibling.getSibling(), this))
+					beforeSibling = beforeSibling.getSibling();
+				
+				beforeSibling.setSibling(getSibling());
+			}
+			else if(getSibling() != null)
+			{
+				parent.setChild(getSibling());
+			}
 		}
-	}
+		
+		if(getChild() != null)
+		{
+			TileEntityStorageExpansion child = getChild();
+			if(child.getSibling() != null)
+			{
+				TileEntityStorageExpansion sibling = child.getSibling();
 
-	public TileEntityStorageExpansion getNext()
-	{
-		return (TileEntityStorageExpansion)worldObj.getTileEntity(nextX, nextY, nextZ);
+				while(sibling != null)
+				{
+					sibling.invalidateExpansion();
+					sibling.invalidateCore();
+					sibling = sibling.getSibling();
+				}
+			}
+			childY = -100;
+			child.invalidateExpansion();
+			child.invalidateCore();
+		}
+
 	}
 
 	public void setTileType(int type)
@@ -108,9 +169,17 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 		coreY = tagCompound.getInteger("coreY");
 		coreZ = tagCompound.getInteger("coreZ");
 
-		nextX = tagCompound.getInteger("nextX");
-		nextY = tagCompound.getInteger("nextY");
-		nextZ = tagCompound.getInteger("nextZ");
+		childX = tagCompound.getInteger("nextX");
+		childY = tagCompound.getInteger("nextY");
+		childZ = tagCompound.getInteger("nextZ");
+
+		siblingX = tagCompound.getInteger("siblingX");
+		siblingY = tagCompound.getInteger("siblingY");
+		siblingZ = tagCompound.getInteger("siblingZ");
+
+		parentX = tagCompound.getInteger("parentX");
+		parentY = tagCompound.getInteger("parentY");
+		parentZ = tagCompound.getInteger("parentZ");
 
 		tileType = tagCompound.getInteger("Type");
 	}
@@ -123,9 +192,17 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 		tagCompound.setInteger("coreY", coreY);
 		tagCompound.setInteger("coreZ", coreZ);
 
-		tagCompound.setInteger("nextX", nextX);
-		tagCompound.setInteger("nextY", nextY);
-		tagCompound.setInteger("nextZ", nextZ);
+		tagCompound.setInteger("nextX", childX);
+		tagCompound.setInteger("nextY", childY);
+		tagCompound.setInteger("nextZ", childZ);
+
+		tagCompound.setInteger("siblingX", siblingX);
+		tagCompound.setInteger("siblingY", siblingY);
+		tagCompound.setInteger("siblingZ", siblingZ);
+
+		tagCompound.setInteger("parentX", parentX);
+		tagCompound.setInteger("parentY", parentY);
+		tagCompound.setInteger("parentZ", parentZ);
 
 		tagCompound.setInteger("Type", tileType);
 	}

@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import com.pauljoda.modularsystems.core.util.VersionChecking;
+import com.pauljoda.modularsystems.core.VersionChecking;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

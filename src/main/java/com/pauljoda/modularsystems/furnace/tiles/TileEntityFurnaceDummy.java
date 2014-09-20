@@ -1,6 +1,6 @@
 package com.pauljoda.modularsystems.furnace.tiles;
 
-import com.pauljoda.modularsystems.core.ModularTileEntity;
+import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

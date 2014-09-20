@@ -7,21 +7,21 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
+import com.pauljoda.modularsystems.core.GeneralSettings;
 import com.pauljoda.modularsystems.core.ModularSystems;
-import com.pauljoda.modularsystems.core.util.GeneralSettings;
-import com.pauljoda.modularsystems.furnace.blocks.BlockCrafterActive;
-import com.pauljoda.modularsystems.furnace.blocks.BlockCrafterInactive;
+import com.pauljoda.modularsystems.furnace.blocks.BlockCrafter;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceAddition;
-import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceAdditionActive;
+import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceAddition;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummy;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
-import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIOActive;
+import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
 import com.pauljoda.modularsystems.furnace.blocks.BlockTextureOverlay;
 import com.pauljoda.modularsystems.storage.blocks.BlockArmorStorageExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockBasicExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockHoppingStorageExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockSmashingStorageExpansion;
+import com.pauljoda.modularsystems.storage.blocks.BlockSortingExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageCore;
 import com.pauljoda.modularsystems.storage.blocks.BlockCapacityExpansion;
 
@@ -33,12 +33,9 @@ public class BlockManager {
 	public static Block furnaceCore;
 	public static Block furnaceCoreActive;
 	public static Block furnaceDummy;
-	public static Block furnaceCraftingUpgradeInactive;
-	public static Block furnaceCraftingUpgradeActive;
+	public static Block furnaceCraftingUpgrade;
 	public static Block furnaceDummyIO;
-	public static Block furnaceDummyActiveIO;
 	public static Block furnaceAddition;
-	public static Block furnaceAdditionActive;
 	public static Block overLayTexture;
 	
 	//Storage
@@ -48,6 +45,7 @@ public class BlockManager {
 	public static Block storageHoppingExpansion;
 	public static Block storageArmorExpansion;
 	public static Block storageSmashingExpansion;
+	public static Block storageSortingExpansion;
 
 	public static void registerBlocks()
 	{
@@ -55,12 +53,9 @@ public class BlockManager {
 		furnaceCore = new BlockFurnaceCore(false).setBlockName("modularsystems:blockFurnaceCore").setCreativeTab(ModularSystems.tabModularSystems);
 		furnaceCoreActive = new BlockFurnaceCore(true).setLightLevel(1F).setBlockName("modularsystems:blockFurnaceCoreActive");
 		furnaceDummy = new BlockFurnaceDummy();
-		furnaceCraftingUpgradeInactive = new BlockCrafterInactive(Material.wood);
-		furnaceCraftingUpgradeActive = new BlockCrafterActive();
-		furnaceDummyIO = new BlockFurnaceDummyIO(Material.rock);
-		furnaceDummyActiveIO = new BlockFurnaceDummyIOActive();
+		furnaceCraftingUpgrade = new BlockCrafter();
+		furnaceDummyIO = new BlockFurnaceDummyIO();
 		furnaceAddition = new BlockFurnaceAddition();
-		furnaceAdditionActive = new BlockFurnaceAdditionActive();
 		if(GeneralSettings.useTextures)
 			overLayTexture = new BlockTextureOverlay(GeneralSettings.textureName, "overLayTexture", true);
 		else
@@ -73,6 +68,7 @@ public class BlockManager {
 		storageHoppingExpansion = new BlockHoppingStorageExpansion();
 		storageArmorExpansion = new BlockArmorStorageExpansion();
 		storageSmashingExpansion = new BlockSmashingStorageExpansion();
+		storageSortingExpansion = new BlockSortingExpansion();
 	}
 	
 	public static void register()
@@ -81,12 +77,9 @@ public class BlockManager {
 		GameRegistry.registerBlock(furnaceCore, "blockFurnaceCore");
 		GameRegistry.registerBlock(furnaceCoreActive, "blockFurnaceCoreActive");
 		GameRegistry.registerBlock(furnaceDummy, "blockFurnaceDummy");
-		GameRegistry.registerBlock(furnaceCraftingUpgradeInactive, "blockFurnaceCraftingUpgradeInactive");
-		GameRegistry.registerBlock(furnaceCraftingUpgradeActive, "blockFurnaceCraftingUpgradeActive");
+		GameRegistry.registerBlock(furnaceCraftingUpgrade, "blockFurnaceCraftingUpgrade");
 		GameRegistry.registerBlock(furnaceDummyIO, "blockFurnaceDummyIO");
-		GameRegistry.registerBlock(furnaceDummyActiveIO, "blockFurnaceDummyActiveIO");
 		GameRegistry.registerBlock(furnaceAddition, "blockFurnaceAddition");
-		GameRegistry.registerBlock(furnaceAdditionActive, "blockFurnaceAdditionActive");
 		GameRegistry.registerBlock(overLayTexture, "overLayTexture");
 	
 		//Storage
@@ -96,6 +89,7 @@ public class BlockManager {
 		GameRegistry.registerBlock(storageHoppingExpansion, "blockHoppingStorageExpansion");
 		GameRegistry.registerBlock(storageArmorExpansion, "blockArmorStorageExpansion");
 		GameRegistry.registerBlock(storageSmashingExpansion, "blockSmashingStorageExpansion");
+		GameRegistry.registerBlock(storageSortingExpansion, "blockSortingStorageExpansion");
 	}
 	
 	public static void registerCraftingRecipes()
@@ -116,7 +110,7 @@ public class BlockManager {
 				"XxX",
 				"XXX", 'X', Items.iron_ingot, 'x', furnaceCore);
 
-		CraftingManager.getInstance().addRecipe(new ItemStack(furnaceCraftingUpgradeInactive, 1),
+		CraftingManager.getInstance().addRecipe(new ItemStack(furnaceCraftingUpgrade, 1),
 				"XxX",
 				"xCx",
 				"XxX", 'X', Items.iron_ingot, 'x', new ItemStack(Items.dye, 9, 4), 'C', Blocks.crafting_table); 
@@ -145,5 +139,10 @@ public class BlockManager {
 				" X ",
 				"XsX",
 				" X ", 'X', Items.diamond_pickaxe, 's', basicExpansion);
+		
+		CraftingManager.getInstance().addRecipe(new ItemStack(storageSortingExpansion, 1),
+				"XXX",
+				"XxX",
+				"XXX", 'X', Items.book, 'x', basicExpansion);
 	}
 }

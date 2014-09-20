@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core;
+package com.pauljoda.modularsystems.core.abstracts;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -6,6 +6,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class ModularTileEntity extends TileEntity {
 
@@ -20,6 +21,15 @@ public class ModularTileEntity extends TileEntity {
 
 	public static boolean isPoweringTo(World world, int x, int y, int z, int side) {
 		return world.getBlock(x, y, z).isProvidingWeakPower(world, x, y, z, side) > 0;
+	}
+	
+	public TileEntity getTileInDirection(ForgeDirection direction) {
+		int x = xCoord + direction.offsetX;
+		int y = yCoord + direction.offsetY;
+		int z = zCoord + direction.offsetZ;
+
+		if (worldObj != null && worldObj.blockExists(x, y, z)) { return worldObj.getTileEntity(x, y, z); }
+		return null;
 	}
 	
 	@Override

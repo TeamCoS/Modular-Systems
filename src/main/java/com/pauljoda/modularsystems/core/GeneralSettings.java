@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core.util;
+package com.pauljoda.modularsystems.core;
 
 import java.io.File;
 

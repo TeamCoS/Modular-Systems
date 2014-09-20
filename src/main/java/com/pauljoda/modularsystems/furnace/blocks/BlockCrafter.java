@@ -8,19 +8,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
 
-public class BlockFurnaceAdditionActive extends BlockContainer
+public class BlockCrafter extends BlockBasicDummy
 {
-    public BlockFurnaceAdditionActive()
+    public BlockCrafter()
     {
-        super(Material.rock);
+        super(Material.wood, true);
         
-        setBlockName("modularsystems:blockFurnaceAdditionActive");
-        setStepSound(Block.soundTypeStone);
-        setHardness(3.5f);  
+        setBlockName("modularsystems:blockFurnaceCraftingUpgrade");
+        setStepSound(Block.soundTypeWood);
+        setHardness(3.5f);
     }
     public int meta = 0;
     
@@ -32,19 +33,10 @@ public class BlockFurnaceAdditionActive extends BlockContainer
     @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
-        blockIcon = iconRegister.registerIcon("furnace_side");
+        blockIcon = iconRegister.registerIcon("crafting_table_top");
     }
     
-    @Override
-    public void breakBlock(World world, int x, int y, int z, Block par5, int par6)
-    {
-        TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getTileEntity(x, y, z);
-        
-        if(dummy != null && dummy.getCore() != null)
-            dummy.getCore().invalidateMultiblock();
-        
-        super.breakBlock(world, x, y, z, par5, par6);
-    }
+ 
     
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
@@ -73,6 +65,7 @@ public class BlockFurnaceAdditionActive extends BlockContainer
 	{
 		return false;
 	}
+	
 	@Override
 	public int getRenderType()
 	{
@@ -92,4 +85,5 @@ public class BlockFurnaceAdditionActive extends BlockContainer
 	{
 		return 1;
 	}    
+
 }

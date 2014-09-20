@@ -2,21 +2,16 @@ package com.pauljoda.modularsystems.storage.containers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
-import com.pauljoda.modularsystems.core.util.SlotArmor;
-import com.pauljoda.modularsystems.storage.gui.GuiModularStorage;
+import com.pauljoda.modularsystems.core.abstracts.SlotArmor;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerModularStorage extends Container {
 
@@ -125,9 +120,18 @@ public class ContainerModularStorage extends Container {
 			}
 		}
 	}
+	
+	public void sortInventoryAlphabetically()
+	{
+		storageCore.sortInventoryAlphabetically();
+	}
+	
+	public void sortInventoryByIndex()
+	{
+		storageCore.sortInventoryByIndex();
+	}
 	@Override
 	public boolean canInteractWith(EntityPlayer p_75145_1_) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 }

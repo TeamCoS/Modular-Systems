@@ -18,7 +18,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 
 import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
-import com.pauljoda.modularsystems.core.util.LogHelper;
+import com.pauljoda.modularsystems.core.helper.LogHelper;
 
 import cpw.mods.fml.common.eventhandler.Event;
 

@@ -194,7 +194,7 @@ public class BlockStorageCore extends BlockContainer {
 						continue;
 
 					Block localBlock = world.getBlock(i + x, j + y, k + z);
-					if(localBlock == BlockManager.storageExpansion)
+					if(BlockBasicExpansion.isStorageExpansion(localBlock))
 					{
 						TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)world.getTileEntity(i + x, j + y, k + z);
 						expansion.invalidateExpansion();

@@ -11,10 +11,10 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import com.pauljoda.modularsystems.core.VersionChecking;
 import com.pauljoda.modularsystems.core.gui.StatisticsPanel;
 import com.pauljoda.modularsystems.core.lib.GuiColor;
 import com.pauljoda.modularsystems.core.lib.Strings;
-import com.pauljoda.modularsystems.core.util.VersionChecking;
 import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnaceCrafter;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 

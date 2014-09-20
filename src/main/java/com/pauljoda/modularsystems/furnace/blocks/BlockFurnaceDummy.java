@@ -17,12 +17,12 @@ import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
 
-public class BlockFurnaceDummy extends BlockContainer
+public class BlockFurnaceDummy extends BlockBasicDummy
 {
 
 	public BlockFurnaceDummy()
 	{
-		super(Material.rock);
+		super(Material.rock, false);
 		setBlockName("modularsystems:blockFurnaceDummy");
 		setStepSound(Block.soundTypeStone);
 		setHardness(3.5f);
@@ -31,13 +31,6 @@ public class BlockFurnaceDummy extends BlockContainer
 	public int meta = 0;
 	Random furnaceRand = new Random();
 	
-	@Override
-	public TileEntity createNewTileEntity(World world, int i)
-	{
-		return new TileEntityFurnaceDummy();
-	}
-
-
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
 	{
@@ -56,12 +49,6 @@ public class BlockFurnaceDummy extends BlockContainer
 	{
 		TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getTileEntity(x, y, z);
 
-		if(dummy != null && dummy.getCore() != null)
-		{
-			dummy.getCore().isValidMultiblock = false;
-			dummy.getCore().invalidateMultiblock();
-
-		}
 		if(world.getBlock(x, y, z) == null)
 		{
 			float f = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
@@ -74,52 +61,4 @@ public class BlockFurnaceDummy extends BlockContainer
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
-
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
-	{
-		if(player.isSneaking())
-			return false;
-
-		TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getTileEntity(x, y, z);
-
-		if(dummy != null && dummy.getCore() != null)
-		{
-			TileEntityFurnaceCore core = dummy.getCore();
-			return core.getBlockType().onBlockActivated(world, core.xCoord, core.yCoord, core.zCoord, player, par6, par7, par8, par9);
-		}
-
-		return true;
-	}
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-	@Override
-	public int getRenderType()
-	{
-		return ClientProxy.furnaceDummyRenderType;
-	}
-
-	@Override
-	public boolean canRenderInPass(int pass)
-	{
-		//Set the static var in the client proxy
-		ClientProxy.renderPass = pass;
-		//the block can render in both passes, so return true always
-		return true;
-	}
-	@Override
-	public int getRenderBlockPass()
-	{
-		return 1;
-	}
-
 }

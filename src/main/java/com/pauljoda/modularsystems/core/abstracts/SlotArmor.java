@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core.util;
+package com.pauljoda.modularsystems.core.abstracts;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

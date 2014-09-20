@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnaceEnabled;
 import com.pauljoda.modularsystems.furnace.renderer.FurnaceDummyRenderer;
@@ -50,7 +51,7 @@ public class ClientProxy extends CommonProxy {
 			else if(tileEntity instanceof TileEntityStorageCore)
 			{
 				TileEntityStorageCore storageCore = (TileEntityStorageCore)world.getTileEntity(x, y, z);
-				return new GuiModularStorage(player.inventory, storageCore, player, storageCore.hasArmorUpgrade());
+				return new GuiModularStorage(player.inventory, storageCore, player, storageCore.hasSpecificUpgrade(Reference.ARMOR_STORAGE_EXPANSION));
 			}
 		}
 		return null;

@@ -23,7 +23,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 
-import com.pauljoda.modularsystems.core.ModularTileEntity;
+import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
@@ -375,11 +375,9 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
 
 
 
-					if(worldObj.getBlock(x, y, z) == BlockManager.furnaceCraftingUpgradeInactive)
+					if(worldObj.getBlock(x, y, z) == BlockManager.furnaceCraftingUpgrade)
 					{
 						crafterEnabled = true;
-						worldObj.setBlock(x, y, z, BlockManager.furnaceCraftingUpgradeActive);
-						worldObj.markBlockForUpdate(x, y, z);
 						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getTileEntity(x, y, z);
 						dummyTE.setCore(this);
 					}
@@ -388,16 +386,12 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
 					{
 						smeltingMultiplier++;
 						efficiencyMultiplier -= 2;
-						worldObj.setBlock(x, y, z, BlockManager.furnaceAdditionActive);
-						worldObj.markBlockForUpdate(x, y, z);
 						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getTileEntity(x, y, z);
 						dummyTE.setCore(this);
 					}
 
 					else if(worldObj.getBlock(x, y, z) == BlockManager.furnaceDummyIO)
 					{
-						worldObj.setBlock(x, y, z, BlockManager.furnaceDummyActiveIO);
-						worldObj.markBlockForUpdate(x, y, z);
 						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getTileEntity(x, y, z);
 						dummyTE.setCore(this);
 					}
@@ -497,24 +491,25 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
 						continue;
 					}
 
-					if(blockId == BlockManager.furnaceCraftingUpgradeActive)
+					if(blockId == BlockManager.furnaceCraftingUpgrade)
 					{
-						worldObj.setBlock(x, y, z, BlockManager.furnaceCraftingUpgradeInactive);
+						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getTileEntity(x, y, z);
+						dummyTE.coreY = -100;
 						worldObj.markBlockForUpdate(x, y, z);
 						continue;
 					}
 
-					if(blockId == BlockManager.furnaceAdditionActive)
+					if(blockId == BlockManager.furnaceAddition)
 					{
-						worldObj.setBlock(x, y, z, BlockManager.furnaceAddition);
-						worldObj.markBlockForUpdate(x, y, z);
+						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getTileEntity(x, y, z);
+						dummyTE.coreY = -100;
 						continue;
 					}
 
-					if(blockId == BlockManager.furnaceDummyActiveIO)
+					if(blockId == BlockManager.furnaceDummyIO)
 					{
-						worldObj.setBlock(x, y, z, BlockManager.furnaceDummyIO);
-						worldObj.markBlockForUpdate(x, y, z);
+						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getTileEntity(x, y, z);
+						dummyTE.coreY = -100;
 						continue;
 					}
 
@@ -562,7 +557,7 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
 					if(horiz == 0 && vert == 0 && depth == 0)
 						continue;
 
-					if(blockId == BlockManager.furnaceCraftingUpgradeActive || blockId == BlockManager.furnaceCraftingUpgradeInactive)
+					if(blockId == BlockManager.furnaceCraftingUpgrade)
 					{
 						return true;
 					}

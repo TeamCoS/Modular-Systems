@@ -2,16 +2,17 @@ package com.pauljoda.modularsystems.storage.tiles;
 
 import java.util.List;
 
-import com.pauljoda.modularsystems.core.ModularTileEntity;
+import com.pauljoda.modularsystems.core.GeneralSettings;
+import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
-import com.pauljoda.modularsystems.core.util.GeneralSettings;
 import com.pauljoda.modularsystems.storage.blocks.BlockCapacityExpansion;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
@@ -32,6 +33,117 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 	public TileEntityStorageCore()
 	{
 		inv = new ItemStack[11 * MAX_EXPANSIONS];
+	}
+
+	public void sortInventoryAlphabetically()
+	{
+		String temp, temp2;
+		ItemStack swapper;
+		for(int i = 0; i < inventoryRows * 11; i++)
+		{
+			for(int j = 1; j < (inventoryRows * 11) - 1; j++)
+			{
+				if(inv[j - 1] != null && inv[j] != null)
+				{
+					temp = inv[j - 1].getDisplayName();
+					temp2 = inv[j].getDisplayName();
+					if(temp.compareTo(temp2) > 0)
+					{
+						swapper = inv[j - 1].copy();
+						this.setInventorySlotContents(j - 1, inv[j].copy());
+						this.setInventorySlotContents(j, swapper);
+					}
+					else if(temp.equals(temp2))
+					{
+						if(inv[j - 1].stackSize < inv[j - 1].getMaxStackSize())
+						{
+							int mergeSize = inv[j - 1].getMaxStackSize() - inv[j - 1].stackSize;
+							if(inv[j].stackSize >= mergeSize)
+							{
+								inv[j - 1].stackSize += mergeSize;
+								inv[j].stackSize -= mergeSize;
+							}
+							else
+							{
+								inv[j - 1].stackSize += inv[j].stackSize;
+								this.setInventorySlotContents(j, null);
+							}
+						}
+
+						else if(inv[j - 1].getItemDamage() > inv[j].getItemDamage())
+						{
+							swapper = inv[j - 1].copy();
+							this.setInventorySlotContents(j - 1, inv[j].copy());
+							this.setInventorySlotContents(j, swapper);
+						}
+					}
+				}
+				else if(inv[j - 1] == null && inv[j] != null)
+				{
+					this.setInventorySlotContents(j - 1, inv[j].copy());
+					this.setInventorySlotContents(j, null);
+				}
+			}
+		}
+		markDirty();
+
+	}
+
+	public void sortInventoryByIndex()
+	{
+		int temp, temp2;
+		ItemStack swapper;
+		for(int i = 0; i < inventoryRows * 11; i++)
+		{
+			for(int j = 1; j < (inventoryRows * 11) - 1; j++)
+			{
+				if(inv[j - 1] != null && inv[j] != null)
+				{
+					temp = Item.getIdFromItem(inv[j - 1].getItem());
+					temp2 = Item.getIdFromItem(inv[j].getItem());
+					if(temp2 > temp)
+					{
+						swapper = inv[j - 1].copy();
+						this.setInventorySlotContents(j - 1, inv[j].copy());
+						this.setInventorySlotContents(j, swapper);
+					}
+					else if(temp == temp2)
+					{
+						if(inv[j - 1].getItemDamage() > inv[j].getItemDamage())
+						{
+							swapper = inv[j - 1].copy();
+							this.setInventorySlotContents(j - 1, inv[j].copy());
+							this.setInventorySlotContents(j, swapper);
+							continue;
+						}
+						//Handle meta blocks merging
+						else if(inv[j - 1].getItemDamage() < inv[j].getItemDamage())
+							continue;
+						
+						else if(inv[j - 1].stackSize < inv[j - 1].getMaxStackSize())
+						{
+							int mergeSize = inv[j - 1].getMaxStackSize() - inv[j - 1].stackSize;
+							if(inv[j].stackSize >= mergeSize)
+							{
+								inv[j - 1].stackSize += mergeSize;
+								inv[j].stackSize -= mergeSize;
+							}
+							else
+							{
+								inv[j - 1].stackSize += inv[j].stackSize;
+								this.setInventorySlotContents(j, null);
+							}
+						}
+					}
+				}
+				else if(inv[j - 1] == null && inv[j] != null)
+				{
+					this.setInventorySlotContents(j - 1, inv[j].copy());
+					this.setInventorySlotContents(j, null);
+				}
+			}
+		}
+		markDirty();
 	}
 
 	public void dropItems(int x, int y, int z)
@@ -72,8 +184,8 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 			}
 		}
 	}
-	
-	public boolean hasArmorUpgrade()
+
+	public boolean hasSpecificUpgrade(int upgradeId)
 	{
 		for(int i = -1; i <= 1; i++)
 		{
@@ -86,16 +198,16 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 						continue;
 
 					Block localBlock = worldObj.getBlock(i + xCoord, j + yCoord, k + zCoord);
-					
-					if(localBlock == BlockManager.storageArmorExpansion)
-						return true;
-					else if(BlockCapacityExpansion.isStorageExpansion(localBlock))
+
+					if(BlockCapacityExpansion.isStorageExpansion(localBlock))
 					{
 						TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)worldObj.getTileEntity(i + xCoord, j + yCoord, k + zCoord);
-						while(expansion.getNext() != null)
+						if(expansion.tileType == upgradeId)
+							return true;
+						while(expansion.getChild() != null)
 						{
-							expansion = expansion.getNext();
-							if(expansion.tileType == Reference.ARMOR_STORAGE_EXPANSION)
+							expansion = expansion.getChild();
+							if(expansion.tileType == upgradeId)
 								return true;
 						}
 					}

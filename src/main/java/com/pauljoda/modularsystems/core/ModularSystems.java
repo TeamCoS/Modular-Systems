@@ -8,10 +8,9 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.network.PacketPipeline;
 import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
-import com.pauljoda.modularsystems.core.util.GeneralSettings;
-import com.pauljoda.modularsystems.core.util.VersionChecking;
 import com.pauljoda.modularsystems.fakeplayer.FakePlayerPool;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -36,6 +35,8 @@ public class ModularSystems {
 	@SidedProxy( clientSide="com.pauljoda.modularsystems.core.proxy.ClientProxy", serverSide="com.pauljoda.modularsystems.core.proxy.CommonProxy")
 	public static CommonProxy proxy;
 
+	public static final PacketPipeline packetPipeline = new PacketPipeline();
+
 	//Creates the Creative Tab
 	public static CreativeTabs tabModularSystems = new CreativeTabs("tabModularSystems"){
 
@@ -48,34 +49,40 @@ public class ModularSystems {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event){
-		
+
 		//Set up config
 		GeneralSettings.init(new File(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + Reference.CHANNEL_NAME.toLowerCase() + File.separator + "ModularSystems.cfg"));
 		FMLCommonHandler.instance().bus().register(new GeneralSettings());
-		
+
 		//Version Check
 		VersionChecking.execute();
-		
+
 		BlockManager.registerBlocks();
 		BlockManager.register();
 		BlockManager.registerCraftingRecipes();
-		
+
 		MinecraftForge.EVENT_BUS.register(FakePlayerPool.instance);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		
+
+		//Open Network Pipeline
+		packetPipeline.initalise();
+
 		//Register Tiles
 		proxy.registerTileEntities();
-		
+
 		//Set Up Custom Renderers
 		ClientProxy.setCustomRenderers();
-		
+
 		//Setup GUIs
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy); 
 	}
 
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {}
+	public void postInit(FMLPostInitializationEvent event) {
+		//Close Network
+		packetPipeline.postInitialise();
+	}
 }
