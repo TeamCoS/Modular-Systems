@@ -38,6 +38,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
     public void registerPackets()
 	{
 		registerPacket(StorageSortPacket.class);
+		registerPacket(EnchantPacket.class);
 	}
     
     /**

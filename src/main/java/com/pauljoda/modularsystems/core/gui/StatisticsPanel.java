@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import com.pauljoda.modularsystems.core.VersionChecking;
+import com.pauljoda.modularsystems.core.helper.VersionHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -39,6 +39,11 @@ public class StatisticsPanel extends Gui {
 		stats.add(new StatisticNode(x, y, text));
 	}
 	
+	public void updateNode(int pos, String string)
+	{
+		stats.get(pos).updateText(string);
+	}
+	
 	public void drawText(FontRenderer fontRendererObj)
 	{
 		fontRendererObj.drawString("Stats:",  xPos + 5 , 6, 4210752);
@@ -58,7 +63,7 @@ public class StatisticsPanel extends Gui {
 		for(int i = 0; i < stats.size(); i++)
 			drawTexturedModalRect(x -57, y + 16 + (i * 16), stats.get(i).iconX, stats.get(i).iconY, 16, 16);
 
-		if(VersionChecking.getResult() == VersionChecking.OUTDATED)
+		if(VersionHelper.getResult() == VersionHelper.OUTDATED)
 		{
 			drawTexturedModalRect(x, y, 0, 240, 16, 16);
 		}
@@ -76,6 +81,11 @@ public class StatisticsPanel extends Gui {
 			this.iconX = iconX;
 			this.iconY = iconY;
 			this.text = text;
+		}
+		
+		public void updateText(String string)
+		{
+			this.text = string;
 		}
 	}
 }

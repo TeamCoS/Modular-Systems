@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core.abstracts;
+package com.pauljoda.modularsystems.core.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -16,6 +16,16 @@ public class TexturedButton extends GuiButton
 	int v;
 
 	private static final ResourceLocation buttonLocation = new ResourceLocation("modularsystems:textures/buttons.png");
+	/**
+	 * Creates a Textured button from our assets
+	 * @param par1 id
+	 * @param par2 xPos
+	 * @param par3 yPos
+	 * @param x width
+	 * @param y height
+	 * @param u u
+	 * @param v v
+	 */
 	public TexturedButton(int par1, int par2, int par3, int x, int y, int u, int v)
 	{
 		super(par1, par2, par3, x, y, "");

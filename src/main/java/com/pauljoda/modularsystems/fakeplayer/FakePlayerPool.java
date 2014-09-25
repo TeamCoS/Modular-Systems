@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.WorldEvent;
 
-import com.pauljoda.modularsystems.core.GeneralSettings;
+import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.helper.LogHelper;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -45,7 +45,7 @@ public class FakePlayerPool {
 
 			if (player == null) {
 				int id = playerCount.incrementAndGet();
-				if (id > GeneralSettings.fakePlayerMax) LogHelper.warn(StatCollector.translateToLocal("Number of fake players in use has reached max. Something may leak them"));
+				if (id > ConfigHelper.fakePlayerMax) LogHelper.warn(StatCollector.translateToLocal("Number of fake players in use has reached max. Something may leak them"));
 				player = new ModularSystemsFakePlayer(world, id);
 			}
 

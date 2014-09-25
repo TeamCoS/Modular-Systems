@@ -1,7 +1,7 @@
 package com.pauljoda.modularsystems.storage.blocks;
 
-import com.pauljoda.modularsystems.core.GeneralSettings;
 import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.proxy.ClientProxy;

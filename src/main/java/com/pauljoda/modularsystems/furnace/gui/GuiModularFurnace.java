@@ -10,8 +10,8 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import com.pauljoda.modularsystems.core.VersionChecking;
 import com.pauljoda.modularsystems.core.gui.StatisticsPanel;
+import com.pauljoda.modularsystems.core.helper.VersionHelper;
 import com.pauljoda.modularsystems.core.lib.GuiColor;
 import com.pauljoda.modularsystems.core.lib.Strings;
 import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnace;
@@ -89,7 +89,7 @@ public class GuiModularFurnace extends GuiContainer
 	public void drawScreen(int par1, int par2, float par3)
 	{
 		super.drawScreen(par1, par2, par3);
-		if(VersionChecking.getResult() == VersionChecking.OUTDATED)
+		if(VersionHelper.getResult() == VersionHelper.OUTDATED)
 		{
 			int var5 = (this.width - this.xSize) / 2;
 			int var6 = (this.height - this.ySize) / 2;

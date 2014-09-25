@@ -6,8 +6,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 
+import com.pauljoda.modularsystems.core.helper.ConfigHelper;
+import com.pauljoda.modularsystems.core.helper.VersionHelper;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.managers.ItemManager;
 import com.pauljoda.modularsystems.core.network.PacketPipeline;
 import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
@@ -51,15 +54,19 @@ public class ModularSystems {
 	public void preInit(FMLPreInitializationEvent event){
 
 		//Set up config
-		GeneralSettings.init(new File(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + Reference.CHANNEL_NAME.toLowerCase() + File.separator + "ModularSystems.cfg"));
-		FMLCommonHandler.instance().bus().register(new GeneralSettings());
+		ConfigHelper.init(new File(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + Reference.CHANNEL_NAME.toLowerCase() + File.separator + "ModularSystems.cfg"));
+		FMLCommonHandler.instance().bus().register(new ConfigHelper());
 
 		//Version Check
-		VersionChecking.execute();
+		VersionHelper.execute();
 
+		BlockManager.createBlocks();
 		BlockManager.registerBlocks();
-		BlockManager.register();
-		BlockManager.registerCraftingRecipes();
+		BlockManager.registerBlockCrafting();
+		
+		ItemManager.createItems();
+		ItemManager.registerItems();
+		ItemManager.registerItemCrafting();
 
 		MinecraftForge.EVENT_BUS.register(FakePlayerPool.instance);
 	}

@@ -5,7 +5,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.pauljoda.modularsystems.core.GeneralSettings;
+import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 
 public class Reference {
@@ -34,9 +34,9 @@ public class Reference {
 	public static boolean isValidBlock(String blockId)
 	{
 
-		for(int i = 0; i < GeneralSettings.bannedBlocks.length; i++)
+		for(int i = 0; i < ConfigHelper.bannedBlocks.length; i++)
 		{
-			if(blockId.equals(GeneralSettings.bannedBlocks[i]))
+			if(blockId.equals(ConfigHelper.bannedBlocks[i]))
 			{
 				return false;
 			}

@@ -2,8 +2,8 @@ package com.pauljoda.modularsystems.storage.tiles;
 
 import java.util.List;
 
-import com.pauljoda.modularsystems.core.GeneralSettings;
 import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
+import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.storage.blocks.BlockCapacityExpansion;
@@ -28,7 +28,7 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 
 	public ItemStack[] inv;
 	public int inventoryRows = 6;
-	private final int MAX_EXPANSIONS = GeneralSettings.maxExpansionSize;
+	private final int MAX_EXPANSIONS = ConfigHelper.maxExpansionSize;
 
 	public TileEntityStorageCore()
 	{

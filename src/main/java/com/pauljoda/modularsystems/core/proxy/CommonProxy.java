@@ -5,6 +5,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.enchanting.container.ContainerEnchantmentUpgrades;
+import com.pauljoda.modularsystems.enchanting.container.ContainerModularEnchanting;
+import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
 import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnaceCrafter;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
@@ -24,11 +27,13 @@ public class CommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityFurnaceDummy.class, "modularsystems:tileEntityFurnaceDummy");
 		GameRegistry.registerTileEntity(TileEntityStorageCore.class, "modularsystems:tileEntityStorageCore");
 		GameRegistry.registerTileEntity(TileEntityStorageExpansion.class, "modularsystems:tileEntityStorageExpansion");
+		GameRegistry.registerTileEntity(TileEntityEnchantmentAlter.class, "modularsystems:tileEntityEnchantmentAlter");
+
 	}
 
 
 	@Override
-	public Object getServerGuiElement(int guiID, EntityPlayer player, World world, int x, int y, int z)
+	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z)
 	{
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
 
@@ -47,15 +52,25 @@ public class CommonProxy implements IGuiHandler
 					return new ContainerModularFurnace(player.inventory, tileEntity1);
 				}
 			}
-			
+
 			//Storage
 			else if(tileEntity instanceof TileEntityStorageCore)
 			{
 				TileEntityStorageCore storageCore = (TileEntityStorageCore)world.getTileEntity(x, y, z);
 				return new ContainerModularStorage(player.inventory, storageCore, player, storageCore.hasSpecificUpgrade(Reference.ARMOR_STORAGE_EXPANSION));
 			}
+
+			//Storage
+			else if(tileEntity instanceof TileEntityEnchantmentAlter)
+			{
+				TileEntityEnchantmentAlter alter = (TileEntityEnchantmentAlter)world.getTileEntity(x, y, z);
+				if(id == 0)
+					return new ContainerModularEnchanting(player.inventory, alter, player);
+				else if (id == 1)
+					return new ContainerEnchantmentUpgrades(player.inventory, alter, player);
+			}
 		}
-		
+
 		return null;
 	}
 

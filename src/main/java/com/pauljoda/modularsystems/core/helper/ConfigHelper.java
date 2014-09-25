@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core;
+package com.pauljoda.modularsystems.core.helper;
 
 import java.io.File;
 
@@ -14,7 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Configuration;
 
-public class GeneralSettings {
+public class ConfigHelper {
 
 	public static Configuration config;
 

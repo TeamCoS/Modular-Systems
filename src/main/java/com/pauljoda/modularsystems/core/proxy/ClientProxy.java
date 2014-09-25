@@ -5,6 +5,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.enchanting.gui.GuiEnchantmentUpgrades;
+import com.pauljoda.modularsystems.enchanting.gui.GuiModularEnchanting;
+import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnaceEnabled;
 import com.pauljoda.modularsystems.furnace.renderer.FurnaceDummyRenderer;
@@ -12,12 +15,13 @@ import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.storage.gui.GuiModularStorage;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy {
 
 	public static int renderPass;
-	public static int furnaceDummyRenderType; 
+	public static int furnaceDummyRenderType;
 	public static void setCustomRenderers()
 	{
 		furnaceDummyRenderType = RenderingRegistry.getNextAvailableRenderId();
@@ -46,12 +50,22 @@ public class ClientProxy extends CommonProxy {
 					return new GuiModularFurnace(player.inventory, tileEntity1);
 				}
 			}
-			
+
 			//Storage
 			else if(tileEntity instanceof TileEntityStorageCore)
 			{
 				TileEntityStorageCore storageCore = (TileEntityStorageCore)world.getTileEntity(x, y, z);
 				return new GuiModularStorage(player.inventory, storageCore, player, storageCore.hasSpecificUpgrade(Reference.ARMOR_STORAGE_EXPANSION));
+			}
+
+			//Enchanting
+			else if(tileEntity instanceof TileEntityEnchantmentAlter)
+			{
+				TileEntityEnchantmentAlter alter = (TileEntityEnchantmentAlter)world.getTileEntity(x, y, z);
+				if(id == 0)
+					return new GuiModularEnchanting(player.inventory, alter, player);
+				else if(id == 1)
+					return new GuiEnchantmentUpgrades(player.inventory, alter, player);
 			}
 		}
 		return null;

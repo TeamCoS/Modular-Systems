@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core;
+package com.pauljoda.modularsystems.core.helper;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -7,16 +7,15 @@ import java.util.Properties;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
 
-import com.pauljoda.modularsystems.core.helper.LogHelper;
 import com.pauljoda.modularsystems.core.lib.Colours;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.lib.Strings;
 
 import cpw.mods.fml.common.Loader;
 
-public class VersionChecking implements Runnable {
+public class VersionHelper implements Runnable {
 
-	private static VersionChecking instance = new VersionChecking();
+	private static VersionHelper instance = new VersionHelper();
 
 	// The (publicly available) remote version number authority file
 	final static String REMOTE_VERSION_XML_FILE = "https://raw.githubusercontent.com/pauljoda/Modular-Systems/master/VersionControl.xml";
@@ -65,8 +64,8 @@ public class VersionChecking implements Runnable {
 				}
 
 				if (remoteVersion != null) {
-					if (!GeneralSettings.LAST_DISCOVERED_VERSION.equalsIgnoreCase(remoteVersion)) {
-						GeneralSettings.set(Configuration.CATEGORY_GENERAL, GeneralSettings.LAST_DISCOVERED_VERSION_CONFIGNAME, remoteVersion);
+					if (!ConfigHelper.LAST_DISCOVERED_VERSION.equalsIgnoreCase(remoteVersion)) {
+						ConfigHelper.set(Configuration.CATEGORY_GENERAL, ConfigHelper.LAST_DISCOVERED_VERSION_CONFIGNAME, remoteVersion);
 					}
 
 					if (remoteVersion.equalsIgnoreCase(getVersionForCheck())) 
@@ -164,7 +163,7 @@ public class VersionChecking implements Runnable {
 		LogHelper.info(StatCollector.translateToLocalFormatted(Strings.VERSION_CHECK_INIT_LOG_MESSAGE, REMOTE_VERSION_XML_FILE));
 
 		try {
-			while (count < GeneralSettings.VERSION_CHECK_ATTEMPTS - 1 && (result == UNINITIALIZED || result == ERROR)) {
+			while (count < ConfigHelper.VERSION_CHECK_ATTEMPTS - 1 && (result == UNINITIALIZED || result == ERROR)) {
 
 				checkVersion();
 				count++;

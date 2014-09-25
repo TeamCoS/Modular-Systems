@@ -16,9 +16,9 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
-import com.pauljoda.modularsystems.core.VersionChecking;
-import com.pauljoda.modularsystems.core.abstracts.TexturedButton;
 import com.pauljoda.modularsystems.core.gui.StatisticsPanel;
+import com.pauljoda.modularsystems.core.gui.TexturedButton;
+import com.pauljoda.modularsystems.core.helper.VersionHelper;
 import com.pauljoda.modularsystems.core.lib.GuiColor;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.lib.Strings;
@@ -212,7 +212,7 @@ public class GuiModularStorage extends GuiContainer {
 		}
 		this.updateScreen();
 
-		if(VersionChecking.getResult() == VersionChecking.OUTDATED)
+		if(VersionHelper.getResult() == VersionHelper.OUTDATED)
 		{
 			int var5 = (this.width - this.xSize) / 2;
 			int var6 = (this.height - this.ySize) / 2;
