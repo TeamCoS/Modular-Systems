@@ -14,5 +14,4 @@ public class WorldUtil {
 	{
 		return (tile1.xCoord == tile2.xCoord) && (tile1.yCoord == tile2.yCoord) && (tile1.zCoord == tile2.zCoord);
 	}
-
 }
