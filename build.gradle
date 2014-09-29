@@ -17,13 +17,13 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0"
-group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+version = "1.7.10_1.41"
+group= "com.pauljoda.modularsystems" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Modular Systems"
 
 minecraft {
     version = "1.7.10-10.13.0.1180"
-    assetDir = "eclipse/assets"
+    assetDir = "src/main/resources"
 }
 
 dependencies {
