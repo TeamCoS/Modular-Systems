@@ -99,15 +99,17 @@ public class BlockBasicExpansion extends BlockContainer {
 					if(localBlock == BlockManager.storageCore)
 					{
 						TileEntityStorageCore core = (TileEntityStorageCore)world.getTileEntity(i + x, j + y, k + z);
+						if(core.inventoryRows < ConfigHelper.maxExpansionSize)
+						{
+							expansion.setCore(core);
 
-						expansion.setCore(core);
-						
-						if(world.getBlock(x, y, z) == BlockManager.storageExpansion)
-							expansion.getCore().setInventoryRows(core.inventoryRows + 1);
+							if(world.getBlock(x, y, z) == BlockManager.storageExpansion)
+								expansion.getCore().setInventoryRows(core.inventoryRows + 1);
 
-						world.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
-						registered = true;
-						break;
+							world.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
+							registered = true;
+							break;
+						}
 					}
 				}
 			}
@@ -134,39 +136,43 @@ public class BlockBasicExpansion extends BlockContainer {
 							if(parent.getCore() != null && parent.getChild() == null)
 							{
 								TileEntityStorageCore core = (TileEntityStorageCore)parent.getCore();
+								if(core.inventoryRows < ConfigHelper.maxExpansionSize)
+								{
+									expansion.setCore(core);
+									expansion.setParent(parent);
+									parent.setChild(expansion);
 
-								expansion.setCore(core);
-								expansion.setParent(parent);
-								parent.setChild(expansion);
-								
-								if(world.getBlock(x, y, z) == BlockManager.storageExpansion)
-									expansion.getCore().setInventoryRows(core.inventoryRows + 1);
-								
-								world.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
-								world.markBlockForUpdate(i + x, j + y, k + z);
-								registered = true;
-								break;
+									if(world.getBlock(x, y, z) == BlockManager.storageExpansion)
+										expansion.getCore().setInventoryRows(core.inventoryRows + 1);
+
+									world.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
+									world.markBlockForUpdate(i + x, j + y, k + z);
+									registered = true;
+									break;
+								}
 
 							}
 							else if(parent.getCore() != null && parent.getChild() != null)
 							{
 								TileEntityStorageExpansion sibling = parent.getChild();
 								TileEntityStorageCore core = (TileEntityStorageCore)parent.getCore();
+								if(core.inventoryRows < ConfigHelper.maxExpansionSize)
+								{
+									while(sibling.getSibling() != null)
+										sibling = sibling.getSibling();
 
-								while(sibling.getSibling() != null)
-									sibling = sibling.getSibling();
-								
-								sibling.setSibling(expansion);
-								expansion.setCore(core);
-								expansion.setParent(parent);
-								
-								if(world.getBlock(x, y, z) == BlockManager.storageExpansion)
-									expansion.getCore().setInventoryRows(core.inventoryRows + 1);
-								
-								world.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
-								world.markBlockForUpdate(i + x, j + y, k + z);
-								registered = true;
-								break;
+									sibling.setSibling(expansion);
+									expansion.setCore(core);
+									expansion.setParent(parent);
+
+									if(world.getBlock(x, y, z) == BlockManager.storageExpansion)
+										expansion.getCore().setInventoryRows(core.inventoryRows + 1);
+
+									world.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
+									world.markBlockForUpdate(i + x, j + y, k + z);
+									registered = true;
+									break;
+								}
 							}
 							else
 								world.setBlockMetadataWithNotify(x, y, z, 1, 2);

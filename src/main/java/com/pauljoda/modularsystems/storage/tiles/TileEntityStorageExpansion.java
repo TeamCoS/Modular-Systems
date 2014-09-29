@@ -74,7 +74,11 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 
 	public TileEntityStorageExpansion getChild()
 	{
-		return (TileEntityStorageExpansion)worldObj.getTileEntity(childX, childY, childZ);
+		TileEntity tile = worldObj.getTileEntity(childX, childY, childZ);
+				if(tile instanceof TileEntityStorageExpansion)
+					return (TileEntityStorageExpansion)tile;
+				else
+					return null;
 	}
 
 	public void setParent(TileEntityStorageExpansion par)
@@ -86,7 +90,11 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 
 	public TileEntityStorageExpansion getParent()
 	{
-		return (TileEntityStorageExpansion)worldObj.getTileEntity(parentX, parentY, parentZ);
+		TileEntity tile = worldObj.getTileEntity(parentX, parentY, parentZ);
+		if(tile instanceof TileEntityStorageExpansion)
+			return (TileEntityStorageExpansion)tile;
+		else
+			return null;
 	}
 
 	public void setSibling(TileEntityStorageExpansion expand)
@@ -98,7 +106,11 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 
 	public TileEntityStorageExpansion getSibling()
 	{
-		return (TileEntityStorageExpansion)worldObj.getTileEntity(siblingX, siblingY, siblingZ);
+		TileEntity tile = worldObj.getTileEntity(siblingX, siblingY, siblingZ);
+		if(tile instanceof TileEntityStorageExpansion)
+			return (TileEntityStorageExpansion)tile;
+		else
+			return null;
 	}
 	public void invalidateCore()
 	{
@@ -123,10 +135,10 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 			if(parent.getChild() != null && !WorldUtil.areTilesSame(parent.getChild(), this) && getSibling() != null)
 			{
 				TileEntityStorageExpansion beforeSibling = parent.getChild();
-				
+
 				while(beforeSibling.getSibling() != null && !WorldUtil.areTilesSame(beforeSibling.getSibling(), this))
 					beforeSibling = beforeSibling.getSibling();
-				
+
 				beforeSibling.setSibling(getSibling());
 			}
 			else if(getSibling() != null)
@@ -134,7 +146,7 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 				parent.setChild(getSibling());
 			}
 		}
-		
+
 		if(getChild() != null)
 		{
 			TileEntityStorageExpansion child = getChild();

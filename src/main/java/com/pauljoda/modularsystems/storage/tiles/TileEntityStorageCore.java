@@ -119,7 +119,7 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 						//Handle meta blocks merging
 						else if(inv[j - 1].getItemDamage() < inv[j].getItemDamage())
 							continue;
-						
+
 						else if(inv[j - 1].stackSize < inv[j - 1].getMaxStackSize())
 						{
 							int mergeSize = inv[j - 1].getMaxStackSize() - inv[j - 1].stackSize;
@@ -229,7 +229,10 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		return inv[slot];
+		if(slot < ConfigHelper.maxExpansionSize * 11)
+			return inv[slot];
+		else
+			return null;
 	}
 
 	@Override

@@ -18,10 +18,10 @@ import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummy;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
 import com.pauljoda.modularsystems.furnace.blocks.BlockTextureOverlay;
-import com.pauljoda.modularsystems.storage.blocks.BlockArmorStorageExpansion;
+import com.pauljoda.modularsystems.storage.blocks.BlockArmorExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockBasicExpansion;
-import com.pauljoda.modularsystems.storage.blocks.BlockHoppingStorageExpansion;
-import com.pauljoda.modularsystems.storage.blocks.BlockSmashingStorageExpansion;
+import com.pauljoda.modularsystems.storage.blocks.BlockHoppingExpansion;
+import com.pauljoda.modularsystems.storage.blocks.BlockSmashingExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockSortingExpansion;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageCore;
 import com.pauljoda.modularsystems.storage.blocks.BlockCapacityExpansion;
@@ -69,9 +69,9 @@ public class BlockManager {
 		storageCore = new BlockStorageCore();
 		basicExpansion = new BlockBasicExpansion();
 		storageExpansion = new BlockCapacityExpansion();
-		storageHoppingExpansion = new BlockHoppingStorageExpansion();
-		storageArmorExpansion = new BlockArmorStorageExpansion();
-		storageSmashingExpansion = new BlockSmashingStorageExpansion();
+		storageHoppingExpansion = new BlockHoppingExpansion();
+		storageArmorExpansion = new BlockArmorExpansion();
+		storageSmashingExpansion = new BlockSmashingExpansion();
 		storageSortingExpansion = new BlockSortingExpansion();
 		
 		//Enchantment
