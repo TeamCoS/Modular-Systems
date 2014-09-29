@@ -59,7 +59,7 @@ public class ContainerEnchantmentUpgrades extends Container {
 			stack = stackInSlot.copy();
 			//merges the item into player inventory since its in the tileEntity
 			if (slot < 25) {
-				if (!this.mergeItemStack(stackInSlot, 25, 61, true)) {
+				if (!this.mergeItemStack(stackInSlot, 25, 60, true)) {
 					return null;
 				}
 			}

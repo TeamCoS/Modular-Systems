@@ -4,7 +4,11 @@ import com.pauljoda.modularsystems.enchanting.items.ItemEnchantingUpgrade;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 
 public class ItemManager {
 
@@ -34,7 +38,7 @@ public class ItemManager {
 	public static Item enchantmentUpgradeInfinity;
 	public static Item enchantmentUpgradeLuckOfTheSea;
 	public static Item enchantmentUpgradeLure;
-	
+
 	public static void createItems()
 	{
 		//Enchanting Upgrades
@@ -64,7 +68,7 @@ public class ItemManager {
 		enchantmentUpgradeLuckOfTheSea = new ItemEnchantingUpgrade("LuckOfTheSea", Enchantment.field_151370_z);
 		enchantmentUpgradeLure = new ItemEnchantingUpgrade("Lure", Enchantment.field_151369_A);
 	}
-	
+
 	public static void registerItems()
 	{
 		//Enchanting Upgrades
@@ -94,9 +98,33 @@ public class ItemManager {
 		GameRegistry.registerItem(enchantmentUpgradeLuckOfTheSea, "enchantmentUpgradeLuckOfTheSea");
 		GameRegistry.registerItem(enchantmentUpgradeLure, "enchantmentUpgradeLure");
 	}
-	
+
 	public static void registerItemCrafting()
 	{
-		
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeBasic, 1), Items.iron_ingot, Items.book, Items.paper);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeProtection, 1), Items.iron_chestplate, enchantmentUpgradeBasic, Blocks.obsidian);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeFireProtection, 1), Items.iron_chestplate, enchantmentUpgradeBasic, Items.fire_charge);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeFeatherFalling, 1), Items.iron_boots, enchantmentUpgradeBasic, Items.feather);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeBlastResistance, 1), Items.iron_chestplate, enchantmentUpgradeBasic, Blocks.tnt);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeProjectileProtection, 1), Items.iron_chestplate, enchantmentUpgradeBasic, Items.arrow);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeRespiration, 1), Items.iron_helmet, enchantmentUpgradeBasic, Items.bucket);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeAquaAffinity, 1), Items.iron_helmet, enchantmentUpgradeBasic, Items.water_bucket);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeThorns, 1), Items.iron_chestplate, enchantmentUpgradeBasic, Blocks.cactus);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeSharpness, 1), Items.iron_sword, enchantmentUpgradeBasic, Items.flint);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeSmite, 1), Items.iron_sword, enchantmentUpgradeBasic, Items.rotten_flesh);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeSpiders, 1), Items.iron_sword, enchantmentUpgradeBasic, Items.spider_eye);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeKnockback, 1), Items.iron_sword, enchantmentUpgradeBasic, Blocks.piston);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeFireAspect, 1), Items.iron_sword, enchantmentUpgradeBasic, Items.flint_and_steel);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeLooting, 1), Items.iron_sword, enchantmentUpgradeBasic, Items.emerald);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeEfficiency, 1), Items.iron_pickaxe, enchantmentUpgradeBasic, Items.sugar);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeSilkTouch, 1), Items.iron_pickaxe, enchantmentUpgradeBasic, Items.string);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeUnbreaking, 1), Items.iron_pickaxe, enchantmentUpgradeBasic, Blocks.obsidian);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeFortune, 1), Items.iron_pickaxe, enchantmentUpgradeBasic, Items.diamond);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradePower, 1), Items.bow, enchantmentUpgradeBasic, Items.redstone);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradePunch, 1), Items.bow, enchantmentUpgradeBasic, Blocks.piston);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeFlame, 1), Items.bow, enchantmentUpgradeBasic, Items.flint_and_steel);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeInfinity, 1), Items.bow, enchantmentUpgradeBasic, Items.arrow);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeLuckOfTheSea, 1), Items.fishing_rod, enchantmentUpgradeBasic, Items.leather_boots);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(enchantmentUpgradeLure, 1), Items.fishing_rod, enchantmentUpgradeBasic, Items.fish);
 	}
 }

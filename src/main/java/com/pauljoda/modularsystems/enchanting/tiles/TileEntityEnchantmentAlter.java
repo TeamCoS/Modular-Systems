@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -21,9 +22,14 @@ import com.pauljoda.modularsystems.core.helper.EnchantHelper;
 import com.pauljoda.modularsystems.core.managers.ItemManager;
 import com.pauljoda.modularsystems.enchanting.items.ItemEnchantingUpgrade;
 
-public class TileEntityEnchantmentAlter extends ModularTileEntity implements IInventory {
+public class TileEntityEnchantmentAlter extends ModularTileEntity implements ISidedInventory {
 
 	public ItemStack[] inv;
+
+	//Automation related 
+	private static final int[] slots_top = new int[] {0};
+	private static final int[] slots_bottom = new int[] {0};
+	private static final int[] slots_sides = new int[] {};
 
 	public TileEntityEnchantmentAlter(){
 		inv = new ItemStack[26];
@@ -32,7 +38,7 @@ public class TileEntityEnchantmentAlter extends ModularTileEntity implements IIn
 	@Override
 	public void updateEntity()
 	{}
-	
+
 	@Override
 	public int getSizeInventory() {
 		return inv.length;
@@ -193,5 +199,25 @@ public class TileEntityEnchantmentAlter extends ModularTileEntity implements IIn
 				enchants.add(((ItemEnchantingUpgrade) inv[i].getItem()).getEnchantment());
 		}
 		return enchants;
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		switch(side)
+		{
+		case 0 : return slots_bottom;
+		case 1 : return slots_top;
+		default : return slots_sides;
+		}
+	}
+
+	@Override
+	public boolean canInsertItem(int slot, ItemStack item, int side) {
+		return this.isItemValidForSlot(slot, item);
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack item, int side) {
+		return slot == 0;
 	}
 }

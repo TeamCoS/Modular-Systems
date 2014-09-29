@@ -151,5 +151,11 @@ public class BlockManager {
 				"XXX",
 				"XxX",
 				"XXX", 'X', Items.book, 'x', basicExpansion);
+		
+		//Enchanting
+		CraftingManager.getInstance().addRecipe(new ItemStack(enchantmentAlter, 1),
+				"   ",
+				" x ",
+				"XeX", 'X', Blocks.emerald_block, 'x', Items.book, 'e', Blocks.enchanting_table);
 	}
 }
