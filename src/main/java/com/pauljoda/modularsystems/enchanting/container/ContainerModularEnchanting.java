@@ -1,16 +1,16 @@
 package com.pauljoda.modularsystems.enchanting.container;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnchantmentNameParts;
-
 import com.pauljoda.modularsystems.core.helper.EnchantHelper;
 import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
-import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentData;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemBook;
+import net.minecraft.item.ItemStack;
 
 public class ContainerModularEnchanting extends Container {
 
@@ -79,6 +79,16 @@ public class ContainerModularEnchanting extends Container {
 		if(alter.inv[0] != null && (player.experienceLevel >= EnchantHelper.getScaledValue(level, alter) || player.capabilities.isCreativeMode))
 		{
 			Enchantment enchantment = Enchantment.enchantmentsList[enchantId];
+
+            if(alter.inv[0].getItem() instanceof ItemBook)
+            {
+                alter.inv[0].func_150996_a(Items.enchanted_book);
+                Items.enchanted_book.addEnchantment(alter.inv[0], new EnchantmentData(enchantId, level));
+                if(!player.capabilities.isCreativeMode)
+                    player.addExperienceLevel(-(EnchantHelper.getScaledValue(level, alter)));
+                return;
+            }
+
 			alter.inv[0].addEnchantment(enchantment, level);
 			if(!player.capabilities.isCreativeMode)
 				player.addExperienceLevel(-(EnchantHelper.getScaledValue(level, alter)));

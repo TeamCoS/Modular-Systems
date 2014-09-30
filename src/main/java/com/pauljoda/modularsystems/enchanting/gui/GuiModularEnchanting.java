@@ -1,25 +1,5 @@
 package com.pauljoda.modularsystems.enchanting.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-
-import org.lwjgl.opengl.GL11;
-
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.abstracts.EntityStaticItem;
 import com.pauljoda.modularsystems.core.gui.StatisticsPanel;
@@ -31,9 +11,27 @@ import com.pauljoda.modularsystems.core.lib.Strings;
 import com.pauljoda.modularsystems.core.network.EnchantPacket;
 import com.pauljoda.modularsystems.enchanting.container.ContainerModularEnchanting;
 import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBook;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class GuiModularEnchanting extends GuiContainer {
@@ -163,19 +161,27 @@ public class GuiModularEnchanting extends GuiContainer {
 			if(hasItem)
 			{
 				if(Minecraft.getMinecraft().thePlayer.experienceLevel > EnchantHelper.getRequiredLevelFromList(enchants, alter) || Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
-				for(int i = 0; i < enchants.size(); i++)
-				{
-					if(enchants.get(i).level > 0)
-					{
-						EnchantPacket packet = new EnchantPacket(enchants.get(i).enchantment.effectId, enchants.get(i).level);
-						ModularSystems.packetPipeline.sendToServer(packet);
-					}
-				}
+                {
+                    for (int i = 0; i < enchants.size(); i++)
+                    {
+                        if (enchants.get(i).level > 0)
+                        {
+                            EnchantPacket packet = new EnchantPacket(enchants.get(i).enchantment.effectId, enchants.get(i).level);
+                            ModularSystems.packetPipeline.sendToServer(packet);
+                        }
+                    }
+                }
 			}
 			break;
 		default :
 			int operation = button.id % 2;
 			int enchantLoc = ((button.id / 2) - 1);
+
+            boolean canOperate = true;
+            for(int i = 0; i < enchants.size(); i++)
+                if (enchantLoc != i && enchants.get(i).level > 0 && alter.inv[0].getItem() instanceof ItemBook)
+                    canOperate = false;
+
 
 			if(operation == 0)
 			{
@@ -184,7 +190,7 @@ public class GuiModularEnchanting extends GuiContainer {
 				if(pointsToSpend > maxPoints)
 					pointsToSpend = maxPoints;
 			}
-			else if(pointsToSpend > 0 && enchants.get(enchantLoc).level < enchants.get(enchantLoc).enchantment.getMaxLevel())
+			else if(pointsToSpend > 0 && enchants.get(enchantLoc).level < enchants.get(enchantLoc).enchantment.getMaxLevel() && canOperate)
 			{
 				enchants.get(enchantLoc).level++;
 				pointsToSpend--;

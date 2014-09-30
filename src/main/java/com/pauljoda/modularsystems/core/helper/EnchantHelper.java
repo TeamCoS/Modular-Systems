@@ -1,20 +1,17 @@
 package com.pauljoda.modularsystems.core.helper;
 
+import com.pauljoda.modularsystems.enchanting.gui.GuiElementEnchantmentAdjuster;
+import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBook;
+import net.minecraft.item.ItemStack;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import com.pauljoda.modularsystems.enchanting.gui.GuiElementEnchantmentAdjuster;
-import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
-
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentData;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemBook;
-import net.minecraft.item.ItemStack;
 
 public class EnchantHelper {
 
@@ -30,6 +27,7 @@ public class EnchantHelper {
 		Map validEnchants = EnchantmentHelper.mapEnchantmentData(level, itemstack);
 		List<Enchantment> list = new ArrayList<Enchantment>();
 		List<Enchantment> l = alter.getEnchantsUnlocked();
+        Random r = new Random();
 		if(validEnchants != null && !validEnchants.isEmpty())
 		{
 			for(int i = 0; i < l.size(); i++)
@@ -37,10 +35,11 @@ public class EnchantHelper {
 				if(validEnchants.containsKey(Integer.valueOf(l.get(i).effectId)))
 					list.add(l.get(i));
 			}
+            while(list.size() > 7)
+                list.remove(r.nextInt(list.size()));
 		}
 		if(itemstack.getItem() instanceof ItemBook)
 		{
-			Random r = new Random();
 			while(list.size() > 7)
 				list.remove(r.nextInt(list.size()));
 		}

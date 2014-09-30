@@ -1,7 +1,6 @@
 package com.pauljoda.modularsystems.enchanting.container;
 
 import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -22,6 +21,6 @@ public class SlotEnchantingUpgrade extends Slot {
 
 	public boolean isItemValid(ItemStack par1ItemStack)
     {
-		return alter.canPlaceUpgrade(par1ItemStack.getItem());
+		return alter.canPlaceUpgrade(par1ItemStack);
     }
 }

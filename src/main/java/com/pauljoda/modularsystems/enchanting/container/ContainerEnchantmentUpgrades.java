@@ -1,12 +1,11 @@
 package com.pauljoda.modularsystems.enchanting.container;
 
+import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
 
 public class ContainerEnchantmentUpgrades extends Container {
 
@@ -64,7 +63,7 @@ public class ContainerEnchantmentUpgrades extends Container {
 				}
 			}
 			//places it into the tileEntity if possible since its in the player inventory
-			else if(alter.canPlaceUpgrade(stackInSlot.getItem()))
+			else if(alter.canPlaceUpgrade(stackInSlot))
 			{
 				if (!this.mergeItemStack(stackInSlot, 0, 24, false)) {
 					return null;

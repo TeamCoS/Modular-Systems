@@ -1,26 +1,22 @@
 package com.pauljoda.modularsystems.enchanting.tiles;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
 
-import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
-import com.pauljoda.modularsystems.core.helper.EnchantHelper;
-import com.pauljoda.modularsystems.core.managers.ItemManager;
-import com.pauljoda.modularsystems.enchanting.items.ItemEnchantingUpgrade;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class TileEntityEnchantmentAlter extends ModularTileEntity implements ISidedInventory {
 
@@ -173,19 +169,26 @@ public class TileEntityEnchantmentAlter extends ModularTileEntity implements ISi
 		}
 		return count;
 	}
-	public boolean canPlaceUpgrade(Item item) 
+	public boolean canPlaceUpgrade(ItemStack item)
 	{
-		if(!(item instanceof ItemEnchantingUpgrade))
+		if(!(item.getItem() instanceof ItemEnchantedBook))
 			return false;
 
-		else if(item == ItemManager.enchantmentUpgradeBasic)
-			return false;
-
+        List enchants = getEnchantsUnlocked();
 		for(int i = 0; i < inv.length; i++)
 		{
-			if(inv[i] != null)
-				if(item == inv[i].getItem())
-					return false;
+			if(inv[i] != null && enchants != null)
+            {
+                Map map = EnchantmentHelper.getEnchantments(item);
+                Iterator iterator = map.keySet().iterator();
+                while(iterator.hasNext())
+                {
+                    int loc = ((Integer) iterator.next()).intValue();
+                    Enchantment enchant = Enchantment.enchantmentsList[loc];
+                    if (enchants.contains(enchant))
+                        return false;
+                }
+            }
 		}
 		return true;
 	}
@@ -195,8 +198,17 @@ public class TileEntityEnchantmentAlter extends ModularTileEntity implements ISi
 		List enchants = new ArrayList<Enchantment>();
 		for(int i = 0; i < inv.length; i++)
 		{
-			if(inv[i] != null && inv[i].getItem() instanceof ItemEnchantingUpgrade)
-				enchants.add(((ItemEnchantingUpgrade) inv[i].getItem()).getEnchantment());
+			if(inv[i] != null && inv[i].getItem() instanceof ItemEnchantedBook)
+            {
+                Map map = EnchantmentHelper.getEnchantments(inv[i]);
+                Iterator iterator = map.keySet().iterator();
+                while(iterator.hasNext())
+                {
+                    int loc = ((Integer) iterator.next()).intValue();
+                    Enchantment enchant = Enchantment.enchantmentsList[loc];
+                    enchants.add(enchant);
+                }
+            }
 		}
 		return enchants;
 	}
