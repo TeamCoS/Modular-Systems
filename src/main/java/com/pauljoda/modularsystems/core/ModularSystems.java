@@ -14,7 +14,7 @@ import com.pauljoda.modularsystems.core.managers.ItemManager;
 import com.pauljoda.modularsystems.core.network.PacketPipeline;
 import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
-import com.pauljoda.modularsystems.fakeplayer.FakePlayerPool;
+import com.pauljoda.modularsystems.core.fakeplayer.FakePlayerPool;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;

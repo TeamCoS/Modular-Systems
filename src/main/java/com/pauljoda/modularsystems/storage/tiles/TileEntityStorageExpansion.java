@@ -1,6 +1,5 @@
 package com.pauljoda.modularsystems.storage.tiles;
 
-import java.util.EnumMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -18,16 +17,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent;
 
-import com.google.common.collect.Maps;
 import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.util.WorldUtil;
-import com.pauljoda.modularsystems.fakeplayer.FakePlayerPool;
-import com.pauljoda.modularsystems.fakeplayer.FakePlayerPool.PlayerUser;
-import com.pauljoda.modularsystems.fakeplayer.ModularSystemsFakePlayer;
+import com.pauljoda.modularsystems.core.fakeplayer.FakePlayerPool;
+import com.pauljoda.modularsystems.core.fakeplayer.FakePlayerPool.PlayerUser;
+import com.pauljoda.modularsystems.core.fakeplayer.ModularSystemsFakePlayer;
 
 public class TileEntityStorageExpansion extends ModularTileEntity implements IInventory, IEntitySelector {
 
