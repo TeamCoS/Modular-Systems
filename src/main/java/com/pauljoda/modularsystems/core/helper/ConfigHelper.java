@@ -1,21 +1,23 @@
 package com.pauljoda.modularsystems.core.helper;
 
-import java.io.File;
-
-import org.apache.logging.log4j.Level;
-
+import com.pauljoda.modularsystems.core.lib.Reference;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
-import com.pauljoda.modularsystems.core.lib.Reference;
-
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Configuration;
+import org.apache.logging.log4j.Level;
+
+import java.io.File;
 
 public class ConfigHelper {
 
 	public static Configuration config;
+
+    //Modules
+    public static boolean enableFurnace;
+    public static boolean enableStorage;
+    public static boolean enableEnchanting;
 
 	//Banned Blocks
 	public static String[] bannedBlocks;
@@ -53,13 +55,19 @@ public class ConfigHelper {
 	public static void syncConfig() {
 
 		try {
+
+            enableFurnace = config.get("modules", "enable furnace module", true).getBoolean();
+            enableStorage = config.get("modules", "enable storage module", true).getBoolean();
+            enableEnchanting = config.get("modules", "enable enchanting module", true).getBoolean();
+
 			/* Version check */
 			DISPLAY_VERSION_RESULT = config.get(Configuration.CATEGORY_GENERAL, DISPLAY_VERSION_RESULT_CONFIGNAME, DISPLAY_VERSION_RESULT_DEFAULT).getBoolean(DISPLAY_VERSION_RESULT_DEFAULT);
 			LAST_DISCOVERED_VERSION = config.get(Configuration.CATEGORY_GENERAL, LAST_DISCOVERED_VERSION_CONFIGNAME, LAST_DISCOVERED_VERSION_DEFAULT).getString();
 			LAST_DISCOVERED_VERSION_TYPE = config.get(Configuration.CATEGORY_GENERAL, LAST_DISCOVERED_VERSION_TYPE_CONFIGNAME, LAST_DISCOVERED_VERSION_TYPE_DEFAULT).getString();
 
-			fakePlayerMax = config.getInt("Settings", "Fake Player Max", 10, 1, 100, "Adding more is not suggested");
-			bannedBlocks = config.get("Settings, Modular Furnace", "Banned Block Unlocalized Names",
+			fakePlayerMax = config.getInt(Configuration.CATEGORY_GENERAL, "Fake Player Max", 10, 1, 100, "Adding more is not suggested");
+
+            bannedBlocks = config.get("Settings, Modular Furnace", "Banned Block Unlocalized Names",
 					new String[] 	{Blocks.log.getUnlocalizedName(), Blocks.planks.getUnlocalizedName(),
 					Blocks.dirt.getUnlocalizedName(), Blocks.ice.getUnlocalizedName(),
 					Blocks.snow.getUnlocalizedName(), Blocks.bookshelf.getUnlocalizedName(),

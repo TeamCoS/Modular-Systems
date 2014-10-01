@@ -1,23 +1,14 @@
 package com.pauljoda.modularsystems.furnace.containers;
 
+import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotCrafting;
-import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
-
-import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerModularFurnaceCrafter extends Container
 {
@@ -156,8 +147,6 @@ public class ContainerModularFurnaceCrafter extends Container
 		return tileEntity.isUseableByPlayer(entityPlayer);
 	}
 
-
-
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
 	{
@@ -200,7 +189,7 @@ public class ContainerModularFurnaceCrafter extends Container
 
 			if (itemstack1.stackSize == 0)
 			{
-				slot.putStack((ItemStack)null);
+				slot.putStack(null);
 			}
 			else
 			{

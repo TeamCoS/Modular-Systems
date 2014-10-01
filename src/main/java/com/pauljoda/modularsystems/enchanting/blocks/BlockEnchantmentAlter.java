@@ -1,7 +1,9 @@
 package com.pauljoda.modularsystems.enchanting.blocks;
 
-import java.util.Random;
-
+import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -14,12 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import com.pauljoda.modularsystems.core.ModularSystems;
-import com.pauljoda.modularsystems.core.proxy.ClientProxy;
-import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Random;
 
 public class BlockEnchantmentAlter extends BlockContainer {
 

@@ -1,21 +1,14 @@
 package com.pauljoda.modularsystems.core;
 
-import java.io.File;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraftforge.common.MinecraftForge;
-
+import com.pauljoda.modularsystems.core.fakeplayer.FakePlayerPool;
 import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.helper.VersionHelper;
 import com.pauljoda.modularsystems.core.lib.Reference;
-import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.managers.ItemManager;
+import com.pauljoda.modularsystems.core.managers.ModuleManager;
 import com.pauljoda.modularsystems.core.network.PacketPipeline;
 import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
-import com.pauljoda.modularsystems.core.fakeplayer.FakePlayerPool;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -27,6 +20,12 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.io.File;
 
 @Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID, version = Reference.VERSION)
 
@@ -46,7 +45,8 @@ public class ModularSystems {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
-			return Item.getItemFromBlock(BlockManager.furnaceCore);
+			return Item.getItemFromBlock(Blocks.furnace);
+
 		}
 	};
 
@@ -60,10 +60,15 @@ public class ModularSystems {
 		//Version Check
 		VersionHelper.execute();
 
-		BlockManager.createBlocks();
-		BlockManager.registerBlocks();
-		BlockManager.registerBlockCrafting();
-		
+        if(ConfigHelper.enableFurnace)
+            ModuleManager.enableFurnaceModule();
+
+        if(ConfigHelper.enableStorage)
+            ModuleManager.enableStorageModule();
+
+        if(ConfigHelper.enableEnchanting)
+            ModuleManager.enableEnchantingModule();
+
 		ItemManager.createItems();
 		ItemManager.registerItems();
 		ItemManager.registerItemCrafting();
