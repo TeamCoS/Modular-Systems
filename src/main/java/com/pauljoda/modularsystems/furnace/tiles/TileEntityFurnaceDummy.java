@@ -1,206 +1,230 @@
 package com.pauljoda.modularsystems.furnace.tiles;
 
 import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
-
+import com.pauljoda.modularsystems.core.util.Coord;
+import com.pauljoda.modularsystems.core.util.InventoryUtil;
+import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityFurnaceDummy extends ModularTileEntity implements ISidedInventory
 {
-	public int slot = 4;
-	int coreX;
-	int coreY;
-	int coreZ;
-	int icon = 1;
-	int metadata = 0;
+    public int slot = 4;
+    int coreX;
+    int coreY;
+    int coreZ;
+    int icon = 1;
+    int metadata = 0;
+    int coolDown = 80;
 
-	public TileEntityFurnaceDummy()
-	{
-	}
+    public TileEntityFurnaceDummy()
+    {
+    }
 
-	public void setCore(TileEntityFurnaceCore core)
-	{
-		coreX = core.xCoord;
-		coreY = core.yCoord;
-		coreZ = core.zCoord;
-	}
+    @Override
+    public void updateEntity()
+    {
+        if(coolDown < 0)
+        {
+            if (worldObj.getBlock(xCoord, yCoord, zCoord) instanceof BlockFurnaceDummyIO && !worldObj.isRemote && slot == 2)
+            {
+                for(int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++)
+                {
+                    Coord check = new Coord(xCoord, yCoord, zCoord).offset(ForgeDirection.VALID_DIRECTIONS[i]);
 
-	public TileEntityFurnaceCore getCore()
-	{
-		return (TileEntityFurnaceCore)worldObj.getTileEntity(coreX, coreY, coreZ);
-	}
+                    if (worldObj.getTileEntity(check.x, check.y, check.z) instanceof IInventory && getCore() != null)
+                    {
+                        if (getCore().getStackInSlot(2) != null)
+                            InventoryUtil.moveItemInto(getCore(), 2, worldObj.getTileEntity(check.x, check.y, check.z), -1, 64, ForgeDirection.UP, true, true);
+                    }
+                }
+            }
+            coolDown = 80;
+        }
+        coolDown--;
+    }
 
-	@Override
-	public void readFromNBT(NBTTagCompound tagCompound)
-	{
-		super.readFromNBT(tagCompound);
+    public void setCore(TileEntityFurnaceCore core)
+    {
+        coreX = core.xCoord;
+        coreY = core.yCoord;
+        coreZ = core.zCoord;
+    }
 
-		coreX = tagCompound.getInteger("CoreX");
-		coreY = tagCompound.getInteger("CoreY");
-		coreZ = tagCompound.getInteger("CoreZ");
+    public TileEntityFurnaceCore getCore()
+    {
+        return (TileEntityFurnaceCore)worldObj.getTileEntity(coreX, coreY, coreZ);
+    }
 
-		slot = tagCompound.getInteger("Slot");
-		icon = tagCompound.getInteger("Icon");
-		metadata = tagCompound.getInteger("Meta");
-	}
+    @Override
+    public void readFromNBT(NBTTagCompound tagCompound)
+    {
+        super.readFromNBT(tagCompound);
 
-	@Override
-	public void writeToNBT(NBTTagCompound tagCompound)
-	{
-		super.writeToNBT(tagCompound);
+        coreX = tagCompound.getInteger("CoreX");
+        coreY = tagCompound.getInteger("CoreY");
+        coreZ = tagCompound.getInteger("CoreZ");
 
-		tagCompound.setInteger("CoreX", coreX);
-		tagCompound.setInteger("CoreY", coreY);
-		tagCompound.setInteger("CoreZ", coreZ);
+        slot = tagCompound.getInteger("Slot");
+        icon = tagCompound.getInteger("Icon");
+        metadata = tagCompound.getInteger("Meta");
+    }
 
-		tagCompound.setInteger("Slot", slot);
-		tagCompound.setInteger("Icon", icon);
-		tagCompound.setInteger("Meta", metadata);
-	}
+    @Override
+    public void writeToNBT(NBTTagCompound tagCompound)
+    {
+        super.writeToNBT(tagCompound);
 
-	public Block getBlock()
-	{
-		if(Block.getBlockById(this.icon) == null)
-			return Blocks.cobblestone;
+        tagCompound.setInteger("CoreX", coreX);
+        tagCompound.setInteger("CoreY", coreY);
+        tagCompound.setInteger("CoreZ", coreZ);
 
-		return Block.getBlockById(this.icon);
-	}
+        tagCompound.setInteger("Slot", slot);
+        tagCompound.setInteger("Icon", icon);
+        tagCompound.setInteger("Meta", metadata);
+    }
 
-	public int getMeta()
-	{
-		return metadata;
-	}
+    public Block getBlock()
+    {
+        if(Block.getBlockById(this.icon) == null)
+            return Blocks.cobblestone;
 
-	@Override
-	public int getSizeInventory() {
-		if(getCore() != null)
-			return getCore().getSizeInventory();
-		else
-			return 0;
-	}
+        return Block.getBlockById(this.icon);
+    }
 
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		if(getCore() != null)
-			return getCore().getStackInSlot(i);
-		else
-			return null;
-	}
+    public int getMeta()
+    {
+        return metadata;
+    }
 
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		if(getCore() != null)
-			return getCore().decrStackSize(i, j);
-		else
-			return null;
-	}
+    @Override
+    public int getSizeInventory() {
+        if(getCore() != null)
+            return getCore().getSizeInventory();
+        else
+            return 0;
+    }
 
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		if(getCore() != null)
-			return getCore().getStackInSlotOnClosing(i);
-		else
-			return null;
-	}
+    @Override
+    public ItemStack getStackInSlot(int i) {
+        if(getCore() != null)
+            return getCore().getStackInSlot(i);
+        else
+            return null;
+    }
 
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		if(getCore() != null)
-			getCore().setInventorySlotContents(i, itemstack);
-	}
+    @Override
+    public ItemStack decrStackSize(int i, int j) {
+        if(getCore() != null)
+            return getCore().decrStackSize(i, j);
+        else
+            return null;
+    }
 
-	@Override
-	public int getInventoryStackLimit() {
-		if(getCore() != null)
-			return getCore().getInventoryStackLimit();
-		else
-			return 0;
-	}
+    @Override
+    public ItemStack getStackInSlotOnClosing(int i) {
+        if(getCore() != null)
+            return getCore().getStackInSlotOnClosing(i);
+        else
+            return null;
+    }
 
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return getCore() != null ? true : false;
-	}
+    @Override
+    public void setInventorySlotContents(int i, ItemStack itemstack) {
+        if(getCore() != null)
+            getCore().setInventorySlotContents(i, itemstack);
+    }
 
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		if(getCore() != null)
-			return getCore().isItemValidForSlot(i, itemstack);
-		else
-			return false;
-	}
+    @Override
+    public int getInventoryStackLimit() {
+        if(getCore() != null)
+            return getCore().getInventoryStackLimit();
+        else
+            return 0;
+    }
 
-	@Override
-	public int[] getAccessibleSlotsFromSide(int var1) {
-		if(slot != 4)
-		{
-			if(slot == 0)
-				var1 = 0;
-			if(slot == 1)
-				var1 = 1;
-			if(slot == 2)
-				var1 = 2;
-		}
-		if(getCore() != null)
-			return getCore().getAccessibleSlotsFromSide(var1);
-		else
-			return new int[] {0};
-	}
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+        return getCore() != null ? true : false;
+    }
 
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		if(getCore() != null)
-			return getCore().isItemValidForSlot(i, itemstack);
-		else
-			return false;
-	}
+    @Override
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+        if(getCore() != null)
+            return getCore().isItemValidForSlot(i, itemstack);
+        else
+            return false;
+    }
 
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		if(getCore() != null)
-		{
-			if(slot <= 3)
-			{
-				j = slot;
-				return getCore().canExtractItem(i, itemstack, j);
-			}
-			else
-			{
-				return getCore().canExtractItem(i, itemstack, j);
-			}
-		}
-		return false;
-	}
+    @Override
+    public int[] getAccessibleSlotsFromSide(int var1) {
+        if(slot != 4)
+        {
+            if(slot == 0)
+                var1 = 0;
+            if(slot == 1)
+                var1 = 1;
+            if(slot == 2)
+                var1 = 2;
+        }
+        if(getCore() != null)
+            return getCore().getAccessibleSlotsFromSide(var1);
+        else
+            return new int[] {0};
+    }
 
-	@Override
-	public String getInventoryName() {
-		if(getCore() != null)
-			return getCore().getInventoryName();
-		else
-			return "";
-	}
+    @Override
+    public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+        if(getCore() != null)
+            return getCore().isItemValidForSlot(i, itemstack);
+        else
+            return false;
+    }
 
-	@Override
-	public boolean hasCustomInventoryName() {
-		if(getCore() != null)
-			return getCore().hasCustomInventoryName();
-		else
-			return false;
-	}
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        if(getCore() != null)
+        {
+            if(slot <= 3)
+            {
+                j = slot;
+                return getCore().canExtractItem(i, itemstack, j);
+            }
+            else
+            {
+                return getCore().canExtractItem(i, itemstack, j);
+            }
+        }
+        return false;
+    }
 
-	@Override
-	public void openInventory() {		
-	}
+    @Override
+    public String getInventoryName() {
+        if(getCore() != null)
+            return getCore().getInventoryName();
+        else
+            return "";
+    }
 
-	@Override
-	public void closeInventory() {		
-	}
+    @Override
+    public boolean hasCustomInventoryName() {
+        if(getCore() != null)
+            return getCore().hasCustomInventoryName();
+        else
+            return false;
+    }
+
+    @Override
+    public void openInventory() {
+    }
+
+    @Override
+    public void closeInventory() {
+    }
 }

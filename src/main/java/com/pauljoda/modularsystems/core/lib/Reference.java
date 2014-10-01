@@ -111,27 +111,27 @@ public class Reference {
 		if(block == Blocks.iron_block)
 			return 0.2;
 		else if(block == Blocks.coal_block)
-			return 0.1;
+			return 0.05;
 		else if(block == Blocks.redstone_block)
-			return -1;
+			return -2;
 		else if(block == Blocks.diamond_block)
-			return 1.2;
+			return 0.6;
 		else if(block == Blocks.netherrack)
 			return -0.7;
 		else if(block == Blocks.stone)
 			return 0.05;
 		else if(block == Blocks.stonebrick)
-			return 0.1;
+			return 0.07;
 		else if(block == Blocks.sand)
 			return -0.5;
 		else if(block == Blocks.lapis_block)
-			return 0.2;
+			return 0.1;
 		else if(block == Blocks.sandstone)
 			return 0.01;
 		else if(block == Blocks.nether_brick)
 			return -0.5;
 		else if(block == Blocks.quartz_block)
-			return 0.2;
+			return 0.1;
 		else if(block == Blocks.hardened_clay)
 			return 0.1;
 		else
