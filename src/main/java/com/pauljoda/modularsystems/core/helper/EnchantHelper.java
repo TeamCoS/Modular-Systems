@@ -3,15 +3,13 @@ package com.pauljoda.modularsystems.core.helper;
 import com.pauljoda.modularsystems.enchanting.gui.GuiElementEnchantmentAdjuster;
 import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemBook;
 import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class EnchantHelper {
 
@@ -24,7 +22,8 @@ public class EnchantHelper {
 	 */
 	public static List<Enchantment> getEnchantsForItemInAlter(TileEntityEnchantmentAlter alter, ItemStack itemstack, int level)
 	{
-		Map validEnchants = EnchantmentHelper.mapEnchantmentData(level, itemstack);
+
+		Map validEnchants = getValidEnchantments(itemstack);
 		List<Enchantment> list = new ArrayList<Enchantment>();
 		List<Enchantment> l = alter.getEnchantsUnlocked();
         Random r = new Random();
@@ -45,6 +44,29 @@ public class EnchantHelper {
 		}
 		return list;
 	}
+
+    public static Map getValidEnchantments(ItemStack itemstack)
+    {
+        HashMap map = null;
+        Enchantment[] enchantList = Enchantment.enchantmentsList;
+        for(int i = 0; i < enchantList.length; i++)
+        {
+            Enchantment temp = enchantList[i];
+            if(temp == null) continue;
+            if(temp.canApply(itemstack) || ((itemstack.getItem() == Items.book) && temp.isAllowedOnBooks()))
+            {
+                if (map == null)
+                {
+                    map = new HashMap();
+                }
+
+                map.put(Integer.valueOf(temp.effectId), new EnchantmentData(temp, 1));
+            }
+        }
+
+
+        return map;
+    }
 
 	public static int getScaledValue(int level, TileEntityEnchantmentAlter alter)
 	{

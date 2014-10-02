@@ -1,21 +1,15 @@
 package com.pauljoda.modularsystems.furnace.blocks;
 
-import java.util.Random;
-
+import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.pauljoda.modularsystems.core.proxy.ClientProxy;
-import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
-import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
+import java.util.Random;
 
 public class BlockFurnaceDummy extends BlockBasicDummy
 {
@@ -48,17 +42,19 @@ public class BlockFurnaceDummy extends BlockBasicDummy
 	public void breakBlock(World world, int x, int y, int z, Block par5, int par6)
 	{
 		TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getTileEntity(x, y, z);
+        Block block = dummy.getBlock();
+        int meta = dummy.getMeta();
+        super.breakBlock(world, x, y, z, par5, par6);
 
-		if(world.getBlock(x, y, z) == null)
+		if(world.isAirBlock(x, y, z))
 		{
 			float f = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
 			float f1 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
 			float f2 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
 
-			EntityItem entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(dummy.getBlock(), 1, dummy.getMeta()));
+			EntityItem entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(block, 1, meta));
 
 			world.spawnEntityInWorld(entityitem);
 		}
-		super.breakBlock(world, x, y, z, par5, par6);
 	}
 }

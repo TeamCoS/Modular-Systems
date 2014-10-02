@@ -3,6 +3,7 @@ package com.pauljoda.modularsystems.furnace.tiles;
 import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 import com.pauljoda.modularsystems.core.util.Coord;
 import com.pauljoda.modularsystems.core.util.InventoryUtil;
+import com.pauljoda.modularsystems.core.util.WorldUtil;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,6 +41,24 @@ public class TileEntityFurnaceDummy extends ModularTileEntity implements ISidedI
 
                     if (worldObj.getTileEntity(check.x, check.y, check.z) instanceof IInventory && getCore() != null)
                     {
+                        if(worldObj.getTileEntity(check.x, check.y, check.z) instanceof TileEntityFurnaceDummy)
+                        {
+                            TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)worldObj.getTileEntity(check.x, check.y, check.z);
+                            if(dummy.getCore() != null)
+                            {
+                                if (WorldUtil.areTilesSame(dummy.getCore(), this.getCore()))
+                                    continue;
+                            }
+                            else
+                                continue;
+                        }
+
+                        else if(worldObj.getTileEntity(check.x, check.y, check.z) instanceof TileEntityFurnaceCore)
+                        {
+                            if(WorldUtil.areTilesSame(worldObj.getTileEntity(check.x, check.y, check.z), this.getCore()))
+                                continue;
+                        }
+
                         if (getCore().getStackInSlot(2) != null)
                             InventoryUtil.moveItemInto(getCore(), 2, worldObj.getTileEntity(check.x, check.y, check.z), -1, 64, ForgeDirection.UP, true, true);
                     }

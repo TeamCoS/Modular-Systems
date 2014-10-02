@@ -18,6 +18,7 @@ public class ConfigHelper {
     public static boolean enableFurnace;
     public static boolean enableStorage;
     public static boolean enableEnchanting;
+    public static boolean enableOreProcessing;
 
 	//Banned Blocks
 	public static String[] bannedBlocks;
@@ -59,6 +60,7 @@ public class ConfigHelper {
             enableFurnace = config.get("modules", "enable furnace module", true).getBoolean();
             enableStorage = config.get("modules", "enable storage module", true).getBoolean();
             enableEnchanting = config.get("modules", "enable enchanting module", true).getBoolean();
+            enableOreProcessing = config.get("modules", "enable ore processing module", true).getBoolean();
 
 			/* Version check */
 			DISPLAY_VERSION_RESULT = config.get(Configuration.CATEGORY_GENERAL, DISPLAY_VERSION_RESULT_CONFIGNAME, DISPLAY_VERSION_RESULT_DEFAULT).getBoolean(DISPLAY_VERSION_RESULT_DEFAULT);
