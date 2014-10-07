@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.core.util;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -13,6 +14,13 @@ public class Coord implements Cloneable {
         x = direction.offsetX;
         y = direction.offsetY;
         z = direction.offsetZ;
+    }
+
+    public Coord(TileEntity tile)
+    {
+        x = tile.xCoord;
+        y = tile.yCoord;
+        z = tile.zCoord;
     }
 
     public Coord(int x, int y, int z) {

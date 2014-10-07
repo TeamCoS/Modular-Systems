@@ -21,7 +21,15 @@ public class BlockManager {
 	public static Block storageArmorExpansion;
 	public static Block storageSmashingExpansion;
 	public static Block storageSortingExpansion;
+    public static Block storageCraftingExpansion;
 	
 	//Enchatment
 	public static Block enchantmentAlter;
+
+    //Ore Processing
+    public static Block smelteryCore;
+    public static Block smelteryCoreActive;
+    public static Block smelteryDummy;
+    public static Block smelteryDummyIO;
+    public static Block smeleryOverlay;
 }

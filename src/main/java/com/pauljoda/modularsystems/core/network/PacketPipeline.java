@@ -1,9 +1,13 @@
 package com.pauljoda.modularsystems.core.network;
 
-import java.util.*;
-
 import com.pauljoda.modularsystems.core.lib.Reference;
-
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.FMLEmbeddedChannel;
+import cpw.mods.fml.common.network.FMLOutboundHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -12,15 +16,11 @@ import io.netty.handler.codec.MessageToMessageCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.FMLEmbeddedChannel;
-import cpw.mods.fml.common.network.FMLOutboundHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.*;
 
 /**
  * Packet pipeline class. Directs all registered packet data to be handled by the packets themselves.
@@ -176,6 +176,13 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
         this.channels.get(Side.SERVER).writeAndFlush(message);
     }
 
+    public void sendTo(NBTTagCompound message, EntityPlayerMP player) {
+        FMLEmbeddedChannel chan = this.channels.get(Side.SERVER);
+        chan.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
+        chan.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+        chan.writeAndFlush(message);
+    }
+
     /**
      * Send this message to everyone within a certain range of a point.
      * <p/>
@@ -214,5 +221,11 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
     public void sendToServer(AbstractPacket message) {
         this.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
         this.channels.get(Side.CLIENT).writeAndFlush(message);
+    }
+
+    public void sendToServer(NBTTagCompound message) {
+        FMLEmbeddedChannel chan = this.channels.get(Side.CLIENT);
+        chan.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+        chan.writeAndFlush(message);
     }
 }

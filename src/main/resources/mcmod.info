@@ -11,6 +11,9 @@
   "credits": "Everyone who supported me over my time modding",
   "logoFile": "/assets/modularsystems/textures/logo.png",
   "screenshots": [],
-  "dependencies": []
+  "requiredMods": [],
+  "dependencies": ["NotEnoughItems", "CodeChickenCore"],
+  "dependants": [],
+  "useDependencyInformation": true
 }
 ]

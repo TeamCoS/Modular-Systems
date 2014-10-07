@@ -1,31 +1,38 @@
 package com.pauljoda.modularsystems.core.proxy;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.enchanting.gui.GuiEnchantmentUpgrades;
 import com.pauljoda.modularsystems.enchanting.gui.GuiModularEnchanting;
 import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
+import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnace;
+import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnaceCrafter;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnaceEnabled;
 import com.pauljoda.modularsystems.furnace.renderer.FurnaceDummyRenderer;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
+import com.pauljoda.modularsystems.oreprocessing.container.ContainerModularOreProcessing;
+import com.pauljoda.modularsystems.oreprocessing.gui.GuiModularOreProcessing;
+import com.pauljoda.modularsystems.oreprocessing.renderer.SmelteryDummyRenderer;
+import com.pauljoda.modularsystems.oreprocessing.tiles.TileEntitySmelteryCore;
 import com.pauljoda.modularsystems.storage.gui.GuiModularStorage;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
-
-import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class ClientProxy extends CommonProxy {
 
 	public static int renderPass;
 	public static int furnaceDummyRenderType;
+    public static int smelteryDummyRenderType;
 	public static void setCustomRenderers()
 	{
 		furnaceDummyRenderType = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(new FurnaceDummyRenderer());
+
+        smelteryDummyRenderType = RenderingRegistry.getNextAvailableRenderId();
+        RenderingRegistry.registerBlockHandler(new SmelteryDummyRenderer());
 	}
 
 	@Override
@@ -43,11 +50,11 @@ public class ClientProxy extends CommonProxy {
 				if(tileEntity1.checkIfCrafting())
 				{
 
-					return new GuiModularFurnaceEnabled(player.inventory, world, x, y, z, tileEntity1);
+					return new GuiModularFurnaceEnabled(new ContainerModularFurnaceCrafter(player.inventory, tileEntity1), tileEntity1);
 				}
 				else
 				{
-					return new GuiModularFurnace(player.inventory, tileEntity1);
+					return new GuiModularFurnace(new ContainerModularFurnace(player.inventory, tileEntity1), tileEntity1);
 				}
 			}
 
@@ -55,7 +62,7 @@ public class ClientProxy extends CommonProxy {
 			else if(tileEntity instanceof TileEntityStorageCore)
 			{
 				TileEntityStorageCore storageCore = (TileEntityStorageCore)world.getTileEntity(x, y, z);
-				return new GuiModularStorage(player.inventory, storageCore, player, storageCore.hasSpecificUpgrade(Reference.ARMOR_STORAGE_EXPANSION));
+				return new GuiModularStorage(player.inventory, storageCore, player, storageCore.hasSpecificUpgrade(Reference.ARMOR_STORAGE_EXPANSION), storageCore.hasSpecificUpgrade(Reference.CRAFTING_STORAGE_EXPANSION));
 			}
 
 			//Enchanting
@@ -67,6 +74,13 @@ public class ClientProxy extends CommonProxy {
 				else if(id == 1)
 					return new GuiEnchantmentUpgrades(player.inventory, alter, player);
 			}
+
+            //OreProcessing
+            else if(tileEntity instanceof TileEntitySmelteryCore)
+            {
+                TileEntitySmelteryCore smelterCore = (TileEntitySmelteryCore)world.getTileEntity(x,y,z);
+                return new GuiModularOreProcessing(new ContainerModularOreProcessing(player.inventory, smelterCore), smelterCore);
+            }
 		}
 		return null;
 	}

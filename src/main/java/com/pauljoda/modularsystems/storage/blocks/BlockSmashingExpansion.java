@@ -50,7 +50,7 @@ public class BlockSmashingExpansion extends BlockBasicExpansion {
 			return side == 3 ? drillFace : blockIcon;
 		else if(meta - 2 == side)
 			return drillFace;
-		else if(meta == 1)
+		else if(meta > 7)
 			return errorIcon;
 		return blockIcon;
 	}

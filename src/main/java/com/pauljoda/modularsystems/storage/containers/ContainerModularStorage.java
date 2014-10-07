@@ -1,17 +1,16 @@
 package com.pauljoda.modularsystems.storage.containers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
 import com.pauljoda.modularsystems.core.abstracts.SlotArmor;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContainerModularStorage extends Container {
 
@@ -19,18 +18,22 @@ public class ContainerModularStorage extends Container {
 	public List itemList = new ArrayList();
 	public int currentBottomRow = 0;
 	public boolean hasArmorViewable;
+    public InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
+    public IInventory craftResult = new InventoryCraftResult();
+    public World worldObj;
 
-	public ContainerModularStorage(InventoryPlayer playerInventory, TileEntityStorageCore tileEntityStorageCore, final EntityPlayer thePlayer, boolean hasArmorUpgrade)
+	public ContainerModularStorage(InventoryPlayer playerInventory, TileEntityStorageCore tileEntityStorageCore, final EntityPlayer thePlayer, boolean hasArmorUpgrade, boolean hasCraftingVisible)
 	{
 		storageCore = tileEntityStorageCore;
 		hasArmorViewable = hasArmorUpgrade;
+        worldObj = storageCore.getWorldObj();
 
 		for (int i = 0; i < storageCore.inventoryRows; i++)
 		{
 			for (int j = 0; j < 11; j++)
 			{
 				if(i < 6)
-					addSlotToContainer(new Slot(tileEntityStorageCore, j + i * 11, 8 + j * 18, 18 + i * 18));
+					addSlotToContainer(new Slot(tileEntityStorageCore, j + i * 11, 68 + j * 18, 18 + i * 18));
 				else
 					addSlotToContainer(new Slot(tileEntityStorageCore, j + i * 11, -1000, -1000));
 			}
@@ -39,24 +42,66 @@ public class ContainerModularStorage extends Container {
 		for (int i = 0; i < 4; ++i)
 		{
 			if(hasArmorViewable)
-				this.addSlotToContainer(new SlotArmor(playerInventory, playerInventory.getSizeInventory() - 1 - i, 199, 143 + i * 18, i, thePlayer));    
+				this.addSlotToContainer(new SlotArmor(playerInventory, playerInventory.getSizeInventory() - 1 - i, 259, 143 + i * 18, i, thePlayer));
 			else
 				this.addSlotToContainer(new SlotArmor(playerInventory, playerInventory.getSizeInventory() - 1 - i, -1000, -1000, i, thePlayer));    
 
 		}
 
 		bindPlayerInventory(playerInventory);
+
+        if(hasCraftingVisible)
+        {
+            this.addSlotToContainer(new SlotCrafting(playerInventory.player, this.craftMatrix, this.craftResult, 1000, 10, 124));
+            for (int i = 0; i < 3; ++i)
+            {
+                for (int i1 = 0; i1 < 3; ++i1)
+                {
+                    this.addSlotToContainer(new Slot(this.craftMatrix, i1 + i * 3, 6 + i1 * 18, 154 + i * 18));
+                }
+            }
+        }
 	}
+
+    public void onCraftMatrixChanged(IInventory par1IInventory)
+    {
+        this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.worldObj));
+    }
+
+    @Override
+    public void onContainerClosed(EntityPlayer par1EntityPlayer)
+    {
+        super.onContainerClosed(par1EntityPlayer);
+
+        if (!this.worldObj.isRemote)
+        {
+            for (int i = 0; i < 9; ++i)
+            {
+                ItemStack itemstack = this.craftMatrix.getStackInSlotOnClosing(i);
+
+                if (itemstack != null)
+                {
+                    par1EntityPlayer.dropPlayerItemWithRandomChoice(itemstack, false);
+                }
+            }
+        }
+    }
+
+    public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot)
+    {
+        return par2Slot.inventory != this.craftResult && super.func_94530_a(par1ItemStack, par2Slot);
+    }
+
 	protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
 				addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
-						26 + j * 18, 140 + i * 18));
+						86 + j * 18, 140 + i * 18));
 			}
 		}
 
 		for (int i = 0; i < 9; i++) {
-			addSlotToContainer(new Slot(inventoryPlayer, i, 26 + i * 18, 198));
+			addSlotToContainer(new Slot(inventoryPlayer, i, 86 + i * 18, 198));
 		}
 	}
 
@@ -75,7 +120,7 @@ public class ContainerModularStorage extends Container {
 				}
 			}
 			//places it into the tileEntity if possible since its in the player inventory
-			else if (!this.mergeItemStack(stackInSlot, currentBottomRow * 11, (currentBottomRow * 11) + 65, false)) {
+			else if (!this.mergeItemStack(stackInSlot, 0, storageCore.inventoryRows * 11, false)) {
 				return null;
 			}
 
@@ -97,7 +142,7 @@ public class ContainerModularStorage extends Container {
 	{
 		int i = storageCore.inventoryRows - 6;
 		int j = (int)((double)(index * (float)i) + 0.5D);
-		this.currentBottomRow = j;
+		currentBottomRow = j;
 		if (j < 0)
 		{
 			j = 0;
@@ -115,7 +160,7 @@ public class ContainerModularStorage extends Container {
 			for (int s = 0; s < 11; s++)
 			{
 				Slot slot = (Slot)this.inventorySlots.get((s + (f+j) * 11));
-				slot.xDisplayPosition = 8 + s * 18;
+				slot.xDisplayPosition = 68 + s * 18;
 				slot.yDisplayPosition = 18 + f * 18;
 			}
 		}
@@ -130,6 +175,7 @@ public class ContainerModularStorage extends Container {
 	{
 		storageCore.sortInventoryByIndex();
 	}
+
 	@Override
 	public boolean canInteractWith(EntityPlayer p_75145_1_) {
 		return true;

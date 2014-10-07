@@ -1,31 +1,28 @@
 package com.pauljoda.modularsystems.furnace.gui;
 
-import java.util.Arrays;
-import java.util.List;
-
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-
-import org.lwjgl.opengl.GL11;
-
+import com.pauljoda.modularsystems.core.gui.GuiBase;
 import com.pauljoda.modularsystems.core.gui.StatisticsPanel;
 import com.pauljoda.modularsystems.core.helper.VersionHelper;
 import com.pauljoda.modularsystems.core.lib.GuiColor;
 import com.pauljoda.modularsystems.core.lib.Strings;
 import com.pauljoda.modularsystems.furnace.containers.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import org.lwjgl.opengl.GL11;
 
-public class GuiModularFurnace extends GuiContainer
+import java.util.Arrays;
+import java.util.List;
+
+public class GuiModularFurnace extends GuiBase
 {
 	private TileEntityFurnaceCore tileEntity;
 	private StatisticsPanel statsPanel;
 	private static final ResourceLocation background = new ResourceLocation("textures/gui/container/furnace.png");
 
-	public GuiModularFurnace(InventoryPlayer playerInventory, TileEntityFurnaceCore tileEntity)
+	public GuiModularFurnace(ContainerModularFurnace container, TileEntityFurnaceCore tileEntity)
 	{
-		super(new ContainerModularFurnace(playerInventory, tileEntity));
+		super(container, 80, 35, 101, 50, 175, 165);
 
 		this.tileEntity = tileEntity;
 		statsPanel = new StatisticsPanel(-60, 0);

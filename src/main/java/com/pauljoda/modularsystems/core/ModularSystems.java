@@ -1,10 +1,10 @@
 package com.pauljoda.modularsystems.core;
 
+import com.pauljoda.modularsystems.api.nei.INEICallback;
 import com.pauljoda.modularsystems.core.fakeplayer.FakePlayerPool;
 import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.helper.VersionHelper;
 import com.pauljoda.modularsystems.core.lib.Reference;
-import com.pauljoda.modularsystems.core.managers.ItemManager;
 import com.pauljoda.modularsystems.core.managers.ModuleManager;
 import com.pauljoda.modularsystems.core.network.PacketPipeline;
 import com.pauljoda.modularsystems.core.proxy.ClientProxy;
@@ -39,6 +39,8 @@ public class ModularSystems {
 
 	public static final PacketPipeline packetPipeline = new PacketPipeline();
 
+    public static INEICallback nei;
+
 	//Creates the Creative Tab
 	public static CreativeTabs tabModularSystems = new CreativeTabs("tabModularSystems"){
 
@@ -69,9 +71,8 @@ public class ModularSystems {
         if(ConfigHelper.enableEnchanting)
             ModuleManager.enableEnchantingModule();
 
-		ItemManager.createItems();
-		ItemManager.registerItems();
-		ItemManager.registerItemCrafting();
+        if(ConfigHelper.enableOreProcessing)
+            ModuleManager.enableOreProcessingModule();
 
 		MinecraftForge.EVENT_BUS.register(FakePlayerPool.instance);
 	}
@@ -79,7 +80,7 @@ public class ModularSystems {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 
-		//Open Network Pipeline
+        //Open Network Pipeline
 		packetPipeline.initalise();
 
 		//Register Tiles

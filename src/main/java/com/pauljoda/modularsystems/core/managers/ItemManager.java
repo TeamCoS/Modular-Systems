@@ -1,20 +1,10 @@
 package com.pauljoda.modularsystems.core.managers;
 
+import net.minecraft.item.Item;
+
 public class ItemManager {
 
-
-
-	public static void createItems()
-	{
-
-	}
-
-	public static void registerItems()
-	{
-
-	}
-
-	public static void registerItemCrafting()
-	{
-	}
+    //Dusts
+    public static Item ironDust;
+    public static Item goldDust;
 }

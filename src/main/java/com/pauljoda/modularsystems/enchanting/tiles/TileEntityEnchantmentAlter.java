@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
@@ -162,8 +163,14 @@ public class TileEntityEnchantmentAlter extends ModularTileEntity implements ISi
 			{
 				for(int z = -range; z <= range; z++)
 				{
-					if(worldObj.getBlock(this.xCoord + x, this.yCoord + y, this.zCoord + z) == block)
-						count++;
+                    if(block != Blocks.bookshelf)
+                    {
+                        if (worldObj.getBlock(this.xCoord + x, this.yCoord + y, this.zCoord + z) == block)
+                        count++;
+                    }
+                    else
+                        count += worldObj.getBlock(this.xCoord + x, this.yCoord + y, this.zCoord + z).getEnchantPowerBonus(worldObj, this.xCoord + x, this.yCoord + y, this.zCoord + z);
+
 				}
 			}
 		}

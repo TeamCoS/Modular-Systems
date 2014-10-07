@@ -8,6 +8,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 
 public class ContainerModularFurnaceCrafter extends Container
@@ -21,10 +23,10 @@ public class ContainerModularFurnaceCrafter extends Container
 	public IInventory craftResult = new InventoryCraftResult();
 	private World worldObj;
 
-	public ContainerModularFurnaceCrafter(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5, TileEntityFurnaceCore tileEntity)
+	public ContainerModularFurnaceCrafter(InventoryPlayer par1InventoryPlayer, TileEntityFurnaceCore tileEntity)
 	{
 
-		this.worldObj = par2World;
+		this.worldObj = tileEntity.getWorldObj();
 		int i;
 		int i1;
 		this.tileEntity = tileEntity;
@@ -38,17 +40,6 @@ public class ContainerModularFurnaceCrafter extends Container
 		//Output
 		addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 148, 47));
 
-
-		this.addSlotToContainer(new SlotCrafting(par1InventoryPlayer.player, this.craftMatrix, this.craftResult, 47, 9, 45));
-		for (i = 0; i < 3; ++i)
-		{
-			for (i1 = 0; i1 < 3; ++i1)
-			{
-				this.addSlotToContainer(new Slot(this.craftMatrix, i1 + i * 3, 32 + i1 * 18, 9 + i * 18));
-			}
-		}
-
-
 		for (i = 0; i < 3; ++i)
 		{
 			for (int j = 0; j < 9; ++j)
@@ -61,6 +52,15 @@ public class ContainerModularFurnaceCrafter extends Container
 		{
 			this.addSlotToContainer(new Slot(par1InventoryPlayer, i, 8 + i * 18, 142));
 		}
+
+        this.addSlotToContainer(new SlotCrafting(par1InventoryPlayer.player, this.craftMatrix, this.craftResult, 47, 9, 45));
+        for (i = 0; i < 3; ++i)
+        {
+            for (i1 = 0; i1 < 3; ++i1)
+            {
+                this.addSlotToContainer(new Slot(this.craftMatrix, i1 + i * 3, 32 + i1 * 18, 9 + i * 18));
+            }
+        }
 	}
 
 
@@ -147,65 +147,77 @@ public class ContainerModularFurnaceCrafter extends Container
 		return tileEntity.isUseableByPlayer(entityPlayer);
 	}
 
-	@Override
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
-	{
-		ItemStack itemstack = null;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+    {
+        ItemStack itemstack = null;
+        Slot slot = (Slot)this.inventorySlots.get(par2);
+        if (slot != null && slot.getHasStack())
+        {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
 
-		if (slot != null && slot.getHasStack())
-		{
-			ItemStack itemstack1 = slot.getStack();
-			itemstack = itemstack1.copy();
+            if (par2 == 2)
+            {
+                if (!this.mergeItemStack(itemstack1, 3, 39, true))
+                {
+                    return null;
+                }
 
-			if (par2 == 0 || par2 == 49)
-			{
-				if (!this.mergeItemStack(itemstack1, 10, 46, true))
-				{
-					return null;
-				}
+                slot.onSlotChange(itemstack1, itemstack);
+            }
+            else if (par2 != 1 && par2 != 0)
+            {
+                if (FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null)
+                {
+                    if (!this.mergeItemStack(itemstack1, 0, 1, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (TileEntityFurnace.isItemFuel(itemstack1))
+                {
+                    if (!this.mergeItemStack(itemstack1, 1, 2, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (par2 >= 3 && par2 < 30)
+                {
+                    if (!this.mergeItemStack(itemstack1, 30, 39, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (par2 >= 30 && par2 < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
+                {
+                    return null;
+                }
+            }
+            else if (!this.mergeItemStack(itemstack1, 3, 39, false))
+            {
+                return null;
+            }
 
-				slot.onSlotChange(itemstack1, itemstack);
-			}
-			else if (par2 >= 13 && par2 < 40)
-			{
-				if (!this.mergeItemStack(itemstack1, 40, 49, false))
-				{
-					return null;
-				}
-			}
-			else if (par2 >= 40 && par2 < 49)
-			{
-				if (!this.mergeItemStack(itemstack1, 13, 40, false))
-				{
-					return null;
-				}
-			}
-			else if (!this.mergeItemStack(itemstack1, 13, 49, false))
-			{
-				return null;
-			}
+            if (itemstack1.stackSize == 0)
+            {
+                slot.putStack((ItemStack)null);
+            }
+            else
+            {
+                slot.onSlotChanged();
+            }
 
+            if (itemstack1.stackSize == itemstack.stackSize)
+            {
+                return null;
+            }
 
-			if (itemstack1.stackSize == 0)
-			{
-				slot.putStack(null);
-			}
-			else
-			{
-				slot.onSlotChanged();
-			}
+            slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+        }
 
-			if (itemstack1.stackSize == itemstack.stackSize)
-			{
-				return null;
-			}
-
-			slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
-		}
-
-		return itemstack;
-	}
+        return itemstack;
+    }
 
 
 	public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot)

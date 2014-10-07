@@ -1,9 +1,15 @@
 package com.pauljoda.modularsystems.core.managers;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.crafting.OreProcessingRecipies;
 import com.pauljoda.modularsystems.core.helper.ConfigHelper;
+import com.pauljoda.modularsystems.core.helper.OreDictionaryHelper;
 import com.pauljoda.modularsystems.enchanting.blocks.BlockEnchantmentAlter;
 import com.pauljoda.modularsystems.furnace.blocks.*;
+import com.pauljoda.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
+import com.pauljoda.modularsystems.oreprocessing.blocks.BlockSmelteryDummy;
+import com.pauljoda.modularsystems.oreprocessing.blocks.BlockSmelteryDummyIO;
+import com.pauljoda.modularsystems.oreprocessing.blocks.BlockSmelteryOverlay;
 import com.pauljoda.modularsystems.storage.blocks.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
@@ -64,6 +70,7 @@ public class ModuleManager
         BlockManager.storageArmorExpansion = new BlockArmorExpansion();
         BlockManager.storageSmashingExpansion = new BlockSmashingExpansion();
         BlockManager.storageSortingExpansion = new BlockSortingExpansion();
+        BlockManager.storageCraftingExpansion = new BlockCraftingExpansion();
 
         GameRegistry.registerBlock(BlockManager.storageCore, "blockStorageCore");
         GameRegistry.registerBlock(BlockManager.basicExpansion, "blockBasicExpansion");
@@ -72,6 +79,7 @@ public class ModuleManager
         GameRegistry.registerBlock(BlockManager.storageArmorExpansion, "blockArmorStorageExpansion");
         GameRegistry.registerBlock(BlockManager.storageSmashingExpansion, "blockSmashingStorageExpansion");
         GameRegistry.registerBlock(BlockManager.storageSortingExpansion, "blockSortingStorageExpansion");
+        GameRegistry.registerBlock(BlockManager.storageCraftingExpansion, "blockCraftingStorageExpansion");
 
         CraftingManager.getInstance().addRecipe(new ItemStack(BlockManager.storageCore, 1),
                 "XxX",
@@ -94,6 +102,8 @@ public class ModuleManager
 
         CraftingManager.getInstance().addShapelessRecipe(new ItemStack(BlockManager.storageSmashingExpansion, 1), Items.diamond_pickaxe, BlockManager.basicExpansion);
 
+        CraftingManager.getInstance().addShapelessRecipe(new ItemStack(BlockManager.storageCraftingExpansion, 1), Blocks.crafting_table, BlockManager.basicExpansion);
+
         CraftingManager.getInstance().addRecipe(new ItemStack(BlockManager.storageSortingExpansion, 1),
                 "XXX",
                 "XxX",
@@ -110,5 +120,33 @@ public class ModuleManager
                 "   ",
                 " x ",
                 "XeX", 'X', Blocks.emerald_block, 'x', Items.book, 'e', Blocks.enchanting_table);
+    }
+
+    public static void enableOreProcessingModule()
+    {
+        OreDictionaryHelper.initDustsAsNeeded();
+        OreProcessingRecipies.addOreProcessingRecipe(Blocks.cobblestone, Blocks.sand);
+
+        BlockManager.smelteryCore = new BlockSmelteryCore(false).setBlockName("modularsystems:blockSmelteryCore").setCreativeTab(ModularSystems.tabModularSystems);
+        BlockManager.smelteryCoreActive = new BlockSmelteryCore(true).setBlockName("modularsystems:blockSmelteryCoreActive").setLightLevel(1.0F);
+        BlockManager.smelteryDummy = new BlockSmelteryDummy();
+        BlockManager.smelteryDummyIO = new BlockSmelteryDummyIO();
+        BlockManager.smeleryOverlay = new BlockSmelteryOverlay();
+
+        GameRegistry.registerBlock(BlockManager.smelteryCore, "smelteryCore");
+        GameRegistry.registerBlock(BlockManager.smelteryCoreActive, "smelteryCoreActive");
+        GameRegistry.registerBlock(BlockManager.smelteryDummy, "smelteryDummy");
+        GameRegistry.registerBlock(BlockManager.smelteryDummyIO, "smelteryDummyIO");
+        GameRegistry.registerBlock(BlockManager.smeleryOverlay, "smelteryOverlay");
+
+        CraftingManager.getInstance().addRecipe(new ItemStack(BlockManager.smelteryCore, 1),
+                "XXX",
+                "XxX",
+                "XXX", 'X', Items.flint, 'x', Blocks.furnace);
+
+        CraftingManager.getInstance().addRecipe(new ItemStack(BlockManager.smelteryDummyIO, 1),
+                "XXX",
+                "XxX",
+                "XXX", 'X', Items.flint, 'x', Blocks.dispenser);
     }
 }

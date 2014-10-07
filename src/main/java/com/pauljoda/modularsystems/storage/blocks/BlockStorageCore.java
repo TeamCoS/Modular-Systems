@@ -1,7 +1,10 @@
 package com.pauljoda.modularsystems.storage.blocks;
 
-import java.util.Random;
-
+import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -17,13 +20,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import com.pauljoda.modularsystems.core.ModularSystems;
-import com.pauljoda.modularsystems.core.managers.BlockManager;
-import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
-import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageExpansion;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Random;
 
 public class BlockStorageCore extends BlockContainer {
 
@@ -182,28 +179,6 @@ public class BlockStorageCore extends BlockContainer {
 			}
 		}
 
-		//Find expansions and break
-		for(int i = -1; i <= 1; i++)
-		{
-			for(int j = -1; j <= 1; j++)
-			{
-				for(int k = -1; k <= 1; k++)
-				{
-					//Checks to make sure we are looking at only adjacent blocks
-					if(!(Math.abs(i) == 1 ? (Math.abs(j) == 0 && Math.abs(k) == 0) : ((Math.abs(j) == 1) ? Math.abs(k) == 0 : Math.abs(k) == 1)))
-						continue;
-
-					Block localBlock = world.getBlock(i + x, j + y, k + z);
-					if(BlockBasicExpansion.isStorageExpansion(localBlock))
-					{
-						TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)world.getTileEntity(i + x, j + y, k + z);
-						expansion.invalidateExpansion();
-						expansion.invalidateCore();
-					}
-				}
-			}
-		}
-		
 		world.func_147453_f(x, y, z, par5);
 
 		super.breakBlock(world, x, y, z, par5, par6);

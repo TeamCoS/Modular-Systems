@@ -4,10 +4,8 @@ import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
-import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageExpansion;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -27,8 +25,6 @@ public class BlockBasicExpansion extends BlockContainer {
 
 	@SideOnly(Side.CLIENT)
 	public IIcon errorIcon;
-	@SideOnly(Side.CLIENT)
-	public static IIcon overLay;
 
 	public BlockBasicExpansion() {
 		super(Material.wood);
@@ -38,20 +34,16 @@ public class BlockBasicExpansion extends BlockContainer {
 		setCreativeTab(ModularSystems.tabModularSystems);
 	}
 
-
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister par1IconRegister)
 	{
 		blockIcon = par1IconRegister.registerIcon("modularsystems:chestSideBasic");
 		errorIcon = par1IconRegister.registerIcon("modularsystems:chestSideError");
-		overLay = par1IconRegister.registerIcon("modularsystems:chestOverlay");
 	}
 
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta)
 	{
-		if(meta == 12)
-			return overLay;
 		return meta == 0 ? blockIcon : errorIcon;
 	}
 
@@ -63,17 +55,16 @@ public class BlockBasicExpansion extends BlockContainer {
 
 		TileEntityStorageExpansion dummy = (TileEntityStorageExpansion)world.getTileEntity(x, y, z);
 
-		if(dummy != null && dummy.getCore() != null)
+		if(dummy != null && dummy.getCore() != null && dummy.isConnected())
 		{
 			TileEntityStorageCore core = dummy.getCore();
 			return core.getBlockType().onBlockActivated(world, core.xCoord, core.yCoord, core.zCoord, player, par6, par7, par8, par9);
 		}
 
-		if(dummy.getCore() == null)
+		if(dummy.getCore() == null || world.getBlockMetadata(x, y, z) == 1)
 		{
-			dummy.invalidateCore();
 			if(world.isRemote)
-				player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "Could not locate core, please replace this block"));
+				player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "Could not locate core, please provide a connection"));
 		}
 		return true;
 	}
@@ -103,8 +94,7 @@ public class BlockBasicExpansion extends BlockContainer {
 						{
 							expansion.setCore(core);
 
-							if(world.getBlock(x, y, z) == BlockManager.storageExpansion)
-								expansion.getCore().setInventoryRows(core.inventoryRows + 1);
+						    expansion.setUpgradeToCore(world.getBlock(x,y,z));
 
 							world.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
 							registered = true;
@@ -133,46 +123,21 @@ public class BlockBasicExpansion extends BlockContainer {
 						{
 							TileEntityStorageExpansion parent = (TileEntityStorageExpansion)world.getTileEntity(i + x, j + y, k + z);
 
-							if(parent.getCore() != null && parent.getChild() == null)
+							if(parent.getCore() != null)
 							{
-								TileEntityStorageCore core = (TileEntityStorageCore)parent.getCore();
+								TileEntityStorageCore core = parent.getCore();
 								if(core.inventoryRows < ConfigHelper.maxExpansionSize)
 								{
 									expansion.setCore(core);
-									expansion.setParent(parent);
-									parent.setChild(expansion);
 
-									if(world.getBlock(x, y, z) == BlockManager.storageExpansion)
-										expansion.getCore().setInventoryRows(core.inventoryRows + 1);
+                                    expansion.setUpgradeToCore(world.getBlock(x,y,z));
 
-									world.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
+                                    world.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
 									world.markBlockForUpdate(i + x, j + y, k + z);
 									registered = true;
 									break;
 								}
 
-							}
-							else if(parent.getCore() != null && parent.getChild() != null)
-							{
-								TileEntityStorageExpansion sibling = parent.getChild();
-								TileEntityStorageCore core = (TileEntityStorageCore)parent.getCore();
-								if(core.inventoryRows < ConfigHelper.maxExpansionSize)
-								{
-									while(sibling.getSibling() != null)
-										sibling = sibling.getSibling();
-
-									sibling.setSibling(expansion);
-									expansion.setCore(core);
-									expansion.setParent(parent);
-
-									if(world.getBlock(x, y, z) == BlockManager.storageExpansion)
-										expansion.getCore().setInventoryRows(core.inventoryRows + 1);
-
-									world.markBlockForUpdate(core.xCoord, core.yCoord, core.zCoord);
-									world.markBlockForUpdate(i + x, j + y, k + z);
-									registered = true;
-									break;
-								}
 							}
 							else
 								world.setBlockMetadataWithNotify(x, y, z, 1, 2);
@@ -189,21 +154,11 @@ public class BlockBasicExpansion extends BlockContainer {
 	public void breakBlock(World world, int x, int y, int z, Block par5, int par6)
 	{
 		TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)world.getTileEntity(x, y, z);
-		expansion.invalidateExpansion();
-		expansion.invalidateCore();
+        if(expansion.isConnected)
+		    expansion.invalidateCore();
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
-	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block changedBlock)
-	{
-		if(isStorageExpansion(changedBlock))
-		{
-			TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)world.getTileEntity(x, y, z);
-			if(expansion.getChild() == null)
-				expansion.childY = -100;
-		}
-	}
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 		TileEntityStorageExpansion tile = new TileEntityStorageExpansion();

@@ -1,14 +1,8 @@
 package com.pauljoda.modularsystems.storage.tiles;
 
-import java.util.List;
-
 import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.lib.Reference;
-import com.pauljoda.modularsystems.core.managers.BlockManager;
-import com.pauljoda.modularsystems.storage.blocks.BlockCapacityExpansion;
-
-import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -18,17 +12,16 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 public class TileEntityStorageCore extends ModularTileEntity implements IInventory {
 
 	public ItemStack[] inv;
 	public int inventoryRows = 6;
 	private final int MAX_EXPANSIONS = ConfigHelper.maxExpansionSize;
+
+    public boolean hasSortingUpgrade;
+    public boolean hasArmorUpgrade;
+    public boolean hasCraftingUpgrade;
 
 	public TileEntityStorageCore()
 	{
@@ -58,7 +51,7 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 						if(inv[j - 1].stackSize < inv[j - 1].getMaxStackSize())
 						{
 							int mergeSize = inv[j - 1].getMaxStackSize() - inv[j - 1].stackSize;
-							if(inv[j].stackSize >= mergeSize)
+							if(inv[j].stackSize > mergeSize)
 							{
 								inv[j - 1].stackSize += mergeSize;
 								inv[j].stackSize -= mergeSize;
@@ -101,7 +94,7 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 				{
 					temp = Item.getIdFromItem(inv[j - 1].getItem());
 					temp2 = Item.getIdFromItem(inv[j].getItem());
-					if(temp2 > temp)
+					if(temp2 < temp)
 					{
 						swapper = inv[j - 1].copy();
 						this.setInventorySlotContents(j - 1, inv[j].copy());
@@ -123,7 +116,7 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 						else if(inv[j - 1].stackSize < inv[j - 1].getMaxStackSize())
 						{
 							int mergeSize = inv[j - 1].getMaxStackSize() - inv[j - 1].stackSize;
-							if(inv[j].stackSize >= mergeSize)
+							if(inv[j].stackSize > mergeSize)
 							{
 								inv[j - 1].stackSize += mergeSize;
 								inv[j].stackSize -= mergeSize;
@@ -186,36 +179,19 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 	}
 
 	public boolean hasSpecificUpgrade(int upgradeId)
-	{
-		for(int i = -1; i <= 1; i++)
-		{
-			for(int j = -1; j <= 1; j++)
-			{
-				for(int k = -1; k <= 1; k++)
-				{
-					//Checks to make sure we are looking at only adjacent blocks
-					if(!(Math.abs(i) == 1 ? (Math.abs(j) == 0 && Math.abs(k) == 0) : ((Math.abs(j) == 1) ? Math.abs(k) == 0 : Math.abs(k) == 1)))
-						continue;
-
-					Block localBlock = worldObj.getBlock(i + xCoord, j + yCoord, k + zCoord);
-
-					if(BlockCapacityExpansion.isStorageExpansion(localBlock))
-					{
-						TileEntityStorageExpansion expansion = (TileEntityStorageExpansion)worldObj.getTileEntity(i + xCoord, j + yCoord, k + zCoord);
-						if(expansion.tileType == upgradeId)
-							return true;
-						while(expansion.getChild() != null)
-						{
-							expansion = expansion.getChild();
-							if(expansion.tileType == upgradeId)
-								return true;
-						}
-					}
-				}
-			}
-		}
-		return false;
-	}
+    {
+        switch(upgradeId)
+        {
+            case Reference.ARMOR_STORAGE_EXPANSION :
+                return hasArmorUpgrade;
+            case Reference.SORTING_STORAGE_EXPANSION :
+                return hasSortingUpgrade;
+            case Reference.CRAFTING_STORAGE_EXPANSION :
+                return hasCraftingUpgrade;
+            default :
+                return false;
+        }
+    }
 
 	public void setInventoryRows(int i)
 	{
@@ -295,6 +271,10 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 
 		this.inventoryRows = tagCompound.getInteger("Rows");
 
+        this.hasArmorUpgrade = tagCompound.getBoolean("hasArmorUpgrade");
+        this.hasSortingUpgrade = tagCompound.getBoolean("hasSortingUpgrade");
+        this.hasCraftingUpgrade = tagCompound.getBoolean("hasCraftingUpgrade");
+
 		NBTTagList itemsTag = tagCompound.getTagList("Items", 10);
 		this.inv = new ItemStack[getSizeInventory()];
 		for (int i = 0; i < itemsTag.tagCount(); i++)
@@ -318,6 +298,10 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 		super.writeToNBT(tagCompound);
 
 		tagCompound.setInteger("Rows", this.inventoryRows);
+
+        tagCompound.setBoolean("hasArmorUpgrade", this.hasArmorUpgrade);
+        tagCompound.setBoolean("hasSortingUpgrade", this.hasSortingUpgrade);
+        tagCompound.setBoolean("hasCraftingUpgrade", this.hasCraftingUpgrade);
 
 		NBTTagList nbtTagList = new NBTTagList();
 		for (int i = 0; i < this.inv.length; i++) {
