@@ -123,7 +123,7 @@ public class BlockBasicExpansion extends BlockContainer {
 						{
 							TileEntityStorageExpansion parent = (TileEntityStorageExpansion)world.getTileEntity(i + x, j + y, k + z);
 
-							if(parent.getCore() != null)
+							if(parent.getCore() != null && parent.isConnected)
 							{
 								TileEntityStorageCore core = parent.getCore();
 								if(core.inventoryRows < ConfigHelper.maxExpansionSize)

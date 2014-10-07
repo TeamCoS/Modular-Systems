@@ -182,7 +182,7 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
             if (worldObj.getTileEntity(check.x, check.y, check.z) instanceof TileEntityStorageExpansion && !worldObj.isRemote)
             {
                 TileEntityStorageExpansion buddy = (TileEntityStorageExpansion)worldObj.getTileEntity(check.x, check.y, check.z);
-                if(buddy.getCore() != null && getCore() != null)
+                if(buddy.getCore() != null && getCore() != null && buddy.isConnected)
                 {
                     if (WorldUtil.areTilesSame(this.getCore(), buddy.getCore()) && buddy.isConnected(new Coord(this)))
                         return true;
@@ -209,7 +209,7 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
             if (worldObj.getTileEntity(check.x, check.y, check.z) instanceof TileEntityStorageExpansion && !worldObj.isRemote && !coord.equals(check))
             {
                 TileEntityStorageExpansion buddy = (TileEntityStorageExpansion)worldObj.getTileEntity(check.x, check.y, check.z);
-                if(buddy.getCore() != null && getCore() != null)
+                if(buddy.getCore() != null && getCore() != null && buddy.isConnected)
                 {
                     if (WorldUtil.areTilesSame(this.getCore(), buddy.getCore()) && buddy.isConnected(new Coord(this)))
                         return true;
