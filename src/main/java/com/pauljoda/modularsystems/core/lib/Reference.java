@@ -20,7 +20,7 @@ public class Reference {
 
     public static final String MOD_ID = "modularsystems";
     public static final String MOD_NAME = "Modular Systems";
-    public static final String VERSION = "1.5";
+    public static final String VERSION = "1.51";
     public static final String CHANNEL_NAME = MOD_ID;
 
     //FURNACE: Blocks that are from my mod, used to prevent overlaying on reload
@@ -76,10 +76,8 @@ public class Reference {
         int oreDictCheck = OreDictionary.getOreID(new ItemStack(blockId));
         int isWood = OreDictionary.getOreID("logWood");
         int isPlank = OreDictionary.getOreID("plankWood");
-        if(oreDictCheck == isWood || oreDictCheck == isPlank)
-            return true;
+        return oreDictCheck == isWood || oreDictCheck == isPlank;
 
-        return false;
     }
 
     //FURNACE: Gets Speed Multiplier

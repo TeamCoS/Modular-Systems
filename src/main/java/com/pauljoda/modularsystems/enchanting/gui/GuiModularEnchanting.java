@@ -252,10 +252,7 @@ public class GuiModularEnchanting extends GuiContainer {
 
 	public void onInventoryChanged()
 	{
-		if(hasItem)
-			hasItem = false;
-		else
-			hasItem = true;
+        hasItem = !hasItem;
 
 
 		int x = (width - xSize) / 2;

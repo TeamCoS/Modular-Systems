@@ -25,6 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TileEntityStorageExpansion extends ModularTileEntity implements IInventory, IEntitySelector {
@@ -176,6 +177,9 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 
     public boolean isConnected()
     {
+        List<Coord>list = new ArrayList<Coord>();
+        list.add(new Coord(this));
+
         for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++)
         {
             Coord check = new Coord(xCoord, yCoord, zCoord).offset(ForgeDirection.VALID_DIRECTIONS[i]);
@@ -184,7 +188,7 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
                 TileEntityStorageExpansion buddy = (TileEntityStorageExpansion)worldObj.getTileEntity(check.x, check.y, check.z);
                 if(buddy.getCore() != null && getCore() != null && buddy.isConnected)
                 {
-                    if (WorldUtil.areTilesSame(this.getCore(), buddy.getCore()) && buddy.isConnected(new Coord(this)))
+                    if (WorldUtil.areTilesSame(this.getCore(), buddy.getCore()) && buddy.isConnected(list))
                         return true;
                 }
             }
@@ -201,17 +205,22 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
         return false;
     }
 
-    public boolean isConnected(Coord coord)
+    public boolean isConnected(List<Coord> coord)
     {
+        coord.add(new Coord(this));
         for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++)
         {
             Coord check = new Coord(xCoord, yCoord, zCoord).offset(ForgeDirection.VALID_DIRECTIONS[i]);
-            if (worldObj.getTileEntity(check.x, check.y, check.z) instanceof TileEntityStorageExpansion && !worldObj.isRemote && !coord.equals(check))
+            if (worldObj.getTileEntity(check.x, check.y, check.z) instanceof TileEntityStorageExpansion && !worldObj.isRemote && !coord.contains(check))
             {
                 TileEntityStorageExpansion buddy = (TileEntityStorageExpansion)worldObj.getTileEntity(check.x, check.y, check.z);
+
+                if(coord.contains(buddy))
+                    continue;
+
                 if(buddy.getCore() != null && getCore() != null && buddy.isConnected)
                 {
-                    if (WorldUtil.areTilesSame(this.getCore(), buddy.getCore()) && buddy.isConnected(new Coord(this)))
+                    if (WorldUtil.areTilesSame(this.getCore(), buddy.getCore()) && buddy.isConnected(coord))
                         return true;
                 }
             }
@@ -470,7 +479,7 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) != this ? false : entityplayer.getDistanceSq((double)xCoord + 0.5, (double)yCoord + 0.5, (double)zCoord + 0.5) <= 64.0;
+        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && entityplayer.getDistanceSq((double) xCoord + 0.5, (double) yCoord + 0.5, (double) zCoord + 0.5) <= 64.0;
     }
 
     @Override

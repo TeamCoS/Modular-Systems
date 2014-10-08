@@ -337,9 +337,7 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
                         return false;
                     if (!Reference.isValidBlock(blockId.getUnlocalizedName()))
                     {
-                        if (Reference.isModularTile(blockId.getUnlocalizedName()))
-                            return true;
-                        return false;
+                        return Reference.isModularTile(blockId.getUnlocalizedName());
                     }
 
                 }
@@ -1004,10 +1002,7 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
             return false;
         if (par1 == 1 && isItemFuel(par2ItemStack))
             return true;
-        if (par1 == 0)
-            return true;
-        else
-            return false;
+        return par1 == 0;
 
     }
 
@@ -1213,7 +1208,6 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
                         return;
                     }
                 }
-                return;
             }
             else if (this.furnaceItems[2].isItemEqual(itemstack))
             {

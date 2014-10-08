@@ -170,7 +170,7 @@ public class TileEntitySmelteryDummy extends ModularTileEntity implements ISided
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        return getCore() != null ? true : false;
+        return getCore() != null;
     }
 
     @Override

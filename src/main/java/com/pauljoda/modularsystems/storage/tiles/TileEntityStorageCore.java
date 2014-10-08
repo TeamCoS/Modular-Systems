@@ -326,10 +326,7 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		if(i < this.inventoryRows * 11)
-			return true;
-		else
-			return false;
+        return i < this.inventoryRows * 11;
 	}
 
 	public void setGuiDisplayName(String displayName) { }

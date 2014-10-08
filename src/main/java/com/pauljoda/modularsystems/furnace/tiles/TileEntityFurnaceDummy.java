@@ -170,7 +170,7 @@ public class TileEntityFurnaceDummy extends ModularTileEntity implements ISidedI
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        return getCore() != null ? true : false;
+        return getCore() != null;
     }
 
     @Override
