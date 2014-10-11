@@ -16,7 +16,7 @@ public class VersionHelper implements Runnable {
 	private static VersionHelper instance = new VersionHelper();
 
 	// The (publicly available) remote version number authority file
-	final static String REMOTE_VERSION_XML_FILE = "https://raw.githubusercontent.com/pauljoda/Modular-Systems/master/build.properties";
+	final static String REMOTE_VERSION_XML_FILE = "https://raw.githubusercontent.com/pauljoda/Modular-Systems/master/VersionControl.xml";
 
 	static Properties remoteVersionProperties = new Properties();
 
@@ -46,8 +46,7 @@ public class VersionHelper implements Runnable {
 		try {
 			URL remoteVersionURL = new URL(REMOTE_VERSION_XML_FILE);
 			remoteVersionRepoStream = remoteVersionURL.openStream();
-			remoteVersionProperties = new Properties();
-            remoteVersionProperties.load(remoteVersionRepoStream);
+			remoteVersionProperties.loadFromXML(remoteVersionRepoStream);
 
 			String remoteVersionProperty = remoteVersionProperties.getProperty(Loader.instance().getMCVersionString());
 
