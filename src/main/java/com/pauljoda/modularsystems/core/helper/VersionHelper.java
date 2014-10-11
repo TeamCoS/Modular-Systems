@@ -1,24 +1,22 @@
 package com.pauljoda.modularsystems.core.helper;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Properties;
-
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.config.Configuration;
-
 import com.pauljoda.modularsystems.core.lib.Colours;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.lib.Strings;
-
 import cpw.mods.fml.common.Loader;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.config.Configuration;
+
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Properties;
 
 public class VersionHelper implements Runnable {
 
 	private static VersionHelper instance = new VersionHelper();
 
 	// The (publicly available) remote version number authority file
-	final static String REMOTE_VERSION_XML_FILE = "https://raw.githubusercontent.com/pauljoda/Modular-Systems/master/VersionControl.xml";
+	final static String REMOTE_VERSION_XML_FILE = "https://raw.githubusercontent.com/pauljoda/Modular-Systems/master/build.properties";
 
 	static Properties remoteVersionProperties = new Properties();
 
@@ -48,7 +46,8 @@ public class VersionHelper implements Runnable {
 		try {
 			URL remoteVersionURL = new URL(REMOTE_VERSION_XML_FILE);
 			remoteVersionRepoStream = remoteVersionURL.openStream();
-			remoteVersionProperties.loadFromXML(remoteVersionRepoStream);
+			remoteVersionProperties = new Properties();
+            remoteVersionProperties.load(remoteVersionRepoStream);
 
 			String remoteVersionProperty = remoteVersionProperties.getProperty(Loader.instance().getMCVersionString());
 

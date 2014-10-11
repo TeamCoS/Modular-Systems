@@ -17,36 +17,45 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.10_1.51"
+ext.configFile = file "build.properties"
+
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+
+version = "${config.minecraft_version}-${config.mod_version}.${System.getenv("BUILD_NUMBER") ?: 0}"
 group= "com.pauljoda.modularsystems" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Modular Systems"
 
 minecraft {
-    version = "1.7.10-10.13.0.1180"
+    version = config.minecraft_version + "-" + config.forge_version
+
+    replaceIn "core/lib/Reference.java"
+    replace "@VERSION@", "${config.mod_version}.${System.getenv("BUILD_NUMBER") ?: 0}"
+
     assetDir = "src/main/resources"
 }
-
 dependencies {
     compile files ("lib/CodeChickenCore-1.7.10-1.0.2.9-dev.jar",
             "lib/NotEnoughItems-1.7.10-1.0.2.15-dev.jar")
 }
 
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+processResources {
+    // exclude xcf files, as they are for development only
+    exclude '**/*.xcf'
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
+        include '*.info'
+
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'mod_version': project.version, 'minecraft_version': project.config.minecraft_version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        exclude '**/*.info'
     }
 }
