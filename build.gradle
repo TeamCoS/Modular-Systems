@@ -25,7 +25,7 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 
-version = "${config.minecraft_version}-${config.mod_version}.${System.getenv("BUILD_NUMBER") ?: 0}"
+version = "${config.minecraft_version}-${config.mod_version}"
 group= "com.pauljoda.modularsystems" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Modular Systems"
 
@@ -33,7 +33,7 @@ minecraft {
     version = config.minecraft_version + "-" + config.forge_version
 
     replaceIn "core/lib/Reference.java"
-    replace "@VERSION@", "${config.mod_version}.${System.getenv("BUILD_NUMBER") ?: 0}"
+    replace "@VERSION@", "${config.mod_version}"
 
     assetDir = "src/main/resources"
 }
