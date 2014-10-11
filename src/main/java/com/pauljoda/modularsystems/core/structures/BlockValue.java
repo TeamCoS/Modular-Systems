@@ -2,32 +2,39 @@ package com.pauljoda.modularsystems.core.structures;
 
 import net.minecraft.block.Block;
 
-public class BlockValues
+public class BlockValue
 {
     private String unlocalizedName;
-    private int speedValue;
-    private int efficiencyValue;
+    private double speedValue;
+    private double efficiencyValue;
 
-    public BlockValues(String name, int speed, int efficiency)
+    public BlockValue(String name, double speed, double efficiency)
     {
         unlocalizedName = name;
         speedValue = speed;
         efficiencyValue = efficiency;
     }
 
-    public BlockValues(Block block, int speed, int efficiency)
+    public BlockValue(String name, String speed, String efficiency)
+    {
+        unlocalizedName = name;
+        speedValue = Double.parseDouble(speed);
+        efficiencyValue = Double.parseDouble(efficiency);
+    }
+
+    public BlockValue(Block block, double speed, double efficiency)
     {
         unlocalizedName = block.getUnlocalizedName();
         speedValue = speed;
         efficiencyValue = efficiency;
     }
 
-    public int getSpeedValue()
+    public double getSpeedValue()
     {
         return speedValue;
     }
 
-    public int getEfficiencyValue()
+    public double getEfficiencyValue()
     {
         return efficiencyValue;
     }

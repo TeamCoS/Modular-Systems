@@ -26,10 +26,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.File;
+import java.io.IOException;
 
 @Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID, version = Reference.VERSION)
 
@@ -71,6 +73,12 @@ public class ModularSystems {
         {
             LogHelper.error(e.getMessage());
         } catch (TransformerException e)
+        {
+            LogHelper.error(e.getMessage());
+        } catch (SAXException e)
+        {
+            LogHelper.error(e.getMessage());
+        } catch (IOException e)
         {
             LogHelper.error(e.getMessage());
         }

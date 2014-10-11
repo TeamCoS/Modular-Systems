@@ -1,9 +1,9 @@
 package com.pauljoda.modularsystems.core.lib;
 
+import com.pauljoda.modularsystems.core.helper.BlockValueHelper;
 import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -83,68 +83,33 @@ public class Reference {
     //FURNACE: Gets Speed Multiplier
     public static double getSpeedMultiplierForBlock(Block block)
     {
-        if(block == Blocks.redstone_block)
-            return 1.2;
-        else if(block == Blocks.gold_block)
-            return 1;
-        else if(block == Blocks.diamond_block)
-            return 3;
-        else if(block == Blocks.netherrack)
-            return 1;
-        else if(block == Blocks.lapis_block)
-            return 1;
-        else if(block == Blocks.sandstone)
-            return 0.3;
-        else if(block == Blocks.brick_block)
-            return 0.5;
-        else if(block == Blocks.soul_sand)
-            return 0.3;
-        else if(block == Blocks.nether_brick)
-            return 1.0;
-        else if(block == Blocks.hardened_clay)
-            return 0.6;
-        else if(block.getMaterial() == Material.iron)
-            return 1;
-        else if(block.getMaterial() == Material.rock && block != Blocks.cobblestone)
-            return 0.2;
-        else
+         for(int i = 0; i < BlockValueHelper.blockValues.size(); i++)
+         {
+            if(BlockValueHelper.blockValues.get(i).compareBlock(block))
+            return BlockValueHelper.blockValues.get(i).getSpeedValue();
+         }
+        for(int i = 0; i < BlockValueHelper.materialValues.size(); i++)
+        {
+            if(BlockValueHelper.materialValues.get(i).compareBlock(block))
+                return BlockValueHelper.materialValues.get(i).getSpeedValue();
+        }
             return 0;
     }
 
     //FURNACE: Gets Efficiency Multiplier
     public static double getEfficiencyMultiplierForBlock(Block block)
     {
-        if(block == Blocks.iron_block)
-            return 0.1;
-        else if(block == Blocks.coal_block)
-            return 0.05;
-        else if(block == Blocks.redstone_block)
-            return -2;
-        else if(block == Blocks.diamond_block)
-            return 0.6;
-        else if(block == Blocks.netherrack)
-            return -0.7;
-        else if(block == Blocks.stone)
-            return 0.005;
-        else if(block == Blocks.stonebrick)
-            return 0.007;
-        else if(block == Blocks.sand)
-            return -0.5;
-        else if(block == Blocks.lapis_block)
-            return 0.1;
-        else if(block == Blocks.sandstone)
-            return 0.001;
-        else if(block == Blocks.nether_brick)
-            return -0.5;
-        else if(block == Blocks.quartz_block)
-            return 0.1;
-        else if(block == Blocks.hardened_clay)
-            return 0.001;
-        else if(block.getMaterial() == Material.iron)
-            return 0.03;
-        else if(block.getMaterial() == Material.rock && block != Blocks.cobblestone)
-            return 0.001;
-        else
+
+        for(int i = 0; i < BlockValueHelper.blockValues.size(); i++)
+        {
+            if(BlockValueHelper.blockValues.get(i).compareBlock(block))
+                return BlockValueHelper.blockValues.get(i).getEfficiencyValue();
+        }
+        for(int i = 0; i < BlockValueHelper.materialValues.size(); i++)
+        {
+            if(BlockValueHelper.materialValues.get(i).compareBlock(block))
+                return BlockValueHelper.materialValues.get(i).getEfficiencyValue();
+        }
             return 0.0;
     }
 }
