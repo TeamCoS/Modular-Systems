@@ -4,7 +4,6 @@ import com.pauljoda.modularsystems.enchanting.gui.GuiElementEnchantmentAdjuster;
 import com.pauljoda.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBook;
 import net.minecraft.item.ItemStack;
@@ -71,7 +70,7 @@ public class EnchantHelper {
 	public static int getScaledValue(int level, TileEntityEnchantmentAlter alter)
 	{
 		int out;
-		out = (int) (-(0.1 * Math.pow(alter.countBlocksInRange(2, Blocks.skull), 2)) + 10);
+		out = (int) (-(0.1 * Math.pow(alter.getSkullValue(), 2)) + 10);
 		if(out < 1)
 			out = 1;
 		return out * level;

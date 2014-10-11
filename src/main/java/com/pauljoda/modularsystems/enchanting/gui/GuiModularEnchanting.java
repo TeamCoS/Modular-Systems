@@ -67,15 +67,15 @@ public class GuiModularEnchanting extends GuiContainer {
 		this.xSize = 256;
 		this.ySize = 226;
 
-		maxPoints = pointsToSpend = alter.countBlocksInRange(2, Blocks.bookshelf);
-		
+        maxPoints = pointsToSpend = alter.getEnchantmentBonus();
+
 		itemRenderer = new ItemRenderer(mc);
 		item = new EntityStaticItem(Minecraft.getMinecraft().theWorld, 0, 0, 0, new ItemStack(Blocks.air, 1));
-		
+
 		statsPanel = new StatisticsPanel(-60, 0);
 		statsPanel.addNode(240, 208, GuiColor.GREEN + "0");
 		statsPanel.addNode(224, 208, GuiColor.BLACK + String.valueOf(maxPoints));
-		
+
 		hasItem = false;
 	}
 
@@ -96,29 +96,29 @@ public class GuiModularEnchanting extends GuiContainer {
 
 		statsPanel.updateNode(0, GuiColor.GREEN + String.valueOf(EnchantHelper.getRequiredLevelFromList(enchants, alter)));
 		statsPanel.updateNode(1, GuiColor.BLACK + String.valueOf(pointsToSpend));
-		
+
 		if(alter.inv[0] == null && hasItem)
 			onInventoryChanged();
 		else if(alter.inv[0] != null && !hasItem)
 			onInventoryChanged();
 		else if(alter.inv[0] != null && hasItem && !ItemStack.areItemStacksEqual(currentStack, alter.inv[0]))
 			onInventoryChanged();
-		
+
 
 		if(VersionHelper.getResult() == VersionHelper.OUTDATED)
 		{
 			int var5 = (this.width - this.xSize) / 2;
 			int var6 = (this.height - this.ySize) / 2;
-			if(par1 >= 0 + var5 && par2 >= 0 + var6 && par1 <= 16 + var5 && par2 <= 16 + var6) 
+			if(par1 >= 0 + var5 && par2 >= 0 + var6 && par1 <= 16 + var5 && par2 <= 16 + var6)
 			{
 				List temp = Arrays.asList(Strings.UPDATE_TOOLTIP);
-				drawHoveringText(temp, par1, par2, fontRendererObj); 
+				drawHoveringText(temp, par1, par2, fontRendererObj);
 			}
 		}
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int param1, int param2) 
+	protected void drawGuiContainerForegroundLayer(int param1, int param2)
 	{
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
