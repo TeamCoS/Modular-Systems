@@ -1,7 +1,7 @@
 package com.pauljoda.modularsystems.enchanting.gui;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
-import com.pauljoda.modularsystems.core.abstracts.EntityStaticItem;
+import com.pauljoda.modularsystems.core.entity.EntityStaticItem;
 import com.pauljoda.modularsystems.core.gui.StatisticsPanel;
 import com.pauljoda.modularsystems.core.gui.TexturedButton;
 import com.pauljoda.modularsystems.core.helper.EnchantHelper;

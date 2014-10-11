@@ -3,7 +3,7 @@ package com.pauljoda.modularsystems.core.util;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import com.pauljoda.modularsystems.core.abstracts.GenericInventory;
+import com.pauljoda.modularsystems.core.inventory.GenericInventory;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;

@@ -1,8 +1,8 @@
 package com.pauljoda.modularsystems.furnace.tiles;
 
-import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.tiles.ModularTileEntity;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;

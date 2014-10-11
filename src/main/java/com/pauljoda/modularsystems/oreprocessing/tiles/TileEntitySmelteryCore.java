@@ -1,9 +1,9 @@
 package com.pauljoda.modularsystems.oreprocessing.tiles;
 
-import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 import com.pauljoda.modularsystems.core.crafting.OreProcessingRecipies;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.tiles.ModularTileEntity;
 import com.pauljoda.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;

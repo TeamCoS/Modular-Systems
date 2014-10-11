@@ -1,6 +1,6 @@
 package com.pauljoda.modularsystems.oreprocessing.tiles;
 
-import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
+import com.pauljoda.modularsystems.core.tiles.ModularTileEntity;
 import com.pauljoda.modularsystems.core.util.Coord;
 import com.pauljoda.modularsystems.core.util.InventoryUtil;
 import com.pauljoda.modularsystems.core.util.WorldUtil;

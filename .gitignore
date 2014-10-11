@@ -3,3 +3,12 @@
 *.iws
 .gradle/
 out/
+CREDITS-fml.txt
+*.location
+*.location
+*.tree
+*.prefs
+*.prefs
+*.launch
+eclipse/*
+src/api/*

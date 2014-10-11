@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core.abstracts;
+package com.pauljoda.modularsystems.core.inventory;
 
 import com.pauljoda.modularsystems.core.util.IInventoryCallback;
 import net.minecraft.entity.player.EntityPlayer;

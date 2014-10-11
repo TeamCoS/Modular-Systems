@@ -115,7 +115,7 @@ public class Reference {
     public static double getEfficiencyMultiplierForBlock(Block block)
     {
         if(block == Blocks.iron_block)
-            return 0.2;
+            return 0.1;
         else if(block == Blocks.coal_block)
             return 0.05;
         else if(block == Blocks.redstone_block)
@@ -125,25 +125,25 @@ public class Reference {
         else if(block == Blocks.netherrack)
             return -0.7;
         else if(block == Blocks.stone)
-            return 0.05;
+            return 0.005;
         else if(block == Blocks.stonebrick)
-            return 0.07;
+            return 0.007;
         else if(block == Blocks.sand)
             return -0.5;
         else if(block == Blocks.lapis_block)
             return 0.1;
         else if(block == Blocks.sandstone)
-            return 0.01;
+            return 0.001;
         else if(block == Blocks.nether_brick)
             return -0.5;
         else if(block == Blocks.quartz_block)
             return 0.1;
         else if(block == Blocks.hardened_clay)
-            return 0.1;
+            return 0.001;
         else if(block.getMaterial() == Material.iron)
-            return 0.1;
+            return 0.03;
         else if(block.getMaterial() == Material.rock && block != Blocks.cobblestone)
-            return 0.05;
+            return 0.001;
         else
             return 0.0;
     }

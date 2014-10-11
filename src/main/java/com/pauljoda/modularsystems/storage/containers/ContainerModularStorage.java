@@ -1,6 +1,6 @@
 package com.pauljoda.modularsystems.storage.containers;
 
-import com.pauljoda.modularsystems.core.abstracts.SlotArmor;
+import com.pauljoda.modularsystems.core.inventory.SlotArmor;
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageCore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

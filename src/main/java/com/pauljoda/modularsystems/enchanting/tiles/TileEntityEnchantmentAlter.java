@@ -1,6 +1,6 @@
 package com.pauljoda.modularsystems.enchanting.tiles;
 
-import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
+import com.pauljoda.modularsystems.core.tiles.ModularTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;

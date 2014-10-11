@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core.abstracts;
+package com.pauljoda.modularsystems.core.tiles;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;

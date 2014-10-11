@@ -1,8 +1,8 @@
 package com.pauljoda.modularsystems.storage.tiles;
 
-import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.tiles.ModularTileEntity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

@@ -1,11 +1,11 @@
 package com.pauljoda.modularsystems.storage.tiles;
 
-import com.pauljoda.modularsystems.core.abstracts.ModularTileEntity;
 import com.pauljoda.modularsystems.core.fakeplayer.FakePlayerPool;
 import com.pauljoda.modularsystems.core.fakeplayer.FakePlayerPool.PlayerUser;
 import com.pauljoda.modularsystems.core.fakeplayer.ModularSystemsFakePlayer;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.tiles.ModularTileEntity;
 import com.pauljoda.modularsystems.core.util.Coord;
 import com.pauljoda.modularsystems.core.util.WorldUtil;
 import net.minecraft.block.Block;

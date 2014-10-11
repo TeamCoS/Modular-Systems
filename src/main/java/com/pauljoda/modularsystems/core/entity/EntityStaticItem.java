@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core.abstracts;
+package com.pauljoda.modularsystems.core.entity;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;

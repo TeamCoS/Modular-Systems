@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root>
+	<!-- Blocks /!-->
+	<block unlocalizedName="tile.blockRedstone">
+		<speedValue>1.2</speedValue>
+		<efficiencyValue>-2</efficiencyValue>
+	</block>
+	
+	<block unlocalizedName="tile.blockGold">
+		<speedValue>1</speedValue>
+		<efficiencyValue>0.1</efficiencyValue>
+	</block>
+	
+	<block unlocalizedName="tile.blockDiamond">
+		<speedValue>3</speedValue>
+		<efficiencyValue>0.6</efficiencyValue>
+	</block>
+	
+	<block unlocalizedName="tile.hellrock">
+		<speedValue>1</speedValue>
+		<efficiencyValue>-0.7</efficiencyValue>
+	</block>
+	
+	<block unlocalizedName="tile.blockLapis">
+		<speedValue>1</speedValue>
+		<efficiencyValue>0.1</efficiencyValue>
+	</block>
+	
+	
+	
+</root>
