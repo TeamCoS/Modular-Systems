@@ -274,7 +274,7 @@ public class GuiModularEnchanting extends GuiContainer {
 				buttonList.clear();
 
 				this.buttonList.add(new GuiButton(0, x + 48, y + 22, 48, 20, "Enchant"));
-				if(alter.inv[0].getEnchantmentTagList() == null)
+				if(alter.inv[0].getEnchantmentTagList() == null || alter.inv[0].getEnchantmentTagList().tagCount() == 0)
 				{
 					List<Enchantment> enchantList = EnchantHelper.getEnchantsForItemInAlter(alter, alter.inv[0], 30);
 					for(int i = 0; i < enchantList.size(); i++)
