@@ -15,6 +15,13 @@ buildscript {
     }
 }
 
+repositories {
+    maven {
+        name 'CB Maven FS'
+        url "http://chickenbones.net/maven/"
+    }
+}
+
 apply plugin: 'forge'
 
 ext.configFile = file "build.properties"
@@ -37,9 +44,13 @@ minecraft {
 
     assetDir = "src/main/resources"
 }
+
 dependencies {
     compile files ("lib/CodeChickenCore-1.7.10-1.0.2.9-dev.jar",
             "lib/NotEnoughItems-1.7.10-1.0.2.15-dev.jar")
+    compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
+    compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
+    compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
 }
 
 processResources {

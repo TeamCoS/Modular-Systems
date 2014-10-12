@@ -12,3 +12,5 @@ CREDITS-fml.txt
 *.launch
 eclipse/*
 src/api/*
+src/main/logs
+src/main/config
