@@ -18,6 +18,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
@@ -25,8 +26,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TileEntityStorageExpansion extends ModularTileEntity implements IInventory, IEntitySelector {
 
@@ -177,63 +179,30 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 
     public boolean isConnected()
     {
-        List<Coord>list = new ArrayList<Coord>();
-        list.add(new Coord(this));
-
-        for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++)
-        {
-            Coord check = new Coord(xCoord, yCoord, zCoord).offset(ForgeDirection.VALID_DIRECTIONS[i]);
-            if (worldObj.getTileEntity(check.x, check.y, check.z) instanceof TileEntityStorageExpansion && !worldObj.isRemote)
-            {
-                TileEntityStorageExpansion buddy = (TileEntityStorageExpansion)worldObj.getTileEntity(check.x, check.y, check.z);
-                if(buddy.getCore() != null && getCore() != null && buddy.isConnected)
-                {
-                    if (WorldUtil.areTilesSame(this.getCore(), buddy.getCore()) && buddy.isConnected(list))
-                        return true;
-                }
-            }
-            else if (worldObj.getTileEntity(check.x, check.y, check.z) instanceof TileEntityStorageCore && !worldObj.isRemote)
-            {
-                TileEntityStorageCore core = (TileEntityStorageCore)worldObj.getTileEntity(check.x, check.y, check.z);
-                if(core != null && getCore() != null)
-                {
-                    if (WorldUtil.areTilesSame(this.getCore(), core))
-                        return true;
-                }
-            }
-        }
-        return false;
+        if (worldObj.isRemote) return false;
+        return isConnected( new HashSet<Coord>());
     }
 
-    public boolean isConnected(List<Coord> coord)
+    private boolean isConnected(Set<Coord> coords)
     {
-        coord.add(new Coord(this));
-        for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++)
-        {
-            Coord check = new Coord(xCoord, yCoord, zCoord).offset(ForgeDirection.VALID_DIRECTIONS[i]);
-            if (worldObj.getTileEntity(check.x, check.y, check.z) instanceof TileEntityStorageExpansion && !worldObj.isRemote && !coord.contains(check))
-            {
-                TileEntityStorageExpansion buddy = (TileEntityStorageExpansion)worldObj.getTileEntity(check.x, check.y, check.z);
+        if (!worldObj.isRemote && getCore() != null && coords.add(new Coord(this))) {
+            for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+                Coord check = new Coord(xCoord, yCoord, zCoord).offset(direction);
+                TileEntity tileEntity = worldObj.getTileEntity(check.x, check.y, check.z);
+                if (tileEntity instanceof TileEntityStorageExpansion) {
+                    TileEntityStorageExpansion buddy = (TileEntityStorageExpansion) tileEntity;
 
-                if(coord.contains(buddy))
-                    continue;
-
-                if(buddy.getCore() != null && getCore() != null && buddy.isConnected)
-                {
-                    if (WorldUtil.areTilesSame(this.getCore(), buddy.getCore()) && buddy.isConnected(coord))
+                    if (buddy.getCore() != null && buddy.isConnected &&
+                            WorldUtil.areTilesSame(this.getCore(), buddy.getCore()) && buddy.isConnected(coords)) {
                         return true;
-                }
-            }
-            else if (worldObj.getTileEntity(check.x, check.y, check.z) instanceof TileEntityStorageCore && !worldObj.isRemote)
-            {
-                TileEntityStorageCore core = (TileEntityStorageCore)worldObj.getTileEntity(check.x, check.y, check.z);
-                if(core != null && getCore() != null)
-                {
-                    if (WorldUtil.areTilesSame(this.getCore(), core))
-                        return true;
+                    }
+                } else if (tileEntity instanceof TileEntityStorageCore) {
+                    TileEntityStorageCore core = (TileEntityStorageCore) tileEntity;
+                    if (WorldUtil.areTilesSame(this.getCore(), core)) return true;
                 }
             }
         }
+
         return false;
     }
 
