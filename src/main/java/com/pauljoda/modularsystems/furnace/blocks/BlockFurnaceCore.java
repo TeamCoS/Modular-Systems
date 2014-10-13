@@ -1,7 +1,11 @@
 package com.pauljoda.modularsystems.furnace.blocks;
 
-import java.util.Random;
-
+import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.proxy.ClientProxy;
+import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -19,13 +23,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import com.pauljoda.modularsystems.core.ModularSystems;
-import com.pauljoda.modularsystems.core.managers.BlockManager;
-import com.pauljoda.modularsystems.core.proxy.ClientProxy;
-import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Random;
 
 public class BlockFurnaceCore extends BlockContainer
 {
@@ -113,6 +111,7 @@ public class BlockFurnaceCore extends BlockContainer
 		}
 		if(tileEntity != null)
 		{
+            tileEntity.isDirty = true;
 			// Determine if the Multiblock is currently known to be valid
 			if(!tileEntity.getIsValid())
 			{
