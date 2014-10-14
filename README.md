@@ -5,7 +5,6 @@ The conceptual successor of Modular Furnace. Modular Systems is a mod about buil
 
 License
 ===============
-Do what you want with this. The source code and the mod are free to use for any purpose (that's legal) so long as you don't claim you made it all by yourself. Don't be like that, if you take work from someone else its ok to say you did. 
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width: 0" src="http://i.creativecommons.org/l/by/4.0/88x31.png"></a>
+Modular Systems uses the Creative Commons license
 
-More bluntly:
-Mod packs, other modders, private packs, whatever you want to use this mod for go for it. 
