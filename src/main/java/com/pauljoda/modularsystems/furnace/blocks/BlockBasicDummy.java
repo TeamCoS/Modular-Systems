@@ -4,7 +4,6 @@ import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -32,8 +31,8 @@ public class BlockBasicDummy extends BlockContainer {
 	{
 		TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getTileEntity(x, y, z);
 
-		if(dummy != null && dummy.getCore() != null)
-			dummy.getCore().invalidateMultiblock();
+        if(dummy.getCore() != null)
+            dummy.getCore().isDirty = true;
 
 		super.breakBlock(world, x, y, z, par5, par6);
 	}

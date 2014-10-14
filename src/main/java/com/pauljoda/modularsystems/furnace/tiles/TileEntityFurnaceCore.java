@@ -35,7 +35,7 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
     public int smeltingMultiplier = 1;
     public int cookSpeed = 200;
     int direction;
-    int maxSize = 20;
+    int maxSize = 50;
 
     //Size
     public int hMin;
@@ -54,6 +54,7 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
     //Booleans
     public boolean isValidMultiblock = false;
     public boolean crafterEnabled = false;
+    public boolean isDirty = true;
 
     //Randomizer
     Random r = new Random();
@@ -602,8 +603,8 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
                     if (blockId == BlockManager.furnaceDummy)
                     {
                         TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) worldObj.getTileEntity(x, y, z);
-
-                        worldObj.setBlock(x, y, z, dummyTE.getBlock());
+                        Block block = dummyTE.getBlock();
+                        worldObj.setBlock(x, y, z, block);
                         worldObj.setBlockMetadataWithNotify(x, y, z, dummyTE.metadata, 2);
 
                         worldObj.markBlockForUpdate(x, y, z);
@@ -866,6 +867,17 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
     @Override
     public void updateEntity()
     {
+
+        if(isDirty)
+        {
+            isValidMultiblock = this.checkIfProperlyFormed();
+            if(!isValidMultiblock)
+                this.invalidateMultiblock();
+            else
+                this.convertDummies();
+            isDirty = false;
+        }
+
         boolean flag = this.furnaceBurnTime > 0;
         boolean flag1 = false;
 
@@ -1084,7 +1096,7 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
             }
         }
 
-
+        this.isDirty = tagCompound.getBoolean("isDirty");
         this.furnaceBurnTime = tagCompound.getShort("BurnTime");
         this.furnaceCookTime = tagCompound.getShort("CookTime");
         this.currentItemBurnTime = this.scaledBurnTime();
@@ -1113,7 +1125,7 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
         super.writeToNBT(tagCompound);
 
         tagCompound.setBoolean("isValidMultiblock", isValidMultiblock);
-
+        tagCompound.setBoolean("isDirty", isDirty);
         tagCompound.setShort("BurnTime", (short) this.furnaceBurnTime);
         tagCompound.setShort("CookTime", (short) this.furnaceCookTime);
         tagCompound.setDouble("Speed", (double) this.speedMultiplier);

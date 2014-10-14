@@ -44,7 +44,6 @@ public class BlockFurnaceDummy extends BlockBasicDummy
 		TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getTileEntity(x, y, z);
         Block block = dummy.getBlock();
         int meta = dummy.getMeta();
-        super.breakBlock(world, x, y, z, par5, par6);
 
 		if(world.isAirBlock(x, y, z))
 		{
@@ -56,5 +55,6 @@ public class BlockFurnaceDummy extends BlockBasicDummy
 
 			world.spawnEntityInWorld(entityitem);
 		}
-	}
+        super.breakBlock(world, x, y, z, par5, par6);
+    }
 }
