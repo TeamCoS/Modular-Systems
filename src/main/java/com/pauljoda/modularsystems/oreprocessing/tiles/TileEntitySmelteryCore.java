@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.oreprocessing.tiles;
 
 import com.pauljoda.modularsystems.core.crafting.OreProcessingRecipies;
+import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.tiles.ModularTileEntity;
@@ -34,7 +35,7 @@ public class TileEntitySmelteryCore extends ModularTileEntity implements ISidedI
     public double efficiencyMultiplier = 1;
     public int cookSpeed = 200;
     int direction;
-    int maxSize = 20;
+    int maxSize = ConfigHelper.maxFurnaceSize;
 
     //Size
     public int hMin;
@@ -53,6 +54,7 @@ public class TileEntitySmelteryCore extends ModularTileEntity implements ISidedI
     //Booleans
     public boolean isValidMultiblock = false;
     public boolean crafterEnabled = false;
+    public boolean isDirty = true;
 
     //Randomizer
     Random r = new Random();
@@ -726,6 +728,16 @@ public class TileEntitySmelteryCore extends ModularTileEntity implements ISidedI
     @Override
     public void updateEntity()
     {
+        if(isDirty)
+        {
+            isValidMultiblock = this.checkIfProperlyFormed();
+            if(!isValidMultiblock)
+                this.invalidateMultiblock();
+            else
+                this.convertDummies();
+            isDirty = false;
+        }
+
         boolean flag = this.furnaceBurnTime > 0;
         boolean flag1 = false;
 
@@ -944,7 +956,7 @@ public class TileEntitySmelteryCore extends ModularTileEntity implements ISidedI
             }
         }
 
-
+        this.isDirty = tagCompound.getBoolean("isDirty");
         this.furnaceBurnTime = tagCompound.getShort("BurnTime");
         this.furnaceCookTime = tagCompound.getShort("CookTime");
         this.currentItemBurnTime = this.scaledBurnTime();
@@ -973,6 +985,7 @@ public class TileEntitySmelteryCore extends ModularTileEntity implements ISidedI
 
         tagCompound.setBoolean("isValidMultiblock", isValidMultiblock);
 
+        tagCompound.setBoolean("isDirty", isDirty);
         tagCompound.setShort("BurnTime", (short) this.furnaceBurnTime);
         tagCompound.setShort("CookTime", (short) this.furnaceCookTime);
         tagCompound.setDouble("Speed", (double) this.speedMultiplier);

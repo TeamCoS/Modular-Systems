@@ -73,7 +73,6 @@ public class GuiModularStorage extends GuiContainer {
             ItemStack is = this.core.getStackInSlot(i);
 
             this.itemList.add(is);
-            containerModularStorage.itemList = this.itemList;
         }
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;

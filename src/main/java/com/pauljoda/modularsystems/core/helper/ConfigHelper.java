@@ -29,7 +29,10 @@ public class ConfigHelper {
 	public static boolean useTextures;
 	public static String textureName;
 	public static boolean useOverlay;
-	
+
+    //Furnace
+    public static int maxFurnaceSize;
+
 	//Storage
 	public static int maxExpansionSize;
 	
@@ -84,6 +87,7 @@ public class ConfigHelper {
 			textureName = config.get("Settings, Modular Furnace", "Overlay Texture Name (from assets folder)", "hopper_top").getString();
 			useTextures = config.get("Settings, Modular Furnace", "Use Overlay?", false).getBoolean(true);
 
+            maxFurnaceSize = config.getInt("Settings, Modular Furnace", "Max Furnace Size", 20, 3, 1000, "This is half of cube side, eg 20 would equal a furnace with one side being 40 as a max");
 			maxExpansionSize = config.getInt("Settings, Modular Storage", "Max row expansion", 40, 7, 100, "This will manage the size of the inventory allocation");
 		}
 		catch (Exception e) {

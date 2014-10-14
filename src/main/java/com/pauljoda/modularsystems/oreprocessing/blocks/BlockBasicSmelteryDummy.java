@@ -32,8 +32,8 @@ public class BlockBasicSmelteryDummy extends BlockContainer
     {
         TileEntitySmelteryDummy dummy = (TileEntitySmelteryDummy)world.getTileEntity(x, y, z);
 
-        if(dummy != null && dummy.getCore() != null)
-            dummy.getCore().invalidateMultiblock();
+        if(dummy.getCore() != null)
+            dummy.getCore().isDirty = true;
 
         super.breakBlock(world, x, y, z, par5, par6);
     }
