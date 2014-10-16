@@ -3,7 +3,9 @@ package com.pauljoda.modularsystems.core.helper;
 import com.pauljoda.modularsystems.furnace.FurnaceConfigHandler;
 import com.pauljoda.modularsystems.furnace.config.BlockConfig;
 import com.pauljoda.modularsystems.furnace.config.Calculation;
+import com.pauljoda.modularsystems.registries.MaterialRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -79,27 +81,31 @@ public class BlockValueHelper
             if (nNode.getNodeType() == Node.ELEMENT_NODE)
             {
                 Element element = (Element) nNode;
-                String name = element.getAttribute("unlocalizedName");
-                String speed = element.getElementsByTagName("speedValue").item(0).getTextContent();
-                NodeList speedEqNode = element.getElementsByTagName("speedEq");
-                String speedFunction = "linear";
-                if (speedEqNode.getLength() > 0) {
-                    speedFunction = speedEqNode.item(0).getTextContent();
+                String name = element.getAttribute("name");
+                Material material = MaterialRegistry.retrieveMaterial(name);
+                if (material != null) {
+                    String speed = element.getElementsByTagName("speedValue").item(0).getTextContent();
+                    NodeList speedEqNode = element.getElementsByTagName("speedEq");
+                    String speedFunction = "linear";
+                    if (speedEqNode.getLength() > 0) {
+                        speedFunction = speedEqNode.item(0).getTextContent();
+                    }
+                    String efficiency = element.getElementsByTagName("efficiencyValue").item(0).getTextContent();
+                    NodeList effEqNode = element.getElementsByTagName("efficiencyEq");
+                    String effFunction = "linear";
+                    if (effEqNode.getLength() > 0) {
+                        effFunction = effEqNode.item(0).getTextContent();
+                    }
+
+                    FurnaceConfigHandler.publishMaterialConfig(
+                            material,
+                            new BlockConfig(
+                                    name,
+                                    getCalculation(effFunction, efficiency),
+                                    getCalculation(speedFunction, speed)
+                            )
+                    );
                 }
-                String efficiency = element.getElementsByTagName("efficiencyValue").item(0).getTextContent();
-                NodeList effEqNode = element.getElementsByTagName("efficiencyEq");
-                String effFunction = "linear";
-                if (effEqNode.getLength() > 0) {
-                    effFunction = effEqNode.item(0).getTextContent();
-                }
-                FurnaceConfigHandler.publishMaterialConfig(
-                        name,
-                        new BlockConfig(
-                                name,
-                                getCalculation(effFunction, efficiency),
-                                getCalculation(speedFunction, speed)
-                        )
-                );
             }
         }
     }
@@ -179,6 +185,6 @@ public class BlockValueHelper
     }
 
     public static BlockConfig getMaterialValueForBlock(Block block) {
-        return FurnaceConfigHandler.retrieveMaterialConfig(block.getMaterial().toString());
+        return FurnaceConfigHandler.retrieveMaterialConfig(block.getMaterial());
     }
 }

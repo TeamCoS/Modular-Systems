@@ -13,11 +13,11 @@ public class BlockConfig {
     }
 
     public double efficiency(int blockCount) {
-        return efficiency(blockCount);
+        return efficiency.calculate(blockCount);
     }
 
     public double speed(int blockCount) {
-        return speed(blockCount);
+        return speed.calculate(blockCount);
     }
 
     public String getBlockName() {

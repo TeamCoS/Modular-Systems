@@ -19,7 +19,6 @@ public class Reference {
     public static final int SORTING_STORAGE_EXPANSION = 5;
     public static final int CRAFTING_STORAGE_EXPANSION = 6;
     public static final int MAX_FURNACE_SIZE = 50;
-    public static final int MAX_PROCESSOR_SIZE = 50;
 
     public static final String MOD_ID = "modularsystems";
     public static final String MOD_NAME = "Modular Systems";

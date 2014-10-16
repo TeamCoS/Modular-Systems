@@ -20,9 +20,11 @@ import net.minecraft.item.*;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -455,7 +457,7 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
 
     private Doublet<Double, Double> getSpeedAndEfficiency(World worldObj, int x, int y, int z) {
 
-        WorldFunction.BlockCountWorldFunction myFunction = new WorldFunction.BlockCountWorldFunction();
+        BlockCountWorldFunction myFunction = new BlockCountWorldFunction();
         LocalBlockCollections.searchBlock(worldObj, x, y, z, myFunction, Reference.MAX_FURNACE_SIZE);
 
         double speedMultiplier = 0.0;
@@ -976,6 +978,44 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
 
         public Map<Block, Integer> blockCounts() {
             return bcFunc.getBlockCounts();
+        }
+    }
+
+    public static class BlockCountWorldFunction implements WorldFunction {
+        private Map<Block, Integer> blocks = new LinkedHashMap<Block, Integer>();
+
+        @Override
+        public void outerBlock(World world, int x, int y, int z) {
+            Block block = world.getBlock(x, y, z);
+            TileEntity tileEntity = world.getTileEntity(x, y, z);
+            if (tileEntity instanceof TileEntityFurnaceDummy) {
+                TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) tileEntity;
+                block = dummyTE.getBlock();
+            }
+            GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(block);
+            block = GameRegistry.findBlock(id.modId, id.name);
+            Integer count = blocks.get(block);
+
+            if (count == null) {
+                count = 1;
+            } else {
+                count += 1;
+            }
+            blocks.put(block, count);
+        }
+
+        @Override
+        public void innerBlock(World world, int x, int y, int z) {
+
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            return true;
+        }
+
+        public Map<Block, Integer> getBlockCounts() {
+            return blocks;
         }
     }
 }
