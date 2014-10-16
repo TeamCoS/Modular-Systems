@@ -3,7 +3,10 @@ package com.pauljoda.modularsystems.furnace.tiles;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.tiles.ModularTileEntity;
+import com.pauljoda.modularsystems.functions.WorldFunction;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
+import com.pauljoda.modularsystems.helpers.Doublet;
+import com.pauljoda.modularsystems.helpers.LocalBlockCollections;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,8 +20,12 @@ import net.minecraft.item.*;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.world.World;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedInventory
@@ -34,34 +41,84 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
     public double efficiencyMultiplier = 1;
     public int smeltingMultiplier = 1;
     public int cookSpeed = 200;
-    int direction;
-    int maxSize = 50;
-
     //Size
     public int hMin;
     public int hMax;
     public int vMin;
     public int vMax;
     public int depthVal;
-
-    //Furnace related things
-    private ItemStack[] furnaceItems = new ItemStack[3];
     public int furnaceBurnTime;
     public int currentItemBurnTime;
     public int furnaceCookTime;
-    private String field_94130_e;
-
     //Booleans
     public boolean isValidMultiblock = false;
     public boolean crafterEnabled = false;
     public boolean isDirty = true;
-
+    int direction;
     //Randomizer
     Random r = new Random();
+    //Furnace related things
+    private ItemStack[] furnaceItems = new ItemStack[3];
+    private String field_94130_e;
 
     //Empty Constructor
     public TileEntityFurnaceCore()
     {
+    }
+
+    public static boolean isItemFuel(ItemStack par0ItemStack)
+    {
+        return getItemBurnTime(par0ItemStack) > 0;
+    }
+
+    public static int getItemBurnTime(ItemStack p_145952_0_)
+    {
+        if (p_145952_0_ == null)
+        {
+            return 0;
+        }
+        else
+        {
+            Item item = p_145952_0_.getItem();
+
+            if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air)
+            {
+                Block block = Block.getBlockFromItem(item);
+
+                if (block == Blocks.wooden_slab)
+                {
+                    return 150;
+                }
+
+                if (block.getMaterial() == Material.wood)
+                {
+                    return 300;
+                }
+
+                if (block == Blocks.coal_block)
+                {
+                    return 16000;
+                }
+            }
+
+            if (item instanceof ItemTool && ((ItemTool) item).getToolMaterialName().equals("WOOD"))
+                return 200;
+            if (item instanceof ItemSword && ((ItemSword) item).getToolMaterialName().equals("WOOD"))
+                return 200;
+            if (item instanceof ItemHoe && ((ItemHoe) item).getToolMaterialName().equals("WOOD"))
+                return 200;
+            if (item == Items.stick)
+                return 100;
+            if (item == Items.coal)
+                return 1600;
+            if (item == Items.lava_bucket)
+                return 20000;
+            if (item == Item.getItemFromBlock(Blocks.sapling))
+                return 100;
+            if (item == Items.blaze_rod)
+                return 2400;
+            return GameRegistry.getFuelValue(p_145952_0_);
+        }
     }
 
     /*
@@ -104,247 +161,14 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
         worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
     }
 
-    public int getHorizontalMin()
-    {
-        int output = 0;
-        int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-        if (dir == 0)
-            dir = this.direction;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
-        int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
-        int yCheck = yCoord;
-        int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
-
-        while (worldObj.isAirBlock(xCheck, yCheck, zCheck))
-        {
-            output++;
-            if (forwardZ)
-                xCheck = xCheck + depthMultiplier;
-            else
-                zCheck = zCheck - depthMultiplier;
-
-            if (output > maxSize)
-                return -1;
-        }
-        return output;
-    }
-
-    public int getHorizontalMax()
-    {
-        int output = 0;
-        int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-        if (dir == 0)
-            dir = this.direction;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
-        int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
-        int yCheck = yCoord;
-        int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
-
-        while (worldObj.isAirBlock(xCheck, yCheck, zCheck))
-        {
-            output++;
-            if (forwardZ)
-                xCheck = xCheck - depthMultiplier;
-            else
-                zCheck = zCheck + depthMultiplier;
-
-            if (output > maxSize)
-                return -1;
-        }
-        return output;
-    }
-
-    public int getVerticalMin()
-    {
-        int output = 0;
-        int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-        if (dir == 0)
-            dir = this.direction;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
-        int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
-        int yCheck = yCoord;
-        int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
-
-        while (worldObj.isAirBlock(xCheck, yCheck, zCheck))
-        {
-            output++;
-            yCheck--;
-
-            if (output > maxSize)
-                return -1;
-        }
-        return output;
-    }
-
-    public int getVerticalMax()
-    {
-        int output = 0;
-        int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-        if (dir == 0)
-            dir = this.direction;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
-        int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
-        int yCheck = yCoord;
-        int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
-
-        while (worldObj.isAirBlock(xCheck, yCheck, zCheck))
-        {
-            output++;
-            yCheck++;
-
-            if (output > maxSize)
-                return -1;
-        }
-        return output;
-    }
-
-    public int getDepthVal()
-    {
-        int output = 0;
-        int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-        if (dir == 0)
-            dir = this.direction;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
-        int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
-        int yCheck = yCoord;
-        int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
-
-        while (worldObj.isAirBlock(xCheck, yCheck, zCheck))
-        {
-            output++;
-            if (forwardZ)
-                zCheck = zCheck + depthMultiplier;
-            else
-                xCheck = xCheck + depthMultiplier;
-
-            if (output > maxSize)
-                return -1;
-        }
-        return output;
-    }
-
     /*
      * Checks if the structure has been formed properly
      */
     public boolean checkIfProperlyFormed()
     {
-        int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
-
-		/*
-         *           Horiz         DEPTH
-		 * North 2:   +x              +z
-		 * South 3:   -x              -z
-		 * East 5:    +z              -x
-		 * West 4:    -z              +x
-		 * 
-		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
-		 */
-
-        int hMin = getHorizontalMin();
-        int hMax = getHorizontalMax();
-        int vMin = getVerticalMin();
-        int vMax = getVerticalMax();
-        int depthVal = getDepthVal();
-
-        int startX;
-        int startY = yCoord - vMin;
-        int startZ;
-
-        switch(dir)
-        {
-            case 2 :
-                startX = xCoord + hMin;
-                startZ = zCoord;
-                break;
-            case 3 :
-                startX = xCoord - hMin;
-                startZ = zCoord;
-                break;
-            case 4 :
-                startX = xCoord;
-                startZ = zCoord - hMin;
-                break;
-            case 5 :
-                startX = xCoord;
-                startZ = zCoord + hMin;
-                break;
-            default :
-                startX = xCoord;
-                startZ = zCoord;
-        }
-
-        int horizMax = hMin + hMax;
-        int vertMax = vMin + vMax;
-
-        if (hMin < 0 || hMax < 0 || vMin < 0 || vMax < 0 || depthVal < 0)
-            return false;
-
-        for (int horiz = 0; horiz <= horizMax; horiz++)    // Horizontal (X or Z)
-        {
-            for (int vert = 0; vert <= vertMax; vert++)   // Vertical (Y)
-            {
-                for (int depth = 0; depth <= depthVal + 1; depth++) // Depth (Z or X)
-                {
-                    int x;
-                    int y = startY + vert;
-                    int z;
-                    switch(dir)
-                    {
-                        case 2 :
-                            x = startX - horiz;
-                            z = startZ + depth;
-                            break;
-                        case 3 :
-                            x = startX + horiz;
-                            z = startZ - depth;
-                            break;
-                        case 4 :
-                            x = startX + depth;
-                            z = startZ + horiz;
-                            break;
-                        case 5 :
-                            x = startX - depth;
-                            z = startZ - horiz;
-                            break;
-                        default :
-                            x = 0;
-                            z = 0;
-                    }
-                    Block blockId = worldObj.getBlock(x, y, z);
-                    if (x == xCoord && y == yCoord && z == zCoord)
-                        continue;
-
-                    if (horiz > 0 && horiz < horizMax)
-                    {
-                        if (vert > 0 && vert < vertMax)
-                        {
-                            if (depth > 0 && depth < depthVal + 1)
-                            {
-                                if(!worldObj.isAirBlock(x,y,z))
-                                    return false;
-                                else
-                                    continue;
-                            }
-                        }
-                    }
-                    if (worldObj.isAirBlock(x, y, z) || (Reference.isBadBlock(blockId) && !Reference.isModularTile(blockId.getUnlocalizedName())))
-                        return false;
-                    if (!Reference.isValidBlock(blockId.getUnlocalizedName()))
-                    {
-                        return Reference.isModularTile(blockId.getUnlocalizedName());
-                    }
-
-                }
-            }
-        }
-        return true;
+        ProperlyFormedWorldFunction myFunction = new ProperlyFormedWorldFunction();
+        LocalBlockCollections.searchBlock(worldObj, xCoord, yCoord, zCoord, myFunction, Reference.MAX_FURNACE_SIZE);
+        return myFunction.shouldContinue;
     }
 
     /*
@@ -352,155 +176,22 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
      */
     public void convertDummies()
     {
-        int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-        this.direction = dir;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
+        //This was being set before, and it was never set false in the method, no idea!
+        isValidMultiblock = true;
 
+        ConvertDummiesWorldFunction myFunction = new ConvertDummiesWorldFunction();
+        LocalBlockCollections.searchBlock(worldObj, xCoord, yCoord, zCoord, myFunction, Reference.MAX_FURNACE_SIZE);
 
-		/*
-         *          FORWARD     BACKWARD
-		 * North:   -z              +z
-		 * South:   +z              -z
-		 * East:    +x              -x
-		 * West:    -x              +x
-		 * 
-		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
-		 */
+        double speedMultiplier = 0.0;
+        double efficiencyMultiplier = 0.0;
 
-        hMin = getHorizontalMin();
-        hMax = getHorizontalMax();
-        vMin = getVerticalMin();
-        vMax = getVerticalMax();
-        depthVal = getDepthVal();
-
-        int startX;
-        int startY = yCoord - vMin;
-        int startZ;
-
-        switch(dir)
-        {
-            case 2 :
-                startX = xCoord + hMin;
-                startZ = zCoord;
-                break;
-            case 3 :
-                startX = xCoord - hMin;
-                startZ = zCoord;
-                break;
-            case 4 :
-                startX = xCoord;
-                startZ = zCoord - hMin;
-                break;
-            case 5 :
-                startX = xCoord;
-                startZ = zCoord + hMin;
-                break;
-            default :
-                startX = xCoord;
-                startZ = zCoord;
+        for (Map.Entry<Block, Integer> blockEntry : myFunction.blockCounts().entrySet()) {
+            speedMultiplier += Reference.getSpeedMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
+            efficiencyMultiplier += Reference.getEfficiencyMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
         }
 
-        int horizMax = hMin + hMax;
-        int vertMax = vMin + vMax;
-
-        for (int horiz = 0; horiz <= horizMax; horiz++)    // Horizontal (X or Z)
-        {
-            for (int vert = 0; vert <= vertMax; vert++)   // Vertical (Y)
-            {
-                for (int depth = 0; depth <= depthVal + 1; depth++) // Depth (Z or X)
-                {
-                    int x;
-                    int y = startY + vert;
-                    int z;
-                    switch(dir)
-                    {
-                        case 2 :
-                            x = startX - horiz;
-                            z = startZ + depth;
-                            break;
-                        case 3 :
-                            x = startX + horiz;
-                            z = startZ - depth;
-                            break;
-                        case 4 :
-                            x = startX + depth;
-                            z = startZ + horiz;
-                            break;
-                        case 5 :
-                            x = startX - depth;
-                            z = startZ - horiz;
-                            break;
-                        default :
-                            x = 0;
-                            z = 0;
-                    }
-                    if (x == xCoord && y == yCoord && z == zCoord)
-                        continue;
-
-                    if (horiz > 0 && horiz < horizMax)
-                    {
-                        if (vert > 0 && vert < vertMax)
-                        {
-                            if (depth > 0 && depth < depthVal + 1)
-                            {
-                                continue;
-                            }
-                        }
-                    }
-
-                    if (worldObj.getBlock(x, y, z) == BlockManager.furnaceCraftingUpgrade)
-                    {
-                        crafterEnabled = true;
-                        TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) worldObj.getTileEntity(x, y, z);
-                        dummyTE.setCore(this);
-                    }
-                    else if (worldObj.getBlock(x, y, z) == BlockManager.furnaceAddition)
-                    {
-                        smeltingMultiplier++;
-                        efficiencyMultiplier -= 2;
-                        TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) worldObj.getTileEntity(x, y, z);
-                        dummyTE.setCore(this);
-                    }
-                    else if (worldObj.getBlock(x, y, z) == BlockManager.furnaceDummyIO)
-                    {
-                        TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) worldObj.getTileEntity(x, y, z);
-                        dummyTE.setCore(this);
-                    }
-                    else if (!Reference.isModularTile(worldObj.getBlock(x, y, z).getUnlocalizedName()) && worldObj.getBlock(x, y, z) != null && worldObj.getBlock(x, y, z) != Blocks.air)
-                    {
-
-                        Block icon = worldObj.getBlock(x, y, z);
-                        int metadata = worldObj.getBlockMetadata(x, y, z);
-
-                        speedMultiplier += Reference.getSpeedMultiplierForBlock(icon);
-                        if (speedMultiplier <= 0)
-                            speedMultiplier = 1;
-
-                        efficiencyMultiplier += Reference.getEfficiencyMultiplierForBlock(icon);
-
-                        worldObj.setBlock(x, y, z, BlockManager.furnaceDummy);
-
-                        worldObj.markBlockForUpdate(x, y, z);
-                        TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) worldObj.getTileEntity(x, y, z);
-
-                        if (icon == BlockManager.furnaceDummy)
-                        {
-                            icon = Block.getBlockById(dummyTE.icon);
-                            metadata = dummyTE.metadata;
-                        }
-                        else
-                        {
-                            dummyTE.icon = Block.getIdFromBlock(icon);
-                            dummyTE.metadata = metadata;
-                        }
-                        worldObj.markBlockForUpdate(x, y, z);
-                        dummyTE.setCore(this);
-                    }
-                }
-            }
-            isValidMultiblock = true;
-        }
+        this.speedMultiplier = speedMultiplier;
+        this.efficiencyMultiplier = efficiencyMultiplier;
     }
 
     /**
@@ -520,7 +211,7 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
 		 * South:   +z              -z
 		 * East:    +x              -x
 		 * West:    -x              +x
-		 * 
+		 *
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
 
@@ -659,7 +350,7 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
 		 * South:   +z              -z
 		 * East:    +x              -x
 		 * West:    -x              +x
-		 * 
+		 *
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
 
@@ -760,107 +451,24 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
      */
     public double getSpeed()
     {
-        double output = 8;
-        int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
+        Doublet<Double, Double> speedAndEfficiency = getSpeedAndEfficiency(worldObj, xCoord, yCoord, zCoord);
+        return speedAndEfficiency.getFirst();
+    }
 
-		/*
-		 *          FORWARD     BACKWARD
-		 * North:   -z              +z
-		 * South:   +z              -z
-		 * East:    +x              -x
-		 * West:    -x              +x
-		 * 
-		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
-		 */
+    private Doublet<Double, Double> getSpeedAndEfficiency(World worldObj, int x, int y, int z) {
 
-        int startX;
-        int startY = yCoord - vMin;
-        int startZ;
+        BlockCountWorldFunction myFunction = new BlockCountWorldFunction();
+        LocalBlockCollections.searchBlock(worldObj, x, y, z, myFunction, Reference.MAX_FURNACE_SIZE);
 
-        switch(dir)
-        {
-            case 2 :
-                startX = xCoord + hMin;
-                startZ = zCoord;
-                break;
-            case 3 :
-                startX = xCoord - hMin;
-                startZ = zCoord;
-                break;
-            case 4 :
-                startX = xCoord;
-                startZ = zCoord - hMin;
-                break;
-            case 5 :
-                startX = xCoord;
-                startZ = zCoord + hMin;
-                break;
-            default :
-                startX = xCoord;
-                startZ = zCoord;
+        double speedMultiplier = 0.0;
+        double efficiencyMultiplier = 0.0;
+
+        for (Map.Entry<Block, Integer> blockEntry : myFunction.getBlockCounts().entrySet()) {
+            speedMultiplier += Reference.getSpeedMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
+            efficiencyMultiplier += Reference.getEfficiencyMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
         }
 
-        int horizMax = hMin + hMax;
-        int vertMax = vMin + vMax;
-
-        for (int horiz = 0; horiz <= horizMax; horiz++)    // Horizontal (X or Z)
-        {
-            for (int vert = 0; vert <= vertMax; vert++)   // Vertical (Y)
-            {
-                for (int depth = 0; depth <= depthVal + 1; depth++) // Depth (Z or X)
-                {
-                    int x;
-                    int y = startY + vert;
-                    int z;
-                    switch(dir)
-                    {
-                        case 2 :
-                            x = startX - horiz;
-                            z = startZ + depth;
-                            break;
-                        case 3 :
-                            x = startX + horiz;
-                            z = startZ - depth;
-                            break;
-                        case 4 :
-                            x = startX + depth;
-                            z = startZ + horiz;
-                            break;
-                        case 5 :
-                            x = startX - depth;
-                            z = startZ - horiz;
-                            break;
-                        default :
-                            x = 0;
-                            z = 0;
-                    }
-                    Block blockId = worldObj.getBlock(x, y, z);
-                    if (x == xCoord && y == yCoord && z == zCoord)
-                        continue;
-
-                    if (horiz > 0 && horiz < horizMax)
-                    {
-                        if (vert > 0 && vert < vertMax)
-                        {
-                            if (depth > 0 && depth < depthVal + 1)
-                            {
-                                continue;
-                            }
-                        }
-
-                    }
-                    if (blockId == BlockManager.furnaceDummy)
-                    {
-                        TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy) worldObj.getTileEntity(x, y, z);
-                        output += Reference.getSpeedMultiplierForBlock(dummy.getBlock());
-                    }
-
-                }
-            }
-        }
-        return output;
+        return new Doublet<Double, Double>(speedMultiplier, efficiencyMultiplier);
     }
 
     //Furnace stuff
@@ -1016,61 +624,6 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
             return true;
         return par1 == 0;
 
-    }
-
-    public static boolean isItemFuel(ItemStack par0ItemStack)
-    {
-        return getItemBurnTime(par0ItemStack) > 0;
-    }
-
-    public static int getItemBurnTime(ItemStack p_145952_0_)
-    {
-        if (p_145952_0_ == null)
-        {
-            return 0;
-        }
-        else
-        {
-            Item item = p_145952_0_.getItem();
-
-            if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air)
-            {
-                Block block = Block.getBlockFromItem(item);
-
-                if (block == Blocks.wooden_slab)
-                {
-                    return 150;
-                }
-
-                if (block.getMaterial() == Material.wood)
-                {
-                    return 300;
-                }
-
-                if (block == Blocks.coal_block)
-                {
-                    return 16000;
-                }
-            }
-
-            if (item instanceof ItemTool && ((ItemTool) item).getToolMaterialName().equals("WOOD"))
-                return 200;
-            if (item instanceof ItemSword && ((ItemSword) item).getToolMaterialName().equals("WOOD"))
-                return 200;
-            if (item instanceof ItemHoe && ((ItemHoe) item).getToolMaterialName().equals("WOOD"))
-                return 200;
-            if (item == Items.stick)
-                return 100;
-            if (item == Items.coal)
-                return 1600;
-            if (item == Items.lava_bucket)
-                return 20000;
-            if (item == Item.getItemFromBlock(Blocks.sapling))
-                return 100;
-            if (item == Items.blaze_rod)
-                return 2400;
-            return GameRegistry.getFuelValue(p_145952_0_);
-        }
     }
 
     @Override
@@ -1357,5 +910,112 @@ public class TileEntityFurnaceCore extends ModularTileEntity implements ISidedIn
             return ((1600 * efficiencyMultiplier) / getSpeedMultiplier()) / 8;
         else
             return ((1600 * (1 / (-1 * efficiencyMultiplier))) / getSpeedMultiplier()) / 8;
+    }
+
+    private class ProperlyFormedWorldFunction implements WorldFunction {
+        boolean shouldContinue = true;
+
+        @Override
+        public void outerBlock(World world, int x, int y, int z) {
+            Block blockId = worldObj.getBlock(x, y, z);
+            if (worldObj.isAirBlock(x, y, z) || (Reference.isBadBlock(blockId) && !Reference.isModularTile(blockId.getUnlocalizedName()))) {
+                shouldContinue = false;
+            } else if (!Reference.isValidBlock(blockId.getUnlocalizedName())) {
+                shouldContinue = Reference.isModularTile(blockId.getUnlocalizedName());
+            }
+        }
+
+        @Override
+        public void innerBlock(World world, int x, int y, int z) {
+            shouldContinue = worldObj.isAirBlock(x,y,z);
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            return shouldContinue;
+        }
+    }
+
+    private class ConvertDummiesWorldFunction implements WorldFunction {
+        BlockCountWorldFunction bcFunc = new BlockCountWorldFunction();
+
+        @Override
+        public void outerBlock(World world, int x, int y, int z) {
+
+            bcFunc.outerBlock(world, x, y, z);
+
+            if (!Reference.isModularTile(worldObj.getBlock(x, y, z).getUnlocalizedName()) && worldObj.getBlock(x, y, z) != null && worldObj.getBlock(x, y, z) != Blocks.air) {
+
+                Block icon = worldObj.getBlock(x, y, z);
+                int metadata = worldObj.getBlockMetadata(x, y, z);
+                worldObj.setBlock(x, y, z, BlockManager.furnaceDummy);
+
+                worldObj.markBlockForUpdate(x, y, z);
+                TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) worldObj.getTileEntity(x, y, z);
+
+                if (icon == BlockManager.furnaceDummy) {
+                    icon = Block.getBlockById(dummyTE.icon);
+                    metadata = dummyTE.metadata;
+                } else {
+                    dummyTE.icon = Block.getIdFromBlock(icon);
+                    dummyTE.metadata = metadata;
+                }
+                worldObj.markBlockForUpdate(x, y, z);
+                dummyTE.setCore(TileEntityFurnaceCore.this);
+            }
+
+        }
+
+        @Override
+        public void innerBlock(World world, int x, int y, int z) {
+            bcFunc.innerBlock(world, x, y, z);
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            return true;
+        }
+
+        public Map<Block, Integer> blockCounts() {
+            return bcFunc.getBlockCounts();
+        }
+    }
+
+    public static class BlockCountWorldFunction implements WorldFunction {
+        private Map<Block, Integer> blocks = new LinkedHashMap<Block, Integer>();
+
+        @Override
+        public void outerBlock(World world, int x, int y, int z) {
+            Block block = world.getBlock(x, y, z);
+            TileEntity tileEntity = world.getTileEntity(x, y, z);
+            if (tileEntity instanceof TileEntityFurnaceDummy) {
+                TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) tileEntity;
+                block = dummyTE.getBlock();
+            }
+            GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(block);
+            block = GameRegistry.findBlock(id.modId, id.name);
+            Integer count = blocks.get(block);
+
+            if (count == null) {
+                count = 1;
+            } else {
+                count += 1;
+            }
+            blocks.put(block, count);
+        }
+
+        @Override
+        public void innerBlock(World world, int x, int y, int z) {
+
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            return true;
+        }
+
+        public Map<Block, Integer> getBlockCounts() {
+            return blocks;
+        }
     }
 }

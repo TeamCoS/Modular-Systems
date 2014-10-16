@@ -1,7 +1,11 @@
 package com.pauljoda.modularsystems.core.helper;
 
-import com.pauljoda.modularsystems.core.structures.BlockValue;
-import com.pauljoda.modularsystems.core.structures.MaterialValue;
+import com.pauljoda.modularsystems.furnace.FurnaceConfigHandler;
+import com.pauljoda.modularsystems.furnace.config.BlockConfig;
+import com.pauljoda.modularsystems.furnace.config.Calculation;
+import com.pauljoda.modularsystems.registries.MaterialRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -16,13 +20,10 @@ import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BlockValueHelper
 {
-    public static List<BlockValue>blockValues = new ArrayList<BlockValue>();
-    public static List<MaterialValue>materialValues = new ArrayList<MaterialValue>();
+    private BlockValueHelper() {}
 
     public static void init() throws ParserConfigurationException, TransformerException, IOException, SAXException
     {
@@ -44,14 +45,31 @@ public class BlockValueHelper
 
         for (int temp = 0; temp < nList.getLength(); temp++)
         {
-
             Node nNode = nList.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE)
             {
-
-                Element eElement = (Element) nNode;
-                BlockValue block = new BlockValue(eElement.getAttribute("unlocalizedName"), eElement.getElementsByTagName("speedValue").item(0).getTextContent(), eElement.getElementsByTagName("efficiencyValue").item(0).getTextContent());
-                blockValues.add(block);
+                Element element = (Element) nNode;
+                String name = element.getAttribute("unlocalizedName");
+                String speed = element.getElementsByTagName("speedValue").item(0).getTextContent();
+                NodeList speedEqNode = element.getElementsByTagName("speedEq");
+                String speedFunction = "linear";
+                if (speedEqNode.getLength() > 0) {
+                    speedFunction = speedEqNode.item(0).getTextContent();
+                }
+                String efficiency = element.getElementsByTagName("efficiencyValue").item(0).getTextContent();
+                NodeList effEqNode = element.getElementsByTagName("efficiencyEq");
+                String effFunction = "linear";
+                if (effEqNode.getLength() > 0) {
+                    effFunction = effEqNode.item(0).getTextContent();
+                }
+                FurnaceConfigHandler.publishBlockConfig(
+                        name,
+                        new BlockConfig(
+                                name,
+                                getCalculation(effFunction, efficiency),
+                                getCalculation(speedFunction, speed)
+                        )
+                );
             }
         }
 
@@ -59,16 +77,91 @@ public class BlockValueHelper
 
         for (int temp = 0; temp < nList.getLength(); temp++)
         {
-
             Node nNode = nList.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE)
             {
+                Element element = (Element) nNode;
+                String name = element.getAttribute("name");
+                Material material = MaterialRegistry.retrieveMaterial(name);
+                if (material != null) {
+                    String speed = element.getElementsByTagName("speedValue").item(0).getTextContent();
+                    NodeList speedEqNode = element.getElementsByTagName("speedEq");
+                    String speedFunction = "linear";
+                    if (speedEqNode.getLength() > 0) {
+                        speedFunction = speedEqNode.item(0).getTextContent();
+                    }
+                    String efficiency = element.getElementsByTagName("efficiencyValue").item(0).getTextContent();
+                    NodeList effEqNode = element.getElementsByTagName("efficiencyEq");
+                    String effFunction = "linear";
+                    if (effEqNode.getLength() > 0) {
+                        effFunction = effEqNode.item(0).getTextContent();
+                    }
 
-                Element eElement = (Element) nNode;
-                MaterialValue material = new MaterialValue(MaterialValue.getMaterialFromString(eElement.getAttribute("name")), Double.parseDouble(eElement.getElementsByTagName("speedValue").item(0).getTextContent()), Double.parseDouble(eElement.getElementsByTagName("efficiencyValue").item(0).getTextContent()));
-                materialValues.add(material);
+                    FurnaceConfigHandler.publishMaterialConfig(
+                            material,
+                            new BlockConfig(
+                                    name,
+                                    getCalculation(effFunction, efficiency),
+                                    getCalculation(speedFunction, speed)
+                            )
+                    );
+                }
             }
         }
+    }
+
+    private static Calculation getCalculation(String name, String value) {
+        if (name.equals("linear")) {
+            return linearCalculation(value);
+        } else if (name.equals("constant")) {
+            return constantCalculation(value);
+        } else if (name.equals("log")) {
+            return logCalculation(value);
+        } else if (name.equals("parabolic")) {
+            return parabolicCalculation(value);
+        } else {
+            return linearCalculation(value);
+        }
+    }
+
+    private static Calculation constantCalculation(String value) {
+        try {
+            double scalar = Double.parseDouble(value);
+            return new Calculation.ConstantCalculation(scalar);
+        } catch (Exception e) {
+            return defaultCalculation();
+        }
+    }
+
+    private static Calculation logCalculation(String value) {
+        try {
+            double scalar = Double.parseDouble(value);
+            return new Calculation.LogCalculation(scalar);
+        } catch (Exception e) {
+            return defaultCalculation();
+        }
+    }
+
+    private static Calculation parabolicCalculation(String value) {
+        try {
+            double scalar = Double.parseDouble(value);
+            return new Calculation.ParabolicCalculation(scalar);
+        } catch (Exception e) {
+            return defaultCalculation();
+        }
+    }
+
+    private static Calculation linearCalculation(String value) {
+        try {
+            double scalar = Double.parseDouble(value);
+            return new Calculation.LinearCalculation(scalar);
+        } catch (Exception e) {
+            return defaultCalculation();
+        }
+    }
+
+    private static Calculation defaultCalculation() {
+        return new Calculation.LinearCalculation(1);
     }
 
     private static void generateDefaultValues() throws TransformerException, ParserConfigurationException, IOException, SAXException
@@ -84,7 +177,14 @@ public class BlockValueHelper
             flag = false;
             LogHelper.error(e.getMessage());
         }
-        if(flag)
-        init();
+        if(flag) init();
+    }
+
+    public static BlockConfig getBlockValueForBlock(Block block) {
+        return FurnaceConfigHandler.retrieveBlockConfig(block.getUnlocalizedName());
+    }
+
+    public static BlockConfig getMaterialValueForBlock(Block block) {
+        return FurnaceConfigHandler.retrieveMaterialConfig(block.getMaterial());
     }
 }
