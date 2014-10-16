@@ -5,6 +5,9 @@ import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.tiles.ModularTileEntity;
+import com.pauljoda.modularsystems.functions.WorldFunction;
+import com.pauljoda.modularsystems.helpers.Doublet;
+import com.pauljoda.modularsystems.helpers.LocalBlockCollections;
 import com.pauljoda.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -19,7 +22,9 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.world.World;
 
+import java.util.Map;
 import java.util.Random;
 
 public class TileEntitySmelteryCore extends ModularTileEntity implements ISidedInventory
@@ -344,150 +349,24 @@ public class TileEntitySmelteryCore extends ModularTileEntity implements ISidedI
         }
         return true;
     }
-
-    /*
-     * Converts the blocks into dummies
-     */
     public void convertDummies()
     {
-        int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-        this.direction = dir;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
+        //This was being set before, and it was never set false in the method, no idea!
+        isValidMultiblock = true;
 
+        ConvertDummiesWorldFunction myFunction = new ConvertDummiesWorldFunction();
+        LocalBlockCollections.searchBlock(worldObj, xCoord, yCoord, zCoord, myFunction, Reference.MAX_FURNACE_SIZE);
 
-		/*
-         *          FORWARD     BACKWARD
-		 * North:   -z              +z
-		 * South:   +z              -z
-		 * East:    +x              -x
-		 * West:    -x              +x
-		 * 
-		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
-		 */
+        double speedMultiplier = 0.0;
+        double efficiencyMultiplier = 0.0;
 
-        hMin = getHorizontalMin();
-        hMax = getHorizontalMax();
-        vMin = getVerticalMin();
-        vMax = getVerticalMax();
-        depthVal = getDepthVal();
-
-        int startX;
-        int startY = yCoord - vMin;
-        int startZ;
-
-        switch(dir)
-        {
-            case 2 :
-                startX = xCoord + hMin;
-                startZ = zCoord;
-                break;
-            case 3 :
-                startX = xCoord - hMin;
-                startZ = zCoord;
-                break;
-            case 4 :
-                startX = xCoord;
-                startZ = zCoord - hMin;
-                break;
-            case 5 :
-                startX = xCoord;
-                startZ = zCoord + hMin;
-                break;
-            default :
-                startX = xCoord;
-                startZ = zCoord;
+        for (Map.Entry<Block, Integer> blockEntry : myFunction.blockCounts().entrySet()) {
+            speedMultiplier += Reference.getSpeedMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
+            efficiencyMultiplier += Reference.getEfficiencyMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
         }
 
-        int horizMax = hMin + hMax;
-        int vertMax = vMin + vMax;
-
-        for (int horiz = 0; horiz <= horizMax; horiz++)    // Horizontal (X or Z)
-        {
-            for (int vert = 0; vert <= vertMax; vert++)   // Vertical (Y)
-            {
-                for (int depth = 0; depth <= depthVal + 1; depth++) // Depth (Z or X)
-                {
-                    int x;
-                    int y = startY + vert;
-                    int z;
-                    switch(dir)
-                    {
-                        case 2 :
-                            x = startX - horiz;
-                            z = startZ + depth;
-                            break;
-                        case 3 :
-                            x = startX + horiz;
-                            z = startZ - depth;
-                            break;
-                        case 4 :
-                            x = startX + depth;
-                            z = startZ + horiz;
-                            break;
-                        case 5 :
-                            x = startX - depth;
-                            z = startZ - horiz;
-                            break;
-                        default :
-                            x = 0;
-                            z = 0;
-                    }
-                    if (x == xCoord && y == yCoord && z == zCoord)
-                        continue;
-
-                    if (horiz > 0 && horiz < horizMax)
-                    {
-                        if (vert > 0 && vert < vertMax)
-                        {
-                            if (depth > 0 && depth < depthVal + 1)
-                            {
-                                continue;
-                            }
-                        }
-                    }
-
-
-                    if (worldObj.getBlock(x, y, z) == BlockManager.smelteryDummyIO)
-                    {
-                        TileEntitySmelteryDummy dummyTE = (TileEntitySmelteryDummy) worldObj.getTileEntity(x, y, z);
-                        dummyTE.setCore(this);
-                    }
-
-                    else if (!Reference.isModularTile(worldObj.getBlock(x, y, z).getUnlocalizedName()) && worldObj.getBlock(x, y, z) != null && worldObj.getBlock(x, y, z) != Blocks.air)
-                    {
-
-                        Block icon = worldObj.getBlock(x, y, z);
-                        int metadata = worldObj.getBlockMetadata(x, y, z);
-
-                        speedMultiplier += Reference.getSpeedMultiplierForBlock(icon);
-                        if (speedMultiplier <= 0)
-                            speedMultiplier = 1;
-
-                        efficiencyMultiplier += Reference.getEfficiencyMultiplierForBlock(icon);
-
-                        worldObj.setBlock(x, y, z, BlockManager.smelteryDummy);
-
-                        worldObj.markBlockForUpdate(x, y, z);
-                        TileEntitySmelteryDummy dummyTE = (TileEntitySmelteryDummy) worldObj.getTileEntity(x, y, z);
-
-                        if (icon == BlockManager.smelteryDummy)
-                        {
-                            icon = Block.getBlockById(dummyTE.icon);
-                            metadata = dummyTE.metadata;
-                        }
-                        else
-                        {
-                            dummyTE.icon = Block.getIdFromBlock(icon);
-                            dummyTE.metadata = metadata;
-                        }
-                        worldObj.markBlockForUpdate(x, y, z);
-                        dummyTE.setCore(this);
-                    }
-                }
-            }
-            isValidMultiblock = true;
-        }
+        this.speedMultiplier = speedMultiplier;
+        this.efficiencyMultiplier = efficiencyMultiplier;
     }
 
     /**
@@ -621,107 +500,24 @@ public class TileEntitySmelteryCore extends ModularTileEntity implements ISidedI
      */
     public double getSpeed()
     {
-        double output = 8;
-        int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
+        Doublet<Double, Double> speedAndEfficiency = getSpeedAndEfficiency(worldObj, xCoord, yCoord, zCoord);
+        return speedAndEfficiency.getFirst();
+    }
 
-		/*
-		 *          FORWARD     BACKWARD
-		 * North:   -z              +z
-		 * South:   +z              -z
-		 * East:    +x              -x
-		 * West:    -x              +x
-		 * 
-		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
-		 */
+    private Doublet<Double, Double> getSpeedAndEfficiency(World worldObj, int x, int y, int z) {
 
-        int startX;
-        int startY = yCoord - vMin;
-        int startZ;
+        WorldFunction.BlockCountWorldFunction myFunction = new WorldFunction.BlockCountWorldFunction();
+        LocalBlockCollections.searchBlock(worldObj, x, y, z, myFunction, Reference.MAX_FURNACE_SIZE);
 
-        switch(dir)
-        {
-            case 2 :
-                startX = xCoord + hMin;
-                startZ = zCoord;
-                break;
-            case 3 :
-                startX = xCoord - hMin;
-                startZ = zCoord;
-                break;
-            case 4 :
-                startX = xCoord;
-                startZ = zCoord - hMin;
-                break;
-            case 5 :
-                startX = xCoord;
-                startZ = zCoord + hMin;
-                break;
-            default :
-                startX = xCoord;
-                startZ = zCoord;
+        double speedMultiplier = 0.0;
+        double efficiencyMultiplier = 0.0;
+
+        for (Map.Entry<Block, Integer> blockEntry : myFunction.getBlockCounts().entrySet()) {
+            speedMultiplier += Reference.getSpeedMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
+            efficiencyMultiplier += Reference.getEfficiencyMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
         }
 
-        int horizMax = hMin + hMax;
-        int vertMax = vMin + vMax;
-
-        for (int horiz = 0; horiz <= horizMax; horiz++)    // Horizontal (X or Z)
-        {
-            for (int vert = 0; vert <= vertMax; vert++)   // Vertical (Y)
-            {
-                for (int depth = 0; depth <= depthVal + 1; depth++) // Depth (Z or X)
-                {
-                    int x;
-                    int y = startY + vert;
-                    int z;
-                    switch(dir)
-                    {
-                        case 2 :
-                            x = startX - horiz;
-                            z = startZ + depth;
-                            break;
-                        case 3 :
-                            x = startX + horiz;
-                            z = startZ - depth;
-                            break;
-                        case 4 :
-                            x = startX + depth;
-                            z = startZ + horiz;
-                            break;
-                        case 5 :
-                            x = startX - depth;
-                            z = startZ - horiz;
-                            break;
-                        default :
-                            x = 0;
-                            z = 0;
-                    }
-                    Block blockId = worldObj.getBlock(x, y, z);
-                    if (x == xCoord && y == yCoord && z == zCoord)
-                        continue;
-
-                    if (horiz > 0 && horiz < horizMax)
-                    {
-                        if (vert > 0 && vert < vertMax)
-                        {
-                            if (depth > 0 && depth < depthVal + 1)
-                            {
-                                continue;
-                            }
-                        }
-
-                    }
-                    if (blockId == BlockManager.smelteryDummy)
-                    {
-                        TileEntitySmelteryDummy dummy = (TileEntitySmelteryDummy) worldObj.getTileEntity(x, y, z);
-                        output += Reference.getSpeedMultiplierForBlock(dummy.getBlock());
-                    }
-
-                }
-            }
-        }
-        return output;
+        return new Doublet<Double, Double>(speedMultiplier, efficiencyMultiplier);
     }
 
     //Furnace stuff
@@ -1177,5 +973,47 @@ public class TileEntitySmelteryCore extends ModularTileEntity implements ISidedI
             return ((1600 * efficiencyMultiplier) / getSpeedMultiplier()) / 8;
         else
             return ((1600 * (1 / (-1 * efficiencyMultiplier))) / getSpeedMultiplier()) / 8;
+    }
+
+    private class ConvertDummiesWorldFunction implements WorldFunction {
+        BlockCountWorldFunction bcFunc = new BlockCountWorldFunction();
+
+        @Override
+        public void outerBlock(World world, int x, int y, int z) {
+
+            bcFunc.outerBlock(world, x, y, z);if (!Reference.isModularTile(worldObj.getBlock(x, y, z).getUnlocalizedName()) && worldObj.getBlock(x, y, z) != null && worldObj.getBlock(x, y, z) != Blocks.air)
+            {
+
+                Block icon = worldObj.getBlock(x, y, z);
+                int metadata = worldObj.getBlockMetadata(x, y, z);
+
+                worldObj.setBlock(x, y, z, BlockManager.smelteryDummy);
+
+                worldObj.markBlockForUpdate(x, y, z);
+                TileEntitySmelteryDummy dummyTE = (TileEntitySmelteryDummy) worldObj.getTileEntity(x, y, z);
+
+                if (icon != BlockManager.smelteryDummy)
+                {
+                    dummyTE.icon = Block.getIdFromBlock(icon);
+                    dummyTE.metadata = metadata;
+                }
+                worldObj.markBlockForUpdate(x, y, z);
+                dummyTE.setCore(TileEntitySmelteryCore.this);
+            }
+        }
+
+        @Override
+        public void innerBlock(World world, int x, int y, int z) {
+            bcFunc.innerBlock(world, x, y, z);
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            return true;
+        }
+
+        public Map<Block, Integer> blockCounts() {
+            return bcFunc.getBlockCounts();
+        }
     }
 }

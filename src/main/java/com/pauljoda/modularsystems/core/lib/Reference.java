@@ -3,6 +3,7 @@ package com.pauljoda.modularsystems.core.lib;
 import com.pauljoda.modularsystems.core.helper.BlockValueHelper;
 import com.pauljoda.modularsystems.core.helper.ConfigHelper;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.furnace.config.BlockConfig;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,8 @@ public class Reference {
     public static final int SMASHING_STORAGE_EXPANSION = 4;
     public static final int SORTING_STORAGE_EXPANSION = 5;
     public static final int CRAFTING_STORAGE_EXPANSION = 6;
+    public static final int MAX_FURNACE_SIZE = 50;
+    public static final int MAX_PROCESSOR_SIZE = 50;
 
     public static final String MOD_ID = "modularsystems";
     public static final String MOD_NAME = "Modular Systems";
@@ -81,35 +84,30 @@ public class Reference {
     }
 
     //FURNACE: Gets Speed Multiplier
-    public static double getSpeedMultiplierForBlock(Block block)
+    public static double getSpeedMultiplierForBlock(Block block, int count)
     {
-         for(int i = 0; i < BlockValueHelper.blockValues.size(); i++)
-         {
-            if(BlockValueHelper.blockValues.get(i).compareBlock(block))
-            return BlockValueHelper.blockValues.get(i).getSpeedValue();
-         }
-        for(int i = 0; i < BlockValueHelper.materialValues.size(); i++)
-        {
-            if(BlockValueHelper.materialValues.get(i).compareBlock(block))
-                return BlockValueHelper.materialValues.get(i).getSpeedValue();
-        }
+        BlockConfig blockValue = BlockValueHelper.getBlockValueForBlock(block);
+        BlockConfig materialValue = BlockValueHelper.getMaterialValueForBlock(block);
+        if (blockValue != null) {
+            return blockValue.speed(count);
+        } else if (materialValue != null) {
+            return materialValue.speed(count);
+        } else {
             return 0;
+        }
     }
 
     //FURNACE: Gets Efficiency Multiplier
-    public static double getEfficiencyMultiplierForBlock(Block block)
+    public static double getEfficiencyMultiplierForBlock(Block block, int count)
     {
-
-        for(int i = 0; i < BlockValueHelper.blockValues.size(); i++)
-        {
-            if(BlockValueHelper.blockValues.get(i).compareBlock(block))
-                return BlockValueHelper.blockValues.get(i).getEfficiencyValue();
-        }
-        for(int i = 0; i < BlockValueHelper.materialValues.size(); i++)
-        {
-            if(BlockValueHelper.materialValues.get(i).compareBlock(block))
-                return BlockValueHelper.materialValues.get(i).getEfficiencyValue();
-        }
+        BlockConfig blockValue = BlockValueHelper.getBlockValueForBlock(block);
+        BlockConfig materialValue = BlockValueHelper.getMaterialValueForBlock(block);
+        if (blockValue != null) {
+            return blockValue.efficiency(count);
+        } else if (materialValue != null) {
+            return materialValue.efficiency(count);
+        } else {
             return 0.0;
+        }
     }
 }

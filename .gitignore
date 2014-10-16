@@ -13,3 +13,5 @@ CREDITS-fml.txt
 eclipse/*
 src/main/logs
 src/main/config
+src/main/saves
+src/main/options.txt
