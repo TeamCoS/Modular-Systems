@@ -14,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
@@ -136,10 +135,11 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Loca
     }
 
     private boolean canSmelt() {
-        if (values.getInput() == null) {
+        ItemStack input = values.getInput();
+        if (input == null) {
             return false;
         } else {
-            ItemStack recipeResult = FurnaceRecipes.smelting().getSmeltingResult(values.getInput());
+            ItemStack recipeResult = recipe(input);
             if (recipeResult == null) {
                 return false;
             }

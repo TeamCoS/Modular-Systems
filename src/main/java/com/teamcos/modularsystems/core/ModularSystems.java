@@ -11,6 +11,7 @@ import com.teamcos.modularsystems.core.managers.ModuleManager;
 import com.teamcos.modularsystems.core.network.PacketPipeline;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
 import com.teamcos.modularsystems.core.proxy.CommonProxy;
+import com.teamcos.modularsystems.helpers.VanillaFuelHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -20,6 +21,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
@@ -87,6 +89,7 @@ public class ModularSystems {
         if(ConfigHelper.enableOreProcessing) ModuleManager.enableOreProcessingModule();
 
         MinecraftForge.EVENT_BUS.register(FakePlayerPool.instance);
+        GameRegistry.registerFuelHandler(new VanillaFuelHandler());
     }
 
     @EventHandler
