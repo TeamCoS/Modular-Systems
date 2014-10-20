@@ -3,6 +3,7 @@ package com.teamcos.modularsystems.oreprocessing.renderer;
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
 import com.teamcos.modularsystems.manager.ApiBlockManager;
+import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -95,32 +96,26 @@ public class SmelteryDummyRenderer implements ISimpleBlockRenderingHandler
                                     Block block, int modelId, RenderBlocks renderer) {
 
         //which render pass are we doing?
-        if(ClientProxy.renderPass == 0)
-        {
+        if(ClientProxy.renderPass == 0) {
             World world1 = Minecraft.getMinecraft().theWorld;
-            DummyTile dummy = null;
 
-            if(block == BlockManager.smelteryDummy)
-            {
-                dummy = (TileEntitySmelteryDummy)world1.getTileEntity(x, y, z);
-                renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMeta()));
-
+            if(block == ApiBlockManager.dummyBlock) {
+                DummyTile dummy = (DummyTile) world1.getTileEntity(x, y, z);
+                renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMetadata()));
             }
 
-            if(block == BlockManager.smelteryDummyIO)
+            if(block == ApiBlockManager.dummyIOBlock) {
                 renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
+            }
 
-            if(block == BlockManager.smelteryCore)
-            {
+            if(block == BlockManager.smelteryCore) {
                 renderer.renderBlockAllFaces(Blocks.furnace, x, y, z);
             }
 
-            if(block == BlockManager.smelteryCoreActive)
+            if(block == BlockManager.smelteryCoreActive) {
                 renderer.renderBlockAllFaces(Blocks.lit_furnace, x, y, z);
-
-        }
-        else
-        {
+            }
+        } else {
             renderer.renderStandardBlock(BlockManager.smeleryOverlay, x, y, z);
         }
 

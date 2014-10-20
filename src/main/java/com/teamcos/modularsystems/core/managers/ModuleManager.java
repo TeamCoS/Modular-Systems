@@ -10,7 +10,6 @@ import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceAddition;
 import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.teamcos.modularsystems.furnace.blocks.BlockTextureOverlay;
 import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceCore;
-import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
 import com.teamcos.modularsystems.manager.ApiModuleManager;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryOverlay;
@@ -60,7 +59,6 @@ public class ModuleManager {
                 "XxX", 'X', Items.iron_ingot, 'x', new ItemStack(Items.dye, 9, 4), 'C', Blocks.crafting_table);
 
         GameRegistry.registerTileEntity(TileEntityFurnaceCore.class, "modularsystems:tileEntityFurnaceCore");
-        GameRegistry.registerTileEntity(TileEntityFurnaceDummy.class, "modularsystems:tileEntityFurnaceDummy");
     }
 
     public static void enableStorageModule() {

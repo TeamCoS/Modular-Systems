@@ -1,24 +1,13 @@
 package com.teamcos.modularsystems.oreprocessing.tiles;
 
-import com.teamcos.modularsystems.core.lib.Reference;
-import com.teamcos.modularsystems.functions.BlockCountFunction;
-import com.teamcos.modularsystems.functions.WorldFunction;
-import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
 import com.teamcos.modularsystems.registries.OreProcessingRegistry;
-import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
-import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class TileEntitySmelteryCore extends FueledRecipeTile {
 
@@ -30,26 +19,11 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
 
     //Empty Constructor
     public TileEntitySmelteryCore() {
-        super(new BlockCountWorldFunction());
+        super();
     }
 
     public void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z) {
         BlockSmelteryCore.updateFurnaceBlockState(positiveBurnTime, world, x, y, z);
-    }
-
-    @Override
-    protected WorldFunction convertDummiesFunction() {
-        return new ConvertDummiesWorldFunction(this);
-    }
-
-    @Override
-    protected WorldFunction revertDummiesFunction() {
-        return new RevertDummiesWorldFunction();
-    }
-
-    @Override
-    protected WorldFunction craftingUpgradeFunction() {
-        return new HasCraftingUpgrade();
     }
 
     @Override
@@ -97,177 +71,6 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
     @Override
     public int getZ() {
         return zCoord;
-    }
-
-    private static class ConvertDummiesWorldFunction implements WorldFunction {
-        private BlockCountWorldFunction bcFunc = new BlockCountWorldFunction();
-        private final TileEntitySmelteryCore core;
-
-        private ConvertDummiesWorldFunction(TileEntitySmelteryCore core) {
-            this.core = core;
-        }
-
-        @Override
-        public void outerBlock(World world, int x, int y, int z) {
-
-            bcFunc.outerBlock(world, x, y, z);
-            Block block = world.getBlock(x,y,z);
-            if (block != null &&
-                    block != Blocks.air &&
-                    !Reference.isModularTile(block.getUnlocalizedName())) {
-                int metadata = world.getBlockMetadata(x, y, z);
-
-                world.setBlock(x, y, z, ApiBlockManager.dummyBlock);
-
-                world.markBlockForUpdate(x, y, z);
-                DummyTile dummyTE = (DummyTile) world.getTileEntity(x, y, z);
-
-                if (block != ApiBlockManager.dummyBlock) {
-                    dummyTE.setBlock(Block.getIdFromBlock(block));
-                    dummyTE.setMetadata(metadata);
-                }
-                world.markBlockForUpdate(x, y, z);
-                dummyTE.setCore(core);
-            }
-        }
-
-        @Override
-        public void innerBlock(World world, int x, int y, int z) {
-            bcFunc.innerBlock(world, x, y, z);
-        }
-
-        @Override
-        public boolean shouldContinue() {
-            return true;
-        }
-
-        @Override
-        public void clear() {
-            bcFunc.clear();
-        }
-
-        @Override
-        public WorldFunction copy() {
-            return new ConvertDummiesWorldFunction(core);
-        }
-
-        public Map<Block, Integer> blockCounts() {
-            return bcFunc.getBlockCounts();
-        }
-    }
-
-    public static class BlockCountWorldFunction implements BlockCountFunction {
-        private Map<Block, Integer> blocks = new LinkedHashMap<Block, Integer>();
-
-        @Override
-        public void outerBlock(World world, int x, int y, int z) {
-            Block block = world.getBlock(x, y, z);
-            TileEntity te = world.getTileEntity(x, y, z);
-            if (te instanceof DummyTile) {
-                DummyTile dummyTE = (DummyTile) te;
-                block = dummyTE.getBlock();
-            }
-            GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(block);
-            block = GameRegistry.findBlock(id.modId, id.name);
-            Integer count = blocks.get(block);
-
-            if (count == null) {
-                count = 1;
-            } else {
-                count += 1;
-            }
-            blocks.put(block, count);
-        }
-
-        @Override
-        public void innerBlock(World world, int x, int y, int z) {
-
-        }
-
-        @Override
-        public boolean shouldContinue() {
-            return true;
-        }
-
-        public Map<Block, Integer> getBlockCounts() {
-            return blocks;
-        }
-
-        @Override
-        public void clear() {
-            blocks = new LinkedHashMap<Block, Integer>();
-        }
-
-        @Override
-        public BlockCountFunction copy() {
-            return new BlockCountWorldFunction();
-        }
-    }
-
-    private static class RevertDummiesWorldFunction implements WorldFunction {
-
-        @Override
-        public void outerBlock(World world, int x, int y, int z) {
-            Block blockId = world.getBlock(x,y,z);
-            if (blockId == ApiBlockManager.dummyBlock) {
-                DummyTile dummyTE = (DummyTile) world.getTileEntity(x, y, z);
-                world.setBlock(x, y, z, dummyTE.getBlock());
-                world.setBlockMetadataWithNotify(x, y, z, dummyTE.getMetadata(), 2);
-            } else if (blockId == ApiBlockManager.dummyIOBlock) {
-                DummyIOTile te = (DummyIOTile) world.getTileEntity(x, y, z);
-                te.unsetCore();
-            }
-
-            world.markBlockForUpdate(x, y, z);
-        }
-
-        @Override
-        public void innerBlock(World world, int x, int y, int z) {
-
-        }
-
-        @Override
-        public boolean shouldContinue() {
-            return false;
-        }
-
-        @Override
-        public void clear() {
-
-        }
-
-        @Override
-        public WorldFunction copy() {
-            return new RevertDummiesWorldFunction();
-        }
-    }
-
-    private static class HasCraftingUpgrade implements WorldFunction {
-
-        private boolean hasCrafting = false;
-
-        @Override
-        public void outerBlock(World world, int x, int y, int z) {}
-
-        @Override
-        public void innerBlock(World world, int x, int y, int z) {
-
-        }
-
-        @Override
-        public boolean shouldContinue() {
-            return !hasCrafting;
-        }
-
-        @Override
-        public void clear() {
-            hasCrafting = false;
-        }
-
-        @Override
-        public WorldFunction copy() {
-            return new HasCraftingUpgrade();
-        }
     }
 
     public double getSpeed() {

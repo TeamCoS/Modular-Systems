@@ -13,6 +13,8 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class DummyTile extends ModularTileEntity implements ISidedInventory {
@@ -26,8 +28,10 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory {
     public DummyTile() {}
 
     public FueledRecipeTile getCore() {
-        TileEntity te = worldObj.getTileEntity(coreLoc.x, coreLoc.y, coreLoc.z);
-        if (te instanceof FueledRecipeTile) {
+        TileEntity te;
+        if (coreLoc == null) {
+            return null;
+        } else if ((te = worldObj.getTileEntity(coreLoc.x, coreLoc.y, coreLoc.z)) instanceof FueledRecipeTile) {
             return (FueledRecipeTile) te;
         } else {
             return null;
@@ -35,11 +39,8 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory {
     }
 
     public Block getBlock() {
-        if(Block.getBlockById(this.icon) == null) {
-            return Blocks.cobblestone;
-        }
-
-        return Block.getBlockById(this.icon);
+        Block block = Block.getBlockById(this.icon);
+        return block == null ? Blocks.cobblestone : block;
     }
 
     /******************************************************************************************************************
@@ -75,30 +76,23 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory {
             worldObj.setBlock(xCoord, yCoord, zCoord, getBlock());
         } else if(coolDown < 0) {
             if (worldObj.getBlock(xCoord, yCoord, zCoord) instanceof DummyIOBlock && !worldObj.isRemote && slot == 2) {
-                for (Coord dir : LocalBlockCollections.getAdjacentBlocks()) {
-                    int x = xCoord + dir.x;
-                    int y = yCoord + dir.y;
-                    int z = zCoord + dir.z;
-                    TileEntity te = worldObj.getTileEntity(x, y, z);
-                    FueledRecipeTile core = getCore();
-                    if (te instanceof IInventory && core != null) {
-                        if(te instanceof DummyTile) {
-                            DummyTile dummy = (DummyTile) te;
-                            if(dummy.getCore() != null) {
-                                if (WorldUtil.areTilesSame(dummy.getCore(), this.getCore())) {
+                FueledRecipeTile core = getCore();
+                if (core != null) {
+                    for (Coord dir : LocalBlockCollections.getAdjacentBlocks()) {
+                        TileEntity te = worldObj.getTileEntity(xCoord + dir.x, yCoord + dir.y, zCoord + dir.z);
+                        if (te instanceof IInventory) {
+                            if (te instanceof DummyTile) {
+                                DummyTile dummy = (DummyTile) te;
+                                if (dummy.getCore() == null || WorldUtil.areTilesSame(dummy.getCore(), this.getCore())) {
                                     continue;
                                 }
-                            } else {
+                            } else if (WorldUtil.areTilesSame(te, core)) {
                                 continue;
                             }
-                        } else if (te instanceof FueledRecipeTile) {
-                            if(WorldUtil.areTilesSame(te, core)) {
-                                continue;
-                            }
-                        }
 
-                        if (core.getStackInSlot(2) != null) {
-                            InventoryUtil.moveItemInto(core, 2, te, -1, 64, ForgeDirection.UP, true, true);
+                            if (core.getStackInSlot(2) != null) {
+                                InventoryUtil.moveItemInto(getCore(), 2, te, -1, 64, ForgeDirection.UP, true, true);
+                            }
                         }
                     }
                 }
@@ -114,48 +108,38 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory {
 
     @Override
     public int getSizeInventory() {
-        if(getCore() != null)
-            return getCore().getSizeInventory();
-        else
-            return 0;
+        FueledRecipeTile core = getCore();
+        return core == null ? 0 : core.getSizeInventory();
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        if(getCore() != null)
-            return getCore().getStackInSlot(i);
-        else
-            return null;
+        FueledRecipeTile core = getCore();
+        return core == null ? null : core.getStackInSlot(i);
     }
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
-        if(getCore() != null)
-            return getCore().decrStackSize(i, j);
-        else
-            return null;
+        FueledRecipeTile core = getCore();
+        return core == null ? null : core.decrStackSize(i, j);
     }
 
     @Override
     public ItemStack getStackInSlotOnClosing(int i) {
-        if(getCore() != null)
-            return getCore().getStackInSlotOnClosing(i);
-        else
-            return null;
+        FueledRecipeTile core = getCore();
+        return core == null ? null : core.getStackInSlotOnClosing(i);
     }
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
-        if(getCore() != null)
-            getCore().setInventorySlotContents(i, itemstack);
+        FueledRecipeTile core = getCore();
+        if(core != null) core.setInventorySlotContents(i, itemstack);
     }
 
     @Override
     public int getInventoryStackLimit() {
-        if(getCore() != null)
-            return getCore().getInventoryStackLimit();
-        else
-            return 0;
+        FueledRecipeTile core = getCore();
+        return core == null ? 0 : core.getInventoryStackLimit();
     }
 
     @Override
@@ -165,51 +149,36 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory {
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-        if(getCore() != null)
-            return getCore().isItemValidForSlot(i, itemstack);
-        else
-            return false;
+        FueledRecipeTile core = getCore();
+        return core == null ? false : core.isItemValidForSlot(i, itemstack);
     }
 
     @Override
     public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-        if(getCore() != null)
-            return getCore().isItemValidForSlot(i, itemstack);
-        else
-            return false;
+        FueledRecipeTile core = getCore();
+        return core == null ? false : core.canInsertItem(i, itemstack, j);
     }
 
     @Override
     public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-        if(getCore() != null)
-        {
-            if(slot <= 3)
-            {
-                j = slot;
-                return getCore().canExtractItem(i, itemstack, j);
-            }
-            else
-            {
-                return getCore().canExtractItem(i, itemstack, j);
-            }
-        }
-        return false;
+        FueledRecipeTile core = getCore();
+        return core == null
+                ? false
+                : slot <= 3
+                    ? core.canExtractItem(i, itemstack, slot)
+                    : core.canExtractItem(i, itemstack, j);
     }
 
     @Override
     public String getInventoryName() {
-        if(getCore() != null)
-            return getCore().getInventoryName();
-        else
-            return "";
+        FueledRecipeTile core = getCore();
+        return core == null ? "" : core.getInventoryName();
     }
 
     @Override
     public boolean hasCustomInventoryName() {
-        if(getCore() != null)
-            return getCore().hasCustomInventoryName();
-        else
-            return false;
+        FueledRecipeTile core = getCore();
+        return core == null ? false : core.hasCustomInventoryName();
     }
 
     @Override
@@ -222,20 +191,12 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory {
 
     @Override
     public int[] getAccessibleSlotsFromSide(int var1) {
-        if(slot != 4) {
-            if(slot == 0) {
-                var1 = 0;
-            } else if(slot == 1) {
-                var1 = 1;
-            } else if(slot == 2) {
-                var1 = 2;
-            }
-        }
-        if(getCore() != null) {
-            return getCore().getAccessibleSlotsFromSide(var1);
-        } else {
-            return new int[]{0};
-        }
+        FueledRecipeTile core = getCore();
+        return core == null
+                ? new int[]{0}
+                : slot <= 3
+                    ? core.getAccessibleSlotsFromSide(slot)
+                    : core.getAccessibleSlotsFromSide(var1);
     }
 
     /******************************************************************************************************************
@@ -260,5 +221,33 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory {
 
     public void unsetCore() {
         this.coreLoc = null;
+    }
+
+    public void nextSlot() {
+        if (slot == 2) {
+            slot = 0;
+        } else if (slot == 4) {
+            slot = 1;
+        } else {
+            slot += 1;
+        }
+    }
+
+    public String getSlotName() {
+        switch (slot) {
+            case 0: return "Fuel";
+            case 1: return "Input";
+            case 2: return "Output";
+            default: return "Fuel";
+        }
+    }
+
+    public ChatComponentText getSlotNameForChat() {
+        switch (slot) {
+            case 0: return new ChatComponentText(EnumChatFormatting.AQUA + "Slot is Fuel");
+            case 1: return new ChatComponentText(EnumChatFormatting.DARK_AQUA + "Slot is Input");
+            case 2: return new ChatComponentText(EnumChatFormatting.GRAY + "Slot is Output");
+            default: return new ChatComponentText(EnumChatFormatting.AQUA + "Slot is Fuel");
+        }
     }
 }

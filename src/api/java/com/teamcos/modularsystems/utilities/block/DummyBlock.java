@@ -66,9 +66,9 @@ public class DummyBlock extends BlockContainer {
         if (player.isSneaking()) return false;
 
         DummyTile dummy = (DummyTile) world.getTileEntity(x, y, z);
+        FueledRecipeTile core;
 
-        if (dummy != null && dummy.getCore() != null) {
-            FueledRecipeTile core = dummy.getCore();
+        if (dummy != null && (core = dummy.getCore()) != null) {
             return core.getBlockType().onBlockActivated(world, core.xCoord, core.yCoord, core.zCoord, player, par6, par7, par8, par9);
         } else {
             return true;

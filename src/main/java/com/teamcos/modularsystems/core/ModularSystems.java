@@ -66,37 +66,25 @@ public class ModularSystems {
         FMLCommonHandler.instance().bus().register(new ConfigHelper());
 
         //Load block values for speed/efficiency
-        try
-        {
+        try {
             BlockValueHelper.init();
-        } catch (ParserConfigurationException e)
-        {
+        } catch (ParserConfigurationException e) {
             LogHelper.error(e.getMessage());
-        } catch (TransformerException e)
-        {
+        } catch (TransformerException e) {
             LogHelper.error(e.getMessage());
-        } catch (SAXException e)
-        {
+        } catch (SAXException e) {
             LogHelper.error(e.getMessage());
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             LogHelper.error(e.getMessage());
         }
 
         //Version Check
         VersionHelper.execute();
 
-        if(ConfigHelper.enableFurnace)
-            ModuleManager.enableFurnaceModule();
-
-        if(ConfigHelper.enableStorage)
-            ModuleManager.enableStorageModule();
-
-        if(ConfigHelper.enableEnchanting)
-            ModuleManager.enableEnchantingModule();
-
-        if(ConfigHelper.enableOreProcessing)
-            ModuleManager.enableOreProcessingModule();
+        if(ConfigHelper.enableFurnace) ModuleManager.enableFurnaceModule();
+        if(ConfigHelper.enableStorage) ModuleManager.enableStorageModule();
+        if(ConfigHelper.enableEnchanting) ModuleManager.enableEnchantingModule();
+        if(ConfigHelper.enableOreProcessing) ModuleManager.enableOreProcessingModule();
 
         MinecraftForge.EVENT_BUS.register(FakePlayerPool.instance);
     }
@@ -106,9 +94,6 @@ public class ModularSystems {
 
         //Open Network Pipeline
         packetPipeline.initalise();
-
-        //Register Tiles
-        proxy.registerTileEntities();
 
         //Set Up Custom Renderers
         ClientProxy.setCustomRenderers();

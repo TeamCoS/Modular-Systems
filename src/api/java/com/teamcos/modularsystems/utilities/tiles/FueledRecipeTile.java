@@ -2,13 +2,11 @@ package com.teamcos.modularsystems.utilities.tiles;
 
 import com.teamcos.modularsystems.collections.Doublet;
 import com.teamcos.modularsystems.collections.StandardValues;
-import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import com.teamcos.modularsystems.core.lib.Reference;
-import com.teamcos.modularsystems.functions.BlockCountFunction;
-import com.teamcos.modularsystems.functions.ProperlyFormedWorldFunction;
-import com.teamcos.modularsystems.functions.WorldFunction;
+import com.teamcos.modularsystems.functions.*;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import com.teamcos.modularsystems.helpers.Locatable;
+import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.item.EntityItem;
@@ -38,14 +36,11 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Loca
     private String field_94130_e;
 
     protected abstract void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z);
-    protected abstract WorldFunction convertDummiesFunction();
-    protected abstract WorldFunction revertDummiesFunction();
-    protected abstract WorldFunction craftingUpgradeFunction();
     protected abstract int getItemBurnTime(ItemStack is);
     protected abstract ItemStack recipe(ItemStack is);
 
-    public FueledRecipeTile(BlockCountFunction function) {
-        this.values = new StandardValues(this, function);
+    public FueledRecipeTile() {
+        this.values = new StandardValues(this, new BlockCountWorldFunction());
     }
 
     /******************************************************************************************************************
@@ -81,7 +76,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Loca
                 xCoord,
                 yCoord,
                 zCoord,
-                convertDummiesFunction(),
+                new ConvertDummiesWorldFunction(this),
                 Reference.MAX_FURNACE_SIZE
         );
         values.setValues();
@@ -95,7 +90,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Loca
                 xCoord,
                 yCoord,
                 zCoord,
-                revertDummiesFunction(),
+                new RevertDummiesWorldFunction(),
                 Reference.MAX_FURNACE_SIZE
         );
 
@@ -545,7 +540,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Loca
      * @return True if upgrade is present
      */
     public boolean hasCraftingUpgrade() {
-        WorldFunction func = craftingUpgradeFunction();
+        WorldFunction func = new HasCraftingUpgrade();
         LocalBlockCollections.searchCuboidMultiBlock(
                 worldObj,
                 xCoord,

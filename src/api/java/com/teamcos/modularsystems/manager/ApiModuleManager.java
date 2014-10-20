@@ -49,6 +49,7 @@ public class ApiModuleManager {
             ApiBlockManager.dummyBlock = new DummyBlock(Material.rock, false);
             GameRegistry.registerBlock(ApiBlockManager.dummyBlock, "modularDummy");
             GameRegistry.registerTileEntity(DummyTile.class, "dummyTile");
+            registeredDummy = true;
         }
     }
 
@@ -57,6 +58,7 @@ public class ApiModuleManager {
             ApiBlockManager.dummyIOBlock = new DummyIOBlock(Material.rock, false);
             GameRegistry.registerBlock(ApiBlockManager.dummyIOBlock, "modularDummyIO");
             GameRegistry.registerTileEntity(DummyIOTile.class, "dummyIOTile");
+            registeredDummyIO = true;
         }
     }
 }

@@ -1,5 +1,12 @@
 package com.teamcos.modularsystems.furnace.renderer;
 
+import com.teamcos.modularsystems.core.managers.BlockManager;
+import com.teamcos.modularsystems.core.proxy.ClientProxy;
+import com.teamcos.modularsystems.manager.ApiBlockManager;
+import com.teamcos.modularsystems.utilities.tiles.DummyTile;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -8,16 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import org.lwjgl.opengl.GL11;
-
-import com.teamcos.modularsystems.core.managers.BlockManager;
-import com.teamcos.modularsystems.core.proxy.ClientProxy;
-import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
-
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class FurnaceDummyRenderer implements ISimpleBlockRenderingHandler {
 
@@ -84,7 +82,7 @@ public class FurnaceDummyRenderer implements ISimpleBlockRenderingHandler {
 
 		IIcon output;
 
-		if(block == BlockManager.furnaceCore || block == BlockManager.furnaceCraftingUpgrade || block == BlockManager.furnaceDummyIO || block == BlockManager.furnaceAddition)
+		if(block == BlockManager.furnaceCore || block == BlockManager.furnaceCraftingUpgrade || block == ApiBlockManager.dummyIOBlock || block == BlockManager.furnaceAddition)
 			output = renderer.getBlockIconFromSideAndMetadata(BlockManager.overLayTexture, 0, 0);
 		else 
 			output = renderer.getBlockIconFromSideAndMetadata(block, 0,0);
@@ -100,16 +98,15 @@ public class FurnaceDummyRenderer implements ISimpleBlockRenderingHandler {
 		if(ClientProxy.renderPass == 0)
 		{
 			World world1 = Minecraft.getMinecraft().theWorld;
-			TileEntityFurnaceDummy dummy = null;
+			DummyTile dummy = null;
 
-			if(block == BlockManager.furnaceDummy)
-			{
-				dummy = (TileEntityFurnaceDummy)world1.getTileEntity(x, y, z);
-				renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMeta()));
+			if(block == ApiBlockManager.dummyBlock) {
+				dummy = (DummyTile) world1.getTileEntity(x, y, z);
+				renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMetadata()));
 
 			}
 
-			if(block == BlockManager.furnaceDummyIO)
+			if(block == ApiBlockManager.dummyIOBlock)
 				renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
 
 			if(block == BlockManager.furnaceCraftingUpgrade)
