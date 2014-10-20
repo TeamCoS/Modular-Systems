@@ -1,10 +1,10 @@
 package com.teamcos.modularsystems.furnace.tiles;
 
 import com.teamcos.modularsystems.core.tiles.ModularTileEntity;
-import com.teamcos.modularsystems.core.util.Coord;
 import com.teamcos.modularsystems.core.util.InventoryUtil;
 import com.teamcos.modularsystems.core.util.WorldUtil;
 import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceDummyIO;
+import com.teamcos.modularsystems.helpers.Coord;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -15,8 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityFurnaceDummy extends ModularTileEntity implements ISidedInventory
-{
+public class TileEntityFurnaceDummy extends ModularTileEntity implements ISidedInventory {
     public int slot = 4;
     int coreX;
     int coreY;

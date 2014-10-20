@@ -7,9 +7,7 @@ public class BlockManager {
 	//Furnace
 	public static Block furnaceCore;
 	public static Block furnaceCoreActive;
-	public static Block furnaceDummy;
 	public static Block furnaceCraftingUpgrade;
-	public static Block furnaceDummyIO;
 	public static Block furnaceAddition;
 	public static Block overLayTexture;
 	
@@ -29,7 +27,5 @@ public class BlockManager {
     //Ore Processing
     public static Block smelteryCore;
     public static Block smelteryCoreActive;
-    public static Block smelteryDummy;
-    public static Block smelteryDummyIO;
     public static Block smeleryOverlay;
 }

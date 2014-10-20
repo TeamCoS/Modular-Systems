@@ -1,6 +1,6 @@
 package com.teamcos.modularsystems.oreprocessing.container;
 
-import com.teamcos.modularsystems.core.crafting.OreProcessingRecipies;
+import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryCore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -131,7 +131,7 @@ public class ContainerModularOreProcessing extends Container
             }
             else if (par2 != 1 && par2 != 0)
             {
-                if (OreProcessingRecipies.getOutput(itemstack1) != null)
+                if (OreProcessingRegistry.getOutput(itemstack1) != null)
                 {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false))
                     {

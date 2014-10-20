@@ -1,12 +1,14 @@
 package com.teamcos.modularsystems.oreprocessing.tiles;
 
-import com.teamcos.modularsystems.core.crafting.OreProcessingRecipies;
 import com.teamcos.modularsystems.core.lib.Reference;
-import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.functions.BlockCountFunction;
 import com.teamcos.modularsystems.functions.WorldFunction;
-import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
+import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
+import com.teamcos.modularsystems.registries.OreProcessingRegistry;
+import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
+import com.teamcos.modularsystems.utilities.tiles.DummyTile;
+import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -57,7 +59,7 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
 
     @Override
     protected ItemStack recipe(ItemStack is) {
-        return OreProcessingRecipies.getOutput(is);
+        return OreProcessingRegistry.getOutput(is);
     }
 
     //Reworked for I/O
@@ -109,20 +111,20 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
         public void outerBlock(World world, int x, int y, int z) {
 
             bcFunc.outerBlock(world, x, y, z);
-            if (!Reference.isModularTile(world.getBlock(x, y, z).getUnlocalizedName()) &&
-                    world.getBlock(x, y, z) != null && world.getBlock(x, y, z) != Blocks.air) {
-                Block icon = world.getBlock(x, y, z);
+            Block block = world.getBlock(x,y,z);
+            if (block != null &&
+                    block != Blocks.air &&
+                    !Reference.isModularTile(block.getUnlocalizedName())) {
                 int metadata = world.getBlockMetadata(x, y, z);
 
-                world.setBlock(x, y, z, BlockManager.smelteryDummy);
+                world.setBlock(x, y, z, ApiBlockManager.dummyBlock);
 
                 world.markBlockForUpdate(x, y, z);
-                TileEntitySmelteryDummy dummyTE = (TileEntitySmelteryDummy) world.getTileEntity(x, y, z);
+                DummyTile dummyTE = (DummyTile) world.getTileEntity(x, y, z);
 
-                if (icon != BlockManager.smelteryDummy)
-                {
-                    dummyTE.icon = Block.getIdFromBlock(icon);
-                    dummyTE.metadata = metadata;
+                if (block != ApiBlockManager.dummyBlock) {
+                    dummyTE.setBlock(Block.getIdFromBlock(block));
+                    dummyTE.setMetadata(metadata);
                 }
                 world.markBlockForUpdate(x, y, z);
                 dummyTE.setCore(core);
@@ -160,9 +162,9 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
         @Override
         public void outerBlock(World world, int x, int y, int z) {
             Block block = world.getBlock(x, y, z);
-            TileEntity tileEntity = world.getTileEntity(x, y, z);
-            if (tileEntity instanceof TileEntitySmelteryDummy) {
-                TileEntitySmelteryDummy dummyTE = (TileEntitySmelteryDummy) tileEntity;
+            TileEntity te = world.getTileEntity(x, y, z);
+            if (te instanceof DummyTile) {
+                DummyTile dummyTE = (DummyTile) te;
                 block = dummyTE.getBlock();
             }
             GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(block);
@@ -207,15 +209,13 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
         @Override
         public void outerBlock(World world, int x, int y, int z) {
             Block blockId = world.getBlock(x,y,z);
-            if (blockId == BlockManager.smelteryDummy)
-            {
-                TileEntitySmelteryDummy dummyTE = (TileEntitySmelteryDummy) world.getTileEntity(x, y, z);
-
+            if (blockId == ApiBlockManager.dummyBlock) {
+                DummyTile dummyTE = (DummyTile) world.getTileEntity(x, y, z);
                 world.setBlock(x, y, z, dummyTE.getBlock());
-                world.setBlockMetadataWithNotify(x, y, z, dummyTE.metadata, 2);
-            } else if (blockId == BlockManager.smelteryDummyIO) {
-                TileEntitySmelteryDummy dummyTE = (TileEntitySmelteryDummy) world.getTileEntity(x, y, z);
-                dummyTE.coreY = -100;
+                world.setBlockMetadataWithNotify(x, y, z, dummyTE.getMetadata(), 2);
+            } else if (blockId == ApiBlockManager.dummyIOBlock) {
+                DummyIOTile te = (DummyIOTile) world.getTileEntity(x, y, z);
+                te.unsetCore();
             }
 
             world.markBlockForUpdate(x, y, z);

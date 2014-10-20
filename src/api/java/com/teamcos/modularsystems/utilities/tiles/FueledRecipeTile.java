@@ -2,7 +2,7 @@ package com.teamcos.modularsystems.utilities.tiles;
 
 import com.teamcos.modularsystems.collections.Doublet;
 import com.teamcos.modularsystems.collections.StandardValues;
-import com.teamcos.modularsystems.core.crafting.OreProcessingRecipies;
+import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.functions.BlockCountFunction;
 import com.teamcos.modularsystems.functions.ProperlyFormedWorldFunction;
@@ -168,7 +168,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Loca
             return null;
         }
         ItemStack output = values.getOutput();
-        ItemStack recipeResult = OreProcessingRecipies.getOutput(input);
+        ItemStack recipeResult = OreProcessingRegistry.getOutput(input);
         if (recipeResult == null) {
             return null;
         } else if (output != null && !output.isItemEqual(recipeResult)) {

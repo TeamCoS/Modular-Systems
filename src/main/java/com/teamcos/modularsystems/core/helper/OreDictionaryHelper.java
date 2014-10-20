@@ -1,6 +1,6 @@
 package com.teamcos.modularsystems.core.helper;
 
-import com.teamcos.modularsystems.core.crafting.OreProcessingRecipies;
+import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import com.teamcos.modularsystems.core.managers.ItemManager;
 import com.teamcos.modularsystems.oreprocessing.items.ItemDust;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -59,7 +59,7 @@ public class OreDictionaryHelper
             {
                 ItemStack input = OreDictionary.getOres(oresDefined[i]).get(0);
                 if(getOreOutput(input) != null)
-                    OreProcessingRecipies.addOreProcessingRecipe(input, getOreOutput(input));
+                    OreProcessingRegistry.addOreProcessingRecipe(input, getOreOutput(input));
             }
         }
     }

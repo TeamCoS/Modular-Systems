@@ -4,13 +4,17 @@ import com.teamcos.modularsystems.core.helper.BlockValueHelper;
 import com.teamcos.modularsystems.core.helper.ConfigHelper;
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.furnace.config.BlockConfig;
+import com.teamcos.modularsystems.manager.ApiBlockManager;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.Random;
+
 public class Reference {
 
+    public static final Random random = new Random();
     public static final int BASIC_EXPANSION = 0;
     public static final int STORAGE_EXPANSION = 1;
     public static final int HOPPING_STORAGE_EXPANSION = 2;
@@ -21,33 +25,27 @@ public class Reference {
     public static final int MAX_FURNACE_SIZE = 50;
 
     public static final String MOD_ID = "modularsystems";
+    public static final String CHANNEL_NAME = MOD_ID;
     public static final String MOD_NAME = "Modular Systems";
     public static final String VERSION = "@VERSION@";
-    public static final String CHANNEL_NAME = MOD_ID;
-
     //FURNACE: Blocks that are from my mod, used to prevent overlaying on reload
-    public static String[] modularTiles =
-            {BlockManager.furnaceDummy.getUnlocalizedName(),
+    public static String[] modularTiles = {
+                    ApiBlockManager.dummyBlock.getUnlocalizedName(),
+                    ApiBlockManager.dummyIOBlock.getUnlocalizedName(),
                     BlockManager.furnaceCraftingUpgrade.getUnlocalizedName(),
-                    BlockManager.furnaceDummyIO.getUnlocalizedName(),
-                    BlockManager.furnaceAddition.getUnlocalizedName(),
-                    BlockManager.smelteryDummy.getUnlocalizedName(),
-                    BlockManager.smelteryDummyIO.getUnlocalizedName()
+                    BlockManager.furnaceAddition.getUnlocalizedName()
             };
 
     //FURNACE: Checks if the block is valid to form furnace
-    public static boolean isValidBlock(String blockId)
-    {
+    public static boolean isValidBlock(String blockId) {
 
-        for(int i = 0; i < ConfigHelper.bannedBlocks.length; i++)
-        {
-            if(blockId.equals(ConfigHelper.bannedBlocks[i]))
-            {
+        for (int i = 0; i < ConfigHelper.bannedBlocks.length; i++) {
+            if (blockId.equals(ConfigHelper.bannedBlocks[i])) {
                 return false;
             }
         }
 
-        if(blockId.equals(BlockManager.furnaceCraftingUpgrade.getUnlocalizedName()) || blockId.equals(BlockManager.furnaceDummyIO.getUnlocalizedName()) || blockId.equals(Blocks.redstone_block.getUnlocalizedName()) || blockId.equals(BlockManager.furnaceAddition.getUnlocalizedName()))
+        if (blockId.equals(BlockManager.furnaceCraftingUpgrade.getUnlocalizedName()) || blockId.equals(ApiBlockManager.dummyIOBlock.getUnlocalizedName()) || blockId.equals(Blocks.redstone_block.getUnlocalizedName()) || blockId.equals(BlockManager.furnaceAddition.getUnlocalizedName()))
             return true;
 
         return true;
@@ -55,9 +53,8 @@ public class Reference {
 
     //FURNACE: Checks if it is an active dummy
     public static boolean isModularTile(String blockId) {
-        for(int i = 0; i < modularTiles.length; i++)
-        {
-            if(blockId.equals(modularTiles[i]))
+        for (int i = 0; i < modularTiles.length; i++) {
+            if (blockId.equals(modularTiles[i]))
                 return true;
         }
         return false;
@@ -66,13 +63,13 @@ public class Reference {
     //FURNACE
     public static boolean isBadBlock(Block blockId) {
 
-        if(blockId == BlockManager.furnaceCraftingUpgrade || blockId == BlockManager.furnaceDummyIO || blockId == Blocks.redstone_block || blockId == BlockManager.furnaceAddition || blockId == BlockManager.furnaceAddition)
+        if (blockId == BlockManager.furnaceCraftingUpgrade || blockId == ApiBlockManager.dummyIOBlock || blockId == Blocks.redstone_block || blockId == BlockManager.furnaceAddition || blockId == BlockManager.furnaceAddition)
             return false;
 
-        if(blockId.hasTileEntity(0))
+        if (blockId.hasTileEntity(0))
             return true;
 
-        if(!blockId.isNormalCube())
+        if (!blockId.isNormalCube())
             return true;
 
         int oreDictCheck = OreDictionary.getOreID(new ItemStack(blockId));
@@ -83,8 +80,7 @@ public class Reference {
     }
 
     //FURNACE: Gets Speed Multiplier
-    public static double getSpeedMultiplierForBlock(Block block, int count)
-    {
+    public static double getSpeedMultiplierForBlock(Block block, int count) {
         BlockConfig blockValue = BlockValueHelper.getBlockValueForBlock(block);
         BlockConfig materialValue = BlockValueHelper.getMaterialValueForBlock(block);
         if (blockValue != null) {
@@ -97,8 +93,7 @@ public class Reference {
     }
 
     //FURNACE: Gets Efficiency Multiplier
-    public static double getEfficiencyMultiplierForBlock(Block block, int count)
-    {
+    public static double getEfficiencyMultiplierForBlock(Block block, int count) {
         BlockConfig blockValue = BlockValueHelper.getBlockValueForBlock(block);
         BlockConfig materialValue = BlockValueHelper.getMaterialValueForBlock(block);
         if (blockValue != null) {

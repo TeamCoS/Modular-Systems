@@ -5,7 +5,7 @@ import codechicken.nei.ItemList;
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.teamcos.modularsystems.core.crafting.OreProcessingRecipies;
+import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -27,7 +27,7 @@ public class RecipeHandlerOreProcessing extends TemplateRecipeHandler
         public PositionedStack input;
         public PositionedStack output;
 
-        public CachedOreProcessingRecipe(OreProcessingRecipies.OreProcessingRecipe recipe)
+        public CachedOreProcessingRecipe(OreProcessingRegistry.OreProcessingRecipe recipe)
         {
             this.input = new PositionedStack(recipe.input, 50, 7);
             this.output = new PositionedStack(recipe.output, 109, 24);
@@ -143,7 +143,7 @@ public class RecipeHandlerOreProcessing extends TemplateRecipeHandler
     {
         if (outputId.equals(this.getRecipeID()))
         {
-            for (OreProcessingRecipies.OreProcessingRecipe recipe : OreProcessingRecipies.recipes)
+            for (OreProcessingRegistry.OreProcessingRecipe recipe : OreProcessingRegistry.recipes)
             {
                 this.arecipes.add(new CachedOreProcessingRecipe(recipe));
             }
@@ -157,7 +157,7 @@ public class RecipeHandlerOreProcessing extends TemplateRecipeHandler
     @Override
     public void loadCraftingRecipes (ItemStack result)
     {
-        for (OreProcessingRecipies.OreProcessingRecipe re : OreProcessingRecipies.recipes)
+        for (OreProcessingRegistry.OreProcessingRecipe re : OreProcessingRegistry.recipes)
         {
             if (NEIServerUtils.areStacksSameTypeCrafting(re.output, result))
             {
@@ -169,7 +169,7 @@ public class RecipeHandlerOreProcessing extends TemplateRecipeHandler
     @Override
     public void loadUsageRecipes (ItemStack ingred)
     {
-        for (OreProcessingRecipies.OreProcessingRecipe recipe : OreProcessingRecipies.recipes)
+        for (OreProcessingRegistry.OreProcessingRecipe recipe : OreProcessingRegistry.recipes)
         {
             if (NEIServerUtils.areStacksSameTypeCrafting(recipe.input, ingred))
             {

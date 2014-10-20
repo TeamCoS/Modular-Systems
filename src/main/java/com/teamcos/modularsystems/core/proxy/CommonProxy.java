@@ -10,7 +10,6 @@ import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
 import com.teamcos.modularsystems.oreprocessing.container.ContainerModularOreProcessing;
 import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryCore;
-import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryDummy;
 import com.teamcos.modularsystems.storage.containers.ContainerModularStorage;
 import com.teamcos.modularsystems.storage.tiles.TileEntityStorageCore;
 import com.teamcos.modularsystems.storage.tiles.TileEntityStorageExpansion;
@@ -20,19 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class CommonProxy implements IGuiHandler
-{
-	public void registerTileEntities()
-	{
-		GameRegistry.registerTileEntity(TileEntityFurnaceCore.class, "modularsystems:tileEntityFurnaceCore");
-		GameRegistry.registerTileEntity(TileEntityFurnaceDummy.class, "modularsystems:tileEntityFurnaceDummy");
-		GameRegistry.registerTileEntity(TileEntityStorageCore.class, "modularsystems:tileEntityStorageCore");
-		GameRegistry.registerTileEntity(TileEntityStorageExpansion.class, "modularsystems:tileEntityStorageExpansion");
-		GameRegistry.registerTileEntity(TileEntityEnchantmentAlter.class, "modularsystems:tileEntityEnchantmentAlter");
-        GameRegistry.registerTileEntity(TileEntitySmelteryCore.class, "modularsystems:tileEntitySmetleryCore");
-        GameRegistry.registerTileEntity(TileEntitySmelteryDummy.class, "modularsystems:tileEntitySmelteryDummy");
-
-	}
+public class CommonProxy implements IGuiHandler {
 
 
 	@Override

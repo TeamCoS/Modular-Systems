@@ -1,42 +1,46 @@
 package com.teamcos.modularsystems.core.managers;
 
 import com.teamcos.modularsystems.core.ModularSystems;
-import com.teamcos.modularsystems.core.crafting.OreProcessingRecipies;
 import com.teamcos.modularsystems.core.helper.ConfigHelper;
 import com.teamcos.modularsystems.core.helper.OreDictionaryHelper;
 import com.teamcos.modularsystems.enchanting.blocks.BlockEnchantmentAlter;
-import com.teamcos.modularsystems.furnace.blocks.*;
+import com.teamcos.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
+import com.teamcos.modularsystems.furnace.blocks.BlockCrafter;
+import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceAddition;
+import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceCore;
+import com.teamcos.modularsystems.furnace.blocks.BlockTextureOverlay;
+import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceCore;
+import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
+import com.teamcos.modularsystems.manager.ApiModuleManager;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
-import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryDummy;
-import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryDummyIO;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryOverlay;
+import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryCore;
+import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import com.teamcos.modularsystems.storage.blocks.*;
+import com.teamcos.modularsystems.storage.tiles.TileEntityStorageCore;
+import com.teamcos.modularsystems.storage.tiles.TileEntityStorageExpansion;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
-public class ModuleManager
-{
-    public static void enableFurnaceModule()
-    {
+public class ModuleManager {
+    public static void enableFurnaceModule() {
+        ApiModuleManager.enableFurnaceModule();
         BlockManager.furnaceCore = new BlockFurnaceCore(false).setBlockName("modularsystems:blockFurnaceCore").setCreativeTab(ModularSystems.tabModularSystems);
         BlockManager.furnaceCoreActive = new BlockFurnaceCore(true).setLightLevel(1F).setBlockName("modularsystems:blockFurnaceCoreActive");
-        BlockManager. furnaceDummy = new BlockFurnaceDummy();
         BlockManager.furnaceCraftingUpgrade = new BlockCrafter();
-        BlockManager.furnaceDummyIO = new BlockFurnaceDummyIO();
         BlockManager.furnaceAddition = new BlockFurnaceAddition();
-        if(ConfigHelper.useTextures)
+        if (ConfigHelper.useTextures) {
             BlockManager.overLayTexture = new BlockTextureOverlay(ConfigHelper.textureName, "overLayTexture", true);
-        else
+        } else {
             BlockManager.overLayTexture = new BlockTextureOverlay("modularsystems:custom_overlay", "overLayTexture", true);
+        }
 
         GameRegistry.registerBlock(BlockManager.furnaceCore, "blockFurnaceCore");
         GameRegistry.registerBlock(BlockManager.furnaceCoreActive, "blockFurnaceCoreActive");
-        GameRegistry.registerBlock(BlockManager.furnaceDummy, "blockFurnaceDummy");
         GameRegistry.registerBlock(BlockManager.furnaceCraftingUpgrade, "blockFurnaceCraftingUpgrade");
-        GameRegistry.registerBlock(BlockManager.furnaceDummyIO, "blockFurnaceDummyIO");
         GameRegistry.registerBlock(BlockManager.furnaceAddition, "blockFurnaceAddition");
         GameRegistry.registerBlock(BlockManager.overLayTexture, "overLayTexture");
 
@@ -44,11 +48,6 @@ public class ModuleManager
                 "XXX",
                 "XxX",
                 "XXX", 'X', Items.iron_ingot, 'x', Blocks.furnace);
-
-        CraftingManager.getInstance().addRecipe(new ItemStack(BlockManager.furnaceDummyIO, 1),
-                "XXX",
-                "XxX",
-                "XXX", 'X', Blocks.cobblestone, 'x', Blocks.dispenser);
 
         CraftingManager.getInstance().addRecipe(new ItemStack(BlockManager.furnaceAddition, 1),
                 "XXX",
@@ -59,10 +58,13 @@ public class ModuleManager
                 "XxX",
                 "xCx",
                 "XxX", 'X', Items.iron_ingot, 'x', new ItemStack(Items.dye, 9, 4), 'C', Blocks.crafting_table);
+
+        GameRegistry.registerTileEntity(TileEntityFurnaceCore.class, "modularsystems:tileEntityFurnaceCore");
+        GameRegistry.registerTileEntity(TileEntityFurnaceDummy.class, "modularsystems:tileEntityFurnaceDummy");
     }
 
-    public static void enableStorageModule()
-    {
+    public static void enableStorageModule() {
+        ApiModuleManager.enableStorageModule();
         BlockManager.storageCore = new BlockStorageCore();
         BlockManager.basicExpansion = new BlockBasicExpansion();
         BlockManager.storageExpansion = new BlockCapacityExpansion();
@@ -108,10 +110,13 @@ public class ModuleManager
                 "XXX",
                 "XxX",
                 "XXX", 'X', Items.book, 'x', BlockManager.basicExpansion);
+
+        GameRegistry.registerTileEntity(TileEntityStorageCore.class, "modularsystems:tileEntityStorageCore");
+        GameRegistry.registerTileEntity(TileEntityStorageExpansion.class, "modularsystems:tileEntityStorageExpansion");
     }
 
-    public static void enableEnchantingModule()
-    {
+    public static void enableEnchantingModule() {
+        ApiModuleManager.enableEnchantingModule();
         BlockManager.enchantmentAlter = new BlockEnchantmentAlter();
 
         GameRegistry.registerBlock(BlockManager.enchantmentAlter, "blockEnchantmentAlter");
@@ -120,23 +125,22 @@ public class ModuleManager
                 "   ",
                 " x ",
                 "XeX", 'X', Blocks.emerald_block, 'x', Items.book, 'e', Blocks.enchanting_table);
+
+        GameRegistry.registerTileEntity(TileEntityEnchantmentAlter.class, "modularsystems:tileEntityEnchantmentAlter");
     }
 
-    public static void enableOreProcessingModule()
-    {
+    public static void enableOreProcessingModule() {
+        ApiModuleManager.enableOreProcessing();
+
         OreDictionaryHelper.initDustsAsNeeded();
-        OreProcessingRecipies.addOreProcessingRecipe(Blocks.cobblestone, Blocks.sand);
+        OreProcessingRegistry.addOreProcessingRecipe(Blocks.cobblestone, Blocks.sand);
 
         BlockManager.smelteryCore = new BlockSmelteryCore(false).setBlockName("modularsystems:blockSmelteryCore").setCreativeTab(ModularSystems.tabModularSystems);
         BlockManager.smelteryCoreActive = new BlockSmelteryCore(true).setBlockName("modularsystems:blockSmelteryCoreActive").setLightLevel(1.0F);
-        BlockManager.smelteryDummy = new BlockSmelteryDummy();
-        BlockManager.smelteryDummyIO = new BlockSmelteryDummyIO();
         BlockManager.smeleryOverlay = new BlockSmelteryOverlay();
 
         GameRegistry.registerBlock(BlockManager.smelteryCore, "smelteryCore");
         GameRegistry.registerBlock(BlockManager.smelteryCoreActive, "smelteryCoreActive");
-        GameRegistry.registerBlock(BlockManager.smelteryDummy, "smelteryDummy");
-        GameRegistry.registerBlock(BlockManager.smelteryDummyIO, "smelteryDummyIO");
         GameRegistry.registerBlock(BlockManager.smeleryOverlay, "smelteryOverlay");
 
         CraftingManager.getInstance().addRecipe(new ItemStack(BlockManager.smelteryCore, 1),
@@ -144,9 +148,6 @@ public class ModuleManager
                 "XxX",
                 "XXX", 'X', Items.flint, 'x', Blocks.furnace);
 
-        CraftingManager.getInstance().addRecipe(new ItemStack(BlockManager.smelteryDummyIO, 1),
-                "XXX",
-                "XxX",
-                "XXX", 'X', Items.flint, 'x', Blocks.dispenser);
+        GameRegistry.registerTileEntity(TileEntitySmelteryCore.class, "modularsystems:tileEntitySmetleryCore");
     }
 }

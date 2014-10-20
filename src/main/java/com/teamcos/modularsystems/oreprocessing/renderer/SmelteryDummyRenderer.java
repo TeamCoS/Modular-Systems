@@ -2,7 +2,7 @@ package com.teamcos.modularsystems.oreprocessing.renderer;
 
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
-import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryDummy;
+import com.teamcos.modularsystems.manager.ApiBlockManager;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -82,7 +82,7 @@ public class SmelteryDummyRenderer implements ISimpleBlockRenderingHandler
 
         IIcon output;
 
-        if(block == BlockManager.smelteryCore || block == BlockManager.smelteryDummyIO)
+        if(block == BlockManager.smelteryCore || block == ApiBlockManager.dummyIOBlock)
             output = renderer.getBlockIconFromSideAndMetadata(BlockManager.smeleryOverlay, 0, 0);
         else
             output = renderer.getBlockIconFromSideAndMetadata(block, 0,0);
@@ -98,7 +98,7 @@ public class SmelteryDummyRenderer implements ISimpleBlockRenderingHandler
         if(ClientProxy.renderPass == 0)
         {
             World world1 = Minecraft.getMinecraft().theWorld;
-            TileEntitySmelteryDummy dummy = null;
+            DummyTile dummy = null;
 
             if(block == BlockManager.smelteryDummy)
             {

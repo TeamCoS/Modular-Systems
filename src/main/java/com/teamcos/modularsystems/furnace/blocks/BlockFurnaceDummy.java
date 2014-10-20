@@ -22,6 +22,7 @@ public class BlockFurnaceDummy extends BlockBasicDummy
 		setHardness(3.5f);
 		
 	}
+
 	public int meta = 0;
 	Random furnaceRand = new Random();
 	

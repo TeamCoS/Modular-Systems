@@ -4,8 +4,9 @@ import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.functions.BlockCountFunction;
 import com.teamcos.modularsystems.functions.WorldFunction;
-import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceCore;
+import com.teamcos.modularsystems.manager.ApiBlockManager;
+import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -159,7 +160,7 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
         @Override
         public void outerBlock(World world, int x, int y, int z) {
             Block blockId = world.getBlock(x, y, z);
-            if (blockId == BlockManager.furnaceDummy) {
+            if (blockId == ApiBlockManager.dummyBlock) {
                 TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) world.getTileEntity(x, y, z);
                 Block block = dummyTE.getBlock();
                 world.setBlock(x, y, z, block);
@@ -170,7 +171,7 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
             } else if (blockId == BlockManager.furnaceAddition) {
                 TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) world.getTileEntity(x, y, z);
                 dummyTE.coreY = -100;
-            } else if (blockId == BlockManager.furnaceDummyIO) {
+            } else if (blockId == ApiBlockManager.dummyIOBlock) {
                 TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) world.getTileEntity(x, y, z);
                 dummyTE.coreY = -100;
             }
@@ -215,12 +216,12 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
 
                 Block icon = world.getBlock(x, y, z);
                 int metadata = world.getBlockMetadata(x, y, z);
-                world.setBlock(x, y, z, BlockManager.furnaceDummy);
+                world.setBlock(x, y, z, ApiBlockManager.dummyBlock);
 
                 world.markBlockForUpdate(x, y, z);
                 TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy) world.getTileEntity(x, y, z);
 
-                if (icon == BlockManager.furnaceDummy) {
+                if (icon == ApiBlockManager.dummyBlock) {
                     icon = Block.getBlockById(dummyTE.icon);
                     metadata = dummyTE.metadata;
                 } else {

@@ -1,5 +1,6 @@
 package com.teamcos.modularsystems.helpers;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
@@ -178,5 +179,18 @@ public class Coord implements Cloneable {
 
     public boolean isZAligned(Coord pos) {
         return pos != null && z == pos.z;
+    }
+
+    public static Coord readFromNBT(NBTTagCompound tagCompound) {
+        int x = tagCompound.getInteger("CoreX");
+        int y = tagCompound.getInteger("CoreY");
+        int z = tagCompound.getInteger("CoreZ");
+        return new Coord(x, y, z);
+    }
+
+    public void writeToNBT(NBTTagCompound tagCompound) {
+        tagCompound.setInteger("CoreX", x);
+        tagCompound.setInteger("CoreY", y);
+        tagCompound.setInteger("CoreZ", z);
     }
 }

@@ -1,4 +1,4 @@
-package com.teamcos.modularsystems.core.crafting;
+package com.teamcos.modularsystems.registries;
 
 import com.teamcos.modularsystems.core.helper.OreDictionaryHelper;
 import net.minecraft.block.Block;
@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 
-public class OreProcessingRecipies
+public class OreProcessingRegistry
 {
     public static ArrayList<OreProcessingRecipe> recipes = new ArrayList<OreProcessingRecipe>();
 
