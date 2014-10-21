@@ -14,14 +14,13 @@ public class BlockFurnaceIO extends DummyIOBlock
     }
 
     @Override
-    public int getRenderType()
-    {
-        return ClientProxy.furnaceDummyRenderType;
+    public int getRenderType() {
+//        return ClientProxy.furnaceDummyRenderType;
+        return ClientProxy.smelteryDummyRenderType;
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
+    public void registerBlockIcons(IIconRegister iconRegister) {
         blockIcon = iconRegister.registerIcon("dispenser_front_vertical");
     }
 }

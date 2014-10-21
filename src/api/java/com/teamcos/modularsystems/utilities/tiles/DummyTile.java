@@ -5,6 +5,7 @@ import com.teamcos.modularsystems.core.util.WorldUtil;
 import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import com.teamcos.modularsystems.utilities.block.DummyIOBlock;
+import com.teamcos.modularsystems.utilities.block.ModularSystemsTile;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -15,9 +16,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class DummyTile extends ModularTileEntity implements ISidedInventory {
+public class DummyTile extends ModularTileEntity implements ISidedInventory, ModularSystemsTile {
 
     private Coord coreLoc = new Coord(-100, -100, -100);
     private int icon = 1;
@@ -249,5 +251,25 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory {
             case 2: return new ChatComponentText(EnumChatFormatting.GRAY + "Slot is Output");
             default: return new ChatComponentText(EnumChatFormatting.AQUA + "Slot is Fuel");
         }
+    }
+
+    @Override
+    public World getWorld() {
+        return worldObj;
+    }
+
+    @Override
+    public int getX() {
+        return xCoord;
+    }
+
+    @Override
+    public int getY() {
+        return yCoord;
+    }
+
+    @Override
+    public int getZ() {
+        return zCoord;
     }
 }

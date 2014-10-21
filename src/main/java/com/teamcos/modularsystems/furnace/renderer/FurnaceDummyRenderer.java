@@ -76,54 +76,48 @@ public class FurnaceDummyRenderer implements ISimpleBlockRenderingHandler {
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 	}
 
-	private static IIcon getOveryLay(Block block, RenderBlocks renderer)
-	{
-
+	private static IIcon getOveryLay(Block block, RenderBlocks renderer) {
 		IIcon output;
 
-		if(block == BlockManager.furnaceCore || block == BlockManager.furnaceCraftingUpgrade || block == BlockManager.furnaceDummyIO || block == BlockManager.furnaceAddition)
-			output = renderer.getBlockIconFromSideAndMetadata(BlockManager.overLayTexture, 0, 0);
-		else 
-			output = renderer.getBlockIconFromSideAndMetadata(block, 0,0);
+		if(block == BlockManager.furnaceCore || block == BlockManager.furnaceCraftingUpgrade || block == BlockManager.furnaceDummyIO || block == BlockManager.furnaceAddition) {
+            output = renderer.getBlockIconFromSideAndMetadata(BlockManager.overLayTexture, 0, 0);
+        } else {
+            output = renderer.getBlockIconFromSideAndMetadata(block, 0, 0);
+        }
 
 		return output;
 	}
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
-			Block block, int modelId, RenderBlocks renderer) {
+	public boolean renderWorldBlock(
+            IBlockAccess world,
+            int x,
+            int y,
+            int z,
+			Block block,
+            int modelId,
+            RenderBlocks renderer) {
 
 		//which render pass are we doing?
-		if(ClientProxy.renderPass == 0)
-		{
+		if(ClientProxy.renderPass == 0) {
 			World world1 = Minecraft.getMinecraft().theWorld;
-			DummyTile dummy = null;
+			DummyTile dummy;
 
 			if(block == BlockManager.furnaceDummy) {
 				dummy = (DummyTile) world1.getTileEntity(x, y, z);
-				renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMetadata()));
-			}
-
-			if(block == BlockManager.furnaceDummyIO)
-				renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
-
-			if(block == BlockManager.furnaceCraftingUpgrade)
-				renderer.renderBlockUsingTexture(Blocks.crafting_table, x, y, z, Blocks.crafting_table.getIcon(1, 0));
-
-			if(block == BlockManager.furnaceAddition)
-				renderer.renderBlockUsingTexture(Blocks.furnace, x, y, z, Blocks.furnace.getIcon(2, 0));
-
-			if(block == BlockManager.furnaceCore)
-			{
+                renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMetadata()));
+			} else if(block == BlockManager.furnaceDummyIO) {
+                renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
+            } else if(block == BlockManager.furnaceCraftingUpgrade) {
+                renderer.renderBlockUsingTexture(Blocks.crafting_table, x, y, z, Blocks.crafting_table.getIcon(1, 0));
+            } else if(block == BlockManager.furnaceAddition) {
+                renderer.renderBlockUsingTexture(Blocks.furnace, x, y, z, Blocks.furnace.getIcon(2, 0));
+            } else if(block == BlockManager.furnaceCore) {
 				renderer.renderBlockAllFaces(Blocks.furnace, x, y, z);   
-			}
-
-			if(block == BlockManager.furnaceCoreActive)
-				renderer.renderBlockAllFaces(Blocks.lit_furnace, x, y, z);    
-
-		}
-		else                   
-		{
+			} else if(block == BlockManager.furnaceCoreActive) {
+                renderer.renderBlockAllFaces(Blocks.lit_furnace, x, y, z);
+            }
+		} else {
 			renderer.renderStandardBlock(BlockManager.overLayTexture, x, y, z);
 		}
 
@@ -132,7 +126,6 @@ public class FurnaceDummyRenderer implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public int getRenderId() {
-
 		return ClientProxy.furnaceDummyRenderType;
 	}
 

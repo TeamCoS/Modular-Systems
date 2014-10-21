@@ -38,6 +38,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Loca
     protected abstract void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z);
     protected abstract int getItemBurnTime(ItemStack is);
     protected abstract ItemStack recipe(ItemStack is);
+    public abstract Block getOverlay();
     public abstract Block getDummyBlock();
 
     public FueledRecipeTile() {

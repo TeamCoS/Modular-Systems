@@ -20,8 +20,6 @@ import java.util.Random;
 
 public class DummyBlock extends BlockContainer {
 
-    public int meta = 0;
-
     public DummyBlock(Material material, boolean inTab) {
         super(material);
         if (inTab) setCreativeTab(ModularSystems.tabModularSystems);

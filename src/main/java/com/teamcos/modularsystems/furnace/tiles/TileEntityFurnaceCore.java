@@ -40,6 +40,11 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
     }
 
     @Override
+    public Block getOverlay() {
+        return BlockManager.overLayTexture;
+    }
+
+    @Override
     public Block getDummyBlock()
     {
         return BlockManager.furnaceDummy;

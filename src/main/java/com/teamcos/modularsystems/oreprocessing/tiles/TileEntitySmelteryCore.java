@@ -39,6 +39,11 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
     }
 
     @Override
+    public Block getOverlay() {
+        return BlockManager.smeleryOverlay;
+    }
+
+    @Override
     public Block getDummyBlock()
     {
         return BlockManager.smelteryDummy;
