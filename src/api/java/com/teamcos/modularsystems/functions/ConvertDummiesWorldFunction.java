@@ -1,7 +1,6 @@
 package com.teamcos.modularsystems.functions;
 
 import com.teamcos.modularsystems.core.lib.Reference;
-import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import net.minecraft.block.Block;
@@ -28,12 +27,12 @@ public class ConvertDummiesWorldFunction implements WorldFunction {
                 !Reference.isModularTile(block.getUnlocalizedName())) {
             int metadata = world.getBlockMetadata(x, y, z);
 
-            world.setBlock(x, y, z, ApiBlockManager.dummyBlock);
+            world.setBlock(x, y, z, core.getDummyBlock());
 
             world.markBlockForUpdate(x, y, z);
             DummyTile dummyTE = (DummyTile) world.getTileEntity(x, y, z);
 
-            if (block != ApiBlockManager.dummyBlock) {
+            if (block != core.getDummyBlock()) {
                 dummyTE.setBlock(Block.getIdFromBlock(block));
                 dummyTE.setMetadata(metadata);
             }

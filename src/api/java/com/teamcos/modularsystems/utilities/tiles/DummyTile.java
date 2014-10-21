@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class DummyTile extends ModularTileEntity implements ISidedInventory {
 
-    private Coord coreLoc;
+    private Coord coreLoc = new Coord(-100, -100, -100);
     private int icon = 1;
     private int coolDown = 80;
     private int slot = 4;

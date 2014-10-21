@@ -9,6 +9,7 @@ import com.teamcos.modularsystems.helpers.Locatable;
 import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -37,6 +38,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Loca
     protected abstract void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z);
     protected abstract int getItemBurnTime(ItemStack is);
     protected abstract ItemStack recipe(ItemStack is);
+    public abstract Block getDummyBlock();
 
     public FueledRecipeTile() {
         this.values = new StandardValues(this, new BlockCountWorldFunction());
@@ -89,7 +91,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Loca
                 xCoord,
                 yCoord,
                 zCoord,
-                new RevertDummiesWorldFunction(),
+                new RevertDummiesWorldFunction(this),
                 Reference.MAX_FURNACE_SIZE
         );
 

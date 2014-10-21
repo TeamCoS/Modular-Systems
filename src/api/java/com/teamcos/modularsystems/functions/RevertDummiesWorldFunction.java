@@ -3,15 +3,21 @@ package com.teamcos.modularsystems.functions;
 import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
+import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
 public class RevertDummiesWorldFunction implements WorldFunction {
+    private final FueledRecipeTile core;
+
+    public RevertDummiesWorldFunction(FueledRecipeTile core) {
+        this.core = core;
+    }
 
     @Override
     public void outerBlock(World world, int x, int y, int z) {
         Block blockId = world.getBlock(x,y,z);
-        if (blockId == ApiBlockManager.dummyBlock) {
+        if (blockId == core.getDummyBlock()) {
             DummyTile dummyTE = (DummyTile) world.getTileEntity(x, y, z);
             world.setBlock(x, y, z, dummyTE.getBlock());
             world.setBlockMetadataWithNotify(x, y, z, dummyTE.getMetadata(), 2);
@@ -40,6 +46,6 @@ public class RevertDummiesWorldFunction implements WorldFunction {
 
     @Override
     public WorldFunction copy() {
-        return new RevertDummiesWorldFunction();
+        return new RevertDummiesWorldFunction(core);
     }
 }

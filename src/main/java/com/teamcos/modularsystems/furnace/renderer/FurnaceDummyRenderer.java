@@ -2,7 +2,6 @@ package com.teamcos.modularsystems.furnace.renderer;
 
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
-import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -82,7 +81,7 @@ public class FurnaceDummyRenderer implements ISimpleBlockRenderingHandler {
 
 		IIcon output;
 
-		if(block == BlockManager.furnaceCore || block == BlockManager.furnaceCraftingUpgrade || block == ApiBlockManager.dummyIOBlock || block == BlockManager.furnaceAddition)
+		if(block == BlockManager.furnaceCore || block == BlockManager.furnaceCraftingUpgrade || block == BlockManager.furnaceDummyIO || block == BlockManager.furnaceAddition)
 			output = renderer.getBlockIconFromSideAndMetadata(BlockManager.overLayTexture, 0, 0);
 		else 
 			output = renderer.getBlockIconFromSideAndMetadata(block, 0,0);
@@ -100,13 +99,12 @@ public class FurnaceDummyRenderer implements ISimpleBlockRenderingHandler {
 			World world1 = Minecraft.getMinecraft().theWorld;
 			DummyTile dummy = null;
 
-			if(block == ApiBlockManager.dummyBlock) {
+			if(block == BlockManager.furnaceDummy) {
 				dummy = (DummyTile) world1.getTileEntity(x, y, z);
 				renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMetadata()));
-
 			}
 
-			if(block == ApiBlockManager.dummyIOBlock)
+			if(block == BlockManager.furnaceDummyIO)
 				renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
 
 			if(block == BlockManager.furnaceCraftingUpgrade)
@@ -126,7 +124,7 @@ public class FurnaceDummyRenderer implements ISimpleBlockRenderingHandler {
 		}
 		else                   
 		{
-				renderer.renderStandardBlock(BlockManager.overLayTexture, x, y, z);
+			renderer.renderStandardBlock(BlockManager.overLayTexture, x, y, z);
 		}
 
 		return true;

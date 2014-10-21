@@ -11,7 +11,6 @@ public class DummyIOBlock extends DummyBlock {
 
     public DummyIOBlock(Material material, boolean inTab) {
         super(material, inTab);
-        setBlockName("modularsystems:blockSmelteryIO");
         setStepSound(Block.soundTypeStone);
         setHardness(3.5f);
     }

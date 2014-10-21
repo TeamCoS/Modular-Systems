@@ -2,7 +2,6 @@ package com.teamcos.modularsystems.oreprocessing.renderer;
 
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
-import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -83,7 +82,7 @@ public class SmelteryDummyRenderer implements ISimpleBlockRenderingHandler
 
         IIcon output;
 
-        if(block == BlockManager.smelteryCore || block == ApiBlockManager.dummyIOBlock)
+        if(block == BlockManager.smelteryCore || block == BlockManager.smelteryDummyIO)
             output = renderer.getBlockIconFromSideAndMetadata(BlockManager.smeleryOverlay, 0, 0);
         else
             output = renderer.getBlockIconFromSideAndMetadata(block, 0,0);
@@ -99,12 +98,12 @@ public class SmelteryDummyRenderer implements ISimpleBlockRenderingHandler
         if(ClientProxy.renderPass == 0) {
             World world1 = Minecraft.getMinecraft().theWorld;
 
-            if(block == ApiBlockManager.dummyBlock) {
+            if(block == BlockManager.smelteryDummy) {
                 DummyTile dummy = (DummyTile) world1.getTileEntity(x, y, z);
                 renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMetadata()));
             }
 
-            if(block == ApiBlockManager.dummyIOBlock) {
+            if(block == BlockManager.smelteryDummyIO) {
                 renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
             }
 

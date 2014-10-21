@@ -1,8 +1,10 @@
 package com.teamcos.modularsystems.furnace.tiles;
 
+import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,6 +37,12 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
 
     protected ItemStack recipe(ItemStack is) {
         return FurnaceRecipes.smelting().getSmeltingResult(is);
+    }
+
+    @Override
+    public Block getDummyBlock()
+    {
+        return BlockManager.furnaceDummy;
     }
 
     @Override
@@ -98,3 +106,4 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
         values.checkInventorySlots();
     }
 }
+

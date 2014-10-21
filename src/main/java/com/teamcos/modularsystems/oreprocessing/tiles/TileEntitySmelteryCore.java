@@ -1,9 +1,11 @@
 package com.teamcos.modularsystems.oreprocessing.tiles;
 
+import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
 import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -34,6 +36,12 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
     @Override
     protected ItemStack recipe(ItemStack is) {
         return OreProcessingRegistry.getOutput(is);
+    }
+
+    @Override
+    public Block getDummyBlock()
+    {
+        return BlockManager.smelteryDummy;
     }
 
     //Reworked for I/O

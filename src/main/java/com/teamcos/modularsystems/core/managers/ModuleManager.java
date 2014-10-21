@@ -5,13 +5,12 @@ import com.teamcos.modularsystems.core.helper.ConfigHelper;
 import com.teamcos.modularsystems.core.helper.OreDictionaryHelper;
 import com.teamcos.modularsystems.enchanting.blocks.BlockEnchantmentAlter;
 import com.teamcos.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
-import com.teamcos.modularsystems.furnace.blocks.BlockCrafter;
-import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceAddition;
-import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceCore;
-import com.teamcos.modularsystems.furnace.blocks.BlockTextureOverlay;
+import com.teamcos.modularsystems.furnace.blocks.*;
 import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.teamcos.modularsystems.manager.ApiModuleManager;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
+import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryDummy;
+import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryIO;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryOverlay;
 import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryCore;
 import com.teamcos.modularsystems.registries.OreProcessingRegistry;
@@ -31,6 +30,8 @@ public class ModuleManager {
         BlockManager.furnaceCoreActive = new BlockFurnaceCore(true).setLightLevel(1F).setBlockName("modularsystems:blockFurnaceCoreActive");
         BlockManager.furnaceCraftingUpgrade = new BlockCrafter();
         BlockManager.furnaceAddition = new BlockFurnaceAddition();
+        BlockManager.furnaceDummy = new BlockFurnaceDummy();
+        BlockManager.furnaceDummyIO = new BlockFurnaceIO();
         if (ConfigHelper.useTextures) {
             BlockManager.overLayTexture = new BlockTextureOverlay(ConfigHelper.textureName, "overLayTexture", true);
         } else {
@@ -39,6 +40,8 @@ public class ModuleManager {
 
         GameRegistry.registerBlock(BlockManager.furnaceCore, "blockFurnaceCore");
         GameRegistry.registerBlock(BlockManager.furnaceCoreActive, "blockFurnaceCoreActive");
+        GameRegistry.registerBlock(BlockManager.furnaceDummy, "blockFurnaceDummy");
+        GameRegistry.registerBlock(BlockManager.furnaceDummyIO, "blockFurnaceDummyIO");
         GameRegistry.registerBlock(BlockManager.furnaceCraftingUpgrade, "blockFurnaceCraftingUpgrade");
         GameRegistry.registerBlock(BlockManager.furnaceAddition, "blockFurnaceAddition");
         GameRegistry.registerBlock(BlockManager.overLayTexture, "overLayTexture");
@@ -135,10 +138,14 @@ public class ModuleManager {
 
         BlockManager.smelteryCore = new BlockSmelteryCore(false).setBlockName("modularsystems:blockSmelteryCore").setCreativeTab(ModularSystems.tabModularSystems);
         BlockManager.smelteryCoreActive = new BlockSmelteryCore(true).setBlockName("modularsystems:blockSmelteryCoreActive").setLightLevel(1.0F);
+        BlockManager.smelteryDummy = new BlockSmelteryDummy();
+        BlockManager.smelteryDummyIO = new BlockSmelteryIO();
         BlockManager.smeleryOverlay = new BlockSmelteryOverlay();
 
         GameRegistry.registerBlock(BlockManager.smelteryCore, "smelteryCore");
         GameRegistry.registerBlock(BlockManager.smelteryCoreActive, "smelteryCoreActive");
+        GameRegistry.registerBlock(BlockManager.smelteryDummy, "smelteryDummy");
+        GameRegistry.registerBlock(BlockManager.smelteryDummyIO, "smelteryDummyIO");
         GameRegistry.registerBlock(BlockManager.smeleryOverlay, "smelteryOverlay");
 
         CraftingManager.getInstance().addRecipe(new ItemStack(BlockManager.smelteryCore, 1),
