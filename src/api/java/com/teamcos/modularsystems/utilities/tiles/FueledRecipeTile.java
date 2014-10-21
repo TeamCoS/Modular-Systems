@@ -5,8 +5,8 @@ import com.teamcos.modularsystems.collections.StandardValues;
 import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.functions.*;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
-import com.teamcos.modularsystems.helpers.Locatable;
 import com.teamcos.modularsystems.registries.OreProcessingRegistry;
+import com.teamcos.modularsystems.utilities.block.ModularSystemsTile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public abstract class FueledRecipeTile extends ModularTileEntity implements Locatable, ISidedInventory {
+public abstract class FueledRecipeTile extends ModularTileEntity implements ModularSystemsTile, ISidedInventory {
 
     protected static final Random random = new Random();
 
@@ -574,4 +574,11 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Loca
     public void setDirty() {
         isDirty = true;
     }
+
+    public FueledRecipeTile getCore() {
+        return this;
+    }
+
+    @Override
+    public void setCore(FueledRecipeTile tile) {}
 }

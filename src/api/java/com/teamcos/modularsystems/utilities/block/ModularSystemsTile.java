@@ -5,4 +5,5 @@ import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 
 public interface ModularSystemsTile extends Locatable {
     FueledRecipeTile getCore();
+    void setCore(FueledRecipeTile tile);
 }

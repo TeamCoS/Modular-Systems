@@ -20,8 +20,7 @@ public class BlockSmelteryIO extends DummyIOBlock
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
+    public void registerBlockIcons(IIconRegister iconRegister) {
         blockIcon = iconRegister.registerIcon("dispenser_front_vertical");
     }
 }

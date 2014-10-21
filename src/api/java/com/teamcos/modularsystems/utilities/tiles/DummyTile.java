@@ -65,7 +65,9 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
     {
         super.writeToNBT(tagCompound);
 
-        coreLoc.writeToNBT(tagCompound);
+        if (coreLoc != null) {
+            coreLoc.writeToNBT(tagCompound);
+        }
 
         tagCompound.setInteger("Slot", slot);
         tagCompound.setInteger("Icon", icon);

@@ -2,6 +2,7 @@ package com.teamcos.modularsystems.oreprocessing.renderer;
 
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
+import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.utilities.block.ModularSystemsTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
@@ -135,6 +136,10 @@ public class SmelteryDummyRenderer implements ISimpleBlockRenderingHandler
             renderer.renderBlockAllFaces(Blocks.furnace, x, y, z);
         } else if (block == BlockManager.smelteryCoreActive) {
             renderer.renderBlockAllFaces(Blocks.lit_furnace, x, y, z);
+        } else if (block == ApiBlockManager.dummyIOBlock) {
+            renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
+        } else {
+            int i = 0;
         }
     }
 

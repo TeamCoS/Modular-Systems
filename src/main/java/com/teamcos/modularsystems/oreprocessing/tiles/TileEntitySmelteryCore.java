@@ -44,8 +44,7 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
     }
 
     @Override
-    public Block getDummyBlock()
-    {
+    public Block getDummyBlock() {
         return BlockManager.smelteryDummy;
     }
 

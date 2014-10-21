@@ -1,8 +1,9 @@
 package com.teamcos.modularsystems.manager;
 
-import net.minecraft.block.Block;
+import com.teamcos.modularsystems.utilities.block.DummyBlock;
+import com.teamcos.modularsystems.utilities.block.DummyIOBlock;
 
 public class ApiBlockManager {
-    public static Block dummyBlock;
-    public static Block dummyIOBlock;
+    public static DummyBlock dummyBlock;
+    public static DummyIOBlock dummyIOBlock;
 }

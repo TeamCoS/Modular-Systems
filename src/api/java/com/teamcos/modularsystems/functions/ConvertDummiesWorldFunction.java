@@ -1,6 +1,7 @@
 package com.teamcos.modularsystems.functions;
 
 import com.teamcos.modularsystems.core.lib.Reference;
+import com.teamcos.modularsystems.utilities.block.ModularSystemsTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import net.minecraft.block.Block;
@@ -22,6 +23,7 @@ public class ConvertDummiesWorldFunction implements WorldFunction {
 
         bcFunc.outerBlock(world, x, y, z);
         Block block = world.getBlock(x, y, z);
+        ModularSystemsTile msTile;
         if (block != null &&
                 block != Blocks.air &&
                 !Reference.isModularTile(block.getUnlocalizedName())) {
@@ -38,6 +40,9 @@ public class ConvertDummiesWorldFunction implements WorldFunction {
             }
             world.markBlockForUpdate(x, y, z);
             dummyTE.setCore(core);
+        } else if (Reference.isModularTile(block.getUnlocalizedName())
+                && (msTile = (ModularSystemsTile) world.getTileEntity(x, y, z)).getCore() == null) {
+            msTile.setCore(core);
         }
     }
 
