@@ -1,6 +1,6 @@
 package com.teamcos.modularsystems.oreprocessing.tiles;
 
-import com.teamcos.modularsystems.core.managers.BlockManager;
+import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
 import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
@@ -40,12 +40,12 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
 
     @Override
     public Block getOverlay() {
-        return BlockManager.smeleryOverlay;
+        return ApiBlockManager.smelteryOverlay;
     }
 
     @Override
     public Block getDummyBlock() {
-        return BlockManager.smelteryDummy;
+        return ApiBlockManager.dummyBlock;
     }
 
     //Reworked for I/O

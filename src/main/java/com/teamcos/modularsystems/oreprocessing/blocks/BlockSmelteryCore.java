@@ -25,8 +25,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockSmelteryCore extends BlockContainer
-{
+public class BlockSmelteryCore extends BlockContainer {
     private final Random random = new Random();
     private final boolean active;
     private static boolean isActive;
@@ -36,14 +35,12 @@ public class BlockSmelteryCore extends BlockContainer
     private IIcon frontIcon;
     private static final String __OBFID = "CL_00000248";
 
-    public BlockSmelteryCore(boolean active)
-    {
+    public BlockSmelteryCore(boolean active) {
         super(Material.rock);
         this.active = active;
     }
 
-    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
-    {
+    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
         return Item.getItemFromBlock(BlockManager.smelteryCore);
     }
 
@@ -315,7 +312,7 @@ public class BlockSmelteryCore extends BlockContainer
     @Override
     public int getRenderType()
     {
-        return ClientProxy.smelteryDummyRenderType;
+        return ClientProxy.msRenderId;
     }
 
     @Override

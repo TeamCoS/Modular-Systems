@@ -2,7 +2,7 @@ package com.teamcos.modularsystems.utilities.block;
 
 import com.teamcos.modularsystems.core.ModularSystems;
 import com.teamcos.modularsystems.core.lib.Reference;
-import com.teamcos.modularsystems.core.proxy.ClientProxy;
+import com.teamcos.modularsystems.renderers.ApiRenderers;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import net.minecraft.block.Block;
@@ -86,9 +86,14 @@ public class DummyBlock extends BlockContainer {
     @Override
     public boolean canRenderInPass(int pass) {
         //Set the static var in the client proxy
-        ClientProxy.renderPass = pass;
+        ApiRenderers.renderPass = pass;
         //the block can render in both passes, so return true always
         return true;
+    }
+
+    @Override
+    public int getRenderType() {
+        return ApiRenderers.apiDummyRenderType;
     }
 
     @Override

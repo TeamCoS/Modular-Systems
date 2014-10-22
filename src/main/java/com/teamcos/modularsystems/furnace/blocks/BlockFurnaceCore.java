@@ -227,7 +227,6 @@ public class BlockFurnaceCore extends BlockContainer {
         return Container.calcRedstoneFromInventory((IInventory) p_149736_1_.getTileEntity(p_149736_2_, p_149736_3_, p_149736_4_));
     }
 
-
     @Override
     public boolean renderAsNormalBlock() {
         return false;
@@ -240,7 +239,7 @@ public class BlockFurnaceCore extends BlockContainer {
 
     @Override
     public int getRenderType() {
-        return ClientProxy.furnaceDummyRenderType;
+        return ClientProxy.msRenderId;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.teamcos.modularsystems.utilities.block;
 
-import com.teamcos.modularsystems.core.proxy.ClientProxy;
+import com.teamcos.modularsystems.renderers.ApiRenderers;
 import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
@@ -17,11 +17,11 @@ public class DummyIOBlock extends DummyBlock {
         super(material, inTab);
         setStepSound(Block.soundTypeStone);
         setHardness(3.5f);
+        setBlockName("modularsystems:blockDummyIO");
     }
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
-
         DummyIOTile dummy = (DummyIOTile)world.getTileEntity(x, y, z);
         FueledRecipeTile core = dummy.getCore();
         if(core != null) core.setDirty();
@@ -39,17 +39,17 @@ public class DummyIOBlock extends DummyBlock {
     }
     @Override
     public int getRenderType() {
-        return ClientProxy.smelteryDummyRenderType;
+        return ApiRenderers.apiDummyRenderType;
     }
 
     @Override
-    public boolean canRenderInPass(int pass)
-    {
+    public boolean canRenderInPass(int pass) {
         //Set the static var in the client proxy
-        ClientProxy.renderPass = pass;
+        ApiRenderers.renderPass = pass;
         //the block can render in both passes, so return true always
         return true;
     }
+
     @Override
     public int getRenderBlockPass()
     {

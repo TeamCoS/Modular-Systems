@@ -1,4 +1,4 @@
-package com.teamcos.modularsystems.furnace.blocks;
+package com.teamcos.modularsystems.utilities.block;
 
 import java.util.Random;
 
@@ -9,11 +9,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 
-public class BlockTextureOverlay extends Block {
+public class BlockFurnaceOverlay extends Block {
 
 	public String texture;
 	public boolean blastProof;
-	public BlockTextureOverlay(String string, String name, boolean bool) {
+	public BlockFurnaceOverlay(String string, String name, boolean bool) {
 		super(Material.glass);
 		setBlockName(name);
 		this.setHardness(3.5F);

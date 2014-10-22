@@ -21,6 +21,6 @@ public class BlockCrafter extends DummyBlock {
 
 	@Override
 	public int getRenderType() {
-		return ClientProxy.furnaceDummyRenderType;
+		return ClientProxy.msRenderId;
 	}
 }

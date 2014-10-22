@@ -1,7 +1,7 @@
 package com.teamcos.modularsystems.furnace.tiles;
 
-import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceCore;
+import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -41,13 +41,12 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
 
     @Override
     public Block getOverlay() {
-        return BlockManager.overLayTexture;
+        return ApiBlockManager.furnaceOverlay;
     }
 
     @Override
-    public Block getDummyBlock()
-    {
-        return BlockManager.furnaceDummy;
+    public Block getDummyBlock() {
+        return ApiBlockManager.dummyBlock;
     }
 
     @Override

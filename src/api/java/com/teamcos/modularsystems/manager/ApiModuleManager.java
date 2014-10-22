@@ -1,5 +1,8 @@
 package com.teamcos.modularsystems.manager;
 
+import com.teamcos.modularsystems.core.helper.ConfigHelper;
+import com.teamcos.modularsystems.utilities.block.BlockFurnaceOverlay;
+import com.teamcos.modularsystems.utilities.block.BlockSmelteryOverlay;
 import com.teamcos.modularsystems.utilities.block.DummyBlock;
 import com.teamcos.modularsystems.utilities.block.DummyIOBlock;
 import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
@@ -16,6 +19,13 @@ public class ApiModuleManager {
     public static void enableFurnaceModule() {
         registerDummy();
         registerDummyIO();
+        if (ConfigHelper.useTextures) {
+            ApiBlockManager.furnaceOverlay = new BlockFurnaceOverlay(ConfigHelper.textureName, "furnaceOverlay", true);
+        } else {
+            ApiBlockManager.furnaceOverlay = new BlockFurnaceOverlay("modularsystems:custom_overlay", "furnaceOverlay", true);
+        }
+
+        GameRegistry.registerBlock(ApiBlockManager.furnaceOverlay, "furnaceOverlay");
 
         CraftingManager.getInstance().addRecipe(new ItemStack(ApiBlockManager.dummyIOBlock, 1),
                 "XXX",
@@ -35,6 +45,10 @@ public class ApiModuleManager {
         registerDummy();
         registerDummyIO();
 
+        ApiBlockManager.smelteryOverlay = new BlockSmelteryOverlay();
+
+        GameRegistry.registerBlock(ApiBlockManager.smelteryOverlay, "smelteryOverlay");
+
         CraftingManager.getInstance().addRecipe(new ItemStack(ApiBlockManager.dummyIOBlock, 1),
                 "XXX",
                 "XxX",
@@ -46,7 +60,7 @@ public class ApiModuleManager {
 
     public static void registerDummy() {
         if (!registeredDummy) {
-            ApiBlockManager.dummyBlock = new DummyBlock(Material.rock, false);
+            ApiBlockManager.dummyBlock = new DummyBlock(Material.rock, true);
             GameRegistry.registerBlock(ApiBlockManager.dummyBlock, "modularDummy");
             GameRegistry.registerTileEntity(DummyTile.class, "dummyTile");
             registeredDummy = true;
@@ -55,7 +69,7 @@ public class ApiModuleManager {
 
     public static void registerDummyIO() {
         if (!registeredDummyIO) {
-            ApiBlockManager.dummyIOBlock = new DummyIOBlock(Material.rock, false);
+            ApiBlockManager.dummyIOBlock = new DummyIOBlock(Material.rock, true);
             GameRegistry.registerBlock(ApiBlockManager.dummyIOBlock, "modularDummyIO");
             GameRegistry.registerTileEntity(DummyIOTile.class, "dummyIOTile");
             registeredDummyIO = true;

@@ -1,7 +1,5 @@
-package com.teamcos.modularsystems.oreprocessing.renderer;
+package com.teamcos.modularsystems.renderers;
 
-import com.teamcos.modularsystems.core.managers.BlockManager;
-import com.teamcos.modularsystems.core.proxy.ClientProxy;
 import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.utilities.block.ModularSystemsTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
@@ -18,8 +16,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
-public class SmelteryDummyRenderer implements ISimpleBlockRenderingHandler
-{
+public class ApiBlockRenderer implements ISimpleBlockRenderingHandler {
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelID,
@@ -80,10 +77,11 @@ public class SmelteryDummyRenderer implements ISimpleBlockRenderingHandler
     private static IIcon getOveryLay(Block block, RenderBlocks renderer) {
         IIcon output;
 
-        if(block == BlockManager.smelteryCore || block == BlockManager.smelteryDummyIO)
-            output = renderer.getBlockIconFromSideAndMetadata(BlockManager.smeleryOverlay, 0, 0);
-        else
-            output = renderer.getBlockIconFromSideAndMetadata(block, 0,0);
+        if(block == ApiBlockManager.dummyIOBlock || block == ApiBlockManager.dummyBlock) {
+            output = renderer.getBlockIconFromSideAndMetadata(ApiBlockManager.furnaceOverlay, 0, 0);
+        } else {
+            output = renderer.getBlockIconFromSideAndMetadata(block, 0, 0);
+        }
 
         return output;
     }
@@ -98,54 +96,36 @@ public class SmelteryDummyRenderer implements ISimpleBlockRenderingHandler
             ModularSystemsTile mst = (ModularSystemsTile) te;
             FueledRecipeTile core = mst.getCore();
             if (core != null) {
-                if (ClientProxy.renderPass == 0) {
-                    doStandardRender(world, block, x, y, z, renderer);
+                if (ApiRenderers.renderPass == 0) {
+                    return doStandardRender(world, block, x, y, z, renderer);
                 } else {
-                    renderer.renderStandardBlock(core.getOverlay(), x, y, z);
+                    return renderer.renderStandardBlock(core.getOverlay(), x, y, z);
                 }
             } else {
-                doStandardRender(world, block, x, y, z, renderer);
+                return doStandardRender(world, block, x, y, z, renderer);
             }
         } else {
-            renderer.renderStandardBlock(block, x, y, z);
+            return renderer.renderStandardBlock(block, x, y, z);
         }
-
-        return true;
     }
 
-    private void doStandardRender(IBlockAccess world1, Block block, int x, int y, int z, RenderBlocks renderer) {
-        if(block == BlockManager.furnaceDummy) {
+    private boolean doStandardRender(IBlockAccess world1, Block block, int x, int y, int z, RenderBlocks renderer) {
+        if (block == ApiBlockManager.dummyIOBlock) {
+            renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
+            return true;
+        } else if (block == ApiBlockManager.dummyBlock) {
             DummyTile dummy = (DummyTile) world1.getTileEntity(x, y, z);
             renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMetadata()));
-        } else if(block == BlockManager.furnaceDummyIO) {
-            renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
-        } else if(block == BlockManager.furnaceCraftingUpgrade) {
-            renderer.renderBlockUsingTexture(Blocks.crafting_table, x, y, z, Blocks.crafting_table.getIcon(1, 0));
-        } else if(block == BlockManager.furnaceAddition) {
-            renderer.renderBlockUsingTexture(Blocks.furnace, x, y, z, Blocks.furnace.getIcon(2, 0));
-        } else if(block == BlockManager.furnaceCore) {
-            renderer.renderBlockAllFaces(Blocks.furnace, x, y, z);
-        } else if(block == BlockManager.furnaceCoreActive) {
-            renderer.renderBlockAllFaces(Blocks.lit_furnace, x, y, z);
-        } else if (block == BlockManager.smelteryDummy) {
-            DummyTile dummy = (DummyTile) world1.getTileEntity(x, y, z);
-            renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMetadata()));
-        } else if (block == BlockManager.smelteryDummyIO) {
-            renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
-        } else if (block == BlockManager.smelteryCore) {
-            renderer.renderBlockAllFaces(Blocks.furnace, x, y, z);
-        } else if (block == BlockManager.smelteryCoreActive) {
-            renderer.renderBlockAllFaces(Blocks.lit_furnace, x, y, z);
-        } else if (block == ApiBlockManager.dummyIOBlock) {
-            renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
+            return true;
         } else {
             int i = 0;
+            return false;
         }
     }
 
     @Override
     public int getRenderId() {
-        return ClientProxy.smelteryDummyRenderType;
+        return ApiRenderers.apiDummyRenderType;
     }
 
     @Override

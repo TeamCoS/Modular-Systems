@@ -1,4 +1,4 @@
-package com.teamcos.modularsystems.oreprocessing.blocks;
+package com.teamcos.modularsystems.utilities.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
