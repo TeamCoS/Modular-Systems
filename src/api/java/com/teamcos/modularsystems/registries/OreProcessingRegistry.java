@@ -64,7 +64,7 @@ public class OreProcessingRegistry
         }
         public boolean matches (ItemStack input)
         {
-            return ItemStack.areItemStacksEqual(this.input, input);
+            return this.input.isItemEqual(input);
         }
 
         public ItemStack getResult ()
