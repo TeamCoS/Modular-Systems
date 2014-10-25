@@ -7,6 +7,7 @@ import net.minecraft.world.World;
 public class HasCraftingUpgrade implements WorldFunction {
 
     private boolean hasCrafting = false;
+    private boolean failed = false;
 
     @Override
     public void outerBlock(World world, int x, int y, int z) {
@@ -21,16 +22,22 @@ public class HasCraftingUpgrade implements WorldFunction {
 
     @Override
     public boolean shouldContinue() {
-        return !hasCrafting;
+        return !hasCrafting && !failed;
     }
 
     @Override
-    public void clear() {
+    public void reset() {
         hasCrafting = false;
+        failed = false;
     }
 
     @Override
     public WorldFunction copy() {
         return new HasCraftingUpgrade();
+    }
+
+    @Override
+    public void fail() {
+        failed = true;
     }
 }

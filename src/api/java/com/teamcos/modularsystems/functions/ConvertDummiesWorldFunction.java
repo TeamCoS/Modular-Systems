@@ -13,6 +13,7 @@ import java.util.Map;
 public class ConvertDummiesWorldFunction implements WorldFunction {
     private BlockCountWorldFunction bcFunc = new BlockCountWorldFunction();
     private final FueledRecipeTile core;
+    private boolean failed = false;
 
     public ConvertDummiesWorldFunction(FueledRecipeTile core) {
         this.core = core;
@@ -53,17 +54,23 @@ public class ConvertDummiesWorldFunction implements WorldFunction {
 
     @Override
     public boolean shouldContinue() {
-        return true;
+        return !failed;
     }
 
     @Override
-    public void clear() {
-        bcFunc.clear();
+    public void reset() {
+        bcFunc.reset();
+        failed = false;
     }
 
     @Override
     public WorldFunction copy() {
         return new ConvertDummiesWorldFunction(core);
+    }
+
+    @Override
+    public void fail() {
+        failed = true;
     }
 
     public Map<Block, Integer> blockCounts() {

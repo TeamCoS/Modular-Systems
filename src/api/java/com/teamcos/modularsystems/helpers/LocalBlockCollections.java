@@ -197,7 +197,10 @@ public class LocalBlockCollections {
                 startZ = zCoord;
         }
 
-        if (hMin < 0 || hMax < 0 || vMin < 0 || vMax < 0 || depthVal < 0) return;
+        if (hMin < 0 || hMax < 0 || vMin < 0 || vMax < 0 || depthVal < 0) {
+            function.fail();
+            return;
+        }
 
         int horizMax = hMin + hMax;
         int vertMax = vMin + vMax;

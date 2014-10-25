@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class BlockCountWorldFunction implements BlockCountFunction {
     private Map<Block, Integer> blocks = new LinkedHashMap<Block, Integer>();
+    private boolean failed = false;
 
     @Override
     public void outerBlock(World world, int x, int y, int z) {
@@ -39,7 +40,7 @@ public class BlockCountWorldFunction implements BlockCountFunction {
 
     @Override
     public boolean shouldContinue() {
-        return true;
+        return !failed;
     }
 
     public Map<Block, Integer> getBlockCounts() {
@@ -47,12 +48,18 @@ public class BlockCountWorldFunction implements BlockCountFunction {
     }
 
     @Override
-    public void clear() {
+    public void reset() {
         blocks = new LinkedHashMap<Block, Integer>();
+        failed = false;
     }
 
     @Override
     public BlockCountFunction copy() {
         return new BlockCountWorldFunction();
+    }
+
+    @Override
+    public void fail() {
+        failed = true;
     }
 }

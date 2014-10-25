@@ -10,10 +10,15 @@ public interface WorldFunction {
     /**
      * Clears internal state.
      */
-    void clear();
+    void reset();
 
     /**
      * Creates a copy of the function with fresh internal state.
      */
     WorldFunction copy();
+
+    /**
+     * Sets the internal state to a failure condition.
+     */
+    void fail();
 }

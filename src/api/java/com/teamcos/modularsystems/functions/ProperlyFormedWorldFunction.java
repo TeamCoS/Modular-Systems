@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 public class ProperlyFormedWorldFunction implements WorldFunction {
 
     boolean shouldContinue = true;
+    boolean failed = false;
 
     @Override
     public void outerBlock(World world, int x, int y, int z) {
@@ -26,16 +27,22 @@ public class ProperlyFormedWorldFunction implements WorldFunction {
 
     @Override
     public boolean shouldContinue() {
-        return shouldContinue;
+        return shouldContinue && !failed;
     }
 
     @Override
-    public void clear() {
+    public void reset() {
         shouldContinue = true;
+        failed = false;
     }
 
     @Override
     public WorldFunction copy() {
         return new ProperlyFormedWorldFunction();
+    }
+
+    @Override
+    public void fail() {
+        failed = true;
     }
 }

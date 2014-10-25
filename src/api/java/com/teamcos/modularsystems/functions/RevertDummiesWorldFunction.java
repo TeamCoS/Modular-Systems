@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 
 public class RevertDummiesWorldFunction implements WorldFunction {
     private final FueledRecipeTile core;
+    private boolean failed = false;
 
     public RevertDummiesWorldFunction(FueledRecipeTile core) {
         this.core = core;
@@ -36,16 +37,21 @@ public class RevertDummiesWorldFunction implements WorldFunction {
 
     @Override
     public boolean shouldContinue() {
-        return true;
+        return !failed;
     }
 
     @Override
-    public void clear() {
-
+    public void reset() {
+        failed = false;
     }
 
     @Override
     public WorldFunction copy() {
         return new RevertDummiesWorldFunction(core);
+    }
+
+    @Override
+    public void fail() {
+        failed = true;
     }
 }

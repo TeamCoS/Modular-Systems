@@ -1,5 +1,9 @@
 package com.teamcos.modularsystems.oreprocessing.tiles;
 
+import com.teamcos.modularsystems.core.lib.Reference;
+import com.teamcos.modularsystems.functions.WorldFunction;
+import com.teamcos.modularsystems.helpers.Coord;
+import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
 import com.teamcos.modularsystems.registries.OreProcessingRegistry;
@@ -46,6 +50,18 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
     @Override
     public Block getDummyBlock() {
         return ApiBlockManager.dummyBlock;
+    }
+
+    @Override
+    public boolean exploreWorld(WorldFunction function) {
+        LocalBlockCollections.searchCuboidMultiBlock(worldObj, xCoord, yCoord, zCoord, function, Reference.MAX_FURNACE_SIZE);
+        return function.shouldContinue();
+    }
+
+    @Override
+    public boolean exploreWorld(WorldFunction function, Coord c1, Coord c2) {
+        LocalBlockCollections.searchCuboidMultiBlock(worldObj, xCoord, yCoord, zCoord, function, Reference.MAX_FURNACE_SIZE);
+        return function.shouldContinue();
     }
 
     //Reworked for I/O

@@ -4,12 +4,11 @@ import com.teamcos.modularsystems.collections.Doublet;
 import com.teamcos.modularsystems.collections.StandardValues;
 import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.functions.*;
+import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import com.teamcos.modularsystems.registries.OreProcessingRegistry;
-import com.teamcos.modularsystems.utilities.block.ModularSystemsTile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -21,7 +20,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public abstract class FueledRecipeTile extends ModularTileEntity implements ModularSystemsTile, ISidedInventory {
+public abstract class FueledRecipeTile extends ModularTileEntity implements ISidedInventory, MSCore {
 
     protected static final Random random = new Random();
 
@@ -34,12 +33,23 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Modu
     private boolean wellFormed = false;
     protected final StandardValues values;
     private String field_94130_e;
+    private Coord corner1;
+    private Coord corner2;
 
     protected abstract void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z);
     protected abstract int getItemBurnTime(ItemStack is);
     protected abstract ItemStack recipe(ItemStack is);
-    public abstract Block getOverlay();
-    public abstract Block getDummyBlock();
+
+    public abstract boolean exploreWorld(WorldFunction function);
+
+    /**
+     * Coord c1 defines 1 corner of the multi-block and coord c2 defines the other corner.
+     * @param function
+     * @param c1
+     * @param c2
+     * @return
+     */
+    public abstract boolean exploreWorld(WorldFunction function, Coord c1, Coord c2);
 
     public FueledRecipeTile() {
         this.values = new StandardValues(this, new BlockCountWorldFunction());
@@ -49,6 +59,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Modu
      **********************************************  Multiblock Methods  **********************************************
      ******************************************************************************************************************/
 
+    @Override
     public boolean updateMultiblock() {
         if (isDirty) {
             if (isWellFormed()) {
@@ -67,8 +78,16 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements Modu
 
     private boolean isWellFormed() {
         ProperlyFormedWorldFunction myFunction = new ProperlyFormedWorldFunction();
-        LocalBlockCollections.searchCuboidMultiBlock(worldObj, xCoord, yCoord, zCoord, myFunction, Reference.MAX_FURNACE_SIZE);
-        wellFormed = myFunction.shouldContinue();
+
+        boolean formed = corner1 != null && corner2 != null;
+        if (formed) {
+            formed = exploreWorld(myFunction, corner1, corner2);
+        }
+        if (!formed) {
+            formed = exploreWorld(myFunction);
+        }
+
+        wellFormed = formed;
         return wellFormed;
     }
 
