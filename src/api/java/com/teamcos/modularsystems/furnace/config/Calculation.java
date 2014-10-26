@@ -13,7 +13,7 @@ public interface Calculation {
         }
 
         public double calculate(int blockCount) {
-            return Math.max(0, blockCount * perBlock);
+            return blockCount * perBlock;
         }
     }
 

@@ -133,7 +133,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         if (values.getEfficiency() > 0) {
             return ((1600 * values.getEfficiency()) / getSpeedMultiplier()) / 8;
         } else {
-            return ((1600 * (1 / (-1 * values.getEfficiency()))) / getSpeedMultiplier()) / 8;
+            return 0.0000000001;
         }
     }
 
