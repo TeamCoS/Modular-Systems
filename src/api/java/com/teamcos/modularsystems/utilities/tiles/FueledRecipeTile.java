@@ -6,7 +6,6 @@ import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.functions.*;
 import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
-import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.item.EntityItem;
@@ -185,7 +184,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
             return null;
         }
         ItemStack output = values.getOutput();
-        ItemStack recipeResult = OreProcessingRegistry.getOutput(input);
+        ItemStack recipeResult = recipe(input);
         if (recipeResult == null) {
             return null;
         } else if (output != null && !output.isItemEqual(recipeResult)) {
@@ -338,6 +337,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         values.resetInventory();
+        values.unsetValues();
         super.readFromNBT(tagCompound);
 
         NBTTagList itemsTag = tagCompound.getTagList("Items", 10);
@@ -354,8 +354,8 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         this.isDirty = tagCompound.getBoolean("isDirty");
         this.furnaceBurnTime = tagCompound.getShort("BurnTime");
         this.furnaceCookTime = tagCompound.getShort("CookTime");
-        this.currentItemBurnTime = this.scaledBurnTime();
         values.readFromNBT(tagCompound);
+        this.currentItemBurnTime = this.scaledBurnTime();
 
         if (tagCompound.hasKey("CustomName"))
         {
@@ -386,8 +386,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         tagCompound.setTag("Items", itemsList);
         values.writeToNBT(tagCompound);
 
-        if (this.hasCustomInventoryName())
-        {
+         if (this.hasCustomInventoryName()) {
             tagCompound.setString("CustomName", this.field_94130_e);
         }
     }
