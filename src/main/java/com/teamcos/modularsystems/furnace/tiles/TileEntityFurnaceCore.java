@@ -1,10 +1,7 @@
 package com.teamcos.modularsystems.furnace.tiles;
 
-import com.teamcos.modularsystems.core.lib.Reference;
-import com.teamcos.modularsystems.functions.WorldFunction;
+import com.teamcos.modularsystems.core.helper.ConfigHelper;
 import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceCore;
-import com.teamcos.modularsystems.helpers.Coord;
-import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -31,18 +28,6 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
         BlockFurnaceCore.updateFurnaceBlockState(positiveBurnTime, world, x, y, z);
     }
 
-    @Override
-    public boolean exploreWorld(WorldFunction function) {
-        LocalBlockCollections.searchCuboidMultiBlock(worldObj, xCoord, yCoord, zCoord, function, Reference.MAX_FURNACE_SIZE);
-        return function.shouldContinue();
-    }
-
-    @Override
-    public boolean exploreWorld(WorldFunction function, Coord c1, Coord c2) {
-        LocalBlockCollections.searchCuboidMultiBlock(worldObj, xCoord, yCoord, zCoord, function, Reference.MAX_FURNACE_SIZE);
-        return function.shouldContinue();
-    }
-
     protected int getItemBurnTime(ItemStack is) {
         return is == null ? 0 : GameRegistry.getFuelValue(is);
     }
@@ -53,6 +38,11 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
 
     protected ItemStack recipe(ItemStack is) {
         return FurnaceRecipes.smelting().getSmeltingResult(is);
+    }
+
+    @Override
+    public int getMaxSize() {
+        return ConfigHelper.maxFurnaceSize;
     }
 
     @Override

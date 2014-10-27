@@ -6,6 +6,7 @@ import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.functions.*;
 import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
+import com.teamcos.modularsystems.utilities.tiles.shapes.Cuboid;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.item.EntityItem;
@@ -19,7 +20,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public abstract class FueledRecipeTile extends ModularTileEntity implements ISidedInventory, MSCore {
+public abstract class FueledRecipeTile extends ModularTileEntity implements ISidedInventory, ICore {
 
     protected static final Random random = new Random();
 
@@ -31,27 +32,17 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     private boolean isDirty = true;
     private boolean wellFormed = false;
     protected final StandardValues values;
-    private String field_94130_e;
-    private Coord corner1;
-    private Coord corner2;
+    private String custom_name;
+    protected Cuboid cube;
 
     protected abstract void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z);
     protected abstract int getItemBurnTime(ItemStack is);
     protected abstract ItemStack recipe(ItemStack is);
-
-    public abstract boolean exploreWorld(WorldFunction function);
-
-    /**
-     * Coord c1 defines 1 corner of the multi-block and coord c2 defines the other corner.
-     * @param function
-     * @param c1
-     * @param c2
-     * @return
-     */
-    public abstract boolean exploreWorld(WorldFunction function, Coord c1, Coord c2);
+    public abstract int getMaxSize();
 
     public FueledRecipeTile() {
         this.values = new StandardValues(this, new BlockCountWorldFunction());
+        this.cube = new Cuboid();
     }
 
     /******************************************************************************************************************
@@ -77,16 +68,13 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
 
     private boolean isWellFormed() {
         ProperlyFormedWorldFunction myFunction = new ProperlyFormedWorldFunction();
-
-        boolean formed = corner1 != null && corner2 != null;
-        if (formed) {
-            formed = exploreWorld(myFunction, corner1, corner2);
-        }
-        if (!formed) {
-            formed = exploreWorld(myFunction);
-        }
-
-        wellFormed = formed;
+        LocalBlockCollections.searchCuboidMultiBlock(
+                worldObj,
+                myFunction,
+                new Cuboid(this),
+                new Coord(this)
+        );
+        wellFormed = myFunction.shouldContinue();
         return wellFormed;
     }
 
@@ -99,21 +87,19 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
                 new ConvertDummiesWorldFunction(this),
                 Reference.MAX_FURNACE_SIZE
         );
+        cube.setCube(this);
         values.setValues();
     }
 
     private void deconstructMultiblock() {
         values.unsetValues();
-
         LocalBlockCollections.searchCuboidMultiBlock(
                 worldObj,
-                xCoord,
-                yCoord,
-                zCoord,
                 new RevertDummiesWorldFunction(this),
-                Reference.MAX_FURNACE_SIZE
+                cube,
+                new Coord(this)
         );
-
+        cube.reset();
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 
         int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
@@ -356,10 +342,10 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         this.furnaceCookTime = tagCompound.getShort("CookTime");
         values.readFromNBT(tagCompound);
         this.currentItemBurnTime = this.scaledBurnTime();
-
+        cube.readFromNBT(tagCompound);
         if (tagCompound.hasKey("CustomName"))
         {
-            this.field_94130_e = tagCompound.getString("CustomName");
+            this.custom_name = tagCompound.getString("CustomName");
         }
 
     }
@@ -385,9 +371,9 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         }
         tagCompound.setTag("Items", itemsList);
         values.writeToNBT(tagCompound);
-
-         if (this.hasCustomInventoryName()) {
-            tagCompound.setString("CustomName", this.field_94130_e);
+        cube.writeToNBT(tagCompound);
+        if (this.hasCustomInventoryName()) {
+            tagCompound.setString("CustomName", this.custom_name);
         }
     }
 
@@ -489,7 +475,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
 
     public boolean hasCustomInventoryName()
     {
-        return this.field_94130_e != null && this.field_94130_e.length() > 0;
+        return this.custom_name != null && this.custom_name.length() > 0;
     }
 
     @Override
@@ -500,7 +486,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
 
     public void func_145951_a(String p_145951_1_)
     {
-        this.field_94130_e = p_145951_1_;
+        this.custom_name = p_145951_1_;
     }
 
     /******************************************************************************************************************
@@ -513,7 +499,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
 
     public void setGuiDisplayName(String par1Str)
     {
-        this.field_94130_e = par1Str;
+        this.custom_name = par1Str;
     }
 
     public void expelItems() {

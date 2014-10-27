@@ -1,6 +1,7 @@
 package com.teamcos.modularsystems.helpers;
 
 import com.teamcos.modularsystems.functions.WorldFunction;
+import com.teamcos.modularsystems.utilities.tiles.shapes.Cuboid;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -151,50 +152,39 @@ public class LocalBlockCollections {
 //        return new Bound(xNeg, xPos);
 //    }
 
-    public static void searchCuboidMultiBlock(World worldObj, int xCoord, int yCoord, int zCoord, WorldFunction function, int maxSize) {
-        int dir = (worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
-
-		/*
-         *           Horiz         DEPTH
-		 * North 2:   +x              +z
-		 * South 3:   -x              -z
-		 * East 5:    +z              -x
-		 * West 4:    -z              +x
-		 *
-		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
-		 */
-
-        int hMin = getHorizontalMin(worldObj, xCoord, yCoord, zCoord, maxSize, dir);
-        int hMax = getHorizontalMax(worldObj, xCoord, yCoord, zCoord, maxSize, dir);
-        int vMin = getVerticalMin(worldObj, xCoord, yCoord, zCoord, maxSize, dir);
-        int vMax = getVerticalMax(worldObj, xCoord, yCoord, zCoord, maxSize, dir);
-        int depthVal = getDepthVal(worldObj, xCoord, yCoord, zCoord, maxSize, dir);
+    public static void searchCuboidMultiBlock(World worldObj, WorldFunction function, Cuboid cube, Coord coord) {
+        int hMin = cube.getMeasurement(Cuboid.Measurement.HMIN);
+        int hMax = cube.getMeasurement(Cuboid.Measurement.HMAX);
+        int vMin = cube.getMeasurement(Cuboid.Measurement.VMIN);
+        int vMax = cube.getMeasurement(Cuboid.Measurement.VMAX);
+        int depthVal = cube.getMeasurement(Cuboid.Measurement.DEPTHVAL);
+        int dir = cube.getMeasurement(Cuboid.Measurement.DIRECTION);
 
         int startX;
-        int startY = yCoord - vMin;
+        int startY = coord.y - vMin;
         int startZ;
 
         switch(dir)
         {
             case 2 :
-                startX = xCoord + hMin;
-                startZ = zCoord;
+                startX = coord.x + hMin;
+                startZ = coord.z;
                 break;
             case 3 :
-                startX = xCoord - hMin;
-                startZ = zCoord;
+                startX = coord.x - hMin;
+                startZ = coord.z;
                 break;
             case 4 :
-                startX = xCoord;
-                startZ = zCoord - hMin;
+                startX = coord.x;
+                startZ = coord.z - hMin;
                 break;
             case 5 :
-                startX = xCoord;
-                startZ = zCoord + hMin;
+                startX = coord.x;
+                startZ = coord.z + hMin;
                 break;
             default :
-                startX = xCoord;
-                startZ = zCoord;
+                startX = coord.x;
+                startZ = coord.z;
         }
 
         if (hMin < 0 || hMax < 0 || vMin < 0 || vMax < 0 || depthVal < 0) {
@@ -237,7 +227,7 @@ public class LocalBlockCollections {
                             z = 0;
                     }
 
-                    if (x == xCoord && y == yCoord && z == zCoord) continue;
+                    if (x == coord.x && y == coord.y && z == coord.z) continue;
 
                     if (horiz == 0 || horiz == horizMax ||
                             vert == 0 || vert == vertMax ||
@@ -251,112 +241,104 @@ public class LocalBlockCollections {
         }
     }
 
-    public static int getHorizontalMin(World worldObj, int x, int y, int z, int maxSize, int dir) {
-        int output = 0;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
-        int xCheck = x + (forwardZ ? 0 : depthMultiplier);
-        int yCheck = y;
-        int zCheck = z + (forwardZ ? depthMultiplier : 0);
+    public static void searchCuboidMultiBlock(World worldObj, int xCoord, int yCoord, int zCoord, WorldFunction function, int maxSize) {
+        int dir = (worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
 
-        while (worldObj.isAirBlock(xCheck, yCheck, zCheck))
+		/*
+         *           Horiz         DEPTH
+		 * North 2:   +x              +z
+		 * South 3:   -x              -z
+		 * East 5:    +z              -x
+		 * West 4:    -z              +x
+		 *
+		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
+		 */
+
+        int hMin = Cuboid.getHorizontalMin(worldObj, xCoord, yCoord, zCoord, maxSize, dir);
+        int hMax = Cuboid.getHorizontalMax(worldObj, xCoord, yCoord, zCoord, maxSize, dir);
+        int vMin = Cuboid.getVerticalMin(worldObj, xCoord, yCoord, zCoord, maxSize, dir);
+        int vMax = Cuboid.getVerticalMax(worldObj, xCoord, yCoord, zCoord, maxSize, dir);
+        int depthVal = Cuboid.getDepthVal(worldObj, xCoord, yCoord, zCoord, maxSize, dir);
+
+        int startX;
+        int startY = yCoord - vMin;
+        int startZ;
+
+        switch(dir)
         {
-            output++;
-            if (forwardZ)
-                xCheck = xCheck + depthMultiplier;
-            else
-                zCheck = zCheck - depthMultiplier;
-
-            if (output > maxSize)
-                return -1;
+        case 2 :
+            startX = xCoord + hMin;
+            startZ = zCoord;
+            break;
+        case 3 :
+            startX = xCoord - hMin;
+            startZ = zCoord;
+            break;
+        case 4 :
+            startX = xCoord;
+            startZ = zCoord - hMin;
+            break;
+        case 5 :
+            startX = xCoord;
+            startZ = zCoord + hMin;
+            break;
+        default :
+            startX = xCoord;
+            startZ = zCoord;
         }
-        return output;
-    }
 
-    public static int getHorizontalMax(World worldObj, int x, int y, int z, int maxSize, int dir)
-    {
-        int output = 0;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
-        int xCheck = x + (forwardZ ? 0 : depthMultiplier);
-        int yCheck = y;
-        int zCheck = z + (forwardZ ? depthMultiplier : 0);
+        if (hMin < 0 || hMax < 0 || vMin < 0 || vMax < 0 || depthVal < 0) {
+            function.fail();
+            return;
+        }
 
-        while (worldObj.isAirBlock(xCheck, yCheck, zCheck))
+        int horizMax = hMin + hMax;
+        int vertMax = vMin + vMax;
+
+        for (int horiz = 0; horiz <= horizMax && function.shouldContinue(); horiz++)    // Horizontal (X or Z)
         {
-            output++;
-            if (forwardZ)
-                xCheck = xCheck - depthMultiplier;
-            else
-                zCheck = zCheck + depthMultiplier;
+            for (int vert = 0; vert <= vertMax && function.shouldContinue(); vert++)   // Vertical (Y)
+            {
+                for (int depth = 0; depth <= depthVal + 1 && function.shouldContinue(); depth++) // Depth (Z or X)
+                {
+                    int x;
+                    int y = startY + vert;
+                    int z;
+                    switch(dir)
+                    {
+                    case 2 :
+                        x = startX - horiz;
+                        z = startZ + depth;
+                        break;
+                    case 3 :
+                        x = startX + horiz;
+                        z = startZ - depth;
+                        break;
+                    case 4 :
+                        x = startX + depth;
+                        z = startZ + horiz;
+                        break;
+                    case 5 :
+                        x = startX - depth;
+                        z = startZ - horiz;
+                        break;
+                    default :
+                        x = 0;
+                        z = 0;
+                    }
 
-            if (output > maxSize)
-                return -1;
+                    if (x == xCoord && y == yCoord && z == zCoord) continue;
+
+                    if (horiz == 0 || horiz == horizMax ||
+                            vert == 0 || vert == vertMax ||
+                            depth == 0 || depth == depthVal + 1) {
+                        function.outerBlock(worldObj, x, y, z);
+                    } else {
+                        function.innerBlock(worldObj, x, y, z);
+                    }
+                }
+            }
         }
-        return output;
-    }
-
-    public static int getVerticalMin(World worldObj, int x, int y, int z, int maxSize, int dir)
-    {
-        int output = 0;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
-        int xCheck = x + (forwardZ ? 0 : depthMultiplier);
-        int yCheck = y;
-        int zCheck = z + (forwardZ ? depthMultiplier : 0);
-
-        while (worldObj.isAirBlock(xCheck, yCheck, zCheck))
-        {
-            output++;
-            yCheck--;
-
-            if (output > maxSize)
-                return -1;
-        }
-        return output;
-    }
-
-    public static int getVerticalMax(World worldObj, int x, int y, int z, int maxSize, int dir)
-    {
-        int output = 0;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
-        int xCheck = x + (forwardZ ? 0 : depthMultiplier);
-        int yCheck = y;
-        int zCheck = z + (forwardZ ? depthMultiplier : 0);
-
-        while (worldObj.isAirBlock(xCheck, yCheck, zCheck))
-        {
-            output++;
-            yCheck++;
-
-            if (output > maxSize)
-                return -1;
-        }
-        return output;
-    }
-
-    public static int getDepthVal(World worldObj, int x, int y, int z, int maxSize, int dir)
-    {
-        int output = 0;
-        int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-        boolean forwardZ = ((dir == 2) || (dir == 3));
-        int xCheck = x + (forwardZ ? 0 : depthMultiplier);
-        int yCheck = y;
-        int zCheck = z + (forwardZ ? depthMultiplier : 0);
-
-        while (worldObj.isAirBlock(xCheck, yCheck, zCheck))
-        {
-            output++;
-            if (forwardZ)
-                zCheck = zCheck + depthMultiplier;
-            else
-                xCheck = xCheck + depthMultiplier;
-
-            if (output > maxSize)
-                return -1;
-        }
-        return output;
     }
 
     /**

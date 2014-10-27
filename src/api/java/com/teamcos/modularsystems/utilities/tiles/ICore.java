@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 /**
  * Created by mathill on 10/25/14.
  */
-public interface MSCore extends ModularSystemsTile {
+public interface ICore extends ModularSystemsTile {
     Block getOverlay();
 
     Block getDummyBlock();
