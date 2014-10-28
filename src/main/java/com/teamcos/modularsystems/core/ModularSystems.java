@@ -12,6 +12,7 @@ import com.teamcos.modularsystems.core.network.PacketPipeline;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
 import com.teamcos.modularsystems.core.proxy.CommonProxy;
 import com.teamcos.modularsystems.helpers.VanillaFuelHandler;
+import com.teamcos.modularsystems.notification.NotificationTickHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -90,6 +91,10 @@ public class ModularSystems {
 
         MinecraftForge.EVENT_BUS.register(FakePlayerPool.instance);
         GameRegistry.registerFuelHandler(new VanillaFuelHandler());
+
+        if(event.getSide() == Side.CLIENT) {
+            FMLCommonHandler.instance().bus().register(new NotificationTickHandler());
+        }
     }
 
     @EventHandler

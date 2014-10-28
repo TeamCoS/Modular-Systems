@@ -14,7 +14,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -246,12 +245,16 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
         }
     }
 
-    public ChatComponentText getSlotNameForChat() {
+    public String getSlotNameForChat() {
         switch (slot) {
-            case 0: return new ChatComponentText(EnumChatFormatting.AQUA + "Slot is Fuel");
-            case 1: return new ChatComponentText(EnumChatFormatting.DARK_AQUA + "Slot is Input");
-            case 2: return new ChatComponentText(EnumChatFormatting.GRAY + "Slot is Output");
-            default: return new ChatComponentText(EnumChatFormatting.AQUA + "Slot is Fuel");
+        case 0:
+            return EnumChatFormatting.YELLOW + "Mode: Fuel";
+        case 1:
+            return EnumChatFormatting.GREEN + "Mode: Input";
+        case 2:
+            return EnumChatFormatting.RED + "Mode: Output";
+        default:
+            return EnumChatFormatting.YELLOW + "Mode: Fuel";
         }
     }
 

@@ -2,7 +2,6 @@ package com.teamcos.modularsystems.utilities.tiles;
 
 import com.teamcos.modularsystems.collections.Doublet;
 import com.teamcos.modularsystems.collections.StandardValues;
-import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.functions.*;
 import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
@@ -85,7 +84,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
                 yCoord,
                 zCoord,
                 new ConvertDummiesWorldFunction(this),
-                Reference.MAX_FURNACE_SIZE
+                getMaxSize()
         );
         cube.setCube(this);
         values.setValues();
@@ -266,41 +265,38 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
             --this.furnaceBurnTime;
         }
 
-        if (!this.worldObj.isRemote) {
-            if (this.furnaceBurnTime == 0 && this.canSmelt()) {
-                this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
+        if (this.furnaceBurnTime == 0 && this.canSmelt()) {
+            this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
 
-                if (this.furnaceBurnTime > 0) {
-                    didWork = true;
+            if (this.furnaceBurnTime > 0) {
+                didWork = true;
 
-                    if (values.getFuel() != null) {
-                        --values.getFuel().stackSize;
+                if (values.getFuel() != null) {
+                    --values.getFuel().stackSize;
 
-                        if (values.getFuel().stackSize == 0) {
-                            values.setFuel(values.getFuel().getItem().getContainerItem(values.getFuel()));
-                        }
+                    if (values.getFuel().stackSize == 0) {
+                        values.setFuel(values.getFuel().getItem().getContainerItem(values.getFuel()));
                     }
                 }
             }
-
-            if (this.isBurning() && this.canSmelt()) {
-                ++this.furnaceCookTime;
-
-                if (this.furnaceCookTime >= this.getSpeedMultiplier()) {
-                    this.furnaceCookTime = 0;
-                    this.smeltItem();
-                    didWork = true;
-                }
-            } else {
-                this.furnaceCookTime = 0;
-            }
-
-            if (flag != this.furnaceBurnTime > 0) {
-                didWork = true;
-                updateBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-            }
         }
 
+        if (this.isBurning() && this.canSmelt()) {
+            ++this.furnaceCookTime;
+
+            if (this.furnaceCookTime >= this.getSpeedMultiplier()) {
+                this.furnaceCookTime = 0;
+                this.smeltItem();
+                didWork = true;
+            }
+        } else {
+            this.furnaceCookTime = 0;
+        }
+
+        if (flag != this.furnaceBurnTime > 0) {
+            didWork = true;
+            updateBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        }
         return didWork;
     }
 
@@ -554,7 +550,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
                 yCoord,
                 zCoord,
                 func,
-                Reference.MAX_FURNACE_SIZE
+                getMaxSize()
         );
         return !func.shouldContinue();
     }

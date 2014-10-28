@@ -1,5 +1,7 @@
 package com.teamcos.modularsystems.utilities.block;
 
+import com.teamcos.modularsystems.notification.Notification;
+import com.teamcos.modularsystems.notification.NotificationTickHandler;
 import com.teamcos.modularsystems.renderers.ApiRenderers;
 import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
@@ -8,7 +10,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 public class DummyIOBlock extends DummyBlock {
@@ -75,7 +79,9 @@ public class DummyIOBlock extends DummyBlock {
 
     private void displaySlot(World world, int x, int y, int z, EntityPlayer player) {
         DummyTile dummy = (DummyTile)world.getTileEntity(x, y, z);
-        player.addChatMessage(dummy.getSlotNameForChat());
+        if(world.isRemote)
+            NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(world.getBlock(x, y, z)), EnumChatFormatting.WHITE + world.getBlock(x,y,z).getLocalizedName(), dummy.getSlotNameForChat()));
+
     }
 
     @Override

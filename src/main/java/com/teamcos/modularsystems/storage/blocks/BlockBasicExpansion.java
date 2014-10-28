@@ -4,6 +4,8 @@ import com.teamcos.modularsystems.core.ModularSystems;
 import com.teamcos.modularsystems.core.helper.ConfigHelper;
 import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.core.managers.BlockManager;
+import com.teamcos.modularsystems.notification.Notification;
+import com.teamcos.modularsystems.notification.NotificationTickHandler;
 import com.teamcos.modularsystems.storage.tiles.TileEntityStorageCore;
 import com.teamcos.modularsystems.storage.tiles.TileEntityStorageExpansion;
 import cpw.mods.fml.relauncher.Side;
@@ -16,7 +18,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -64,7 +65,7 @@ public class BlockBasicExpansion extends BlockContainer {
 		if(dummy.getCore() == null || world.getBlockMetadata(x, y, z) == 1)
 		{
 			if(world.isRemote)
-				player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "Could not locate core, please provide a connection"));
+                NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(world.getBlock(x, y, z)), EnumChatFormatting.RED + "Lost Connection" , EnumChatFormatting.YELLOW + "Can not reach Core"));
 		}
 		return true;
 	}
