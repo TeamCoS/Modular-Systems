@@ -1,6 +1,5 @@
 package com.teamcos.modularsystems.manager;
 
-import com.teamcos.modularsystems.core.helper.ConfigHelper;
 import com.teamcos.modularsystems.utilities.block.BlockFurnaceOverlay;
 import com.teamcos.modularsystems.utilities.block.BlockSmelteryOverlay;
 import com.teamcos.modularsystems.utilities.block.DummyBlock;
@@ -17,11 +16,11 @@ import net.minecraft.item.crafting.CraftingManager;
 
 public class ApiModuleManager {
 
-    public static void enableFurnaceModule(CreativeTabs tab) {
+    public static void enableFurnaceModule(CreativeTabs tab, String textureName) {
         registerDummy(tab);
         registerDummyIO(tab);
-        if (ConfigHelper.useTextures) {
-            ApiBlockManager.furnaceOverlay = new BlockFurnaceOverlay(ConfigHelper.textureName, "furnaceOverlay", true);
+        if (textureName != null) {
+            ApiBlockManager.furnaceOverlay = new BlockFurnaceOverlay(textureName, "furnaceOverlay", true);
         } else {
             ApiBlockManager.furnaceOverlay = new BlockFurnaceOverlay("modularsystems:custom_overlay", "furnaceOverlay", true);
         }

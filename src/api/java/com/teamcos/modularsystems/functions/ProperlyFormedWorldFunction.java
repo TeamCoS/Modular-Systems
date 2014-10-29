@@ -1,6 +1,5 @@
 package com.teamcos.modularsystems.functions;
 
-import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.notification.Notification;
 import com.teamcos.modularsystems.notification.NotificationTickHandler;
 import com.teamcos.modularsystems.helpers.FurnaceHelper;
@@ -20,7 +19,7 @@ public class ProperlyFormedWorldFunction implements WorldFunction {
         Block blockId = world.getBlock(x, y, z);
         if (world.isAirBlock(x, y, z) || (FurnaceHelper.isBadBlock(blockId) && !FurnaceHelper.isModularBlock(blockId))) {
             shouldContinue = false;
-        } else if (!Reference.isValidBlock(blockId.getUnlocalizedName())) {
+        } else if (!FurnaceHelper.isValidBlock(blockId.getUnlocalizedName())) {
             shouldContinue = FurnaceHelper.isModularBlock(blockId);
         }
         if (world.isAirBlock(x, y, z)) {

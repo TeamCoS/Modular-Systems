@@ -1,18 +1,12 @@
 package com.teamcos.modularsystems.core.lib;
 
-import com.teamcos.modularsystems.core.helper.BlockValueHelper;
-import com.teamcos.modularsystems.core.helper.ConfigHelper;
 import com.teamcos.modularsystems.core.managers.BlockManager;
-import com.teamcos.modularsystems.furnace.config.BlockConfig;
+import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
 import com.teamcos.modularsystems.manager.ApiBlockManager;
-import com.teamcos.modularsystems.notification.Notification;
-import com.teamcos.modularsystems.notification.NotificationTickHandler;
-import com.teamcos.modularsystems.utilities.block.DummyBlock;
+import com.teamcos.modularsystems.registries.BannedFurnaceBlockRegistry;
+import com.teamcos.modularsystems.registries.BannedOreProcessorBlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Random;
 
@@ -39,19 +33,4 @@ public class Reference {
                     BlockManager.furnaceCraftingUpgrade.getUnlocalizedName(),
                     BlockManager.furnaceAddition.getUnlocalizedName()
             };
-
-    //FURNACE: Checks if the block is valid to form furnace
-    public static boolean isValidBlock(String blockId) {
-
-        for (int i = 0; i < ConfigHelper.bannedBlocks.length; i++) {
-            if (blockId.equals(ConfigHelper.bannedBlocks[i])) {
-                return false;
-            }
-        }
-
-        if (blockId.equals(BlockManager.furnaceCraftingUpgrade.getUnlocalizedName()) || blockId.equals(ApiBlockManager.dummyIOBlock.getUnlocalizedName()) || blockId.equals(Blocks.redstone_block.getUnlocalizedName()) || blockId.equals(BlockManager.furnaceAddition.getUnlocalizedName()))
-            return true;
-
-        return true;
-    }
 }

@@ -3,6 +3,8 @@ package com.teamcos.modularsystems.helpers;
 import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
 import com.teamcos.modularsystems.notification.Notification;
 import com.teamcos.modularsystems.notification.NotificationTickHandler;
+import com.teamcos.modularsystems.registries.BannedFurnaceBlockRegistry;
+import com.teamcos.modularsystems.registries.BannedOreProcessorBlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -33,5 +35,16 @@ public class FurnaceHelper {
 
     public static boolean isModularBlock(Block block) {
         return block instanceof MSUpgradeBlock;
+    }
+
+    //FURNACE: Checks if the block is valid to form furnace
+    public static boolean isValidBlock(String blockId) {
+
+        Block block = Block.getBlockFromName(blockId);
+        if (BannedFurnaceBlockRegistry.isBanned(blockId) || BannedOreProcessorBlockRegistry.isBanned(blockId)) return false;
+
+        if (block instanceof MSUpgradeBlock || blockId.equals(Blocks.redstone_block.getUnlocalizedName())) return true;
+
+        return true;
     }
 }

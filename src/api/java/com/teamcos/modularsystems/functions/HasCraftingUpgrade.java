@@ -1,6 +1,6 @@
 package com.teamcos.modularsystems.functions;
 
-import com.teamcos.modularsystems.core.managers.BlockManager;
+import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
@@ -12,7 +12,9 @@ public class HasCraftingUpgrade implements WorldFunction {
     @Override
     public void outerBlock(World world, int x, int y, int z) {
         Block blockId = world.getBlock(x, y, z);
-        hasCrafting = blockId == BlockManager.furnaceCraftingUpgrade;
+        hasCrafting |= blockId instanceof MSUpgradeBlock
+                ? ((MSUpgradeBlock)blockId).isCrafter()
+                : false;
     }
 
     @Override

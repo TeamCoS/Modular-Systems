@@ -1,7 +1,7 @@
 package com.teamcos.modularsystems.core.managers;
 
 import com.teamcos.modularsystems.core.ModularSystems;
-import com.teamcos.modularsystems.core.helper.OreDictionaryHelper;
+import com.teamcos.modularsystems.core.helper.ConfigHelper;
 import com.teamcos.modularsystems.enchanting.blocks.BlockEnchantmentAlter;
 import com.teamcos.modularsystems.enchanting.tiles.TileEntityEnchantmentAlter;
 import com.teamcos.modularsystems.furnace.blocks.BlockCrafter;
@@ -10,6 +10,7 @@ import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.teamcos.modularsystems.manager.ApiModuleManager;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
+import com.teamcos.modularsystems.oreprocessing.items.ItemDust;
 import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryCore;
 import com.teamcos.modularsystems.registries.OreProcessingRegistry;
 import com.teamcos.modularsystems.storage.blocks.*;
@@ -20,10 +21,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ModuleManager {
     public static void enableFurnaceModule() {
-        ApiModuleManager.enableFurnaceModule(ModularSystems.tabModularSystems);
+        String texture = ConfigHelper.useTextures ? ConfigHelper.textureName : null;
+        ApiModuleManager.enableFurnaceModule(ModularSystems.tabModularSystems, texture);
         BlockManager.furnaceCore = new BlockFurnaceCore(false).setBlockName("modularsystems:blockFurnaceCore").setCreativeTab(ModularSystems.tabModularSystems);
         BlockManager.furnaceCoreActive = new BlockFurnaceCore(true).setLightLevel(1F).setBlockName("modularsystems:blockFurnaceCoreActive");
         BlockManager.furnaceCraftingUpgrade = new BlockCrafter();
@@ -121,7 +124,7 @@ public class ModuleManager {
     public static void enableOreProcessingModule() {
         ApiModuleManager.enableOreProcessing(ModularSystems.tabModularSystems);
 
-        OreDictionaryHelper.initDustsAsNeeded();
+        initDustsAsNeeded();
         OreProcessingRegistry.addOreProcessingRecipe(Blocks.cobblestone, Blocks.sand);
 
         BlockManager.smelteryCore = new BlockSmelteryCore(false).setBlockName("modularsystems:blockSmelteryCore").setCreativeTab(ModularSystems.tabModularSystems);
@@ -136,5 +139,24 @@ public class ModuleManager {
                 "XXX", 'X', Items.flint, 'x', Blocks.furnace);
 
         GameRegistry.registerTileEntity(TileEntitySmelteryCore.class, "modularsystems:tileEntitySmetleryCore");
+    }
+
+    private static void initDustsAsNeeded()
+    {
+        if(OreDictionary.getOres("dustIron").isEmpty())
+        {
+            ItemManager.ironDust = new ItemDust("modularsystems:ironDust");
+            GameRegistry.registerItem(ItemManager.ironDust, "ironDust");
+            OreDictionary.registerOre("dustIron", ItemManager.ironDust);
+            GameRegistry.addSmelting(ItemManager.ironDust, new ItemStack(Items.iron_ingot, 1), 0.5F);
+        }
+
+        if(OreDictionary.getOres("dustGold").isEmpty())
+        {
+            ItemManager.goldDust = new ItemDust("modularsystems:goldDust");
+            GameRegistry.registerItem(ItemManager.goldDust, "goldDust");
+            OreDictionary.registerOre("dustGold", ItemManager.goldDust);
+            GameRegistry.addSmelting(ItemManager.goldDust, new ItemStack(Items.gold_ingot, 1), 0.7F);
+        }
     }
 }

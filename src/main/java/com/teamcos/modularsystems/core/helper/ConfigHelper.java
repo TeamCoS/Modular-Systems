@@ -1,6 +1,8 @@
 package com.teamcos.modularsystems.core.helper;
 
 import com.teamcos.modularsystems.core.lib.Reference;
+import com.teamcos.modularsystems.registries.BannedFurnaceBlockRegistry;
+import com.teamcos.modularsystems.registries.BannedOreProcessorBlockRegistry;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -20,9 +22,6 @@ public class ConfigHelper {
     public static boolean enableEnchanting;
     public static boolean enableOreProcessing;
 
-	//Banned Blocks
-	public static String[] bannedBlocks;
-	
 	public static int fakePlayerMax;
 
 	//checks to see if we are using resource pack or not
@@ -72,7 +71,7 @@ public class ConfigHelper {
 
 			fakePlayerMax = config.getInt(Configuration.CATEGORY_GENERAL, "Fake Player Max", 10, 1, 100, "Adding more is not suggested");
 
-            bannedBlocks = config.get("Settings, Modular Furnace", "Banned Block Unlocalized Names",
+            String[] bannedBlocks = config.get("Settings, Modular Furnace", "Banned Block Unlocalized Names",
 					new String[] 	{Blocks.log.getUnlocalizedName(), Blocks.planks.getUnlocalizedName(),
 					Blocks.dirt.getUnlocalizedName(), Blocks.ice.getUnlocalizedName(),
 					Blocks.snow.getUnlocalizedName(), Blocks.bookshelf.getUnlocalizedName(),
@@ -82,6 +81,11 @@ public class ConfigHelper {
 					Blocks.grass.getUnlocalizedName(), Blocks.bedrock.getUnlocalizedName(),
 					Blocks.diamond_ore.getUnlocalizedName(), Blocks.iron_ore.getUnlocalizedName(),
 					Blocks.emerald_ore.getUnlocalizedName(), Blocks.gold_ore.getUnlocalizedName(),}).getStringList();
+
+            for (String bannedBlock : bannedBlocks) {
+                BannedFurnaceBlockRegistry.banBlock(bannedBlock);
+                BannedOreProcessorBlockRegistry.banBlock(bannedBlock);
+            }
 
 			useTextures = config.get("Settings, Modular Furnace", "Use Vanilla Texture For Overlay?", false).getBoolean(true);
 			textureName = config.get("Settings, Modular Furnace", "Overlay Texture Name (from assets folder)", "hopper_top").getString();

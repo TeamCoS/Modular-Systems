@@ -1,6 +1,6 @@
 package com.teamcos.modularsystems.registries;
 
-import com.teamcos.modularsystems.core.helper.OreDictionaryHelper;
+import com.teamcos.modularsystems.helpers.OreDictionaryHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
