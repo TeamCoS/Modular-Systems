@@ -1,8 +1,12 @@
 package com.teamcos.modularsystems.functions;
 
-
 import com.teamcos.modularsystems.core.lib.Reference;
+import com.teamcos.modularsystems.notification.Notification;
+import com.teamcos.modularsystems.notification.NotificationTickHandler;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 public class ProperlyFormedWorldFunction implements WorldFunction {
@@ -18,6 +22,8 @@ public class ProperlyFormedWorldFunction implements WorldFunction {
         } else if (!Reference.isValidBlock(blockId.getUnlocalizedName())) {
             shouldContinue = Reference.isModularTile(blockId.getUnlocalizedName());
         }
+        if (world.isAirBlock(x, y, z))
+            NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(Blocks.furnace), EnumChatFormatting.RED + "ERROR: Missing Block", x + ", " + y + ", " + z));
     }
 
     @Override

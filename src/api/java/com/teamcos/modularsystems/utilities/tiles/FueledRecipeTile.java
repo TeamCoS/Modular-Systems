@@ -254,6 +254,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         {
             currentItemBurnTime = (int) getSpeedMultiplier();
         }
+        System.out.println(furnaceBurnTime + "  " + getSpeedMultiplier());
         return furnaceBurnTime * scaleVal / this.currentItemBurnTime;
     }
 
@@ -263,39 +264,42 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
 
         if (this.furnaceBurnTime > 0) {
             --this.furnaceBurnTime;
+            didWork = true;
         }
 
-        if (this.furnaceBurnTime == 0 && this.canSmelt()) {
-            this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
+        if (!this.worldObj.isRemote) {
+            if (this.furnaceBurnTime == 0 && this.canSmelt()) {
+                this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
 
-            if (this.furnaceBurnTime > 0) {
-                didWork = true;
+                if (this.furnaceBurnTime > 0) {
+                    didWork = true;
 
-                if (values.getFuel() != null) {
-                    --values.getFuel().stackSize;
+                    if (values.getFuel() != null) {
+                        --values.getFuel().stackSize;
 
-                    if (values.getFuel().stackSize == 0) {
-                        values.setFuel(values.getFuel().getItem().getContainerItem(values.getFuel()));
+                        if (values.getFuel().stackSize == 0) {
+                            values.setFuel(values.getFuel().getItem().getContainerItem(values.getFuel()));
+                        }
                     }
                 }
             }
-        }
 
-        if (this.isBurning() && this.canSmelt()) {
-            ++this.furnaceCookTime;
+            if (this.isBurning() && this.canSmelt()) {
+                ++this.furnaceCookTime;
 
-            if (this.furnaceCookTime >= this.getSpeedMultiplier()) {
+                if (this.furnaceCookTime >= this.getSpeedMultiplier()) {
+                    this.furnaceCookTime = 0;
+                    this.smeltItem();
+                    didWork = true;
+                }
+            } else {
                 this.furnaceCookTime = 0;
-                this.smeltItem();
-                didWork = true;
             }
-        } else {
-            this.furnaceCookTime = 0;
-        }
 
-        if (flag != this.furnaceBurnTime > 0) {
-            didWork = true;
-            updateBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+            if (flag != this.furnaceBurnTime > 0) {
+                didWork = true;
+                updateBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+            }
         }
         return didWork;
     }
@@ -310,9 +314,8 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         updateMultiblock();
 
         boolean didWork = doFurnaceWork();
-
         if (didWork) {
-            markDirty();
+            update();
         }
     }
 
