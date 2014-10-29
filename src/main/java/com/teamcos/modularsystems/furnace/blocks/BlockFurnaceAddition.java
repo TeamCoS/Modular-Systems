@@ -1,7 +1,9 @@
 package com.teamcos.modularsystems.furnace.blocks;
 
+import com.teamcos.modularsystems.core.ModularSystems;
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
+import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
 import com.teamcos.modularsystems.utilities.block.DummyBlock;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import cpw.mods.fml.relauncher.Side;
@@ -15,7 +17,7 @@ import net.minecraft.world.World;
 
 public class BlockFurnaceAddition extends DummyBlock {
     public BlockFurnaceAddition() {
-        super(Material.rock, true);
+        super(ModularSystems.tabModularSystems, Material.rock, true);
         
         setBlockName("modularsystems:blockFurnaceAddition");
         setStepSound(Block.soundTypeStone);
@@ -55,5 +57,10 @@ public class BlockFurnaceAddition extends DummyBlock {
         DummyTile dummy = new DummyTile();
         dummy.setBlock(getIdFromBlock(this));
         return dummy;
+    }
+
+    @Override
+    public int getMultiplier(int blockCount) {
+        return FurnaceConfigHandler.getSmeltingMultiplierForBlock(this, blockCount);
     }
 }

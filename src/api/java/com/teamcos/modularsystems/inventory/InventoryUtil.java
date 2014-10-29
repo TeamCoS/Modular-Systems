@@ -1,9 +1,9 @@
-package com.teamcos.modularsystems.core.util;
+package com.teamcos.modularsystems.inventory;
 
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import com.teamcos.modularsystems.core.inventory.GenericInventory;
+import com.teamcos.modularsystems.inventory.GenericInventory;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;

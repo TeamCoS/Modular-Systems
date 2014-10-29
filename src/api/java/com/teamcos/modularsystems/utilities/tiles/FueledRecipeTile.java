@@ -5,6 +5,7 @@ import com.teamcos.modularsystems.collections.StandardValues;
 import com.teamcos.modularsystems.functions.*;
 import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
+import com.teamcos.modularsystems.interfaces.ICore;
 import com.teamcos.modularsystems.utilities.tiles.shapes.Cuboid;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -39,8 +40,8 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     protected abstract ItemStack recipe(ItemStack is);
     public abstract int getMaxSize();
 
-    public FueledRecipeTile() {
-        this.values = new StandardValues(this, new BlockCountWorldFunction());
+    public FueledRecipeTile(int maxSize) {
+        this.values = new StandardValues(this, new BlockCountWorldFunction(), maxSize);
         this.cube = new Cuboid();
     }
 

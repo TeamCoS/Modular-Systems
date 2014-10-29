@@ -23,7 +23,7 @@ import net.minecraft.item.crafting.CraftingManager;
 
 public class ModuleManager {
     public static void enableFurnaceModule() {
-        ApiModuleManager.enableFurnaceModule();
+        ApiModuleManager.enableFurnaceModule(ModularSystems.tabModularSystems);
         BlockManager.furnaceCore = new BlockFurnaceCore(false).setBlockName("modularsystems:blockFurnaceCore").setCreativeTab(ModularSystems.tabModularSystems);
         BlockManager.furnaceCoreActive = new BlockFurnaceCore(true).setLightLevel(1F).setBlockName("modularsystems:blockFurnaceCoreActive");
         BlockManager.furnaceCraftingUpgrade = new BlockCrafter();
@@ -119,7 +119,7 @@ public class ModuleManager {
     }
 
     public static void enableOreProcessingModule() {
-        ApiModuleManager.enableOreProcessing();
+        ApiModuleManager.enableOreProcessing(ModularSystems.tabModularSystems);
 
         OreDictionaryHelper.initDustsAsNeeded();
         OreProcessingRegistry.addOreProcessingRecipe(Blocks.cobblestone, Blocks.sand);

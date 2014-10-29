@@ -1,6 +1,6 @@
 package com.teamcos.modularsystems.storage.containers;
 
-import com.teamcos.modularsystems.core.inventory.SlotArmor;
+import com.teamcos.modularsystems.inventory.SlotArmor;
 import com.teamcos.modularsystems.storage.tiles.TileEntityStorageCore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

@@ -1,7 +1,7 @@
 package com.teamcos.modularsystems.utilities.tiles;
 
-import com.teamcos.modularsystems.core.util.InventoryUtil;
-import com.teamcos.modularsystems.core.util.WorldUtil;
+import com.teamcos.modularsystems.inventory.InventoryUtil;
+import com.teamcos.modularsystems.utilities.WorldUtil;
 import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import com.teamcos.modularsystems.utilities.block.DummyIOBlock;

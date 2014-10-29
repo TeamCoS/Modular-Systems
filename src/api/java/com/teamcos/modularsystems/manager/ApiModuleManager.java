@@ -9,6 +9,7 @@ import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -16,9 +17,9 @@ import net.minecraft.item.crafting.CraftingManager;
 
 public class ApiModuleManager {
 
-    public static void enableFurnaceModule() {
-        registerDummy();
-        registerDummyIO();
+    public static void enableFurnaceModule(CreativeTabs tab) {
+        registerDummy(tab);
+        registerDummyIO(tab);
         if (ConfigHelper.useTextures) {
             ApiBlockManager.furnaceOverlay = new BlockFurnaceOverlay(ConfigHelper.textureName, "furnaceOverlay", true);
         } else {
@@ -41,9 +42,9 @@ public class ApiModuleManager {
 
     }
 
-    public static void enableOreProcessing() {
-        registerDummy();
-        registerDummyIO();
+    public static void enableOreProcessing(CreativeTabs tab) {
+        registerDummy(tab);
+        registerDummyIO(tab);
 
         ApiBlockManager.smelteryOverlay = new BlockSmelteryOverlay();
 
@@ -58,18 +59,18 @@ public class ApiModuleManager {
     private static boolean registeredDummy = false;
     private static boolean registeredDummyIO = false;
 
-    public static void registerDummy() {
+    public static void registerDummy(CreativeTabs tab) {
         if (!registeredDummy) {
-            ApiBlockManager.dummyBlock = new DummyBlock(Material.rock, true);
+            ApiBlockManager.dummyBlock = new DummyBlock(tab, Material.rock, true);
             GameRegistry.registerBlock(ApiBlockManager.dummyBlock, "modularDummy");
             GameRegistry.registerTileEntity(DummyTile.class, "dummyTile");
             registeredDummy = true;
         }
     }
 
-    public static void registerDummyIO() {
+    public static void registerDummyIO(CreativeTabs tab) {
         if (!registeredDummyIO) {
-            ApiBlockManager.dummyIOBlock = new DummyIOBlock(Material.rock, true);
+            ApiBlockManager.dummyIOBlock = new DummyIOBlock(tab, Material.rock, true);
             GameRegistry.registerBlock(ApiBlockManager.dummyIOBlock, "modularDummyIO");
             GameRegistry.registerTileEntity(DummyIOTile.class, "dummyIOTile");
             registeredDummyIO = true;

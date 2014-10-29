@@ -1,4 +1,4 @@
-package com.teamcos.modularsystems.utilities.tiles;
+package com.teamcos.modularsystems.interfaces;
 
 import com.teamcos.modularsystems.utilities.block.ModularSystemsTile;
 import net.minecraft.block.Block;

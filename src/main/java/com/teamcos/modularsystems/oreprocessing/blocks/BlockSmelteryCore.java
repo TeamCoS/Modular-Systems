@@ -3,6 +3,7 @@ package com.teamcos.modularsystems.oreprocessing.blocks;
 import com.teamcos.modularsystems.core.ModularSystems;
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
+import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
 import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryCore;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,7 +26,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockSmelteryCore extends BlockContainer {
+public class BlockSmelteryCore extends BlockContainer implements MSUpgradeBlock {
     private final Random random = new Random();
     private final boolean active;
     private static boolean isActive;
@@ -333,5 +334,25 @@ public class BlockSmelteryCore extends BlockContainer {
     public Item getItem(World world, int x, int y, int z)
     {
         return Item.getItemFromBlock(BlockManager.smelteryCore);
+    }
+
+    @Override
+    public double getEfficiency(int blockCount) {
+        return 0;
+    }
+
+    @Override
+    public double getSpeed(int blockCount) {
+        return 0;
+    }
+
+    @Override
+    public int getMultiplier(int blockCount) {
+        return 0;
+    }
+
+    @Override
+    public boolean isCrafter() {
+        return false;
     }
 }

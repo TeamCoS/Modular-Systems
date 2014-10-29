@@ -6,7 +6,7 @@ import com.teamcos.modularsystems.core.fakeplayer.ModularSystemsFakePlayer;
 import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.tiles.ModularTileEntity;
-import com.teamcos.modularsystems.core.util.WorldUtil;
+import com.teamcos.modularsystems.utilities.WorldUtil;
 import com.teamcos.modularsystems.helpers.Coord;
 import net.minecraft.block.Block;
 import net.minecraft.command.IEntitySelector;

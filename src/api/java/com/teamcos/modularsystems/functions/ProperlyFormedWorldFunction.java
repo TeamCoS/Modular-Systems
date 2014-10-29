@@ -3,6 +3,7 @@ package com.teamcos.modularsystems.functions;
 import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.notification.Notification;
 import com.teamcos.modularsystems.notification.NotificationTickHandler;
+import com.teamcos.modularsystems.helpers.FurnaceHelper;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -17,13 +18,14 @@ public class ProperlyFormedWorldFunction implements WorldFunction {
     @Override
     public void outerBlock(World world, int x, int y, int z) {
         Block blockId = world.getBlock(x, y, z);
-        if (world.isAirBlock(x, y, z) || (Reference.isBadBlock(blockId) && !Reference.isModularTile(blockId.getUnlocalizedName()))) {
+        if (world.isAirBlock(x, y, z) || (FurnaceHelper.isBadBlock(blockId) && !FurnaceHelper.isModularBlock(blockId))) {
             shouldContinue = false;
         } else if (!Reference.isValidBlock(blockId.getUnlocalizedName())) {
-            shouldContinue = Reference.isModularTile(blockId.getUnlocalizedName());
+            shouldContinue = FurnaceHelper.isModularBlock(blockId);
         }
-        if (world.isAirBlock(x, y, z))
+        if (world.isAirBlock(x, y, z)) {
             NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(Blocks.furnace), EnumChatFormatting.RED + "ERROR: Missing Block", x + ", " + y + ", " + z));
+        }
     }
 
     @Override

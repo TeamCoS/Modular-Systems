@@ -1,6 +1,7 @@
 package com.teamcos.modularsystems.oreprocessing.tiles;
 
 import com.teamcos.modularsystems.core.helper.ConfigHelper;
+import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.oreprocessing.blocks.BlockSmelteryCore;
 import com.teamcos.modularsystems.registries.OreProcessingRegistry;
@@ -22,7 +23,7 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
 
     //Empty Constructor
     public TileEntitySmelteryCore() {
-        super();
+        super(Reference.MAX_FURNACE_SIZE);
     }
 
     public void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z) {

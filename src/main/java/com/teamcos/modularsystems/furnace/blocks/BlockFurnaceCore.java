@@ -4,6 +4,7 @@ import com.teamcos.modularsystems.core.ModularSystems;
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
 import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceCore;
+import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -23,7 +24,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockFurnaceCore extends BlockContainer {
+public class BlockFurnaceCore extends BlockContainer implements MSUpgradeBlock {
     private static final Random field_149933_a = new Random();
     private static final String __OBFID = "CL_00000248";
     private static boolean field_149934_M;
@@ -258,5 +259,25 @@ public class BlockFurnaceCore extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public Item getItem(World p_149694_1_, int p_149694_2_, int p_149694_3_, int p_149694_4_) {
         return Item.getItemFromBlock(BlockManager.furnaceCore);
+    }
+
+    @Override
+    public double getEfficiency(int blockCount) {
+        return 0;
+    }
+
+    @Override
+    public double getSpeed(int blockCount) {
+        return 0;
+    }
+
+    @Override
+    public int getMultiplier(int blockCount) {
+        return 0;
+    }
+
+    @Override
+    public boolean isCrafter() {
+        return false;
     }
 }

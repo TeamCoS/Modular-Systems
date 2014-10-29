@@ -9,6 +9,7 @@ import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -17,8 +18,8 @@ import net.minecraft.world.World;
 
 public class DummyIOBlock extends DummyBlock {
 
-    public DummyIOBlock(Material material, boolean inTab) {
-        super(material, inTab);
+    public DummyIOBlock(CreativeTabs tab, Material material, boolean inTab) {
+        super(tab, material, inTab);
         setStepSound(Block.soundTypeStone);
         setHardness(3.5f);
         setBlockName("modularsystems:blockDummyIO");

@@ -1,8 +1,12 @@
-package com.teamcos.modularsystems.core.util;
+package com.teamcos.modularsystems.utilities;
 
 import net.minecraft.tileentity.TileEntity;
 
+import java.util.Random;
+
 public class WorldUtil {
+
+    public final static Random random = new Random();
 	
 	/**
 	 * Returns true if tiles are in same location

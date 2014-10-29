@@ -1,10 +1,10 @@
 package com.teamcos.modularsystems.collections;
 
-import com.teamcos.modularsystems.core.lib.Reference;
-import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.functions.BlockCountFunction;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import com.teamcos.modularsystems.helpers.Locatable;
+import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
+import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,10 +27,12 @@ public class StandardValues {
     private ItemStack fuel;
     private ItemStack output;
     private Locatable entity;
+    private int maxSize;
 
-    public StandardValues(Locatable entity, BlockCountFunction blockCount) {
+    public StandardValues(Locatable entity, BlockCountFunction blockCount, int maxSize) {
         this.blockCount = blockCount;
         this.entity = entity;
+        this.maxSize = maxSize;
     }
 
     public void setSpeedMultiplier(double smeltingMultiplier) {
@@ -119,7 +121,7 @@ public class StandardValues {
     private Values getValues(World worldObj, int x, int y, int z) {
 
         BlockCountFunction blockCount = this.blockCount.copy();
-        LocalBlockCollections.searchCuboidMultiBlock(worldObj, x, y, z, blockCount, Reference.MAX_FURNACE_SIZE);
+        LocalBlockCollections.searchCuboidMultiBlock(worldObj, x, y, z, blockCount, maxSize);
 
         double speedMultiplier = 0.0;
         double efficiencyMultiplier = 0.0;
@@ -127,12 +129,18 @@ public class StandardValues {
         boolean hasCrafter = false;
 
         for (Map.Entry<Block, Integer> blockEntry : blockCount.getBlockCounts().entrySet()) {
-            speedMultiplier += Reference.getSpeedMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
-            efficiencyMultiplier += Reference.getEfficiencyMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
-            if (blockEntry.getKey().getUnlocalizedName().equals(BlockManager.furnaceAddition.getUnlocalizedName())) {
-                smeltingMultiplier += blockEntry.getValue();
+            Block block = blockEntry.getKey();
+            if (block instanceof MSUpgradeBlock) {
+                MSUpgradeBlock upBlock = (MSUpgradeBlock) block;
+                speedMultiplier += upBlock.getSpeed(blockEntry.getValue());
+                efficiencyMultiplier += upBlock.getEfficiency(blockEntry.getValue());
+                smeltingMultiplier += upBlock.getMultiplier(blockEntry.getValue());
+                hasCrafter |= upBlock.isCrafter();
+            } else {
+                speedMultiplier += FurnaceConfigHandler.getSpeedMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
+                efficiencyMultiplier += FurnaceConfigHandler.getEfficiencyMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
+                smeltingMultiplier += FurnaceConfigHandler.getSmeltingMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
             }
-            hasCrafter |= blockEntry.getKey().getUnlocalizedName().equals(BlockManager.furnaceCraftingUpgrade);
         }
 
         return new Values(hasCrafter, speedMultiplier, efficiencyMultiplier, smeltingMultiplier);

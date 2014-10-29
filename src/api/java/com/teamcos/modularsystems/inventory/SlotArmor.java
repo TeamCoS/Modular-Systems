@@ -1,4 +1,4 @@
-package com.teamcos.modularsystems.core.inventory;
+package com.teamcos.modularsystems.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

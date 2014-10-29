@@ -1,14 +1,16 @@
 package com.teamcos.modularsystems.utilities.block;
 
-import com.teamcos.modularsystems.core.ModularSystems;
-import com.teamcos.modularsystems.core.lib.Reference;
+import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
+import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
 import com.teamcos.modularsystems.renderers.ApiRenderers;
+import com.teamcos.modularsystems.utilities.WorldUtil;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -18,11 +20,11 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class DummyBlock extends BlockContainer {
+public class DummyBlock extends BlockContainer implements MSUpgradeBlock {
 
-    public DummyBlock(Material material, boolean inTab) {
+    public DummyBlock(CreativeTabs tab, Material material, boolean inTab) {
         super(material);
-        if (inTab) setCreativeTab(ModularSystems.tabModularSystems);
+        if (inTab) setCreativeTab(tab);
         setBlockName("modularsystems:blockSmelteryDummy");
         setStepSound(Block.soundTypeStone);
         setHardness(3.5f);
@@ -42,9 +44,9 @@ public class DummyBlock extends BlockContainer {
         int meta = dummy.getMetadata();
 
         if (world.isAirBlock(x, y, z)) {
-            float f = Reference.random.nextFloat() * 0.8F + 0.1F;
-            float f1 = Reference.random.nextFloat() * 0.8F + 0.1F;
-            float f2 = Reference.random.nextFloat() * 0.8F + 0.1F;
+            float f = WorldUtil.random.nextFloat() * 0.8F + 0.1F;
+            float f1 = WorldUtil.random.nextFloat() * 0.8F + 0.1F;
+            float f2 = WorldUtil.random.nextFloat() * 0.8F + 0.1F;
 
             EntityItem entityitem = new EntityItem(
                     world,
@@ -114,5 +116,25 @@ public class DummyBlock extends BlockContainer {
     @Override
     public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
         return new DummyTile();
+    }
+
+    @Override
+    public double getEfficiency(int blockCount) {
+        return FurnaceConfigHandler.getEfficiencyMultiplierForBlock(this, blockCount);
+    }
+
+    @Override
+    public double getSpeed(int blockCount) {
+        return FurnaceConfigHandler.getSpeedMultiplierForBlock(this, blockCount);
+    }
+
+    @Override
+    public int getMultiplier(int blockCount) {
+        return FurnaceConfigHandler.getSmeltingMultiplierForBlock(this, blockCount);
+    }
+
+    @Override
+    public boolean isCrafter() {
+        return false;
     }
 }

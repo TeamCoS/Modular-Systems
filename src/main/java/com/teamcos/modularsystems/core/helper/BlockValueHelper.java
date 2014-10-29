@@ -1,10 +1,9 @@
 package com.teamcos.modularsystems.core.helper;
 
-import com.teamcos.modularsystems.furnace.FurnaceConfigHandler;
+import com.teamcos.modularsystems.calculations.*;
 import com.teamcos.modularsystems.furnace.config.BlockConfig;
-import com.teamcos.modularsystems.furnace.config.Calculation;
+import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
 import com.teamcos.modularsystems.registries.MaterialRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
@@ -127,7 +126,7 @@ public class BlockValueHelper
     private static Calculation constantCalculation(String value) {
         try {
             double scalar = Double.parseDouble(value);
-            return new Calculation.ConstantCalculation(scalar);
+            return new ConstantCalculation(scalar);
         } catch (Exception e) {
             return defaultCalculation();
         }
@@ -136,7 +135,7 @@ public class BlockValueHelper
     private static Calculation logCalculation(String value) {
         try {
             double scalar = Double.parseDouble(value);
-            return new Calculation.LogCalculation(scalar);
+            return new LogCalculation(scalar);
         } catch (Exception e) {
             return defaultCalculation();
         }
@@ -145,7 +144,7 @@ public class BlockValueHelper
     private static Calculation parabolicCalculation(String value) {
         try {
             double scalar = Double.parseDouble(value);
-            return new Calculation.ParabolicCalculation(scalar);
+            return new ParabolicCalculation(scalar);
         } catch (Exception e) {
             return defaultCalculation();
         }
@@ -154,14 +153,14 @@ public class BlockValueHelper
     private static Calculation linearCalculation(String value) {
         try {
             double scalar = Double.parseDouble(value);
-            return new Calculation.LinearCalculation(scalar);
+            return new LinearCalculation(scalar);
         } catch (Exception e) {
             return defaultCalculation();
         }
     }
 
     private static Calculation defaultCalculation() {
-        return new Calculation.LinearCalculation(1);
+        return new LinearCalculation(1);
     }
 
     private static void generateDefaultValues() throws TransformerException, ParserConfigurationException, IOException, SAXException
@@ -178,13 +177,5 @@ public class BlockValueHelper
             LogHelper.error(e.getMessage());
         }
         if(flag) init();
-    }
-
-    public static BlockConfig getBlockValueForBlock(Block block) {
-        return FurnaceConfigHandler.retrieveBlockConfig(block.getUnlocalizedName());
-    }
-
-    public static BlockConfig getMaterialValueForBlock(Block block) {
-        return FurnaceConfigHandler.retrieveMaterialConfig(block.getMaterial());
     }
 }

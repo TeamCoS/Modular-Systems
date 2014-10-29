@@ -1,6 +1,7 @@
 package com.teamcos.modularsystems.furnace.tiles;
 
 import com.teamcos.modularsystems.core.helper.ConfigHelper;
+import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
@@ -20,7 +21,7 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
 
     //Empty Constructor
     public TileEntityFurnaceCore() {
-        super();
+        super(Reference.MAX_FURNACE_SIZE);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.teamcos.modularsystems.utilities.util;
+package com.teamcos.modularsystems.inventory;
 
 import net.minecraft.inventory.IInventory;
 

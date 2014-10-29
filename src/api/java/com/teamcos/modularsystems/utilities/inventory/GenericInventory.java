@@ -1,6 +1,6 @@
 package com.teamcos.modularsystems.utilities.inventory;
 
-import com.teamcos.modularsystems.utilities.util.IInventoryCallback;
+import com.teamcos.modularsystems.inventory.IInventoryCallback;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
