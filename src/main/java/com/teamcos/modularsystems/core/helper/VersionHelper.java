@@ -16,7 +16,7 @@ public class VersionHelper implements Runnable {
 	private static VersionHelper instance = new VersionHelper();
 
 	// The (publicly available) remote version number authority file
-	final static String REMOTE_VERSION_XML_FILE = "https://raw.githubusercontent.com/pauljoda/Modular-Systems/master/VersionControl.xml";
+	final static String REMOTE_VERSION_XML_FILE = "https://raw.githubusercontent.com/TeamCoS/Modular-Systems/master/VersionControl.xml";
 
 	static Properties remoteVersionProperties = new Properties();
 
