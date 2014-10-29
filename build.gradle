@@ -33,7 +33,7 @@ configFile.withReader {
 }
 
 version = "${config.minecraft_version}-${config.mod_version}"
-group= "com.pauljoda.modularsystems" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "com.teamcos.modularsystems" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Modular Systems"
 
 minecraft {
