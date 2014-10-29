@@ -30,7 +30,6 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 
 	public void sortInventoryAlphabetically()
 	{
-
 		String temp, temp2;
 		ItemStack swapper;
 		for(int i = 0; i < inventoryRows * 11; i++)

@@ -255,20 +255,18 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         {
             currentItemBurnTime = (int) getSpeedMultiplier();
         }
-        System.out.println(furnaceBurnTime + "  " + getSpeedMultiplier());
         return furnaceBurnTime * scaleVal / this.currentItemBurnTime;
     }
 
-    protected boolean doFurnaceWork() {
+    protected void doFurnaceWork() {
         boolean flag = this.furnaceBurnTime > 0;
         boolean didWork = false;
 
-        if (this.furnaceBurnTime > 0) {
+        if (flag) {
             --this.furnaceBurnTime;
             didWork = true;
         }
 
-        if (!this.worldObj.isRemote) {
             if (this.furnaceBurnTime == 0 && this.canSmelt()) {
                 this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
 
@@ -301,8 +299,9 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
                 didWork = true;
                 updateBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             }
-        }
-        return didWork;
+
+        if(didWork)
+            update();
     }
 
     /******************************************************************************************************************
@@ -313,11 +312,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     @Override
     public void updateEntity() {
         updateMultiblock();
-
-        boolean didWork = doFurnaceWork();
-        if (didWork) {
-            update();
-        }
+        doFurnaceWork();
     }
 
     @Override

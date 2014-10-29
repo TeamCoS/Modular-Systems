@@ -9,20 +9,23 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class FurnaceHelper {
 
     //FURNACE
-    public static boolean isBadBlock(Block blockId) {
+    public static boolean isBadBlock(Block blockId, World world) {
 
         if (blockId instanceof MSUpgradeBlock || blockId == Blocks.redstone_block) return false;
         if (blockId.hasTileEntity(0)) {
+            if(world.isRemote)
             NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(blockId), EnumChatFormatting.RED + "ERROR: Tile Entity Found", blockId.getLocalizedName()));
             return true;
         }
         if (!blockId.isNormalCube()) {
-            NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(blockId), EnumChatFormatting.RED + "ERROR: Non-Solid Block", blockId.getLocalizedName()));
+            if(world.isRemote)
+                NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(blockId), EnumChatFormatting.RED + "ERROR: Non-Solid Block", blockId.getLocalizedName()));
             return true;
         }
 

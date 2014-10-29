@@ -17,13 +17,13 @@ public class ProperlyFormedWorldFunction implements WorldFunction {
     @Override
     public void outerBlock(World world, int x, int y, int z) {
         Block blockId = world.getBlock(x, y, z);
-        if (world.isAirBlock(x, y, z) || (FurnaceHelper.isBadBlock(blockId) && !FurnaceHelper.isModularBlock(blockId))) {
+        if (world.isAirBlock(x, y, z) || (FurnaceHelper.isBadBlock(blockId, world) && !FurnaceHelper.isModularBlock(blockId))) {
             shouldContinue = false;
         } else if (!FurnaceHelper.isValidBlock(blockId.getUnlocalizedName())) {
             shouldContinue = FurnaceHelper.isModularBlock(blockId);
         }
-        if (world.isAirBlock(x, y, z)) {
-            NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(Blocks.furnace), EnumChatFormatting.RED + "ERROR: Missing Block", x + ", " + y + ", " + z));
+        if ((world.isAirBlock(x, y, z) || !shouldContinue) && world.isRemote) {
+            NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(Blocks.furnace), EnumChatFormatting.RED + "ERROR: Invalid Block", x + ", " + y + ", " + z));
         }
     }
 

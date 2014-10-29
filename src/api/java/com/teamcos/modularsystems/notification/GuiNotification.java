@@ -1,6 +1,6 @@
 package com.teamcos.modularsystems.notification;
 
-        import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -10,6 +10,9 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class GuiNotification extends Gui {
@@ -21,32 +24,41 @@ public class GuiNotification extends Gui {
     private String description;
     private Notification notification;
     private long timeOpen;
-    private RenderItem field_146264_m;
+    private RenderItem itemRenderer;
     private boolean hide;
-    private static final String __OBFID = "CL_00000721";
+
+    private List<Notification> notifications = new ArrayList<Notification>();
 
     public GuiNotification(Minecraft mc)
     {
         this.minecraft = mc;
-        this.field_146264_m = new RenderItem();
+        this.itemRenderer = new RenderItem();
     }
 
     public void queueNotification(Notification notification1)
     {
-        this.title = notification1.getTitle();
-        this.description = notification1.getDescription();
-        this.timeOpen = Minecraft.getSystemTime();
-        this.notification = notification1;
-        this.hide = false;
+        if(notifications.isEmpty()) {
+            this.title = notification1.getTitle();
+            this.description = notification1.getDescription();
+            this.timeOpen = Minecraft.getSystemTime();
+            this.notification = notification1;
+        }
+        notifications.add(notification1);
     }
 
-    public void queueNewNotification(Notification notification1)
+    public void moveToNextNotification()
     {
-        this.title = notification1.getTitle();
-        this.description = notification1.getDescription();
-        this.timeOpen = Minecraft.getSystemTime() + 2500L;
-        this.notification = notification1;
-        this.hide = true;
+        if(!notifications.isEmpty()) {
+            notifications.remove(0);
+            setDead();
+            if(!notifications.isEmpty()) {
+                this.title = notifications.get(0).getTitle();
+                this.description = notifications.get(0).getDescription();
+                this.timeOpen = Minecraft.getSystemTime();
+                this.notification = notifications.get(0);
+                this.hide = false;
+            }
+        }
     }
 
     private void updateScale()
@@ -81,6 +93,7 @@ public class GuiNotification extends Gui {
                 if (d0 < 0.0D || d0 > 1.0D)
                 {
                     this.timeOpen = 0L;
+                    moveToNextNotification();
                     return;
                 }
             }
@@ -132,7 +145,7 @@ public class GuiNotification extends Gui {
             GL11.glEnable(GL12.GL_RESCALE_NORMAL);
             GL11.glEnable(GL11.GL_COLOR_MATERIAL);
             GL11.glEnable(GL11.GL_LIGHTING);
-            this.field_146264_m.renderItemAndEffectIntoGUI(this.minecraft.fontRenderer, this.minecraft.getTextureManager(), this.notification.getIcon(), i + 8, j + 8);
+            this.itemRenderer.renderItemAndEffectIntoGUI(this.minecraft.fontRenderer, this.minecraft.getTextureManager(), this.notification.getIcon(), i + 8, j + 8);
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glDepthMask(true);
             GL11.glEnable(GL11.GL_DEPTH_TEST);
