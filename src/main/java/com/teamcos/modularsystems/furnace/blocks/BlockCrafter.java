@@ -23,10 +23,22 @@ public class BlockCrafter extends DummyBlock {
         blockIcon = iconRegister.registerIcon("crafting_table_top");
     }
 
-	@Override
-	public int getRenderType() {
-		return ClientProxy.msRenderId;
-	}
+    public int getRenderType() {
+        return ClientProxy.msRenderId;
+    }
+
+    @Override
+    public boolean canRenderInPass(int pass) {
+        //Set the static var in the client proxy
+        ClientProxy.renderPass = pass;
+        //the block can render in both passes, so return true always
+        return true;
+    }
+
+    @Override
+    public int getRenderBlockPass() {
+        return 1;
+    }
 
     @Override
     public boolean isCrafter() {
