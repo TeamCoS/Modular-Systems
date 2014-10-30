@@ -3,6 +3,7 @@ package com.teamcos.modularsystems.core.waila;
 import com.teamcos.modularsystems.core.lib.GuiColor;
 import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryCore;
 import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
+import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -38,11 +39,18 @@ public class WailaDataProvider implements IWailaDataProvider {
                 currenttip.add(GuiColor.GREEN + "Multiplicity: " + multiplicityText);
             }
         }
-
-        else if(accessor.getTileEntity() instanceof DummyIOTile)
+        else if(accessor.getTileEntity() instanceof DummyTile)
         {
-            DummyIOTile tileEntity = (DummyIOTile)accessor.getTileEntity();
-            currenttip.add(tileEntity.getSlotNameForChat());
+            DummyTile tileEntity = (DummyTile)accessor.getTileEntity();
+            if(accessor.getTileEntity() instanceof DummyIOTile)
+            {
+                tileEntity = (DummyIOTile)accessor.getTileEntity();
+                currenttip.add(tileEntity.getSlotNameForChat());
+            }
+            else {
+                currenttip.add(tileEntity.getBlock().getLocalizedName());
+            }
+
         }
 
         return currenttip;
@@ -61,6 +69,6 @@ public class WailaDataProvider implements IWailaDataProvider {
     public static void callbackRegister(IWailaRegistrar registrar)
     {
         registrar.registerHeadProvider(new WailaDataProvider(), FueledRecipeTile.class);
-        registrar.registerHeadProvider(new WailaDataProvider(), DummyIOTile.class);
+        registrar.registerHeadProvider(new WailaDataProvider(), DummyTile.class);
     }
 }
