@@ -372,6 +372,22 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         }
     }
 
+    public double getSpeed() {
+        return values.getSpeed();
+    }
+
+    public double getEfficiency() {
+        return values.getEfficiency();
+    }
+
+    public int getSmeltingMultiplier() {
+        return values.getSmeltingMultiplier();
+    }
+
+    public void checkInventorySlots() {
+        values.checkInventorySlots();
+    }
+
     /*****************************************************************************************************************
      *********************************************** Inventory methods ***********************************************
      *****************************************************************************************************************/
