@@ -132,20 +132,20 @@ public class ContainerModularFurnaceCrafter extends Container
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int par1, int par2)
 	{
-//		if (par1 == 0)
-//		{
-//			this.tileEntity.furnaceCookTime = par2;
-//		}
-//
-//		if (par1 == 1)
-//		{
-//			this.tileEntity.furnaceBurnTime = par2;
-//		}
-//
-//		if (par1 == 2)
-//		{
-//			this.tileEntity.currentItemBurnTime = par2;
-//		}
+		if (par1 == 0)
+		{
+			this.tileEntity.furnaceCookTime = par2;
+		}
+
+		if (par1 == 1)
+		{
+			this.tileEntity.furnaceBurnTime = par2;
+		}
+
+		if (par1 == 2)
+		{
+			this.tileEntity.currentItemBurnTime = par2;
+		}
 	}
 
 	@Override
