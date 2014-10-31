@@ -5,7 +5,7 @@ import com.teamcos.modularsystems.core.helper.ConfigHelper;
 import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.notification.Notification;
-import com.teamcos.modularsystems.notification.NotificationTickHandler;
+import com.teamcos.modularsystems.notification.NotificationHelper;
 import com.teamcos.modularsystems.storage.tiles.TileEntityStorageCore;
 import com.teamcos.modularsystems.storage.tiles.TileEntityStorageExpansion;
 import cpw.mods.fml.relauncher.Side;
@@ -65,7 +65,7 @@ public class BlockBasicExpansion extends BlockContainer {
 		if(dummy.getCore() == null || world.getBlockMetadata(x, y, z) == 1)
 		{
 			if(world.isRemote)
-                NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(world.getBlock(x, y, z)), EnumChatFormatting.RED + "Lost Connection" , EnumChatFormatting.YELLOW + "Can not reach Core"));
+                NotificationHelper.addNotification(new Notification(new ItemStack(world.getBlock(x, y, z)), EnumChatFormatting.RED + "Lost Connection", EnumChatFormatting.YELLOW + "Can not reach Core", Notification.DEFAULT_DURATION));
 		}
 		return true;
 	}

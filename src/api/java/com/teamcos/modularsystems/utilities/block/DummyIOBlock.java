@@ -1,7 +1,7 @@
 package com.teamcos.modularsystems.utilities.block;
 
 import com.teamcos.modularsystems.notification.Notification;
-import com.teamcos.modularsystems.notification.NotificationTickHandler;
+import com.teamcos.modularsystems.notification.NotificationHelper;
 import com.teamcos.modularsystems.renderers.ApiRenderers;
 import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
@@ -81,7 +81,7 @@ public class DummyIOBlock extends DummyBlock {
     private void displaySlot(World world, int x, int y, int z, EntityPlayer player) {
         DummyTile dummy = (DummyTile)world.getTileEntity(x, y, z);
         if(world.isRemote)
-            NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(world.getBlock(x, y, z)), EnumChatFormatting.WHITE + world.getBlock(x,y,z).getLocalizedName(), dummy.getSlotNameForChat()));
+            NotificationHelper.addNotification(new Notification(new ItemStack(world.getBlock(x, y, z)), EnumChatFormatting.WHITE + world.getBlock(x, y, z).getLocalizedName(), dummy.getSlotNameForChat(), Notification.SHORT_DURATION));
 
     }
 

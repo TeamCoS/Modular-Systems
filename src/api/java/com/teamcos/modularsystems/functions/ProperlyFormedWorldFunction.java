@@ -1,8 +1,8 @@
 package com.teamcos.modularsystems.functions;
 
-import com.teamcos.modularsystems.notification.Notification;
-import com.teamcos.modularsystems.notification.NotificationTickHandler;
 import com.teamcos.modularsystems.helpers.FurnaceHelper;
+import com.teamcos.modularsystems.notification.Notification;
+import com.teamcos.modularsystems.notification.NotificationHelper;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -23,7 +23,7 @@ public class ProperlyFormedWorldFunction implements WorldFunction {
             shouldContinue = FurnaceHelper.isModularBlock(blockId);
         }
         if ((world.isAirBlock(x, y, z) || !shouldContinue) && world.isRemote) {
-            NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(Blocks.furnace), EnumChatFormatting.RED + "ERROR: Invalid Block", x + ", " + y + ", " + z));
+            NotificationHelper.addNotification(new Notification(new ItemStack(Blocks.furnace), EnumChatFormatting.RED + "ERROR: Invalid Block", x + ", " + y + ", " + z, Notification.DEFAULT_DURATION));
         }
     }
 

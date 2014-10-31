@@ -20,6 +20,7 @@ public class GuiNotification extends Gui {
     private Minecraft minecraft;
     private int width;
     private int height;
+    private double duration;
     private String title;
     private String description;
     private Notification notification;
@@ -41,6 +42,7 @@ public class GuiNotification extends Gui {
             this.title = notification1.getTitle();
             this.description = notification1.getDescription();
             this.timeOpen = Minecraft.getSystemTime();
+            this.duration = notification1.getDuration();
             this.notification = notification1;
         }
         notifications.add(notification1);
@@ -55,6 +57,7 @@ public class GuiNotification extends Gui {
                 this.title = notifications.get(0).getTitle();
                 this.description = notifications.get(0).getDescription();
                 this.timeOpen = Minecraft.getSystemTime();
+                this.duration = notifications.get(0).getDuration();
                 this.notification = notifications.get(0);
                 this.hide = false;
             }
@@ -86,7 +89,7 @@ public class GuiNotification extends Gui {
     {
         if (this.notification != null && this.timeOpen != 0L && Minecraft.getMinecraft().thePlayer != null)
         {
-            double d0 = (double)(Minecraft.getSystemTime() - this.timeOpen) / 3000.0D;
+            double d0 = (double)(Minecraft.getSystemTime() - this.timeOpen) / this.duration;
 
             if (!this.hide)
             {
@@ -97,6 +100,7 @@ public class GuiNotification extends Gui {
                     return;
                 }
             }
+
             else if (d0 > 0.5D)
             {
                 d0 = 0.5D;

@@ -2,7 +2,7 @@ package com.teamcos.modularsystems.helpers;
 
 import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
 import com.teamcos.modularsystems.notification.Notification;
-import com.teamcos.modularsystems.notification.NotificationTickHandler;
+import com.teamcos.modularsystems.notification.NotificationHelper;
 import com.teamcos.modularsystems.registries.BannedFurnaceBlockRegistry;
 import com.teamcos.modularsystems.registries.BannedOreProcessorBlockRegistry;
 import net.minecraft.block.Block;
@@ -20,12 +20,12 @@ public class FurnaceHelper {
         if (blockId instanceof MSUpgradeBlock || blockId == Blocks.redstone_block) return false;
         if (blockId.hasTileEntity(0)) {
             if(world.isRemote)
-            NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(blockId), EnumChatFormatting.RED + "ERROR: Tile Entity Found", blockId.getLocalizedName()));
+           NotificationHelper.addNotification(new Notification(new ItemStack(blockId), EnumChatFormatting.RED + "ERROR: Tile Entity Found", blockId.getLocalizedName(), Notification.DEFAULT_DURATION));
             return true;
         }
         if (!blockId.isNormalCube()) {
             if(world.isRemote)
-                NotificationTickHandler.guiNotification.queueNotification(new Notification(new ItemStack(blockId), EnumChatFormatting.RED + "ERROR: Non-Solid Block", blockId.getLocalizedName()));
+                NotificationHelper.addNotification(new Notification(new ItemStack(blockId), EnumChatFormatting.RED + "ERROR: Non-Solid Block", blockId.getLocalizedName(), Notification.DEFAULT_DURATION));
             return true;
         }
 
