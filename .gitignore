@@ -16,6 +16,8 @@ src/main/config
 src/main/saves
 src/main/options.txt
 src/main/crash-reports/
+src/main/mods/
+src/main/asm/
 gradle/wrapper/gradle-wrapper.jar
 gradle/wrapper/gradle-wrapper.properties
 gradlew
