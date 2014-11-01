@@ -73,24 +73,23 @@ public class ContainerModularFurnace extends Container
         this.lastBurnTime = this.tileEntity.getFurnaceBurnTime();
         this.lastItemBurnTime = this.tileEntity.getCurrentItemBurnTime();
     }
-    
+
     @Override
     public void updateProgressBar(int par1, int par2)
     {
-//        if (par1 == 0)
-//        {
-//           this.tileEntity.furnaceCookTime = par2;
-//        }
-//
-//        if (par1 == 1)
-//        {
-//            this.tileEntity.furnaceBurnTime = par2;
-//        }
-//
-//        if (par1 == 2)
-//        {
-//            this.tileEntity.currentItemBurnTime = par2;
-//        }
+        if (par1 == 0) {
+            tileEntity.setFurnaceCookTime(par2);
+        }
+
+        if (par1 == 1)
+        {
+            tileEntity.setFurnaceBurnTime(par2);
+        }
+
+        if (par1 == 2)
+        {
+            tileEntity.setCurrentItemBurnTime(par2);
+        }
     }
     
     @Override

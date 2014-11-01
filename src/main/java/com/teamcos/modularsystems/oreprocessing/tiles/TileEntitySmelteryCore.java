@@ -37,7 +37,7 @@ public class TileEntitySmelteryCore extends FueledRecipeTile {
 
     @Override
     protected ItemStack recipe(ItemStack is) {
-        return OreProcessingRegistry.getOutput(is);
+        return is == null ? null : OreProcessingRegistry.getOutput(is);
     }
 
     @Override

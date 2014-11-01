@@ -1,8 +1,6 @@
 package com.teamcos.modularsystems.furnace.containers;
 
 import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceCore;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
@@ -129,24 +127,23 @@ public class ContainerModularFurnaceCrafter extends Container
         this.lastItemBurnTime = this.tileEntity.getCurrentItemBurnTime();
     }
 
-	@SideOnly(Side.CLIENT)
-	public void updateProgressBar(int par1, int par2)
-	{
-//		if (par1 == 0)
-//		{
-//			this.tileEntity.furnaceCookTime = par2;
-//		}
-//
-//		if (par1 == 1)
-//		{
-//			this.tileEntity.furnaceBurnTime = par2;
-//		}
-//
-//		if (par1 == 2)
-//		{
-//			this.tileEntity.currentItemBurnTime = par2;
-//		}
-	}
+    @Override
+    public void updateProgressBar(int par1, int par2)
+    {
+        if (par1 == 0) {
+            tileEntity.setFurnaceCookTime(par2);
+        }
+
+        if (par1 == 1)
+        {
+            tileEntity.setFurnaceBurnTime(par2);
+        }
+
+        if (par1 == 2)
+        {
+            tileEntity.setCurrentItemBurnTime(par2);
+        }
+    }
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityPlayer)

@@ -38,7 +38,7 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
     }
 
     protected ItemStack recipe(ItemStack is) {
-        return FurnaceRecipes.smelting().getSmeltingResult(is);
+        return is == null ? null : FurnaceRecipes.smelting().getSmeltingResult(is);
     }
 
     @Override
@@ -105,8 +105,16 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
         return values.getSpeed();
     }
 
+    public double getGuiSpeed() {
+        return Math.max(0.001, getSpeed());
+    }
+
     public double getEfficiency() {
         return values.getEfficiency();
+    }
+
+    public double getGuiEfficiency() {
+        return Math.max(0.001, getEfficiency());
     }
 
     public int getSmeltingMultiplier() {

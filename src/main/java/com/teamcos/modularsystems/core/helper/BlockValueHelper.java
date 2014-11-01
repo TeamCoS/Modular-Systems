@@ -1,6 +1,7 @@
 package com.teamcos.modularsystems.core.helper;
 
 import com.teamcos.modularsystems.calculations.*;
+import com.teamcos.modularsystems.calculations.Calculation.*;
 import com.teamcos.modularsystems.furnace.config.BlockConfig;
 import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
 import com.teamcos.modularsystems.registries.MaterialRegistry;
@@ -49,25 +50,12 @@ public class BlockValueHelper
             {
                 Element element = (Element) nNode;
                 String name = element.getAttribute("unlocalizedName");
-                String speed = element.getElementsByTagName("speedValue").item(0).getTextContent();
-                NodeList speedEqNode = element.getElementsByTagName("speedEq");
-                String speedFunction = "linear";
-                if (speedEqNode.getLength() > 0) {
-                    speedFunction = speedEqNode.item(0).getTextContent();
-                }
-                String efficiency = element.getElementsByTagName("efficiencyValue").item(0).getTextContent();
-                NodeList effEqNode = element.getElementsByTagName("efficiencyEq");
-                String effFunction = "linear";
-                if (effEqNode.getLength() > 0) {
-                    effFunction = effEqNode.item(0).getTextContent();
-                }
+                Element speed = getElement(element, "speed");
+                Element efficiency = getElement(element, "efficiency");
+                Element smelting = getElement(element, "smelting");
                 FurnaceConfigHandler.publishBlockConfig(
-                        name,
-                        new BlockConfig(
-                                name,
-                                getCalculation(effFunction, efficiency),
-                                getCalculation(speedFunction, speed)
-                        )
+                    name,
+                    blockConfig(name, speed, efficiency, smelting)
                 );
             }
         }
@@ -83,84 +71,160 @@ public class BlockValueHelper
                 String name = element.getAttribute("name");
                 Material material = MaterialRegistry.retrieveMaterial(name);
                 if (material != null) {
-                    String speed = element.getElementsByTagName("speedValue").item(0).getTextContent();
-                    NodeList speedEqNode = element.getElementsByTagName("speedEq");
-                    String speedFunction = "linear";
-                    if (speedEqNode.getLength() > 0) {
-                        speedFunction = speedEqNode.item(0).getTextContent();
-                    }
-                    String efficiency = element.getElementsByTagName("efficiencyValue").item(0).getTextContent();
-                    NodeList effEqNode = element.getElementsByTagName("efficiencyEq");
-                    String effFunction = "linear";
-                    if (effEqNode.getLength() > 0) {
-                        effFunction = effEqNode.item(0).getTextContent();
-                    }
+                    Element speed = getElement(element, "speed");
+                    Element efficiency = getElement(element, "efficiency");
+                    Element smelting = getElement(element, "smelting");
 
                     FurnaceConfigHandler.publishMaterialConfig(
-                            material,
-                            new BlockConfig(
-                                    name,
-                                    getCalculation(effFunction, efficiency),
-                                    getCalculation(speedFunction, speed)
-                            )
+                        material,
+                        blockConfig(name, speed, efficiency, smelting)
                     );
                 }
             }
         }
     }
 
-    private static Calculation getCalculation(String name, String value) {
-        if (name.equals("linear")) {
-            return linearCalculation(value);
-        } else if (name.equals("constant")) {
-            return constantCalculation(value);
-        } else if (name.equals("log")) {
-            return logCalculation(value);
-        } else if (name.equals("parabolic")) {
-            return parabolicCalculation(value);
+    private static BlockConfig blockConfig(String name, Element speed, Element efficiency, Element smelting) {
+        return new BlockConfig(
+                name,
+                getEfficiencyCalculation(efficiency),
+                getSpeedCalculation(speed),
+                getSmeltingCalculation(smelting)
+        );
+    }
+
+    private static Element getElement(Element node, String name) {
+        NodeList eles = node.getElementsByTagName(name);
+        if (eles.getLength() > 0) {
+            return (Element) eles.item(0);
         } else {
-            return linearCalculation(value);
+            return null;
         }
     }
 
-    private static Calculation constantCalculation(String value) {
+    private static Calculation getSmeltingCalculation(Element node) {
+        return node == null
+                ? defaultSmeltingCalculation()
+                : getCalculation(node);
+    }
+
+    private static Calculation getEfficiencyCalculation(Element node) {
+        return node == null
+                ? defaultCalculation()
+                : getCalculation(node);
+    }
+
+    private static Calculation getSpeedCalculation(Element node) {
+        return node == null
+                ? defaultCalculation()
+                : getCalculation(node);
+    }
+
+    private static Calculation getCalculation(Element node) {
+        String name = getStringValue(node, "equation", "linear");
+        if (name.equals("linear")) {
+            return linearCalculation(node);
+        } else if (name.equals("constant")) {
+            return constantCalculation(node);
+        } else if (name.equals("log")) {
+            return logCalculation(node);
+        } else if (name.equals("parabolic")) {
+            return parabolicCalculation(node);
+        } else {
+            return linearCalculation(node);
+        }
+    }
+
+    private static Calculation constantCalculation(Element node) {
         try {
-            double scalar = Double.parseDouble(value);
-            return new ConstantCalculation(scalar);
+            return new ConstantCalculation(getValues(node));
         } catch (Exception e) {
             return defaultCalculation();
         }
     }
 
-    private static Calculation logCalculation(String value) {
+    private static Calculation logCalculation(Element node) {
         try {
-            double scalar = Double.parseDouble(value);
-            return new LogCalculation(scalar);
+            return new LogCalculation(getValues(node));
         } catch (Exception e) {
             return defaultCalculation();
         }
     }
 
-    private static Calculation parabolicCalculation(String value) {
+    private static Calculation parabolicCalculation(Element node) {
         try {
-            double scalar = Double.parseDouble(value);
-            return new ParabolicCalculation(scalar);
+            return new ParabolicCalculation(getValues(node));
         } catch (Exception e) {
             return defaultCalculation();
         }
     }
 
-    private static Calculation linearCalculation(String value) {
+    private static Calculation linearCalculation(Element node) {
         try {
-            double scalar = Double.parseDouble(value);
-            return new LinearCalculation(scalar);
+            return new LinearCalculation(getValues(node));
         } catch (Exception e) {
             return defaultCalculation();
         }
     }
 
     private static Calculation defaultCalculation() {
-        return new LinearCalculation(1);
+        return new LinearCalculation(new StandardValues(0, 0, 1, 1, Double.MAX_VALUE));
+    }
+
+    private static Calculation defaultSmeltingCalculation() {
+        return new LinearCalculation(new StandardValues(0, 0, 0, 0, Double.MAX_VALUE));
+    }
+
+    private static Calculation.StandardValues getValues(Element node) {
+        double xOffset = getDoubleValue(node, "xOffset", 0);
+        double yOffset = getDoubleValue(node, "yOffset", 0);
+        double xCoefficient = getDoubleValue(node, "xCoefficient", 1);
+        double yCoefficient = getDoubleValue(node, "yCoefficient", 1);
+        double perBlockCap = getDoubleValue(node, "perBlockCap", Double.MAX_VALUE);
+        return new StandardValues(xOffset, yOffset, xCoefficient, yCoefficient, perBlockCap);
+    }
+
+    private static String getStringValue(Element node, String name) {
+        return node.getElementsByTagName(name).item(0).toString();
+    }
+
+    private static String getStringValue(Element node, String name, String defaultValue) {
+        NodeList equationList = node.getElementsByTagName(name);
+        String value;
+        if (equationList.getLength() == 0) {
+            value = defaultValue;
+        } else {
+            value = equationList.item(0).toString();
+        }
+        return value;
+    }
+
+    private static double getDoubleValue(Element node, String name) {
+        String value = getStringValue(node, name);
+        return Double.parseDouble(value);
+    }
+
+    private static double getDoubleValue(Element node, String name, double defaultValue) {
+        try {
+            String value = getStringValue(node, name);
+            return Double.parseDouble(value);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    private static int getIntValue(Element node, String name) {
+        String value = getStringValue(node, name);
+        return Integer.parseInt(value);
+    }
+
+    private static int getIntValue(Element node, String name, int defaultValue) {
+        try {
+            String value = getStringValue(node, name);
+            return Integer.parseInt(value);
+        } catch (Exception e) {
+            return defaultValue;
+        }
     }
 
     private static void generateDefaultValues() throws TransformerException, ParserConfigurationException, IOException, SAXException

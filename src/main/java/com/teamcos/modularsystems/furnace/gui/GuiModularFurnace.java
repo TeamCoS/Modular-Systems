@@ -27,10 +27,10 @@ public class GuiModularFurnace extends GuiBase
 		this.tileEntity = tileEntity;
 		statsPanel = new StatisticsPanel(-60, 0);
 		
-		final double speedValue = tileEntity.getSpeed() / 8;
+		final double speedValue = tileEntity.getGuiSpeed();
 		String speedText = String.format("%.1f", speedValue) + "x";
 
-		final double efficiencyValue = tileEntity.getScaledEfficiency();
+		final double efficiencyValue = tileEntity.getGuiEfficiency();
 		String efficiencyText = String.format("%.1f", efficiencyValue) + "x";
 
 		final int multiplicity = tileEntity.getSmeltingMultiplier();
