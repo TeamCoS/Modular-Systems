@@ -4,8 +4,10 @@ import com.teamcos.modularsystems.collections.Doublet;
 import com.teamcos.modularsystems.collections.StandardValues;
 import com.teamcos.modularsystems.functions.*;
 import com.teamcos.modularsystems.helpers.Coord;
+import com.teamcos.modularsystems.helpers.LiquidHelper;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import com.teamcos.modularsystems.interfaces.ICore;
+import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.utilities.tiles.shapes.Cuboid;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Random;
 
@@ -129,10 +132,25 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
      * @return How many ticks an item will burn
      */
     public int scaledBurnTime() {
+
+        int fuelBurnTime;
+        FindLiquidFuelFunction findFuels = new FindLiquidFuelFunction(ApiBlockManager.fluidTank);
+        LocalBlockCollections.searchCuboidMultiBlock(worldObj, findFuels, cube, new Coord(this));
+        if(!findFuels.shouldContinue()) {
+            Coord tankCoord = findFuels.getTargetCoord();
+            TankLogic logic = (TankLogic) worldObj.getTileEntity(tankCoord.x, tankCoord.y, tankCoord.z);
+            if (logic.tank.getFluidAmount() >= 400) {
+                fuelBurnTime = LiquidHelper.getLiquidBurnTime(logic.tank.getFluid());
+            } else {
+                fuelBurnTime = getItemBurnTime(values.getFuel());
+            }
+        } else
+            fuelBurnTime = getItemBurnTime(values.getFuel());
+
         if (values.getEfficiency() > 0) {
-            return (int) Math.round(getItemBurnTime(values.getFuel()) * values.getEfficiency());
+            return (int) Math.round(fuelBurnTime * values.getEfficiency());
         } else {
-            return (int) Math.round(getItemBurnTime(values.getFuel()) * (1 / (-1 * values.getEfficiency())));
+            return (int) Math.round(fuelBurnTime * (1 / (-1 * values.getEfficiency())));
         }
     }
 
@@ -264,40 +282,57 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         if (flag) {
             --this.furnaceBurnTime;
         }
-            if(!worldObj.isRemote) {
-                if (this.furnaceBurnTime == 0 && this.canSmelt()) {
-                    this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
+        if(!worldObj.isRemote) {
+            if (this.furnaceBurnTime == 0 && this.canSmelt()) {
+                this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
 
-                    if (this.furnaceBurnTime > 0) {
-                        didWork = true;
+                if (this.furnaceBurnTime > 0) {
+                    didWork = true;
 
-                        if (values.getFuel() != null) {
-                            --values.getFuel().stackSize;
+                    boolean usedFuel = false;
+                    FindLiquidFuelFunction findFuels = new FindLiquidFuelFunction(ApiBlockManager.fluidTank);
+                    LocalBlockCollections.searchCuboidMultiBlock(worldObj,
+                            findFuels,
+                            cube,
+                            new Coord(this));
 
-                            if (values.getFuel().stackSize == 0) {
-                                values.setFuel(values.getFuel().getItem().getContainerItem(values.getFuel()));
-                            }
+                    if(!findFuels.shouldContinue())
+                    {
+                        Coord tankCoord = findFuels.getTargetCoord();
+                        TankLogic tank = (TankLogic)worldObj.getTileEntity(tankCoord.x, tankCoord.y, tankCoord.z);
+                        if(tank.tank.getFluidAmount() >= 400) {
+                            tank.drain(ForgeDirection.UNKNOWN, 400, true);
+                            usedFuel = true;
+                        }
+                    }
+
+                    if (values.getFuel() != null && !usedFuel) {
+                        --values.getFuel().stackSize;
+
+                        if (values.getFuel().stackSize == 0) {
+                            values.setFuel(values.getFuel().getItem().getContainerItem(values.getFuel()));
                         }
                     }
                 }
-
-                if (this.isBurning() && this.canSmelt()) {
-                    ++this.furnaceCookTime;
-
-                    if (this.furnaceCookTime >= this.getSpeedMultiplier()) {
-                        this.furnaceCookTime = 0;
-                        this.smeltItem();
-                        didWork = true;
-                    }
-                } else {
-                    this.furnaceCookTime = 0;
-                }
-
-                if (flag != this.furnaceBurnTime > 0) {
-                    didWork = true;
-                    updateBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-                }
             }
+
+            if (this.isBurning() && this.canSmelt()) {
+                ++this.furnaceCookTime;
+
+                if (this.furnaceCookTime >= this.getSpeedMultiplier()) {
+                    this.furnaceCookTime = 0;
+                    this.smeltItem();
+                    didWork = true;
+                }
+            } else {
+                this.furnaceCookTime = 0;
+            }
+
+            if (flag != this.furnaceBurnTime > 0) {
+                didWork = true;
+                updateBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+            }
+        }
         if(didWork)
             markDirty();
     }

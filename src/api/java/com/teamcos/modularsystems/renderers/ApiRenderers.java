@@ -9,5 +9,6 @@ public class ApiRenderers {
     public static void init() {
         apiDummyRenderType = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new ApiBlockRenderer());
+        RenderingRegistry.registerBlockHandler(new TankRenderer());
     }
 }

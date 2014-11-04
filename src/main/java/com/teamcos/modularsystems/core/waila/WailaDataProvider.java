@@ -5,11 +5,14 @@ import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryCore;
 import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
+import com.teamcos.modularsystems.utilities.tiles.TankLogic;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 import java.util.List;
 
@@ -42,6 +45,19 @@ public class WailaDataProvider implements IWailaDataProvider {
         else if(accessor.getTileEntity() instanceof DummyTile)
         {
             DummyTile tileEntity = (DummyTile)accessor.getTileEntity();
+            if(accessor.getTileEntity() instanceof TankLogic)
+            {
+                TankLogic tank = (TankLogic)accessor.getTileEntity();
+                FluidTankInfo[] fluidTankInfo = tank.getTankInfo(null);
+                if(fluidTankInfo[0].fluid != null) {
+                    currenttip.add(GuiColor.TURQUISE + "Fluid: " + FluidRegistry.getFluidName(fluidTankInfo[0].fluid));
+                    currenttip.add(GuiColor.ORANGE + "" + fluidTankInfo[0].fluid.amount + " / " + fluidTankInfo[0].capacity + "mb");
+                }
+                else
+                    currenttip.add("Empty");
+
+                return currenttip;
+            }
             if(accessor.getTileEntity() instanceof DummyIOTile)
             {
                 tileEntity = (DummyIOTile)accessor.getTileEntity();
