@@ -11,6 +11,6 @@ public class ConstantCalculation implements Calculation {
 
     @Override
     public double calculate(int blockCount) {
-        return blockCount > 0 ? values.yOffset : 0;
+        return blockCount > 0 ? values.getyOffset() : 0;
     }
 }

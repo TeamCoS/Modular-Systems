@@ -2,16 +2,19 @@ package com.teamcos.modularsystems.calculations;
 
 public abstract class AbstractCalculation implements Calculation {
 
-    protected final Calculation.StandardValues values;
+    protected final StandardValues values;
 
-    public AbstractCalculation(Calculation.StandardValues values) {
+    public AbstractCalculation(StandardValues values) {
         this.values = values;
     }
 
     @Override
     public double calculate(int blockCount) {
-        return values.yCoefficient * Math.min(values.perBlockCap * blockCount, doCalculation(blockCount) * doCalculation(blockCount) + values.yOffset);
+        double floor = values.getPerBlockFloor() * blockCount;
+        double ceiling = values.getPerBlockCap() * blockCount;
+        double value = values.getyCoefficient() * doCalculation(blockCount) + values.getyOffset();
+        return Math.max(floor, Math.min(ceiling, value));
     }
 
-    protected abstract double doCalculation(double value);
+    protected abstract double doCalculation(double blockCount);
 }
