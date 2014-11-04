@@ -45,8 +45,8 @@ public final class FurnaceConfigHandler {
 
     //FURNACE: Gets Efficiency Multiplier
     public static double getEfficiencyMultiplierForBlock(Block block, int count) {
-        BlockConfig blockValue = retrieveMaterialConfig(block.getMaterial());
-        BlockConfig materialValue = retrieveBlockConfig(block.getUnlocalizedName());
+        BlockConfig blockValue = retrieveBlockConfig(block.getUnlocalizedName());
+        BlockConfig materialValue = retrieveMaterialConfig(block.getMaterial());
         if (blockValue != null) {
             return blockValue.efficiency(count);
         } else if (materialValue != null) {
@@ -58,8 +58,8 @@ public final class FurnaceConfigHandler {
 
     //FURNACE: Gets Efficiency Multiplier
     public static int getSmeltingMultiplierForBlock(Block block, int count) {
-        BlockConfig blockValue = FurnaceConfigHandler.retrieveMaterialConfig(block.getMaterial());
-        BlockConfig materialValue = FurnaceConfigHandler.retrieveBlockConfig(block.getUnlocalizedName());
+        BlockConfig blockValue = retrieveBlockConfig(block.getUnlocalizedName());
+        BlockConfig materialValue = retrieveMaterialConfig(block.getMaterial());
         if (blockValue != null) {
             return blockValue.multiplier(count);
         } else if (materialValue != null) {

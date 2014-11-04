@@ -27,10 +27,10 @@ public class GuiModularOreProcessing extends GuiBase
         this.tileEntity = tileEntity;
         statsPanel = new StatisticsPanel(-60, 0);
 
-        final double speedValue = tileEntity.getSpeed() / 8;
+        final double speedValue = tileEntity.getSpeed();
         String speedText = String.format("%.1f", speedValue) + "x";
 
-        final double efficiencyValue = tileEntity.getScaledEfficiency();
+        final double efficiencyValue = tileEntity.getEfficiency();
         String efficiencyText = String.format("%.1f", efficiencyValue) + "x";
 
         statsPanel.addNode(240, 240, GuiColor.RED + speedText);

@@ -18,7 +18,7 @@ public class StandardValues {
     private boolean validEfficiency = false;
     private boolean validSmelting = false;
     private boolean validCrafter = false;
-    private double speedMultiplier = 8;
+    private double speedMultiplier = 1;
     private double efficiencyMultiplier = 1;
     private int smeltingMultiplier = 1;
     private boolean hasCrafter = false;
@@ -52,7 +52,7 @@ public class StandardValues {
 
     public void unsetSpeedMultiplier() {
         this.validSpeed = false;
-        this.speedMultiplier = 8.0;
+        this.speedMultiplier = 1.0;
     }
 
     public void unsetEfficiencyMultiplier() {
@@ -123,8 +123,8 @@ public class StandardValues {
         BlockCountFunction blockCount = this.blockCount.copy();
         LocalBlockCollections.searchCuboidMultiBlock(worldObj, x, y, z, blockCount, maxSize);
 
-        double speedMultiplier = 0.0;
-        double efficiencyMultiplier = 0.0;
+        double speedMultiplier = 1;
+        double efficiencyMultiplier = 1;
         int smeltingMultiplier = 1;
         boolean hasCrafter = false;
 
@@ -176,6 +176,13 @@ public class StandardValues {
 
     public void setFuel(ItemStack is) {
         fuel = is;
+    }
+
+    public void consumeFuel() {
+        fuel.stackSize--;
+        if (fuel.stackSize == 0) {
+            setFuel(fuel.getItem().getContainerItem(fuel));
+        }
     }
 
     public ItemStack getOutput() {

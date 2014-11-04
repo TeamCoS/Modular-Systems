@@ -1,7 +1,6 @@
 package com.teamcos.modularsystems.furnace.config;
 
 import com.teamcos.modularsystems.calculations.Calculation;
-import com.teamcos.modularsystems.calculations.ConstantCalculation;
 
 public class BlockConfig {
 
@@ -10,11 +9,11 @@ public class BlockConfig {
     private final Calculation speed;
     private final Calculation smeltingMultiplier;
 
-    public BlockConfig(String blockName, Calculation efficiency, Calculation speed) {
+    public BlockConfig(String blockName, Calculation efficiency, Calculation speed, Calculation smeltingMultiplier) {
         this.blockName = blockName;
         this.efficiency = efficiency;
         this.speed = speed;
-        smeltingMultiplier = new ConstantCalculation(0);
+        this.smeltingMultiplier = smeltingMultiplier;
     }
 
     public double efficiency(int blockCount) {

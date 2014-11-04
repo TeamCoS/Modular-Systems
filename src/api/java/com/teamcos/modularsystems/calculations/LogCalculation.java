@@ -1,17 +1,15 @@
 package com.teamcos.modularsystems.calculations;
 
 
-public class LogCalculation implements Calculation {
+public class LogCalculation extends AbstractCalculation {
 
-    private final double scalar;
-
-    public LogCalculation(double scalar) {
-        this.scalar = scalar;
+    public LogCalculation(StandardValues values) {
+        super(values);
     }
 
     @Override
-    public double calculate(int blockCount) {
-        return scalar * Math.log(blockCount);
+    protected double doCalculation(double value) {
+        return Math.log(value);
     }
 }
 

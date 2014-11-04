@@ -23,7 +23,8 @@ import java.util.Random;
 public abstract class FueledRecipeTile extends ModularTileEntity implements ISidedInventory, ICore {
 
     protected static final Random random = new Random();
-
+    protected final StandardValues values;
+    protected Cuboid cube;
     //Furnace related things
     public int furnaceBurnTime;
     public int currentItemBurnTime;
@@ -31,23 +32,26 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     private int cookSpeed = 200;
     private boolean isDirty = true;
     private boolean wellFormed = false;
-    protected final StandardValues values;
     private String custom_name;
-    protected Cuboid cube;
-
-    protected abstract void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z);
-    protected abstract int getItemBurnTime(ItemStack is);
-    protected abstract ItemStack recipe(ItemStack is);
-    public abstract int getMaxSize();
 
     public FueledRecipeTile(int maxSize) {
         this.values = new StandardValues(this, new BlockCountWorldFunction(), maxSize);
         this.cube = new Cuboid();
     }
 
-    /******************************************************************************************************************
-     **********************************************  Multiblock Methods  **********************************************
-     ******************************************************************************************************************/
+    protected abstract void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z);
+
+    protected abstract int getItemBurnTime(ItemStack is);
+
+    protected abstract ItemStack recipe(ItemStack is);
+
+    public abstract int getMaxSize();
+
+    /**
+     * ***************************************************************************************************************
+     * *********************************************  Multiblock Methods  **********************************************
+     * ****************************************************************************************************************
+     */
 
     @Override
     public boolean updateMultiblock() {
@@ -110,58 +114,80 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
      ************************************************  Furnace Methods  ***********************************************
      ******************************************************************************************************************/
 
-    /**
-     * Gets efficiency for display
-     *
-     * @return How efficienct in comparison to vanilla furnace
-     */
-    public double getScaledEfficiency() {
-        if (values.getEfficiency() > 0) {
-            return ((1600 * values.getEfficiency()) / getSpeedMultiplier()) / 8;
-        } else {
-            return 0.0000000001;
+    protected void doFurnaceWork() {
+        boolean flag = this.furnaceBurnTime > 0;
+        boolean didWork = false;
+
+        if (!worldObj.isRemote) {
+            if (flag) {
+                --this.furnaceBurnTime;
+            }
+
+            if (canSmelt(values.getInput(), recipe(values.getInput()), values.getOutput())) {
+                ItemStack fuel = values.getFuel();
+                if (fuel != null && this.furnaceBurnTime <= 0) {
+                    int scaledBurnTime = scaledBurnTime();
+                    values.consumeFuel();
+                    this.currentItemBurnTime = this.furnaceBurnTime = scaledBurnTime;
+                    cook();
+                    didWork = true;
+                } else if (isBurning()) {
+                    didWork = cook();
+                } else {
+                    this.furnaceCookTime = 0;
+                }
+            }
+
+            if (didWork) {
+                updateBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                markDirty();
+            }
         }
     }
 
-    /**
-     * Used to determine how long an item will burn
-     *
-     * @return How many ticks an item will burn
-     */
-    public int scaledBurnTime() {
-        if (values.getEfficiency() > 0) {
-            return (int) Math.round(getItemBurnTime(values.getFuel()) * values.getEfficiency());
+    private boolean cook() {
+        ++this.furnaceCookTime;
+
+        if (this.furnaceCookTime >= getSpeedMultiplier()) {
+            this.furnaceCookTime = 0;
+            this.smeltItem();
+            return true;
         } else {
-            return (int) Math.round(getItemBurnTime(values.getFuel()) * (1 / (-1 * values.getEfficiency())));
+            return false;
         }
     }
 
-    public boolean isBurning()
-    {
-        return furnaceBurnTime > 0;
-    }
-
-    private boolean canSmelt() {
-        ItemStack input = values.getInput();
-        if (input == null) {
+    private boolean canSmelt(ItemStack input, ItemStack result, ItemStack output) {
+        if (input == null || result == null) {
+            return false;
+        } else if (output == null) {
+            return true;
+        } else if (!output.isItemEqual(result)) {
             return false;
         } else {
-            ItemStack recipeResult = recipe(input);
-            if (recipeResult == null) {
-                return false;
-            }
+            //The size below would be if the smeltingMultiplier = 1
+            //If the smelting multiplier is > 1,
+            //there is no guarantee that all potential operations will be completed.
+            int minStackSize = output.stackSize + result.stackSize;
+            return (minStackSize <= getInventoryStackLimit() && minStackSize <= result.getMaxStackSize());
+        }
+    }
+
+    private void smeltItem() {
+        values.checkInventorySlots();
+        Doublet<Integer, Integer> smeltCount = smeltCountAndSmeltSize();
+        if (smeltCount != null && smeltCount.getSecond() > 0) {
+            ItemStack recipeResult = recipe(values.getInput());
+            values.getInput().stackSize -= smeltCount.getFirst();
             if (values.getOutput() == null) {
-                return true;
-            } else if (!values.getOutput().isItemEqual(recipeResult)) {
-                return false;
+                recipeResult = recipeResult.copy();
+                recipeResult.stackSize = smeltCount.getSecond();
+                values.setOutput(recipeResult);
             } else {
-                //The size below would be if the smeltingMultiplier = 1
-                //If the smelting multiplier is > 1,
-                //there is no guarantee that all potential operations will be completed.
-                int minStackSize = values.getOutput().stackSize + (recipeResult.stackSize * recipeResult.stackSize);
-                return (minStackSize <= getInventoryStackLimit() && minStackSize <= recipeResult.getMaxStackSize());
+                values.getOutput().stackSize += smeltCount.getSecond();
             }
         }
+        values.checkInventorySlots();
     }
 
     private Doublet<Integer, Integer> smeltCountAndSmeltSize() {
@@ -214,102 +240,50 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         return new Doublet(count, avail);
     }
 
-    private void smeltItem() {
-        values.checkInventorySlots();
-        Doublet<Integer, Integer> smeltCount = smeltCountAndSmeltSize();
-        if (smeltCount != null && smeltCount.getSecond() > 0) {
-            ItemStack recipeResult = recipe(values.getInput());
-            values.getInput().stackSize -= smeltCount.getFirst();
-            if (values.getOutput() == null) {
-                recipeResult = recipeResult.copy();
-                recipeResult.stackSize = smeltCount.getSecond();
-                values.setOutput(recipeResult);
-            } else {
-                values.getOutput().stackSize += smeltCount.getSecond();
-            }
+    /**
+     * Used to determine how long an item will burn
+     *
+     * @return How many ticks an item will burn
+     */
+    public int scaledBurnTime() {
+        if (values.getEfficiency() > 0) {
+            return (int) Math.round(getItemBurnTime(values.getFuel()) * values.getEfficiency());
+        } else {
+            return (int) Math.round(getItemBurnTime(values.getFuel()) * (1 / (-1 * values.getEfficiency())));
         }
-        values.checkInventorySlots();
     }
 
-    /**
-     * Gets speed multiplier
-     *
-     * @return Cook time
-     */
-    public double getSpeedMultiplier() {
-        double speed = values.getSpeed();
-        speed = speed / 8;
-        return this.cookSpeed / speed;
+    public boolean isBurning() {
+        return furnaceBurnTime > 0;
+    }
+
+    private double getSpeedMultiplier() {
+        return this.cookSpeed / values.getSpeed();
     }
 
     @SideOnly(Side.CLIENT)
-    public int getCookProgressScaled(int scaleVal)
-    {
-        double scale = this.getSpeedMultiplier();
+    public int getCookProgressScaled(int scaleVal) {
+        double scale = getSpeedMultiplier();
         return (int) (this.furnaceCookTime * scaleVal / scale);
     }
 
     @SideOnly(Side.CLIENT)
     public int getBurnTimeRemainingScaled(int scaleVal) {
-        if (currentItemBurnTime == 0)
-        {
+        if (currentItemBurnTime == 0) {
             currentItemBurnTime = (int) getSpeedMultiplier();
         }
         return furnaceBurnTime * scaleVal / this.currentItemBurnTime;
     }
-
-    protected void doFurnaceWork() {
-        boolean flag = this.furnaceBurnTime > 0;
-        boolean didWork = false;
-        if (flag) {
-            --this.furnaceBurnTime;
-        }
-            if(!worldObj.isRemote) {
-                if (this.furnaceBurnTime == 0 && this.canSmelt()) {
-                    this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
-
-                    if (this.furnaceBurnTime > 0) {
-                        didWork = true;
-
-                        if (values.getFuel() != null) {
-                            --values.getFuel().stackSize;
-
-                            if (values.getFuel().stackSize == 0) {
-                                values.setFuel(values.getFuel().getItem().getContainerItem(values.getFuel()));
-                            }
-                        }
-                    }
-                }
-
-                if (this.isBurning() && this.canSmelt()) {
-                    ++this.furnaceCookTime;
-
-                    if (this.furnaceCookTime >= this.getSpeedMultiplier()) {
-                        this.furnaceCookTime = 0;
-                        this.smeltItem();
-                        didWork = true;
-                    }
-                } else {
-                    this.furnaceCookTime = 0;
-                }
-
-                if (flag != this.furnaceBurnTime > 0) {
-                    didWork = true;
-                    updateBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-                }
-            }
-        if(didWork)
-            markDirty();
-    }
-
-    /******************************************************************************************************************
-     **************************************************  Tile Methods  ************************************************
-     ******************************************************************************************************************/
+    /**
+     * ***************************************************************************************************************
+     * *************************************************  Tile Methods  ************************************************
+     * ****************************************************************************************************************
+     */
 
     //Furnace stuff
     @Override
     public void updateEntity() {
-        if(!worldObj.isRemote) {
+        if (!worldObj.isRemote) {
             updateMultiblock();
         }
         doFurnaceWork();
@@ -338,11 +312,9 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         values.readFromNBT(tagCompound);
         this.currentItemBurnTime = this.scaledBurnTime();
         cube.readFromNBT(tagCompound);
-        if (tagCompound.hasKey("CustomName"))
-        {
+        if (tagCompound.hasKey("CustomName")) {
             this.custom_name = tagCompound.getString("CustomName");
         }
-
     }
 
     @Override
@@ -372,25 +344,11 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         }
     }
 
-    public double getSpeed() {
-        return values.getSpeed();
-    }
-
-    public double getEfficiency() {
-        return values.getEfficiency();
-    }
-
-    public int getSmeltingMultiplier() {
-        return values.getSmeltingMultiplier();
-    }
-
-    public void checkInventorySlots() {
-        values.checkInventorySlots();
-    }
-
-    /*****************************************************************************************************************
-     *********************************************** Inventory methods ***********************************************
-     *****************************************************************************************************************/
+    /**
+     * **************************************************************************************************************
+     * ********************************************** Inventory methods ***********************************************
+     * ***************************************************************************************************************
+     */
 
     @Override
     public int getSizeInventory() {
@@ -444,21 +402,18 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     }
 
     @Override
-    public int getInventoryStackLimit()
-    {
+    public int getInventoryStackLimit() {
         return 64;
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer entityPlayer)
-    {
+    public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
         return true;
     }
 
     //Re-writen for the I/O block
     @Override
-    public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
-    {
+    public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack) {
         if (par1 == 2)
             return false;
         if (par1 == 1 && isItemFuel(par2ItemStack))
@@ -467,49 +422,47 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     }
 
     @Override
-    public boolean canInsertItem(int par1, ItemStack par2ItemStack, int par3)
-    {
+    public boolean canInsertItem(int par1, ItemStack par2ItemStack, int par3) {
         return this.isItemValidForSlot(par1, par2ItemStack);
     }
 
     @Override
-    public boolean canExtractItem(int par1, ItemStack par2ItemStack, int par3)
-    {
+    public boolean canExtractItem(int par1, ItemStack par2ItemStack, int par3) {
         return par3 != 0 || par1 != 1 || par2ItemStack.getItem() == Items.bucket;
     }
 
     @Override
-    public String getInventoryName()
-    {
+    public String getInventoryName() {
         return null;
     }
 
-    public boolean hasCustomInventoryName()
-    {
+    public boolean hasCustomInventoryName() {
         return this.custom_name != null && this.custom_name.length() > 0;
     }
 
     @Override
-    public void openInventory() { }
+    public void openInventory() {
+    }
 
     @Override
-    public void closeInventory() { }
+    public void closeInventory() {
+    }
 
-    public void func_145951_a(String p_145951_1_)
-    {
+    public void func_145951_a(String p_145951_1_) {
         this.custom_name = p_145951_1_;
     }
 
-    /******************************************************************************************************************
-     *************************************************  Helper Methods  ***********************************************
-     ******************************************************************************************************************/
+    /**
+     * ***************************************************************************************************************
+     * ************************************************  Helper Methods  ***********************************************
+     * ****************************************************************************************************************
+     */
 
     protected boolean isItemFuel(ItemStack par0ItemStack) {
         return getItemBurnTime(par0ItemStack) > 0;
     }
 
-    public void setGuiDisplayName(String par1Str)
-    {
+    public void setGuiDisplayName(String par1Str) {
         this.custom_name = par1Str;
     }
 
@@ -595,5 +548,18 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     }
 
     @Override
-    public void setCore(FueledRecipeTile tile) {}
+    public void setCore(FueledRecipeTile tile) {
+    }
+
+    public void setFurnaceBurnTime(int furnaceBurnTime) {
+        this.furnaceBurnTime = furnaceBurnTime;
+    }
+
+    public void setCurrentItemBurnTime(int currentItemBurnTime) {
+        this.currentItemBurnTime = currentItemBurnTime;
+    }
+
+    public void setFurnaceCookTime(int furnaceCookTime) {
+        this.furnaceCookTime = furnaceCookTime;
+    }
 }

@@ -1,15 +1,14 @@
 package com.teamcos.modularsystems.calculations;
 
 
-public class LinearCalculation implements Calculation {
+public class LinearCalculation extends AbstractCalculation {
 
-    private double perBlock;
-
-    public LinearCalculation(double perBlock) {
-        this.perBlock = perBlock;
+    public LinearCalculation(StandardValues value) {
+        super(value);
     }
 
-    public double calculate(int blockCount) {
-        return blockCount * perBlock;
+    @Override
+    protected double doCalculation(double value) {
+        return value;
     }
 }
