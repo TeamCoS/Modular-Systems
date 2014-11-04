@@ -1,6 +1,6 @@
 package com.teamcos.modularsystems.core.waila;
 
-import com.teamcos.modularsystems.core.lib.GuiColor;
+import com.teamcos.modularsystems.notification.GuiColor;
 import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryCore;
 import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;

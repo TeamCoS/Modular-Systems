@@ -1,6 +1,9 @@
 package com.teamcos.modularsystems.utilities.block;
 
+import com.teamcos.modularsystems.notification.GuiColor;
 import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
+import com.teamcos.modularsystems.notification.Notification;
+import com.teamcos.modularsystems.notification.NotificationHelper;
 import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
 import com.teamcos.modularsystems.renderers.TankRenderer;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
@@ -22,6 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
@@ -145,7 +149,12 @@ public class BlockTank extends BlockContainer implements MSUpgradeBlock {
                 }
             }
         } else {
-            if (entityplayer.isSneaking()) return false;
+            if (entityplayer.isSneaking()) {
+                TankLogic tankLogic = (TankLogic)world.getTileEntity(x, y, z);
+                if(world.isRemote)
+                    NotificationHelper.addNotification(new Notification(new ItemStack(this), GuiColor.TURQUISE + "Fuel: " + FluidRegistry.getFluidName(tankLogic.tank.getFluid()), GuiColor.ORANGE + "" + tankLogic.tank.getFluidAmount() + " / " + tankLogic.tank.getCapacity() + "mb", Notification.DEFAULT_DURATION));
+                return true;
+            }
 
             DummyTile dummy = (DummyTile) world.getTileEntity(x, y, z);
             FueledRecipeTile core;

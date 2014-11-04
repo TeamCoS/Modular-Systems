@@ -2,7 +2,7 @@ package com.teamcos.modularsystems.furnace.gui;
 
 import com.teamcos.modularsystems.core.gui.GuiBase;
 import com.teamcos.modularsystems.core.gui.StatisticsPanel;
-import com.teamcos.modularsystems.core.lib.GuiColor;
+import com.teamcos.modularsystems.notification.GuiColor;
 import com.teamcos.modularsystems.furnace.containers.ContainerModularFurnaceCrafter;
 import com.teamcos.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import net.minecraft.util.ResourceLocation;

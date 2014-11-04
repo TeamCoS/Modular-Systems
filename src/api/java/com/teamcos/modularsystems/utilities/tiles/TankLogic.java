@@ -64,7 +64,6 @@ public class TankLogic extends DummyTile implements IFluidHandler
     @Override
     public boolean canDrain (ForgeDirection from, Fluid fluid)
     {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -174,7 +173,7 @@ public class TankLogic extends DummyTile implements IFluidHandler
     {
         if (renderOffset > 0)
         {
-            renderOffset -= 6;
+            renderOffset -= 12;
             worldObj.func_147479_m(xCoord, yCoord, zCoord);
         }
     }

@@ -1,4 +1,4 @@
-package com.teamcos.modularsystems.core.lib;
+package com.teamcos.modularsystems.notification;
 
 public enum GuiColor {
 	BLACK(0),

@@ -48,11 +48,6 @@ public class ApiModuleManager {
         ApiBlockManager.smelteryOverlay = new BlockSmelteryOverlay();
 
         GameRegistry.registerBlock(ApiBlockManager.smelteryOverlay, "smelteryOverlay");
-
-        CraftingManager.getInstance().addRecipe(new ItemStack(ApiBlockManager.dummyIOBlock, 1),
-                "XXX",
-                "XxX",
-                "XXX", 'X', Items.flint, 'x', Blocks.dispenser);
     }
 
     private static boolean registeredDummy = false;
@@ -80,6 +75,10 @@ public class ApiModuleManager {
             ApiBlockManager.fluidTank = new BlockTank(tab);
             GameRegistry.registerBlock(ApiBlockManager.fluidTank, "fluidTank");
             GameRegistry.registerTileEntity(TankLogic.class, "tankTile");
+            CraftingManager.getInstance().addRecipe(new ItemStack(ApiBlockManager.fluidTank, 1),
+                    "IGI",
+                    "GGG",
+                    "IGI", 'I', Items.iron_ingot, 'G', Blocks.glass);
         }
     }
 }
