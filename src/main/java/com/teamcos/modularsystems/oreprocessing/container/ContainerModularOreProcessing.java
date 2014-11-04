@@ -77,29 +77,17 @@ public class ContainerModularOreProcessing extends Container
     public void updateProgressBar(int par1, int par2)
     {
         if (par1 == 0) {
-<<<<<<< HEAD
-            this.tileEntity.furnaceCookTime = par2;
-=======
             tileEntity.setFurnaceCookTime(par2);
->>>>>>> newConfig
         }
 
         if (par1 == 1)
         {
-<<<<<<< HEAD
-            this.tileEntity.furnaceBurnTime = par2;
-=======
             tileEntity.setFurnaceBurnTime(par2);
->>>>>>> newConfig
         }
 
         if (par1 == 2)
         {
-<<<<<<< HEAD
-            this.tileEntity.currentItemBurnTime = par2;
-=======
             tileEntity.setCurrentItemBurnTime(par2);
->>>>>>> newConfig
         }
     }
 

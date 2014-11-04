@@ -9,4 +9,5 @@ public class ApiBlockManager {
     public static DummyIOBlock dummyIOBlock;
     public static Block furnaceOverlay;
     public static Block smelteryOverlay;
+    public static Block fluidTank;
 }

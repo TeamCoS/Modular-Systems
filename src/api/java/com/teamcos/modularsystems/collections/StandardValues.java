@@ -1,6 +1,7 @@
 package com.teamcos.modularsystems.collections;
 
 import com.teamcos.modularsystems.functions.BlockCountFunction;
+import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import com.teamcos.modularsystems.helpers.Locatable;
 import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.Map;
 
 public class StandardValues {
@@ -27,6 +29,7 @@ public class StandardValues {
     private ItemStack fuel;
     private ItemStack output;
     private Locatable entity;
+    private List<Coord> tiles;
     private int maxSize;
 
     public StandardValues(Locatable entity, BlockCountFunction blockCount, int maxSize) {
@@ -122,6 +125,7 @@ public class StandardValues {
 
         BlockCountFunction blockCount = this.blockCount.copy();
         LocalBlockCollections.searchCuboidMultiBlock(worldObj, x, y, z, blockCount, maxSize);
+        this.tiles = blockCount.getTiles();
 
         double speedMultiplier = 1;
         double efficiencyMultiplier = 1;
@@ -229,5 +233,9 @@ public class StandardValues {
         tagCompound.setBoolean("Enabled", hasCrafterUpgrade());
         tagCompound.setDouble("Speed", getSpeed());
         tagCompound.setInteger("SmeltingMultiplier", getSmeltingMultiplier());
+    }
+
+    public List<Coord> getTiles() {
+        return tiles;
     }
 }

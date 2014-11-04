@@ -6,7 +6,7 @@ import com.teamcos.modularsystems.core.gui.StatisticsPanel;
 import com.teamcos.modularsystems.core.gui.TexturedButton;
 import com.teamcos.modularsystems.core.helper.EnchantHelper;
 import com.teamcos.modularsystems.core.helper.VersionHelper;
-import com.teamcos.modularsystems.core.lib.GuiColor;
+import com.teamcos.modularsystems.notification.GuiColor;
 import com.teamcos.modularsystems.core.lib.Strings;
 import com.teamcos.modularsystems.core.network.EnchantPacket;
 import com.teamcos.modularsystems.enchanting.container.ContainerModularEnchanting;

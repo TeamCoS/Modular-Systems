@@ -1,11 +1,9 @@
 package com.teamcos.modularsystems.manager;
 
-import com.teamcos.modularsystems.utilities.block.BlockFurnaceOverlay;
-import com.teamcos.modularsystems.utilities.block.BlockSmelteryOverlay;
-import com.teamcos.modularsystems.utilities.block.DummyBlock;
-import com.teamcos.modularsystems.utilities.block.DummyIOBlock;
+import com.teamcos.modularsystems.utilities.block.*;
 import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
+import com.teamcos.modularsystems.utilities.tiles.TankLogic;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,6 +17,7 @@ public class ApiModuleManager {
     public static void enableFurnaceModule(CreativeTabs tab, String textureName) {
         registerDummy(tab);
         registerDummyIO(tab);
+        registerTank(tab);
         if (textureName != null) {
             ApiBlockManager.furnaceOverlay = new BlockFurnaceOverlay(textureName, "furnaceOverlay", true);
         } else {
@@ -44,15 +43,11 @@ public class ApiModuleManager {
     public static void enableOreProcessing(CreativeTabs tab) {
         registerDummy(tab);
         registerDummyIO(tab);
+        registerTank(tab);
 
         ApiBlockManager.smelteryOverlay = new BlockSmelteryOverlay();
 
         GameRegistry.registerBlock(ApiBlockManager.smelteryOverlay, "smelteryOverlay");
-
-        CraftingManager.getInstance().addRecipe(new ItemStack(ApiBlockManager.dummyIOBlock, 1),
-                "XXX",
-                "XxX",
-                "XXX", 'X', Items.flint, 'x', Blocks.dispenser);
     }
 
     private static boolean registeredDummy = false;
@@ -73,6 +68,17 @@ public class ApiModuleManager {
             GameRegistry.registerBlock(ApiBlockManager.dummyIOBlock, "modularDummyIO");
             GameRegistry.registerTileEntity(DummyIOTile.class, "dummyIOTile");
             registeredDummyIO = true;
+        }
+    }
+    public static void registerTank(CreativeTabs tab) {
+        if (ApiBlockManager.fluidTank == null) {
+            ApiBlockManager.fluidTank = new BlockTank(tab);
+            GameRegistry.registerBlock(ApiBlockManager.fluidTank, "fluidTank");
+            GameRegistry.registerTileEntity(TankLogic.class, "tankTile");
+            CraftingManager.getInstance().addRecipe(new ItemStack(ApiBlockManager.fluidTank, 1),
+                    "IGI",
+                    "GGG",
+                    "IGI", 'I', Items.iron_ingot, 'G', Blocks.glass);
         }
     }
 }

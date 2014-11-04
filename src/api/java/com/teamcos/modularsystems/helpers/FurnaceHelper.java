@@ -20,7 +20,7 @@ public class FurnaceHelper {
         if (blockId instanceof MSUpgradeBlock || blockId == Blocks.redstone_block) return false;
         if (blockId.hasTileEntity(0)) {
             if(world.isRemote)
-           NotificationHelper.addNotification(new Notification(new ItemStack(blockId), EnumChatFormatting.RED + "ERROR: Tile Entity Found", blockId.getLocalizedName(), Notification.DEFAULT_DURATION));
+                NotificationHelper.addNotification(new Notification(new ItemStack(blockId), EnumChatFormatting.RED + "ERROR: Tile Entity Found", blockId.getLocalizedName(), Notification.DEFAULT_DURATION));
             return true;
         }
         if (!blockId.isNormalCube()) {

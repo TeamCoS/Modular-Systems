@@ -27,3 +27,4 @@ tile.modularsystems:blockSmelteryDummy.name=Modular Ore Processing Dummy
 tile.modularsystems:blockSmelteryIO.name=Modular Ore Processing I/O
 
 tile.modularsystems:blockDummyIO.name=Modular Systems IO
+tile.modularsystems:blockTank.name=Modular Systems Fluid Tank

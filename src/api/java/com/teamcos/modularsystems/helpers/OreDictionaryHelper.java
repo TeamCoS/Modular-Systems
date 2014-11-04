@@ -5,7 +5,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class OreDictionaryHelper
 {
-
     public static ItemStack getOreOutput(ItemStack input)
     {
         ItemStack output = null;

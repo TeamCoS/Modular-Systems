@@ -2,7 +2,7 @@ package com.teamcos.modularsystems.enchanting.gui;
 
 import org.lwjgl.opengl.GL11;
 
-import com.teamcos.modularsystems.core.lib.GuiColor;
+import com.teamcos.modularsystems.notification.GuiColor;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;

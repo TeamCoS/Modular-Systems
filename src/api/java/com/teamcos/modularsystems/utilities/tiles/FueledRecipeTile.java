@@ -2,6 +2,8 @@ package com.teamcos.modularsystems.utilities.tiles;
 
 import com.teamcos.modularsystems.collections.Doublet;
 import com.teamcos.modularsystems.collections.StandardValues;
+import com.teamcos.modularsystems.fuelprovider.FuelProvider;
+import com.teamcos.modularsystems.fuelprovider.ItemFuelProvider;
 import com.teamcos.modularsystems.functions.*;
 import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
@@ -16,20 +18,22 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import java.util.Random;
+import java.util.*;
 
 public abstract class FueledRecipeTile extends ModularTileEntity implements ISidedInventory, ICore {
 
+    private static final int cookSpeed = 200;
+    private static final FuelSorter fuelSorter = new FuelSorter();
     protected static final Random random = new Random();
     protected final StandardValues values;
     protected Cuboid cube;
     //Furnace related things
-    public int furnaceBurnTime;
-    public int currentItemBurnTime;
-    public int furnaceCookTime;
-    private int cookSpeed = 200;
+    private int furnaceBurnTime;
+    private int currentItemBurnTime;
+    private int furnaceCookTime;
     private boolean isDirty = true;
     private boolean wellFormed = false;
     private String custom_name;
@@ -124,9 +128,9 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
             }
 
             if (canSmelt(values.getInput(), recipe(values.getInput()), values.getOutput())) {
-                ItemStack fuel = values.getFuel();
-                if (fuel != null && this.furnaceBurnTime <= 0) {
-                    int scaledBurnTime = scaledBurnTime();
+                List<FuelProvider> providers = getFuelProviders(values.getTiles());
+                if (!providers.isEmpty() && this.furnaceBurnTime <= 0) {
+                    int scaledBurnTime = scaledBurnTime(providers.get(0).consume());
                     values.consumeFuel();
                     this.currentItemBurnTime = this.furnaceBurnTime = scaledBurnTime;
                     cook();
@@ -143,6 +147,23 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
                 markDirty();
             }
         }
+    }
+
+    protected List<FuelProvider> getFuelProviders(List<Coord> coords) {
+        List<FuelProvider> providers = new ArrayList<FuelProvider>();
+        FuelProvider provider;
+        for (Coord coord : coords) {
+            TileEntity te = worldObj.getTileEntity(coord.x, coord.y, coord.z);
+            if (te instanceof FuelProvider && (provider = (FuelProvider) te).canProvide()) {
+                providers.add(provider);
+            }
+        }
+        provider = new ItemFuelProvider(values.getFuel());
+        if (provider.canProvide()) {
+            providers.add(provider);
+        }
+        Collections.sort(providers, fuelSorter);
+        return providers;
     }
 
     private boolean cook() {
@@ -240,16 +261,11 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         return new Doublet(count, avail);
     }
 
-    /**
-     * Used to determine how long an item will burn
-     *
-     * @return How many ticks an item will burn
-     */
-    public int scaledBurnTime() {
+    public int scaledBurnTime(double fuelValue) {
         if (values.getEfficiency() > 0) {
-            return (int) Math.round(getItemBurnTime(values.getFuel()) * values.getEfficiency());
+            return (int) Math.round(fuelValue * values.getEfficiency());
         } else {
-            return (int) Math.round(getItemBurnTime(values.getFuel()) * (1 / (-1 * values.getEfficiency())));
+            return (int) Math.round(fuelValue * (1 / (-1 * values.getEfficiency())));
         }
     }
 
@@ -310,7 +326,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         this.furnaceBurnTime = tagCompound.getShort("BurnTime");
         this.furnaceCookTime = tagCompound.getShort("CookTime");
         values.readFromNBT(tagCompound);
-        this.currentItemBurnTime = this.scaledBurnTime();
+//        this.currentItemBurnTime = this.scaledBurnTime();
         cube.readFromNBT(tagCompound);
         if (tagCompound.hasKey("CustomName")) {
             this.custom_name = tagCompound.getString("CustomName");
@@ -561,5 +577,46 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
 
     public void setFurnaceCookTime(int furnaceCookTime) {
         this.furnaceCookTime = furnaceCookTime;
+    }
+
+
+    public double getSpeed() {
+        return values.getSpeed();
+    }
+
+    public double getGuiSpeed() {
+        return Math.max(0.001, getSpeed());
+    }
+
+    public double getEfficiency() {
+        return values.getEfficiency();
+    }
+
+    public double getGuiEfficiency() {
+        return Math.max(0.001, getEfficiency());
+    }
+
+    public int getSmeltingMultiplier() {
+        return values.getSmeltingMultiplier();
+    }
+
+    private static final class FuelSorter implements Comparator<FuelProvider> {
+        @Override
+        public int compare(FuelProvider o1, FuelProvider o2) {
+            if (o1.canProvide() && !o2.canProvide()) {
+                return 1;
+            } else if (o2.canProvide() && !o1.canProvide()) {
+                return -1;
+            } else if (o1.type() == o2.type()) {
+                return Double.compare(o1.fuelProvided(), o2.fuelProvided());
+            } else {
+                return Integer.compare(o1.type().sortValue, o2.type().sortValue);
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return this == obj;
+        }
     }
 }

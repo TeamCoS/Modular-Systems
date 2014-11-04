@@ -3,6 +3,7 @@ package com.teamcos.modularsystems;
 import com.teamcos.modularsystems.helpers.KeyInputHelper;
 import com.teamcos.modularsystems.manager.GuiManager;
 import com.teamcos.modularsystems.notification.NotificationKeyBinding;
+import com.teamcos.modularsystems.notification.NotificationTickHandler;
 import com.teamcos.modularsystems.proxy.CommonProxyAPI;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -24,7 +25,9 @@ public class ModularSystemsAPI {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
-
+        if(event.getSide() == Side.CLIENT) {
+            FMLCommonHandler.instance().bus().register(new NotificationTickHandler());
+        }
     }
 
     @Mod.EventHandler
