@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ public class StandardValues {
     private boolean validEfficiency = false;
     private boolean validSmelting = false;
     private boolean validCrafter = false;
+    private boolean validTiles = false;
     private double speedMultiplier = 1;
     private double efficiencyMultiplier = 1;
     private int smeltingMultiplier = 1;
@@ -53,6 +55,11 @@ public class StandardValues {
         this.hasCrafter = hasCrafter;
     }
 
+    private void setTiles(List<Coord> tiles) {
+        this.validTiles = true;
+        this.tiles = tiles;
+    }
+
     public void unsetSpeedMultiplier() {
         this.validSpeed = false;
         this.speedMultiplier = 1.0;
@@ -71,6 +78,11 @@ public class StandardValues {
     public void unsetCrafter() {
         this.validCrafter = false;
         this.hasCrafter = false;
+    }
+
+    private void unsetTiles() {
+        this.validTiles = false;
+        this.tiles = null;
     }
 
     public double getSpeed() {
@@ -94,6 +106,13 @@ public class StandardValues {
         return smeltingMultiplier;
     }
 
+    public List<Coord> getTiles() {
+        if (!validTiles) {
+            setValues();
+        }
+        return new ArrayList(tiles);
+    }
+
     public void setSmeltingMultiplier(int smeltingMultiplier) {
         this.validSmelting = true;
         this.smeltingMultiplier = smeltingMultiplier;
@@ -112,6 +131,7 @@ public class StandardValues {
         setEfficiencyMultiplier(ses.getEfficiencyMultiplier());
         setSmeltingMultiplier(ses.getSmeltingMultiplier());
         setCrafter(ses.isHasCrafter());
+        setTiles(ses.getTiles());
     }
 
     public void unsetValues() {
@@ -125,7 +145,6 @@ public class StandardValues {
 
         BlockCountFunction blockCount = this.blockCount.copy();
         LocalBlockCollections.searchCuboidMultiBlock(worldObj, x, y, z, blockCount, maxSize);
-        this.tiles = blockCount.getTiles();
 
         double speedMultiplier = 1;
         double efficiencyMultiplier = 1;
@@ -147,7 +166,7 @@ public class StandardValues {
             }
         }
 
-        return new Values(hasCrafter, speedMultiplier, efficiencyMultiplier, smeltingMultiplier);
+        return new Values(hasCrafter, speedMultiplier, efficiencyMultiplier, smeltingMultiplier, blockCount.getTiles());
     }
 
     public void setStackInSlot(int slot, ItemStack stack) {
@@ -233,9 +252,5 @@ public class StandardValues {
         tagCompound.setBoolean("Enabled", hasCrafterUpgrade());
         tagCompound.setDouble("Speed", getSpeed());
         tagCompound.setInteger("SmeltingMultiplier", getSmeltingMultiplier());
-    }
-
-    public List<Coord> getTiles() {
-        return tiles;
     }
 }
