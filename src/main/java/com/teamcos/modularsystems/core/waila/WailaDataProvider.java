@@ -11,8 +11,6 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidTankInfo;
 
 import java.util.List;
 
@@ -46,10 +44,9 @@ public class WailaDataProvider implements IWailaDataProvider {
             if(accessor.getTileEntity() instanceof TankLogic)
             {
                 TankLogic tank = (TankLogic)accessor.getTileEntity();
-                FluidTankInfo[] fluidTankInfo = tank.getTankInfo(null);
-                if(fluidTankInfo[0].fluid != null) {
-                    currenttip.add(GuiColor.TURQUISE + "Fluid: " + FluidRegistry.getFluidName(fluidTankInfo[0].fluid));
-                    currenttip.add(GuiColor.ORANGE + "" + fluidTankInfo[0].fluid.amount + " / " + fluidTankInfo[0].capacity + "mb");
+                if(tank.containsFluid()) {
+                    currenttip.add(GuiColor.TURQUISE + "Fluid: " + tank.tank.getFluid().getFluid().getLocalizedName());
+                    currenttip.add(GuiColor.ORANGE + "" + tank.tank.getFluidAmount() + " / " + tank.tank.getCapacity() + "mb");
                 }
                 else
                     currenttip.add("Empty");

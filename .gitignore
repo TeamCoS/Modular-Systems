@@ -22,3 +22,13 @@ gradle/wrapper/gradle-wrapper.jar
 gradle/wrapper/gradle-wrapper.properties
 gradlew
 gradlew.bat
+run/mods/CodeChickenCore-1.7.10-1.0.3.26-dev.jar
+run/mods/NotEnoughItems-1.7.10-1.0.3.56-dev.jar
+README.txt
+MinecraftForge-License.txt
+MinecraftForge-Credits.txt
+LICENSE-fml.txt
+libs/CodeChickenCore-1.7.10-1.0.3.26-dev.jar
+libs/NotEnoughItems-1.7.10-1.0.3.56-dev.jar
+forge-1.7.10-10.13.2.1230-changelog.txt
+build.properties
