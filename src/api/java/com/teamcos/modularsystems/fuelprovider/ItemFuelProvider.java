@@ -14,7 +14,7 @@ public class ItemFuelProvider implements FuelProvider {
     @Override
     public boolean canProvide() {
         checkFuel();
-        return fuel != null && fuel.stackSize > 0;
+        return fuel != null && fuel.stackSize > 0 && fuelProvided() > 0;
     }
 
     @Override

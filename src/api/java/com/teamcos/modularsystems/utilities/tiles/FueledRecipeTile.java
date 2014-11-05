@@ -257,7 +257,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         } else if (values.getEfficiency() > -1) {
             return 1;
         } else {
-            return (int) Math.round(fuelValue * (1 / (-1 * values.getEfficiency())));
+            return (int) Math.round(fuelValue / Math.abs(values.getEfficiency()));
         }
     }
 
@@ -266,12 +266,13 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     }
 
     private double getSpeedMultiplier() {
-        if (this.cookSpeed > 1) {
-            return this.cookSpeed / values.getSpeed();
-        } else if (this.cookSpeed > -1) {
-            return 1 / (1 + Math.abs(values.getSpeed()));
+        double speed = values.getSpeed();
+        if (speed > 1) {
+            return this.cookSpeed / speed;
+        } else if (speed > -1) {
+            return cookSpeed * 2;
         } else {
-            return this.cookSpeed / (1 / -1 * values.getSpeed());
+            return this.cookSpeed -1 * speed;
         }
     }
 
