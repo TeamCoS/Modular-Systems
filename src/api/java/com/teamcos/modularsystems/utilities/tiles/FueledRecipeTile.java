@@ -252,8 +252,10 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     }
 
     public int scaledBurnTime(double fuelValue) {
-        if (values.getEfficiency() > 0) {
+        if (values.getEfficiency() > 1) {
             return (int) Math.round(fuelValue * values.getEfficiency());
+        } else if (values.getEfficiency() > -1) {
+            return 1;
         } else {
             return (int) Math.round(fuelValue * (1 / (-1 * values.getEfficiency())));
         }
@@ -264,7 +266,13 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     }
 
     private double getSpeedMultiplier() {
-        return this.cookSpeed / Math.abs(values.getSpeed());
+        if (this.cookSpeed > 1) {
+            return this.cookSpeed / values.getSpeed();
+        } else if (this.cookSpeed > -1) {
+            return 1 / (1 + Math.abs(values.getSpeed()));
+        } else {
+            return this.cookSpeed / (1 / -1 * values.getSpeed());
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -568,7 +576,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     }
 
     public double getGuiSpeed() {
-        return Math.max(0.001, getSpeed());
+        return Math.max(0.01, getSpeed());
     }
 
     public double getEfficiency() {
@@ -576,7 +584,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     }
 
     public double getGuiEfficiency() {
-        return Math.max(0.001, getEfficiency());
+        return Math.max(0.01, getEfficiency());
     }
 
     public int getSmeltingMultiplier() {

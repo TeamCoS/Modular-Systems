@@ -25,7 +25,7 @@ public class WailaDataProvider implements IWailaDataProvider {
         if(accessor.getTileEntity() instanceof FueledRecipeTile)
         {
             FueledRecipeTile tileEntity = (FueledRecipeTile)accessor.getTileEntity();
-            final double speedValue = tileEntity.getCookSpeed() / 8;
+            final double speedValue = tileEntity.getGuiSpeed();
             String speedText = String.format("%.1f", speedValue) + "x";
 
             final double efficiencyValue = tileEntity.getGuiEfficiency();
