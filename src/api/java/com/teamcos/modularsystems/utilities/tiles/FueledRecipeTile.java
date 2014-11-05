@@ -140,13 +140,11 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     protected List<FuelProvider> getFuelProviders(List<Coord> coords) {
         List<FuelProvider> providers = new ArrayList<FuelProvider>();
         FuelProvider provider;
-        if(coords != null) {
-            for (Coord coord : coords) {
-                TileEntity te = worldObj.getTileEntity(coord.x, coord.y, coord.z);
-                if (te != null) {
-                    if (te instanceof FuelProvider && (provider = (FuelProvider) te).canProvide()) {
-                        providers.add(provider);
-                    }
+        for (Coord coord : coords) {
+            TileEntity te = worldObj.getTileEntity(coord.x, coord.y, coord.z);
+            if (te != null) {
+                if (te instanceof FuelProvider && (provider = (FuelProvider) te).canProvide()) {
+                    providers.add(provider);
                 }
             }
         }
