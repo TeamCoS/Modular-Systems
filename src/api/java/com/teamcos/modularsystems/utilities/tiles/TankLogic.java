@@ -12,7 +12,10 @@ import net.minecraftforge.fluids.*;
 public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
 {
     public FluidTank tank;
+    public Fluid lastFluid;
     public int renderOffset;
+    public double transferOffset;
+    private ForgeDirection fillingFrom = ForgeDirection.UNKNOWN;
 
     public TankLogic()
     {
@@ -23,9 +26,12 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
     public int fill (ForgeDirection from, FluidStack resource, boolean doFill)
     {
         int amount = tank.fill(resource, doFill);
+        fillingFrom = from;
+        lastFluid = resource.getFluid();
         if (amount > 0 && doFill)
         {
             renderOffset = resource.amount;
+            transferOffset = resource.amount;
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
 
@@ -45,7 +51,7 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
     }
 
     @Override
-    public FluidStack drain (ForgeDirection from, FluidStack resource, boolean doDrain)
+    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain)
     {
         if (tank.getFluidAmount() == 0)
             return null;
@@ -59,8 +65,7 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
     @Override
     public boolean canFill (ForgeDirection from, Fluid fluid)
     {
-        // return tank.fill(fluid, false) > 0;
-        return false;
+        return tank.getFluid() == null || tank.getFluid().getFluid() == fluid;
     }
 
     @Override
@@ -78,17 +83,27 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
         return new FluidTankInfo[] { new FluidTankInfo(fluid, tank.getCapacity()) };
     }
 
-    /*
-     * @Override public IFluidTank[] getTanks (ForgeDirection direction) {
-     * return new IFluidTank[] { tank }; }
-     *
-     * @Override public IFluidTank getTank (ForgeDirection direction, FluidStack
-     * type) { return tank; }
-     */
+    public ForgeDirection getDirectionFillingFrom()
+    {
+        return fillingFrom;
+    }
+
+    public boolean isFilling()
+    {
+        return renderOffset > 0 || transferOffset > 0;
+    }
+
+    public Fluid getFillingLiquid() {
+        return lastFluid;
+    }
 
     public float getFluidAmountScaled ()
     {
         return (float) (tank.getFluid().amount - renderOffset) / (float) (tank.getCapacity() * 1.01F);
+    }
+
+    public double getTransferAmountScaled() {
+        return Math.min(0.3, (transferOffset / 10) * 0.3);
     }
 
     public boolean containsFluid ()
@@ -175,10 +190,72 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
     {
         if (renderOffset > 0)
         {
-            renderOffset -= 12;
+            renderOffset -= 8;
             worldObj.func_147479_m(xCoord, yCoord, zCoord);
         }
+
+        if(transferOffset > 0) {
+            transferOffset -= 0.2;
+            worldObj.func_147479_m(xCoord, yCoord, zCoord);
+        }
+
+        distributeFluids();
     }
+
+    public void distributeFluids()
+    {
+        if(containsFluid()) {
+            int drainRate = 10000 / tank.getFluid().getFluid().getViscosity();
+            if (drainRate < 5)
+                drainRate = 5;
+            if (getTileInDirection(ForgeDirection.DOWN) instanceof TankLogic) {
+                TankLogic otherTank = (TankLogic) getTileInDirection(ForgeDirection.DOWN);
+                FluidStack drained = tank.getFluid().amount < drainRate ? tank.getFluid() : new FluidStack(tank.getFluid().getFluid(), drainRate);
+                if (otherTank.canFill(ForgeDirection.UNKNOWN, tank.getFluid().getFluid()) && otherTank.tank.getFluidAmount() < otherTank.tank.getCapacity()) {
+                    otherTank.fill(ForgeDirection.UP, drained, true);
+                    drain(ForgeDirection.UNKNOWN, drained, true);
+                    return;
+                }
+            }
+            if(getTileInDirection(ForgeDirection.NORTH) instanceof TankLogic && containsFluid()) {
+                TankLogic logic = (TankLogic) getTileInDirection(ForgeDirection.NORTH);
+                FluidStack drained = tank.getFluid().amount < drainRate ? tank.getFluid() : new FluidStack(tank.getFluid().getFluid(), drainRate);
+                if (logic.canFill(ForgeDirection.UNKNOWN, tank.getFluid().getFluid()) && logic.tank.getFluidAmount() < logic.tank.getCapacity() && logic.tank.getFluidAmount() + drainRate < tank.getFluidAmount()) {
+                    logic.fill(ForgeDirection.NORTH, drained, true);
+                    drain(ForgeDirection.UNKNOWN, drained, true);
+                    return;
+                }
+            }
+            if(getTileInDirection(ForgeDirection.SOUTH) instanceof TankLogic && containsFluid()) {
+                TankLogic logic = (TankLogic) getTileInDirection(ForgeDirection.SOUTH);
+                FluidStack drained = tank.getFluid().amount < drainRate ? tank.getFluid() : new FluidStack(tank.getFluid().getFluid(), drainRate);
+                if (logic.canFill(ForgeDirection.UNKNOWN, tank.getFluid().getFluid()) && logic.tank.getFluidAmount() < logic.tank.getCapacity() && logic.tank.getFluidAmount() + drainRate < tank.getFluidAmount()) {
+                    logic.fill(ForgeDirection.SOUTH, drained, true);
+                    drain(ForgeDirection.UNKNOWN, drained, true);
+                    return;
+                }
+            }
+            if(getTileInDirection(ForgeDirection.EAST) instanceof TankLogic && containsFluid()) {
+                TankLogic logic = (TankLogic) getTileInDirection(ForgeDirection.EAST);
+                FluidStack drained = tank.getFluid().amount < drainRate ? tank.getFluid() : new FluidStack(tank.getFluid().getFluid(), drainRate);
+                if (logic.canFill(ForgeDirection.UNKNOWN, tank.getFluid().getFluid()) && logic.tank.getFluidAmount() < logic.tank.getCapacity() && logic.tank.getFluidAmount() + drainRate < tank.getFluidAmount()) {
+                    logic.fill(ForgeDirection.EAST, drained, true);
+                    drain(ForgeDirection.UNKNOWN, drained, true);
+                    return;
+                }
+            }
+            if(getTileInDirection(ForgeDirection.WEST) instanceof TankLogic && containsFluid()) {
+                TankLogic logic = (TankLogic) getTileInDirection(ForgeDirection.WEST);
+                FluidStack drained = tank.getFluid().amount < drainRate ? tank.getFluid() : new FluidStack(tank.getFluid().getFluid(), drainRate);
+                if (logic.canFill(ForgeDirection.UNKNOWN, tank.getFluid().getFluid()) && logic.tank.getFluidAmount() < logic.tank.getCapacity() && logic.tank.getFluidAmount() + drainRate < tank.getFluidAmount()) {
+                    logic.fill(ForgeDirection.WEST, drained, true);
+                    drain(ForgeDirection.UNKNOWN, drained, true);
+                    return;
+                }
+            }
+        }
+    }
+
 
     public int comparatorStrength ()
     {

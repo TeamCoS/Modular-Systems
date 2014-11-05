@@ -1,5 +1,6 @@
 package com.teamcos.modularsystems.utilities.block;
 
+import com.teamcos.modularsystems.helpers.LiquidHelper;
 import com.teamcos.modularsystems.notification.GuiColor;
 import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
 import com.teamcos.modularsystems.notification.Notification;
@@ -281,17 +282,23 @@ public class BlockTank extends BlockContainer implements MSUpgradeBlock {
     }
 
     @Override
-    public double getEfficiency(int blockCount) {
-        return FurnaceConfigHandler.getEfficiencyMultiplierForBlock(this, blockCount);
+    public double getEfficiency(World world, int x, int y, int z, int blockCount) {
+        TankLogic tank = (TankLogic)world.getTileEntity(x, y, z);
+        if(tank != null) {
+            if (tank.tank.getFluid() != null) {
+                return LiquidHelper.getLiquidBurnTime(tank.tank.getFluid()) / tank.tank.getFluid().getFluid().getViscosity();
+            }
+        }
+        return 0;
     }
 
     @Override
-    public double getSpeed(int blockCount) {
+    public double getSpeed(World world, int x, int y, int z, int blockCount) {
         return FurnaceConfigHandler.getSpeedMultiplierForBlock(this, blockCount);
     }
 
     @Override
-    public int getMultiplier(int blockCount) {
+    public int getMultiplier(World world, int x, int y, int z, int blockCount) {
         return FurnaceConfigHandler.getSmeltingMultiplierForBlock(this, blockCount);
     }
 

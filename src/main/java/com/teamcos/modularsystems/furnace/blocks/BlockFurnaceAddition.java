@@ -60,7 +60,7 @@ public class BlockFurnaceAddition extends DummyBlock {
     }
 
     @Override
-    public int getMultiplier(int blockCount) {
+    public int getMultiplier(World world, int x, int y, int z, int blockCount) {
         return FurnaceConfigHandler.getSmeltingMultiplierForBlock(this, blockCount);
     }
 }

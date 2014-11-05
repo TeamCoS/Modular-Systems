@@ -52,7 +52,6 @@ public class ConfigHelper {
 		config = new Configuration(configFile);
 		config.load();
 		syncConfig();
-        System.out.println("__________________________" + useTextures + "    " + textureName);
 	}
 
 	public static void syncConfig() {

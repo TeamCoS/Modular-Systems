@@ -262,17 +262,17 @@ public class BlockFurnaceCore extends BlockContainer implements MSUpgradeBlock {
     }
 
     @Override
-    public double getEfficiency(int blockCount) {
+    public double getEfficiency(World world, int x, int y, int z, int blockCount) {
         return 0;
     }
 
     @Override
-    public double getSpeed(int blockCount) {
+    public double getSpeed(World world, int x, int y, int z, int blockCount) {
         return 0;
     }
 
     @Override
-    public int getMultiplier(int blockCount) {
+    public int getMultiplier(World world, int x, int y, int z, int blockCount) {
         return 0;
     }
 

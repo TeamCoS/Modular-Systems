@@ -155,9 +155,9 @@ public class StandardValues {
             Block block = blockEntry.getKey();
             if (block instanceof MSUpgradeBlock) {
                 MSUpgradeBlock upBlock = (MSUpgradeBlock) block;
-                speedMultiplier += upBlock.getSpeed(blockEntry.getValue());
-                efficiencyMultiplier += upBlock.getEfficiency(blockEntry.getValue());
-                smeltingMultiplier += upBlock.getMultiplier(blockEntry.getValue());
+                speedMultiplier += upBlock.getSpeed(worldObj, x, y, z, blockEntry.getValue());
+                efficiencyMultiplier += upBlock.getEfficiency(worldObj, x, y, z, blockEntry.getValue());
+                smeltingMultiplier += upBlock.getMultiplier(worldObj, x, y, z, blockEntry.getValue());
                 hasCrafter |= upBlock.isCrafter();
             } else {
                 speedMultiplier += FurnaceConfigHandler.getSpeedMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());

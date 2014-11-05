@@ -119,17 +119,17 @@ public class DummyBlock extends BlockContainer implements MSUpgradeBlock {
     }
 
     @Override
-    public double getEfficiency(int blockCount) {
+    public double getEfficiency(World world, int x, int y, int z, int blockCount) {
         return FurnaceConfigHandler.getEfficiencyMultiplierForBlock(this, blockCount);
     }
 
     @Override
-    public double getSpeed(int blockCount) {
+    public double getSpeed(World world, int x, int y, int z, int blockCount) {
         return FurnaceConfigHandler.getSpeedMultiplierForBlock(this, blockCount);
     }
 
     @Override
-    public int getMultiplier(int blockCount) {
+    public int getMultiplier(World world,int x, int y, int z,  int blockCount) {
         return FurnaceConfigHandler.getSmeltingMultiplierForBlock(this, blockCount);
     }
 
