@@ -24,10 +24,14 @@ public class ItemFuelProvider implements FuelProvider {
 
     @Override
     public double consume() {
-        fuel.stackSize--;
-        double retVal = fuel == null ? 0 : fuelProvided();
-        checkFuel();
-        return retVal;
+        if (canProvide()) {
+            fuel.stackSize--;
+            double retVal = fuel == null ? 0 : fuelProvided();
+            checkFuel();
+            return retVal;
+        } else {
+            return 0;
+        }
     }
 
     private void checkFuel() {

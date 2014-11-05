@@ -119,7 +119,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
                 List<FuelProvider> providers = getFuelProviders(values.getTiles());
                 if (!providers.isEmpty() && this.furnaceBurnTime <= 0) {
                     int scaledBurnTime = scaledBurnTime(providers.get(0).consume());
-                   // values.consumeFuel();
+                    values.checkInventorySlots();
                     this.currentItemBurnTime = this.furnaceBurnTime = scaledBurnTime;
                     cook();
                     didWork = true;
@@ -264,7 +264,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     }
 
     private double getSpeedMultiplier() {
-        return this.cookSpeed / values.getSpeed();
+        return this.cookSpeed / Math.abs(values.getSpeed());
     }
 
     @SideOnly(Side.CLIENT)
