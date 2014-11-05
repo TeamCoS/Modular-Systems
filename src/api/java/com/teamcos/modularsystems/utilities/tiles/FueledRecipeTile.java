@@ -76,25 +76,13 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
 
     private boolean isWellFormed() {
         ProperlyFormedWorldFunction myFunction = new ProperlyFormedWorldFunction();
-        LocalBlockCollections.searchCuboidMultiBlock(
-                worldObj,
-                myFunction,
-                new Cuboid(this),
-                new Coord(this)
-        );
+        LocalBlockCollections.searchCuboidMultiBlock(worldObj, myFunction, new Cuboid(this), new Coord(this));
         wellFormed = myFunction.shouldContinue();
         return wellFormed;
     }
 
     private void buildMultiblock() {
-        LocalBlockCollections.searchCuboidMultiBlock(
-                worldObj,
-                xCoord,
-                yCoord,
-                zCoord,
-                new ConvertDummiesWorldFunction(this),
-                getMaxSize()
-        );
+        LocalBlockCollections.searchCuboidMultiBlock(worldObj, xCoord, yCoord, zCoord, new ConvertDummiesWorldFunction(this), getMaxSize());
         cube.setCube(this);
         values.setValues();
     }
@@ -131,7 +119,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
                 List<FuelProvider> providers = getFuelProviders(values.getTiles());
                 if (!providers.isEmpty() && this.furnaceBurnTime <= 0) {
                     int scaledBurnTime = scaledBurnTime(providers.get(0).consume());
-                    values.consumeFuel();
+                   // values.consumeFuel();
                     this.currentItemBurnTime = this.furnaceBurnTime = scaledBurnTime;
                     cook();
                     didWork = true;
@@ -152,10 +140,14 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     protected List<FuelProvider> getFuelProviders(List<Coord> coords) {
         List<FuelProvider> providers = new ArrayList<FuelProvider>();
         FuelProvider provider;
-        for (Coord coord : coords) {
-            TileEntity te = worldObj.getTileEntity(coord.x, coord.y, coord.z);
-            if (te instanceof FuelProvider && (provider = (FuelProvider) te).canProvide()) {
-                providers.add(provider);
+        if(coords != null) {
+            for (Coord coord : coords) {
+                TileEntity te = worldObj.getTileEntity(coord.x, coord.y, coord.z);
+                if (te != null) {
+                    if (te instanceof FuelProvider && (provider = (FuelProvider) te).canProvide()) {
+                        providers.add(provider);
+                    }
+                }
             }
         }
         provider = new ItemFuelProvider(values.getFuel());
@@ -528,14 +520,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
      */
     public boolean hasCraftingUpgrade() {
         WorldFunction func = new HasCraftingUpgrade();
-        LocalBlockCollections.searchCuboidMultiBlock(
-                worldObj,
-                xCoord,
-                yCoord,
-                zCoord,
-                func,
-                getMaxSize()
-        );
+        LocalBlockCollections.searchCuboidMultiBlock(worldObj, xCoord, yCoord, zCoord, func, getMaxSize());
         return !func.shouldContinue();
     }
 
