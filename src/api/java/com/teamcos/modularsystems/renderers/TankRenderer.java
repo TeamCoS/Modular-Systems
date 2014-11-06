@@ -1,7 +1,6 @@
 package com.teamcos.modularsystems.renderers;
 
 import com.teamcos.modularsystems.utilities.helper.BlockSkinRenderHelper;
-import com.teamcos.modularsystems.utilities.helper.ItemHelper;
 import com.teamcos.modularsystems.utilities.tiles.TankLogic;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -18,12 +17,7 @@ public class TankRenderer implements ISimpleBlockRenderingHandler
     public static int renderPass = 0;
 
     @Override
-    public void renderInventoryBlock (Block block, int metadata, int modelID, RenderBlocks renderer)
-    {
-        if (modelID == tankModelID)
-        {
-            ItemHelper.renderStandardInvBlock(renderer, block, metadata);
-        }
+    public void renderInventoryBlock (Block block, int metadata, int modelID, RenderBlocks renderer) {
     }
 
     @Override

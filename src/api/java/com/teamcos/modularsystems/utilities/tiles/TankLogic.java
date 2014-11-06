@@ -2,10 +2,12 @@ package com.teamcos.modularsystems.utilities.tiles;
 
 import com.teamcos.modularsystems.fuelprovider.FuelProvider;
 import com.teamcos.modularsystems.helpers.LiquidHelper;
+import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
@@ -202,58 +204,57 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
         distributeFluids();
     }
 
-    public void distributeFluids()
-    {
-        if(containsFluid()) {
-            int drainRate = 10000 / tank.getFluid().getFluid().getViscosity();
-            if (drainRate < 5)
-                drainRate = 5;
+    public void distributeFluids() {
+        if (containsFluid()) {
             if (getTileInDirection(ForgeDirection.DOWN) instanceof TankLogic) {
                 TankLogic otherTank = (TankLogic) getTileInDirection(ForgeDirection.DOWN);
-                FluidStack drained = tank.getFluid().amount < drainRate ? tank.getFluid() : new FluidStack(tank.getFluid().getFluid(), drainRate);
-                if (otherTank.canFill(ForgeDirection.UNKNOWN, tank.getFluid().getFluid()) && otherTank.tank.getFluidAmount() < otherTank.tank.getCapacity()) {
+                int capacity = getCapacity(otherTank);
+                int drainAmount = drainAmount();
+                if (canFill(otherTank) && capacity > 0) {
+                    FluidStack drained = new FluidStack(tank.getFluid().getFluid(), drainAmount);
+                    drain(ForgeDirection.UNKNOWN, drained, true);
                     otherTank.fill(ForgeDirection.UP, drained, true);
-                    drain(ForgeDirection.UNKNOWN, drained, true);
                     return;
                 }
             }
-            if(getTileInDirection(ForgeDirection.NORTH) instanceof TankLogic && containsFluid()) {
-                TankLogic logic = (TankLogic) getTileInDirection(ForgeDirection.NORTH);
-                FluidStack drained = tank.getFluid().amount < drainRate ? tank.getFluid() : new FluidStack(tank.getFluid().getFluid(), drainRate);
-                if (logic.canFill(ForgeDirection.UNKNOWN, tank.getFluid().getFluid()) && logic.tank.getFluidAmount() < logic.tank.getCapacity() && logic.tank.getFluidAmount() + drainRate < tank.getFluidAmount()) {
-                    logic.fill(ForgeDirection.NORTH, drained, true);
-                    drain(ForgeDirection.UNKNOWN, drained, true);
-                    return;
-                }
-            }
-            if(getTileInDirection(ForgeDirection.SOUTH) instanceof TankLogic && containsFluid()) {
-                TankLogic logic = (TankLogic) getTileInDirection(ForgeDirection.SOUTH);
-                FluidStack drained = tank.getFluid().amount < drainRate ? tank.getFluid() : new FluidStack(tank.getFluid().getFluid(), drainRate);
-                if (logic.canFill(ForgeDirection.UNKNOWN, tank.getFluid().getFluid()) && logic.tank.getFluidAmount() < logic.tank.getCapacity() && logic.tank.getFluidAmount() + drainRate < tank.getFluidAmount()) {
-                    logic.fill(ForgeDirection.SOUTH, drained, true);
-                    drain(ForgeDirection.UNKNOWN, drained, true);
-                    return;
-                }
-            }
-            if(getTileInDirection(ForgeDirection.EAST) instanceof TankLogic && containsFluid()) {
-                TankLogic logic = (TankLogic) getTileInDirection(ForgeDirection.EAST);
-                FluidStack drained = tank.getFluid().amount < drainRate ? tank.getFluid() : new FluidStack(tank.getFluid().getFluid(), drainRate);
-                if (logic.canFill(ForgeDirection.UNKNOWN, tank.getFluid().getFluid()) && logic.tank.getFluidAmount() < logic.tank.getCapacity() && logic.tank.getFluidAmount() + drainRate < tank.getFluidAmount()) {
-                    logic.fill(ForgeDirection.EAST, drained, true);
-                    drain(ForgeDirection.UNKNOWN, drained, true);
-                    return;
-                }
-            }
-            if(getTileInDirection(ForgeDirection.WEST) instanceof TankLogic && containsFluid()) {
-                TankLogic logic = (TankLogic) getTileInDirection(ForgeDirection.WEST);
-                FluidStack drained = tank.getFluid().amount < drainRate ? tank.getFluid() : new FluidStack(tank.getFluid().getFluid(), drainRate);
-                if (logic.canFill(ForgeDirection.UNKNOWN, tank.getFluid().getFluid()) && logic.tank.getFluidAmount() < logic.tank.getCapacity() && logic.tank.getFluidAmount() + drainRate < tank.getFluidAmount()) {
-                    logic.fill(ForgeDirection.WEST, drained, true);
-                    drain(ForgeDirection.UNKNOWN, drained, true);
-                    return;
+            for (ForgeDirection dir : LocalBlockCollections.getNeighborDirections()) {
+                TileEntity tile = getTileInDirection(dir);
+                if (tile instanceof TankLogic && containsFluid()) {
+                    TankLogic otherTank = (TankLogic) tile;
+                    int capacity = getCapacity(otherTank);
+                    int drainAmount = drainAmount(otherTank);
+                    if (canFill(otherTank) && capacity > 0 && drainAmount > 0) {
+                        FluidStack drained = new FluidStack(tank.getFluid().getFluid(), drainAmount);
+                        otherTank.fill(dir, drained, true);
+                        drain(ForgeDirection.UNKNOWN, drained, true);
+                    }
                 }
             }
         }
+    }
+
+    public boolean canFill(TankLogic otherTank) {
+        return otherTank.canFill(ForgeDirection.UNKNOWN, tank.getFluid().getFluid());
+    }
+
+    public static boolean hasCapacity(TankLogic otherTank) {
+        return otherTank.tank.getFluidAmount() < otherTank.tank.getCapacity();
+    }
+
+    public int drainRate() {
+        return Math.max(10000 / tank.getFluid().getFluid().getViscosity(), 5);
+    }
+
+    private int drainAmount() {
+        return Math.min(drainRate(), tank.getFluidAmount());
+    }
+
+    public static int getCapacity(TankLogic otherTank) {
+        return otherTank.tank.getCapacity() - otherTank.tank.getFluidAmount();
+    }
+
+    public int drainAmount(TankLogic otherTank) {
+        return Math.min(drainAmount(), this.tank.getFluidAmount() - otherTank.tank.getFluidAmount());
     }
 
 

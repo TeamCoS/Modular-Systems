@@ -1,8 +1,8 @@
 package com.teamcos.modularsystems.utilities.block;
 
 import com.teamcos.modularsystems.helpers.LiquidHelper;
-import com.teamcos.modularsystems.notification.GuiColor;
 import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
+import com.teamcos.modularsystems.notification.GuiColor;
 import com.teamcos.modularsystems.notification.Notification;
 import com.teamcos.modularsystems.notification.NotificationHelper;
 import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
@@ -286,6 +286,7 @@ public class BlockTank extends BlockContainer implements MSUpgradeBlock {
         TankLogic tank = (TankLogic)world.getTileEntity(x, y, z);
         if(tank != null) {
             if (tank.tank.getFluid() != null) {
+                System.out.println(LiquidHelper.getLiquidBurnTime(tank.tank.getFluid()) / tank.tank.getFluid().getFluid().getViscosity());
                 return LiquidHelper.getLiquidBurnTime(tank.tank.getFluid()) / tank.tank.getFluid().getFluid().getViscosity();
             }
         }

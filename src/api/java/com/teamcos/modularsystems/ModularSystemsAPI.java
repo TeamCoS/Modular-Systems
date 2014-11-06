@@ -32,6 +32,7 @@ public class ModularSystemsAPI {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        proxy.registerRenderers();
         if(event.getSide() == Side.CLIENT)
         {
             NotificationKeyBinding.init();
