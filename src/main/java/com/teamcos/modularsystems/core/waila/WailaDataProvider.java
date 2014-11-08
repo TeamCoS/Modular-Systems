@@ -44,6 +44,9 @@ public class WailaDataProvider implements IWailaDataProvider {
             if(accessor.getTileEntity() instanceof TankLogic)
             {
                 TankLogic tank = (TankLogic)accessor.getTileEntity();
+                if(tank.isLocked()) {
+                    currenttip.add(GuiColor.RED + "Tank Locked: " + tank.getLockedFluid().getLocalizedName());
+                }
                 if(tank.containsFluid()) {
                     currenttip.add(GuiColor.TURQUISE + "Fluid: " + tank.tank.getFluid().getFluid().getLocalizedName());
                     currenttip.add(GuiColor.ORANGE + "" + tank.tank.getFluidAmount() + " / " + tank.tank.getCapacity() + "mb");

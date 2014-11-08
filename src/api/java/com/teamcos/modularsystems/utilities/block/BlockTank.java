@@ -10,6 +10,8 @@ import com.teamcos.modularsystems.renderers.TankRenderer;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import com.teamcos.modularsystems.utilities.tiles.TankLogic;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -22,11 +24,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
@@ -34,6 +36,8 @@ import java.util.Random;
 
 public class BlockTank extends BlockContainer implements MSUpgradeBlock {
 
+    @SideOnly(Side.CLIENT)
+    public static IIcon locked;
     public BlockTank(CreativeTabs tab)
     {
         super(Material.rock);
@@ -64,13 +68,14 @@ public class BlockTank extends BlockContainer implements MSUpgradeBlock {
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
         blockIcon = iconRegister.registerIcon("hopper_top");
+        locked = iconRegister.registerIcon("modularsystems:lock");
     }
 
     @Override
     public boolean shouldSideBeRendered (IBlockAccess world, int x, int y, int z, int side)
     {
         Block bID = world.getBlock(x, y, z);
-        return bID == this ? false : super.shouldSideBeRendered(world, x, y, z, side);
+        return bID != this;
     }
 
     @Override
@@ -152,8 +157,19 @@ public class BlockTank extends BlockContainer implements MSUpgradeBlock {
         } else {
             if (entityplayer.isSneaking()) {
                 TankLogic tankLogic = (TankLogic)world.getTileEntity(x, y, z);
-                if(world.isRemote)
-                    NotificationHelper.addNotification(new Notification(new ItemStack(this), GuiColor.TURQUISE + "Fuel: " + FluidRegistry.getFluidName(tankLogic.tank.getFluid()), GuiColor.ORANGE + "" + tankLogic.tank.getFluidAmount() + " / " + tankLogic.tank.getCapacity() + "mb", Notification.DEFAULT_DURATION));
+                if(!tankLogic.isLocked()) {
+                    if (tankLogic.lockTank()) {
+                        if (world.isRemote)
+                            NotificationHelper.addNotification(new Notification(new ItemStack(this), GuiColor.RED + "Tank Locked", GuiColor.TURQUISE + "Fuel: " + tankLogic.getLockedFluid().getLocalizedName()));
+                    }
+                }
+                else {
+                    tankLogic.unlockTank();
+                    if (tankLogic.containsFluid()) {
+                        if (world.isRemote)
+                            NotificationHelper.addNotification(new Notification(new ItemStack(this), GuiColor.GREEN + "Tank Unlocked", GuiColor.TURQUISE + "Fuel: " + tankLogic.tank.getFluid().getLocalizedName()));
+                    }
+                }
                 return true;
             }
 

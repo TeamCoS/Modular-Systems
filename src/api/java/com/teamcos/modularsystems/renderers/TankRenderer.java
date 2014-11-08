@@ -1,11 +1,12 @@
 package com.teamcos.modularsystems.renderers;
 
-import com.teamcos.modularsystems.utilities.helper.BlockSkinRenderHelper;
+import com.teamcos.modularsystems.utilities.block.BlockTank;
 import com.teamcos.modularsystems.utilities.tiles.TankLogic;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -25,16 +26,16 @@ public class TankRenderer implements ISimpleBlockRenderingHandler
     {
         if (modelID == tankModelID)
         {
+            TankLogic logic = (TankLogic) world.getTileEntity(x, y, z);
             //Liquid
             if (renderPass == 0)
             {
-                TankLogic logic = (TankLogic) world.getTileEntity(x, y, z);
                 if (logic.containsFluid())
                 {
                     FluidStack liquid = logic.tank.getFluid();
                     renderer.setRenderBounds(0.001, 0.001, 0.001, 0.999, logic.getFluidAmountScaled(), 0.999);
                     Fluid fluid = liquid.getFluid();
-                    BlockSkinRenderHelper.renderLiquidBlock(fluid.getStillIcon(), fluid.getStillIcon(), x, y, z, renderer, world, true);
+                    RenderHelper.renderLiquidBlock(fluid.getStillIcon(), fluid.getStillIcon(), x, y, z, renderer, world, true);
 
                     renderer.setRenderBounds(0, 0.001, 0.001, 0.999, logic.getFluidAmountScaled(), 0.999);
                 }
@@ -43,7 +44,7 @@ public class TankRenderer implements ISimpleBlockRenderingHandler
                     if (logic.getDirectionFillingFrom() == ForgeDirection.UP) {
                         Fluid fluid = logic.getFillingLiquid();
                         renderer.setRenderBounds(0.5 - logic.getTransferAmountScaled(), 0.001, 0.5 - logic.getTransferAmountScaled(), 0.5 + logic.getTransferAmountScaled(), 0.999, 0.5 + logic.getTransferAmountScaled());
-                        BlockSkinRenderHelper.renderLiquidBlock(fluid.getStillIcon(), fluid.getStillIcon(), x, y, z, renderer, world, true);
+                        RenderHelper.renderLiquidBlock(fluid.getStillIcon(), fluid.getStillIcon(), x, y, z, renderer, world, true);
                     }
                     else if(logic.renderOffset > 0 && (logic.getDirectionFillingFrom() == ForgeDirection.DOWN || logic.getDirectionFillingFrom() == ForgeDirection.UNKNOWN)){
                         Fluid fluid = logic.getFillingLiquid();
@@ -53,10 +54,11 @@ public class TankRenderer implements ISimpleBlockRenderingHandler
                         if(renderMax > 0.999)
                             renderMax = 0.999;
                         renderer.setRenderBounds(0.5 - logic.getTransferAmountScaled(), 0.001, 0.5 - logic.getTransferAmountScaled(), 0.5 + logic.getTransferAmountScaled(), renderMax, 0.5 + logic.getTransferAmountScaled());
-                        BlockSkinRenderHelper.renderLiquidBlock(fluid.getStillIcon(), fluid.getStillIcon(), x, y, z, renderer, world, true);
+                        RenderHelper.renderLiquidBlock(fluid.getStillIcon(), fluid.getStillIcon(), x, y, z, renderer, world, true);
                     }
                 }
-
+                if(logic.isLocked())
+                    renderer.renderBlockUsingTexture(Blocks.stone, x, y, z, BlockTank.locked);
             }
 
             //Block

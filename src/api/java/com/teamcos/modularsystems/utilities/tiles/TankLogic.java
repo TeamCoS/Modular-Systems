@@ -18,6 +18,7 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
     public int renderOffset;
     public double transferOffset;
     private ForgeDirection fillingFrom = ForgeDirection.UNKNOWN;
+    private Fluid lockedFluid;
 
     public TankLogic()
     {
@@ -27,16 +28,17 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
     @Override
     public int fill (ForgeDirection from, FluidStack resource, boolean doFill)
     {
-        int amount = tank.fill(resource, doFill);
-        fillingFrom = from;
-        lastFluid = resource.getFluid();
-        if (amount > 0 && doFill)
-        {
-            renderOffset = resource.amount;
-            transferOffset = resource.amount;
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        int amount = 0;
+        if(canFill(from, resource.getFluid())) {
+            amount = tank.fill(resource, doFill);
+            fillingFrom = from;
+            lastFluid = resource.getFluid();
+            if (amount > 0 && doFill) {
+                renderOffset = resource.amount;
+                transferOffset = resource.amount;
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            }
         }
-
         return amount;
     }
 
@@ -67,7 +69,10 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
     @Override
     public boolean canFill (ForgeDirection from, Fluid fluid)
     {
-        return tank.getFluid() == null || tank.getFluid().getFluid() == fluid;
+        if(isLocked())
+            return fluid == lockedFluid;
+        else
+            return tank.getFluid() == null || tank.getFluid().getFluid() == fluid;
     }
 
     @Override
@@ -113,6 +118,26 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
         return tank.getFluid() != null;
     }
 
+    public boolean lockTank() {
+        if(containsFluid())
+            lockedFluid = tank.getFluid().getFluid();
+        markDirty();
+        return isLocked();
+    }
+
+    public void unlockTank() {
+        lockedFluid = null;
+        markDirty();
+    }
+
+    public boolean isLocked() {
+        return lockedFluid != null;
+    }
+
+    public Fluid getLockedFluid() {
+        return lockedFluid;
+    }
+
     public int getBrightness ()
     {
         if (containsFluid())
@@ -151,6 +176,12 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
         }
         else
             tank.setFluid(null);
+
+        if(tags.getBoolean("isLocked")) {
+            lockedFluid = FluidRegistry.getFluid(tags.getString("lockedFluid"));
+        }
+        else
+            lockedFluid = null;
     }
 
     public void writeCustomNBT (NBTTagCompound tags)
@@ -161,6 +192,10 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
         {
             tags.setString("fluidName", liquid.getFluid().getName());
             tags.setInteger("amount", liquid.amount);
+        }
+        tags.setBoolean("isLocked", lockedFluid != null);
+        if(lockedFluid != null) {
+            tags.setString("lockedFluid", lockedFluid.getName());
         }
     }
 

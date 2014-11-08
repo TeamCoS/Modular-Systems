@@ -1,4 +1,4 @@
-package com.teamcos.modularsystems.utilities.helper;
+package com.teamcos.modularsystems.renderers;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -10,11 +10,20 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.FluidRegistry;
 
-/**
- * Credit to Slime Knights, Tinkers Construct
- */
-public class BlockSkinRenderHelper
-{
+public class RenderHelper {
+
+    /***********************************************************************
+     *************************** Block Rendering ***************************
+     ***********************************************************************/
+
+    public static void renderBlockInWorldUsingIcon(IBlockAccess world, int x, int y, int z, Block block, RenderBlocks renderBlocks) {
+        //I'll add stuff later, want to do some special stuff
+    }
+
+
+    /***********************************************************************
+     *************** Liquid Rendering, Credit to SlimeKnights **************
+     ***********************************************************************/
     public static boolean renderLiquidBlock (IIcon stillIcon, IIcon flowingIcon, int x, int y, int z, RenderBlocks renderer, IBlockAccess world)
     {
         return renderLiquidBlock(stillIcon, flowingIcon, x, y, z, renderer, world, false);

@@ -18,6 +18,13 @@ public class Notification {
         duration = dur;
     }
 
+    public Notification(ItemStack stack, String t, String d) {
+        icon = stack;
+        title = t;
+        description = d;
+        duration = DEFAULT_DURATION;
+    }
+
     public ItemStack getIcon()
     {
         return icon;
