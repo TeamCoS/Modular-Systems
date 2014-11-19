@@ -1,7 +1,9 @@
 package com.teamcos.modularsystems.core.waila;
 
+import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.notification.GuiColor;
 import com.teamcos.modularsystems.oreprocessing.tiles.TileEntitySmelteryCore;
+import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
 import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
@@ -56,13 +58,20 @@ public class WailaDataProvider implements IWailaDataProvider {
 
                 return currenttip;
             }
-            if(accessor.getTileEntity() instanceof DummyIOTile)
+            else if(accessor.getTileEntity() instanceof DummyIOTile)
             {
                 tileEntity = (DummyIOTile)accessor.getTileEntity();
                 currenttip.add(tileEntity.getSlotNameForChat());
             }
             else {
                 currenttip.add(tileEntity.getBlock().getLocalizedName());
+
+                double speedValue = Math.abs(FurnaceConfigHandler.getSpeedMultiplierForBlock(tileEntity.getWorldObj(), new Coord(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord), tileEntity.getBlock(), 1));
+                currenttip.add(GuiColor.RED + "Speed Value: " + speedValue);
+                double efficiencyValue = Math.abs(FurnaceConfigHandler.getEfficiencyMultiplierForBlock(tileEntity.getWorldObj(), new Coord(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord), tileEntity.getBlock(), 1));
+                currenttip.add(GuiColor.GRAY + "Efficiency Value: " + efficiencyValue);
+                double multiplicityValue = Math.abs(FurnaceConfigHandler.getSmeltingMultiplierForBlock(tileEntity.getWorldObj(), new Coord(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord), tileEntity.getBlock(), 1));
+                currenttip.add(GuiColor.GREEN + "Multiplicity Value: " + multiplicityValue);
             }
 
         }

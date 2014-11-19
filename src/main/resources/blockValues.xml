@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
 	<!-- Blocks /!-->
-	<block unlocalizedName="tile.blockRedstone">
+	<block name="minecraft:redstone_block">
         <speed>
             <xOffset>-1</xOffset>
             <yOffset>-1</yOffset>
@@ -20,7 +20,7 @@
         </efficiency>
 	</block>
 
-    <block unlocalizedName="tile.quartzBlock">
+    <block name="minecraft:quartz_block">
         <speed>
             <xOffset>-1</xOffset>
             <yOffset>-1</yOffset>
@@ -39,7 +39,7 @@
         </efficiency>
     </block>
 	
-	<block unlocalizedName="tile.blockGold">
+	<block name="minecraft:gold_block">
         <speed/>
         <efficiency>
             <equation>log</equation>
@@ -47,7 +47,7 @@
         </efficiency>
 	</block>
 	
-	<block unlocalizedName="tile.blockDiamond">
+	<block name="minecraft:diamond_block">
         <speed>
             <equation>parabolic</equation>
             <yCoefficient>0.2</yCoefficient>
@@ -60,7 +60,7 @@
         </efficiency>
 	</block>
 	
-	<block unlocalizedName="tile.blockLapis">
+	<block name="minecraft:lapis_block">
         <speed>
             <equation>parabolic</equation>
             <yCoefficient>0.02</yCoefficient>
@@ -71,7 +71,7 @@
         </efficiency>
 	</block>
 	
-	<block unlocalizedName="tile.brick">
+	<block name="minecraft:brick_block">
         <smelting>
             <equation>linear</equation>
             <yCoefficient>0.5</yCoefficient>
@@ -91,7 +91,7 @@
         </efficiency>
 	</block>
 
-    <block unlocalizedName="tile.netherBrick">
+    <block name="minecraft:nether_brick">
         <smelting>
             <equation>linear</equation>
             <yCoefficient>0.6</yCoefficient>
@@ -111,7 +111,7 @@
         </efficiency>
     </block>
 
-    <block unlocalizedName="tile.hellrock">
+    <block name="minecraft:netherrack">
         <smelting>
             <equation>linear</equation>
             <yCoefficient>0.25</yCoefficient>
@@ -129,17 +129,17 @@
         </efficiency>
     </block>
 	
-	<block unlocalizedName="tile.hellsand">
+	<block name="minecraft:soul_sand">
         <efficiency value="0.1"/>
         <speed value="0"/>
 	</block>
 	
-	<block unlocalizedName="tile.blockCoal">
+	<block name="minecraft:coal_block">
         <speed value="0.05"/>
         <efficiency value="0.05"/>
 	</block>
 
-    <block unlocalizedName="tile.sandStone">
+    <block unlocalizedName="minecraft:sandstone">
         <speed value="0.3"/>
         <efficiency value="0.1"/>
     </block>

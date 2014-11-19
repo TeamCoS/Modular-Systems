@@ -1,5 +1,6 @@
 package com.teamcos.modularsystems.utilities.block;
 
+import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
 import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
 import com.teamcos.modularsystems.renderers.ApiRenderers;
@@ -120,17 +121,17 @@ public class DummyBlock extends BlockContainer implements MSUpgradeBlock {
 
     @Override
     public double getEfficiency(World world, int x, int y, int z, int blockCount) {
-        return FurnaceConfigHandler.getEfficiencyMultiplierForBlock(this, blockCount);
+        return FurnaceConfigHandler.getEfficiencyMultiplierForBlock(world, new Coord(x, y, z), this, blockCount);
     }
 
     @Override
     public double getSpeed(World world, int x, int y, int z, int blockCount) {
-        return FurnaceConfigHandler.getSpeedMultiplierForBlock(this, blockCount);
+        return FurnaceConfigHandler.getSpeedMultiplierForBlock(world, new Coord(x, y, z), this, blockCount);
     }
 
     @Override
     public int getMultiplier(World world,int x, int y, int z,  int blockCount) {
-        return FurnaceConfigHandler.getSmeltingMultiplierForBlock(this, blockCount);
+        return FurnaceConfigHandler.getSmeltingMultiplierForBlock(world, new Coord(x, y, z), this, blockCount);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.teamcos.modularsystems.furnace.blocks;
 import com.teamcos.modularsystems.core.ModularSystems;
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
+import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
 import com.teamcos.modularsystems.utilities.block.DummyBlock;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
@@ -61,6 +62,6 @@ public class BlockFurnaceAddition extends DummyBlock {
 
     @Override
     public int getMultiplier(World world, int x, int y, int z, int blockCount) {
-        return FurnaceConfigHandler.getSmeltingMultiplierForBlock(this, blockCount);
+        return FurnaceConfigHandler.getSmeltingMultiplierForBlock(world, new Coord(x, y, z), this, blockCount);
     }
 }

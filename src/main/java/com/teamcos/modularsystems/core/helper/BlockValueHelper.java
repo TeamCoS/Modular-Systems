@@ -44,7 +44,7 @@ public class BlockValueHelper {
             Node nNode = nList.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) nNode;
-                String name = element.getAttribute("unlocalizedName");
+                String name = element.getAttribute("name");
                 Element speed = getElement(element, "speed");
                 Element efficiency = getElement(element, "efficiency");
                 Element smelting = getElement(element, "smelting");

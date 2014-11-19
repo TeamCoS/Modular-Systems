@@ -13,6 +13,9 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.common.config.Configuration;
+
+import java.io.File;
 
 @Mod(name = "Modular Systems API", modid = "modularsystemsapi", version = "0.0.1")
 
@@ -23,10 +26,33 @@ public class ModularSystemsAPI {
     @SidedProxy( clientSide="com.teamcos.modularsystems.proxy.ClientProxyAPI", serverSide="com.teamcos.modularsystems.proxy.CommonProxyAPI")
     public static CommonProxyAPI proxy;
 
+    public static Configuration notificationConfig;
+    public static int notificationXPos;
+
+    public static void set(String categoryName, String propertyName, int newValue) {
+
+        notificationConfig.load();
+        if (notificationConfig.getCategoryNames().contains(categoryName)) {
+            if (notificationConfig.getCategory(categoryName).containsKey(propertyName)) {
+                notificationConfig.getCategory(categoryName).get(propertyName).set(newValue);
+            }
+        }
+        notificationConfig.save();
+        reloadValues();
+    }
+
+    public static void reloadValues() {
+        notificationXPos = notificationConfig.getInt("notification xpos", "notifications", 1, 0, 2, "0: Left   1: Center   2: Right");
+    }
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
         if(event.getSide() == Side.CLIENT) {
             FMLCommonHandler.instance().bus().register(new NotificationTickHandler());
+
+            notificationConfig = new Configuration(new File(event.getModConfigurationDirectory().getAbsolutePath() + File.separator  + "ModularSystems/ModularSystemsAPINotificationsSettings.cfg"));
+            notificationXPos = notificationConfig.getInt("notification xpos", "notifications", 1, 0, 2, "0: Left\n1: Center\n2: Right");
+            notificationConfig.save();
         }
     }
 

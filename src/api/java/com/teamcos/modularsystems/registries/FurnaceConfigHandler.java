@@ -1,8 +1,11 @@
 package com.teamcos.modularsystems.registries;
 
 import com.teamcos.modularsystems.furnace.config.BlockConfig;
+import com.teamcos.modularsystems.helpers.Coord;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.world.World;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,7 +22,18 @@ public final class FurnaceConfigHandler {
     }
 
     public static BlockConfig retrieveBlockConfig(String blockName) {
-        return blockConfigMap.get(blockName);
+       if(blockConfigMap.containsKey(blockName))
+            return blockConfigMap.get(blockName);
+        else {
+            String input[] = blockName.split(":");
+            if(blockConfigMap.containsKey(input[0] + ":" + input[1]))
+                return blockConfigMap.get(input[0] + ":" + input[1]);
+            else {
+                if(blockConfigMap.containsKey(input[0]))
+                    return blockConfigMap.get(input[0]);
+            }
+        }
+        return null;
     }
 
     public static void publishMaterialConfig(Material blockName, BlockConfig config) {
@@ -31,8 +45,10 @@ public final class FurnaceConfigHandler {
     }
 
     //FURNACE: Gets Speed Multiplier
-    public static double getSpeedMultiplierForBlock(Block block, int count) {
-        BlockConfig blockValue = retrieveBlockConfig(block.getUnlocalizedName());
+    public static double getSpeedMultiplierForBlock(World world, Coord loc, Block block, int count) {
+        GameRegistry.UniqueIdentifier uniqueIdentifier = GameRegistry.findUniqueIdentifierFor(block);
+        String blockName = uniqueIdentifier.modId + ":" + uniqueIdentifier.name + ":" + world.getBlockMetadata(loc.x, loc.y, loc.z);
+        BlockConfig blockValue = retrieveBlockConfig(blockName);
         BlockConfig materialValue = retrieveMaterialConfig(block.getMaterial());
         if (blockValue != null) {
             return blockValue.speed(count);
@@ -44,8 +60,10 @@ public final class FurnaceConfigHandler {
     }
 
     //FURNACE: Gets Efficiency Multiplier
-    public static double getEfficiencyMultiplierForBlock(Block block, int count) {
-        BlockConfig blockValue = retrieveBlockConfig(block.getUnlocalizedName());
+    public static double getEfficiencyMultiplierForBlock(World world, Coord loc, Block block, int count) {
+        GameRegistry.UniqueIdentifier uniqueIdentifier = GameRegistry.findUniqueIdentifierFor(block);
+        String blockName = uniqueIdentifier.modId + ":" + uniqueIdentifier.name + ":" + world.getBlockMetadata(loc.x, loc.y, loc.z);
+        BlockConfig blockValue = retrieveBlockConfig(blockName);
         BlockConfig materialValue = retrieveMaterialConfig(block.getMaterial());
         if (blockValue != null) {
             return blockValue.efficiency(count);
@@ -57,8 +75,10 @@ public final class FurnaceConfigHandler {
     }
 
     //FURNACE: Gets Efficiency Multiplier
-    public static int getSmeltingMultiplierForBlock(Block block, int count) {
-        BlockConfig blockValue = retrieveBlockConfig(block.getUnlocalizedName());
+    public static int getSmeltingMultiplierForBlock(World world, Coord loc, Block block, int count) {
+        GameRegistry.UniqueIdentifier uniqueIdentifier = GameRegistry.findUniqueIdentifierFor(block);
+        String blockName = uniqueIdentifier.modId + ":" + uniqueIdentifier.name + ":" + world.getBlockMetadata(loc.x, loc.y, loc.z);
+        BlockConfig blockValue = retrieveBlockConfig(blockName);
         BlockConfig materialValue = retrieveMaterialConfig(block.getMaterial());
         if (blockValue != null) {
             return blockValue.multiplier(count);

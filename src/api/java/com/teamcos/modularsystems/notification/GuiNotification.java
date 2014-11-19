@@ -1,5 +1,6 @@
 package com.teamcos.modularsystems.notification;
 
+import com.teamcos.modularsystems.ModularSystemsAPI;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -127,6 +128,14 @@ public class GuiNotification extends Gui {
             d1 *= d1;
             d1 *= d1;
             int i = (this.width / 2) - 80;
+            switch(ModularSystemsAPI.notificationXPos) {
+            case 0 :
+                i = 0;
+                break;
+            case 2:
+                i = this.width - 160;
+                break;
+            }
             int j = 0 - (int)(d1 * 36.0D);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             GL11.glEnable(GL11.GL_TEXTURE_2D);

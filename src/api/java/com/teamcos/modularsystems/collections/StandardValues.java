@@ -160,9 +160,9 @@ public class StandardValues {
                 smeltingMultiplier += upBlock.getMultiplier(worldObj, x, y, z, blockEntry.getValue());
                 hasCrafter |= upBlock.isCrafter();
             } else {
-                speedMultiplier += FurnaceConfigHandler.getSpeedMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
-                efficiencyMultiplier += FurnaceConfigHandler.getEfficiencyMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
-                smeltingMultiplier += FurnaceConfigHandler.getSmeltingMultiplierForBlock(blockEntry.getKey(), blockEntry.getValue());
+                speedMultiplier += FurnaceConfigHandler.getSpeedMultiplierForBlock(worldObj, new Coord(x, y, z), blockEntry.getKey(), blockEntry.getValue());
+                efficiencyMultiplier += FurnaceConfigHandler.getEfficiencyMultiplierForBlock(worldObj, new Coord(x, y, z), blockEntry.getKey(), blockEntry.getValue());
+                smeltingMultiplier += FurnaceConfigHandler.getSmeltingMultiplierForBlock(worldObj, new Coord(x, y, z), blockEntry.getKey(), blockEntry.getValue());
             }
         }
 
