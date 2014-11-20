@@ -22,7 +22,7 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
 
     public TankLogic()
     {
-        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 4);
+        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 16);
     }
 
     @Override
@@ -277,7 +277,7 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
     }
 
     public int drainRate() {
-        return Math.max(10000 / tank.getFluid().getFluid().getViscosity(), 5);
+        return Math.max(14000 / tank.getFluid().getFluid().getViscosity(), 5);
     }
 
     private int drainAmount() {

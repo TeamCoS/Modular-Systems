@@ -38,6 +38,7 @@ public class BlockSmelteryCore extends BlockContainer implements MSUpgradeBlock 
 
     public BlockSmelteryCore(boolean active) {
         super(Material.rock);
+        setHardness(3.5F);
         this.active = active;
     }
 

@@ -127,6 +127,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
                     didWork = cook();
                 } else {
                     this.furnaceCookTime = 0;
+                    didWork = true;
                 }
             }
 
@@ -185,20 +186,20 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     }
 
     private void smeltItem() {
-        values.checkInventorySlots();
-        Doublet<Integer, Integer> smeltCount = smeltCountAndSmeltSize();
-        if (smeltCount != null && smeltCount.getSecond() > 0) {
-            ItemStack recipeResult = recipe(values.getInput());
-            values.getInput().stackSize -= smeltCount.getFirst();
-            if (values.getOutput() == null) {
-                recipeResult = recipeResult.copy();
-                recipeResult.stackSize = smeltCount.getSecond();
-                values.setOutput(recipeResult);
-            } else {
-                values.getOutput().stackSize += smeltCount.getSecond();
+            values.checkInventorySlots();
+            Doublet<Integer, Integer> smeltCount = smeltCountAndSmeltSize();
+            if (smeltCount != null && smeltCount.getSecond() > 0) {
+                ItemStack recipeResult = recipe(values.getInput());
+                values.getInput().stackSize -= smeltCount.getFirst();
+                if (values.getOutput() == null) {
+                    recipeResult = recipeResult.copy();
+                    recipeResult.stackSize = smeltCount.getSecond();
+                    values.setOutput(recipeResult);
+                } else {
+                    values.getOutput().stackSize += smeltCount.getSecond();
+                }
             }
-        }
-        values.checkInventorySlots();
+            values.checkInventorySlots();
     }
 
     private Doublet<Integer, Integer> smeltCountAndSmeltSize() {

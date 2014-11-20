@@ -36,6 +36,7 @@ public class BlockFurnaceCore extends BlockContainer implements MSUpgradeBlock {
 
     public BlockFurnaceCore(boolean p_i45407_1_) {
         super(Material.rock);
+        setHardness(3.5F);
         this.field_149932_b = p_i45407_1_;
     }
 
