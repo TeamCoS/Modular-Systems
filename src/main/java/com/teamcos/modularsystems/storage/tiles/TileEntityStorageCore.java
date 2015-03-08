@@ -141,7 +141,7 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 
 	public void dropItems(int x, int y, int z)
 	{
-		for (int i1 = inventoryRows * 11 - 11; i1 < inventoryRows * 11; ++i1)
+		for (int i1 = inventoryRows * 11 - 11; i1 < inventoryRows * 11 && i1 < ConfigHelper.maxExpansionSize * 11 ; ++i1)
 		{
 			ItemStack itemstack = getStackInSlot(i1);
 			inv[i1] = null;
