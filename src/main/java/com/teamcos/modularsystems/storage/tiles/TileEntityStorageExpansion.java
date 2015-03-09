@@ -46,7 +46,14 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 
     public TileEntityStorageCore getCore()
     {
-        return (TileEntityStorageCore) worldObj.getTileEntity(coreX, coreY, coreZ);
+        try
+        {
+            return (TileEntityStorageCore) worldObj.getTileEntity(coreX, coreY, coreZ);
+        }
+        catch(ClassCastException e)
+        {
+            return null;
+        }
     }
 
     public void setCore(TileEntityStorageCore core)
@@ -58,14 +65,17 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 
     public void setUpgradeToCore(Block block)
     {
-        if(block == BlockManager.storageExpansion)
-            getCore().setInventoryRows(getCore().inventoryRows + 1);
-        else if(block == BlockManager.storageArmorExpansion)
-            getCore().hasArmorUpgrade = true;
-        else if(block == BlockManager.storageSortingExpansion)
-            getCore().hasSortingUpgrade = true;
-        else if(block == BlockManager.storageCraftingExpansion)
-            getCore().hasCraftingUpgrade = true;
+        if( getCore() != null )
+        {
+            if(block == BlockManager.storageExpansion)
+                getCore().setInventoryRows(getCore().inventoryRows + 1);
+            else if(block == BlockManager.storageArmorExpansion)
+                getCore().hasArmorUpgrade = true;
+            else if(block == BlockManager.storageSortingExpansion)
+                getCore().hasSortingUpgrade = true;
+            else if(block == BlockManager.storageCraftingExpansion)
+                getCore().hasCraftingUpgrade = true;
+        }
     }
 
     public void invalidateCore()
