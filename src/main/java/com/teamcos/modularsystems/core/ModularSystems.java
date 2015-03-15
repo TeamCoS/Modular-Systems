@@ -1,6 +1,5 @@
 package com.teamcos.modularsystems.core;
 
-import com.teamcos.modularsystems.api.nei.INEICallback;
 import com.teamcos.modularsystems.core.fakeplayer.FakePlayerPool;
 import com.teamcos.modularsystems.core.helper.BlockValueHelper;
 import com.teamcos.modularsystems.core.helper.ConfigHelper;
@@ -12,23 +11,22 @@ import com.teamcos.modularsystems.core.network.PacketPipeline;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
 import com.teamcos.modularsystems.core.proxy.CommonProxy;
 import com.teamcos.modularsystems.helpers.VanillaFuelHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.teamcos.modularsystems.manager.GuiManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -40,7 +38,7 @@ import java.io.IOException;
 
 public class ModularSystems {
 
-    @Instance(Reference.MOD_ID)
+    @Mod.Instance(Reference.MOD_ID)
     public static ModularSystems instance;
 
     @SidedProxy( clientSide="com.teamcos.modularsystems.core.proxy.ClientProxy", serverSide="com.teamcos.modularsystems.core.proxy.CommonProxy")
@@ -48,7 +46,6 @@ public class ModularSystems {
 
     public static final PacketPipeline packetPipeline = new PacketPipeline();
 
-    public static INEICallback nei;
 
     //Creates the Creative Tab
     public static CreativeTabs tabModularSystems = new CreativeTabs("tabModularSystems"){
@@ -61,7 +58,7 @@ public class ModularSystems {
         }
     };
 
-    @EventHandler
+    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
 
         //Set up config
@@ -91,11 +88,9 @@ public class ModularSystems {
 
         MinecraftForge.EVENT_BUS.register(FakePlayerPool.instance);
         GameRegistry.registerFuelHandler(new VanillaFuelHandler());
-
-
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 
         //Open Network Pipeline
@@ -105,12 +100,12 @@ public class ModularSystems {
         ClientProxy.setCustomRenderers();
 
         //Setup GUIs
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiManager());
 
         FMLInterModComms.sendMessage("Waila", "register", "com.teamcos.modularsystems.core.waila.WailaDataProvider.callbackRegister");
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         //Close Network
         packetPipeline.postInitialise();

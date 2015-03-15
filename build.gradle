@@ -15,16 +15,6 @@ buildscript {
     }
 }
 
-repositories {
-    maven { // The repo from which to get waila
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
-    }
-    maven {
-        name 'CB Maven FS'
-        url "http://chickenbones.net/maven/"
-    }
-}
 
 apply plugin: 'forge'
 
@@ -41,35 +31,51 @@ group= "com.teamcos.modularsystems" // http://maven.apache.org/guides/mini/guide
 archivesBaseName = "Modular Systems"
 
 minecraft {
+    version = "1.8-11.14.0.1295-1.8"
+    runDir = "eclipse"
+    
     version = config.minecraft_version + "-" + config.forge_version
 
     replaceIn "core/lib/Reference.java"
     replace "@VERSION@", "${config.mod_version}"
 
     assetDir = "src/main/resources"
+	
+    mappings = "stable_16"
 }
 
 dependencies {
-    compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
-    compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
-    compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
-    compile "mcp.mobius.waila:Waila:1.5.6_dev1_1.7.10"
+    // you may put jars on which you depend on in ./libs
+    // or you may define them like so..
+    //compile "some.group:artifact:version:classifier"
+    //compile "some.group:artifact:version"
+      
+    // real examples
+    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
+    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+
+    // for more info...
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
 }
 
-processResources {
-    // exclude xcf files, as they are for development only
-    exclude '**/*.xcf'
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include '*.info'
-
+        include 'mcmod.info'
+                
         // replace version and mcversion
-        expand 'mod_version': project.version, 'minecraft_version': project.config.minecraft_version
+        expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-
+        
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
-        exclude '**/*.info'
+        exclude 'mcmod.info'
     }
 }

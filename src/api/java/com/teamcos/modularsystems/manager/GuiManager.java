@@ -1,9 +1,9 @@
 package com.teamcos.modularsystems.manager;
 
 import com.teamcos.modularsystems.notification.GuiNotificationConfig;
-import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public class GuiManager implements IGuiHandler {
     public static final int NOTIFICATION_CONFIG_ID = 0;

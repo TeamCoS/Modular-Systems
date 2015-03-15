@@ -181,7 +181,7 @@ public class Coord implements Cloneable {
         return pos != null && z == pos.z;
     }
 
-    public static Coord readFromNBT(NBTTagCompound tagCompound) {
+    public Coord readFromNBT(NBTTagCompound tagCompound) {
         int x = tagCompound.getInteger("CoreX");
         int y = tagCompound.getInteger("CoreY");
         int z = tagCompound.getInteger("CoreZ");

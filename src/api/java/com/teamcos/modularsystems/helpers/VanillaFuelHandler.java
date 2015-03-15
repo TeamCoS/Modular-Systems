@@ -1,11 +1,11 @@
 package com.teamcos.modularsystems.helpers;
 
-import cpw.mods.fml.common.IFuelHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
+import net.minecraftforge.fml.common.IFuelHandler;
 
 public class VanillaFuelHandler implements IFuelHandler {
     @Override
@@ -31,7 +31,7 @@ public class VanillaFuelHandler implements IFuelHandler {
             return 200;
         } else if (item instanceof ItemSword && ((ItemSword) item).getToolMaterialName().equals("WOOD")) {
             return 200;
-        } else if (item instanceof ItemHoe && ((ItemHoe) item).getToolMaterialName().equals("WOOD")) {
+        } else if (item instanceof ItemHoe && ((ItemHoe) item).getMaterialName().equals("WOOD")) {
             return 200;
         } else if (item == Items.stick) {
             return 100;

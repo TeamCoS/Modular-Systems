@@ -8,6 +8,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
@@ -25,18 +26,30 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
         tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 16);
     }
 
+    /*******************************************************************************************************************
+     ********************************************* Fluid Functions *****************************************************
+     *******************************************************************************************************************/
+
     @Override
     public int fill (ForgeDirection from, FluidStack resource, boolean doFill)
     {
         int amount = 0;
         if(canFill(from, resource.getFluid())) {
             amount = tank.fill(resource, doFill);
-            fillingFrom = from;
-            lastFluid = resource.getFluid();
-            if (amount > 0 && doFill) {
-                renderOffset = resource.amount;
-                transferOffset = resource.amount;
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            if(amount > 0) {
+                fillingFrom = from;
+                lastFluid = resource.getFluid();
+                if (amount > 0 && doFill) {
+                    renderOffset = resource.amount;
+                    transferOffset = resource.amount;
+                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                }
+                return amount;
+            } else {
+                TankLogic above = getTankInDirection(ForgeDirection.UP);
+                if(above != null && above.canFill(ForgeDirection.DOWN, resource.getFluid()))
+                    amount = above.fill(ForgeDirection.DOWN, resource, doFill);
+                return amount;
             }
         }
         return amount;
@@ -71,13 +84,14 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
     {
         if(isLocked())
             return fluid == lockedFluid;
+        else if(tank.getFluid() == null || tank.getFluid().getFluid() == fluid)
+            return true;
         else
-            return tank.getFluid() == null || tank.getFluid().getFluid() == fluid;
+            return getTankInDirection(ForgeDirection.UP) != null && getTankInDirection(ForgeDirection.UP).canFill(from, fluid);
     }
 
     @Override
-    public boolean canDrain (ForgeDirection from, Fluid fluid)
-    {
+    public boolean canDrain (ForgeDirection from, Fluid fluid) {
         return false;
     }
 
@@ -90,13 +104,11 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
         return new FluidTankInfo[] { new FluidTankInfo(fluid, tank.getCapacity()) };
     }
 
-    public ForgeDirection getDirectionFillingFrom()
-    {
+    public ForgeDirection getDirectionFillingFrom() {
         return fillingFrom;
     }
 
-    public boolean isFilling()
-    {
+    public boolean isFilling() {
         return renderOffset > 0 || transferOffset > 0;
     }
 
@@ -104,9 +116,8 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
         return lastFluid;
     }
 
-    public float getFluidAmountScaled ()
-    {
-        return (float) (tank.getFluid().amount - renderOffset) / (float) (tank.getCapacity() * 1.01F);
+    public float getFluidAmountScaled () {
+        return (float) (tank.getFluid().amount - renderOffset) / (tank.getCapacity() * 1.01F);
     }
 
     public double getTransferAmountScaled() {
@@ -138,10 +149,8 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
         return lockedFluid;
     }
 
-    public int getBrightness ()
-    {
-        if (containsFluid())
-        {
+    public int getBrightness () {
+        if (containsFluid()) {
             return (tank.getFluid().getFluid().getLuminosity() * tank.getFluidAmount()) / tank.getCapacity();
         }
         return 0;
@@ -321,5 +330,121 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
     @Override
     public FuelProviderType type() {
         return FuelProviderType.LIQUID;
+    }
+    public static final int DIR_NORTH = 1;
+    public static final int DIR_SOUTH = 2;
+
+    public static final int DIR_WEST = 4;
+    public static final int DIR_EAST = 8;
+
+    public static final int DIR_UP = 16;
+    public static final int DIR_DOWN = 32;
+
+
+    public interface IRenderNeighbours {
+        public boolean hasDirectNeighbour(int direction);
+
+        public boolean hasDiagonalNeighbour(int direction1, int direction2);
+    }
+
+    public static final IRenderNeighbours NO_NEIGHBOURS = new IRenderNeighbours() {
+        @Override
+        public boolean hasDirectNeighbour(int dir) {
+            return false;
+        }
+
+        @Override
+        public boolean hasDiagonalNeighbour(int direction1, int direction2) {
+            return false;
+        }
+    };
+
+    private boolean accepts(FluidStack liquid) {
+        if (liquid == null) return true;
+        final FluidStack ownFluid = tank.getFluid();
+        return ownFluid == null || ownFluid.isFluidEqual(liquid);
+    }
+
+    private class NeighbourProvider implements IRenderNeighbours {
+        public boolean[] neighbors = new boolean[64];
+
+        private void testNeighbour(FluidStack ownFluid, int dx, int dy, int dz, int flag) {
+            TankLogic tank = getTankInDirection(dx, dy, dz);
+            if (tank != null && tank.accepts(ownFluid) && tank.isLocked() == isLocked()) neighbors[flag] = true;
+        }
+
+        public NeighbourProvider() {
+            final FluidStack fluid = tank.getFluid();
+
+            testNeighbour(fluid, 0, 1, 0, DIR_UP);
+            testNeighbour(fluid, 0, -1, 0, DIR_DOWN);
+            testNeighbour(fluid, +1, 0, 0, DIR_EAST);
+            testNeighbour(fluid, -1, 0, 0, DIR_WEST);
+            testNeighbour(fluid, 0, 0, +1, DIR_SOUTH);
+            testNeighbour(fluid, 0, 0, -1, DIR_NORTH);
+
+            testNeighbour(fluid, +1, 1, 0, DIR_UP | DIR_EAST);
+            testNeighbour(fluid, -1, 1, 0, DIR_UP | DIR_WEST);
+            testNeighbour(fluid, 0, 1, +1, DIR_UP | DIR_SOUTH);
+            testNeighbour(fluid, 0, 1, -1, DIR_UP | DIR_NORTH);
+
+            testNeighbour(fluid, +1, -1, 0, DIR_DOWN | DIR_EAST);
+            testNeighbour(fluid, -1, -1, 0, DIR_DOWN | DIR_WEST);
+            testNeighbour(fluid, 0, -1, +1, DIR_DOWN | DIR_SOUTH);
+            testNeighbour(fluid, 0, -1, -1, DIR_DOWN | DIR_NORTH);
+
+            testNeighbour(fluid, -1, 0, -1, DIR_WEST | DIR_NORTH);
+            testNeighbour(fluid, -1, 0, +1, DIR_WEST | DIR_SOUTH);
+            testNeighbour(fluid, +1, 0, +1, DIR_EAST | DIR_SOUTH);
+            testNeighbour(fluid, +1, 0, -1, DIR_EAST | DIR_NORTH);
+        }
+
+        @Override
+        public boolean hasDirectNeighbour(int direction) {
+            return neighbors[direction];
+        }
+
+        @Override
+        public boolean hasDiagonalNeighbour(int direction1, int direction2) {
+            return neighbors[direction1 | direction2];
+        }
+    }
+
+    public IRenderNeighbours getRenderConnections() {
+        return new NeighbourProvider();
+    }
+
+    private static TankLogic getValidTank(final TileEntity neighbor) {
+        return (neighbor instanceof TankLogic && !neighbor.isInvalid()) ? (TankLogic)neighbor : null;
+    }
+
+    protected TankLogic getNeighborTank(final int x, final int y, final int z) {
+        if (!worldObj.blockExists(x, y, z)) return null;
+
+        Chunk chunk = worldObj.getChunkFromBlockCoords(x, z);
+        TileEntity te = chunk.getTileEntityUnsafe(x & 0xF, y, z & 0xF);
+
+        return (te instanceof TankLogic)? (TankLogic)te : null;
+    }
+
+    private TankLogic getTankInDirection(ForgeDirection direction) {
+        final TileEntity neighbor = getTileInDirection(direction);
+        return getValidTank(neighbor);
+    }
+
+    private TankLogic getTankInDirection(int dx, int dy, int dz) {
+        final TileEntity neighbor = getNeighbour(dx, dy, dz);
+        return getValidTank(neighbor);
+    }
+    public TileEntity getTileInDirection(ForgeDirection direction) {
+        return getNeighbour(direction.offsetX, direction.offsetY, direction.offsetZ);
+    }
+
+    public TileEntity getNeighbour(int dx, int dy, int dz) {
+        return getTileEntity(xCoord + dx, yCoord + dy, zCoord + dz);
+    }
+
+    private TileEntity getTileEntity(int x, int y, int z) {
+        return (worldObj != null && worldObj.blockExists(x, y, z))? worldObj.getTileEntity(x, y, z) : null;
     }
 }
