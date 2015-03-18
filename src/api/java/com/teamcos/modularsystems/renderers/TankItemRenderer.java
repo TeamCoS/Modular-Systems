@@ -1,21 +1,20 @@
 package com.teamcos.modularsystems.renderers;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import org.lwjgl.opengl.GL11;
 
 public class TankItemRenderer implements IItemRenderer
 {
-    private RenderBlocks renderer;
-    public TankItemRenderer()
-    {
-        renderer = new RenderBlocks();
-    }
+    private FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 16);
+    public RenderBlocks renderBlocks = new RenderBlocks();
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -28,101 +27,38 @@ public class TankItemRenderer implements IItemRenderer
     }
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data)
-    {
-        switch (type)
-        {
-        case ENTITY:
-        {
-            render(item, item.getItemDamage());
-            break;
-        }
-        case EQUIPPED:
-        {
-            render(item, item.getItemDamage());
-            break;
-        }
-        case EQUIPPED_FIRST_PERSON:
-        {
-            render(item, item.getItemDamage());
-            break;
-        }
-        case INVENTORY:
-        {
-            render(item, item.getItemDamage());
-            break;
-        }
-        default:
-            break;
-        }
-    }
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        if (type == ItemRenderType.ENTITY) GL11.glTranslated(-0.5, -0.5, -0.5);
+        else if (type == ItemRenderType.INVENTORY) GL11.glTranslated(0, -0.1, 0);
 
-    public void render(ItemStack stack, int metadata)
-    {
-        FluidStack liquid = null;
-        if (stack.hasTagCompound()) {
-            NBTTagCompound liquidTag = stack.getTagCompound().getCompoundTag("Fluid");
-            if (liquidTag != null) {
-                liquid = FluidStack.loadFluidStackFromNBT(liquidTag);
+        TankRenderer.EMPTY_FRAME.render();
+
+        NBTTagCompound tag = item.getTagCompound();
+        if (tag != null && tag.hasKey("Fluid")) {
+            final FluidStack stack = readFluid(tag);
+            if (stack != null) {
+                final float height = (float)tank.getFluidAmount() / (float)tank.getCapacity();
+
+                Tessellator.instance.startDrawingQuads();
+                final IIcon icon = stack.getFluid().getStillIcon();
+                Tessellator.instance.setTextureUV(icon.getMinU(), icon.getMinV());
+                Tessellator.instance.setColorRGBA(255, 255, 255, 255);
+                RenderHelper.renderCubeWithUV(Tessellator.instance, 0.001, 0.001, 0.001, 0.999, height, 0.999, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV());
+                Tessellator.instance.draw();
             }
         }
-        boolean fluid = liquid != null;
 
-        Block block = Block.getBlockFromItem(stack.getItem());
-        Tessellator tessellator = Tessellator.instance;
+        GL11.glPopMatrix();
+    }
 
-        block.setBlockBoundsForItemRender();
-        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(0.0F, -1F, 0.0F);
-        if(fluid)
-            renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, liquid.getFluid().getStillIcon());
-        renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
-        tessellator.draw();
-
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(0.0F, 1.0F, 0.0F);
-        if(fluid)
-            renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, liquid.getFluid().getStillIcon());
-        renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
-
-        tessellator.draw();
-
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(0.0F, 0.0F, -1F);
-        if(fluid)
-            renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, liquid.getFluid().getStillIcon());
-        renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
-
-        tessellator.draw();
-
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(0.0F, 0.0F, 1.0F);
-        if(fluid)
-            renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, liquid.getFluid().getStillIcon());
-        renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
-
-        tessellator.draw();
-
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(-1F, 0.0F, 0.0F);
-        if(fluid)
-            renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, liquid.getFluid().getStillIcon());
-        renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
-
-        tessellator.draw();
-
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(1.0F, 0.0F, 0.0F);
-        if(fluid)
-            renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, liquid.getFluid().getStillIcon());
-        renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
-
-        tessellator.draw();
-
-        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-
-        //Block
-        renderer.setRenderBounds(0, 0, 0, 1, 1, 1);
+    private FluidStack readFluid(NBTTagCompound tag) {
+        synchronized (tank) {
+            tank.setFluid(null);
+            tank.readFromNBT(tag.getCompoundTag("Fluid"));
+            return tank.getFluid();
+        }
     }
 }

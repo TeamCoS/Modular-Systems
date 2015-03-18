@@ -52,7 +52,7 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
 
-        coreLoc = Coord.readFromNBT(tagCompound);
+        coreLoc.readFromNBT(tagCompound);
 
         slot = tagCompound.getInteger("Slot");
         icon = tagCompound.getInteger("Icon");

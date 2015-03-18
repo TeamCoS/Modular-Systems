@@ -48,6 +48,11 @@ public class BlockTank extends BlockContainer implements MSUpgradeBlock {
         setBlockName("modularsystems:blockTank");
     }
 
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon() {
+        return blockIcon;
+    }
+
     @Override
     public int getRenderBlockPass ()
     {
@@ -66,10 +71,11 @@ public class BlockTank extends BlockContainer implements MSUpgradeBlock {
         return false;
     }
 
+
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
-        blockIcon = iconRegister.registerIcon("hopper_top");
-        locked = iconRegister.registerIcon("modularsystems:lock");
+        blockIcon = iconRegister.registerIcon("modularsystems" + ":tank");
+        locked = iconRegister.registerIcon("modularsystems" + ":lock");
     }
 
     @Override

@@ -20,6 +20,69 @@ public class RenderHelper {
         //I'll add stuff later, want to do some special stuff
     }
 
+    public static void renderCube(Tessellator tes, double x1, double y1, double z1, double x2, double y2, double z2) {
+        tes.addVertex(x1, y1, z1);
+        tes.addVertex(x1, y2, z1);
+        tes.addVertex(x2, y2, z1);
+        tes.addVertex(x2, y1, z1);
+
+        tes.addVertex(x1, y1, z2);
+        tes.addVertex(x2, y1, z2);
+        tes.addVertex(x2, y2, z2);
+        tes.addVertex(x1, y2, z2);
+
+        tes.addVertex(x1, y1, z1);
+        tes.addVertex(x1, y1, z2);
+        tes.addVertex(x1, y2, z2);
+        tes.addVertex(x1, y2, z1);
+
+        tes.addVertex(x2, y1, z1);
+        tes.addVertex(x2, y2, z1);
+        tes.addVertex(x2, y2, z2);
+        tes.addVertex(x2, y1, z2);
+
+        tes.addVertex(x1, y1, z1);
+        tes.addVertex(x2, y1, z1);
+        tes.addVertex(x2, y1, z2);
+        tes.addVertex(x1, y1, z2);
+
+        tes.addVertex(x1, y2, z1);
+        tes.addVertex(x1, y2, z2);
+        tes.addVertex(x2, y2, z2);
+        tes.addVertex(x2, y2, z1);
+    }
+
+    public static void renderCubeWithUV(Tessellator tes, double x1, double y1, double z1, double x2, double y2, double z2, double u, double v, double u1, double v1) {
+        tes.addVertexWithUV(x1, y1, z1, u, v);
+        tes.addVertexWithUV(x1, y2, z1, u, v1);
+        tes.addVertexWithUV(x2, y2, z1, u1, v1);
+        tes.addVertexWithUV(x2, y1, z1, u1, v);
+
+        tes.addVertexWithUV(x1, y1, z2, u, v);
+        tes.addVertexWithUV(x2, y1, z2, u, v1);
+        tes.addVertexWithUV(x2, y2, z2, u1, v1);
+        tes.addVertexWithUV(x1, y2, z2, u1, v);
+
+        tes.addVertexWithUV(x1, y1, z1, u, v);
+        tes.addVertexWithUV(x1, y1, z2, u, v1);
+        tes.addVertexWithUV(x1, y2, z2, u1, v1);
+        tes.addVertexWithUV(x1, y2, z1, u1, v);
+
+        tes.addVertexWithUV(x2, y1, z1, u, v);
+        tes.addVertexWithUV(x2, y2, z1, u, v1);
+        tes.addVertexWithUV(x2, y2, z2, u1, v1);
+        tes.addVertexWithUV(x2, y1, z2, u1, v);
+
+        tes.addVertexWithUV(x1, y1, z1, u, v);
+        tes.addVertexWithUV(x2, y1, z1, u, v1);
+        tes.addVertexWithUV(x2, y1, z2, u1, v1);
+        tes.addVertexWithUV(x1, y1, z2, u1, v);
+
+        tes.addVertexWithUV(x1, y2, z1, u, v);
+        tes.addVertexWithUV(x1, y2, z2, u, v1);
+        tes.addVertexWithUV(x2, y2, z2, u1, v1);
+        tes.addVertexWithUV(x2, y2, z1, u1, v);
+    }
 
     /***********************************************************************
      *************** Liquid Rendering, Credit to SlimeKnights **************
