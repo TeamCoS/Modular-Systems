@@ -13,12 +13,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class DummyRFTile extends DummyTile implements IEnergyHandler, FuelProvider {
 
-    public static final int RF_TICK = 80;
+    public static final int RF_PROCESS = 80;
 
     protected EnergyStorage energyRF;
 
     public DummyRFTile() {
-        energyRF = new EnergyStorage(32000, 1000, 1000);
+        energyRF = new EnergyStorage(10000, 1000, 1000);
     }
 
     public DummyBlock getBlock() {
@@ -60,17 +60,17 @@ public class DummyRFTile extends DummyTile implements IEnergyHandler, FuelProvid
      ******************************************************************************************************************/
     @Override
     public boolean canProvide() {
-        return energyRF.getEnergyStored() > RF_TICK;
+        return energyRF.getEnergyStored() > RF_PROCESS;
     }
 
     @Override
     public double fuelProvided() {
-        return RF_TICK;
+        return RF_PROCESS;
     }
 
     @Override
     public double consume() {
-        int actual = energyRF.extractEnergy(RF_TICK, false);
+        int actual = energyRF.extractEnergy(RF_PROCESS, false);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         return actual;
     }
