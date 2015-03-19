@@ -63,7 +63,7 @@ public class DummyRFBlock extends DummyBlock {
 
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
-        blockIcon = iconRegister.registerIcon("redstone_block");
+        blockIcon = iconRegister.registerIcon("beacon");
     }
 
     @Override

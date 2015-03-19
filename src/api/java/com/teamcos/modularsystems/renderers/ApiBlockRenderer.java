@@ -114,7 +114,7 @@ public class ApiBlockRenderer implements ISimpleBlockRenderingHandler {
             renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
             return true;
         } else if (block == ApiBlockManager.dummyRFBlock) {
-            renderer.renderBlockUsingTexture(Blocks.redstone_block, x, y, z, Blocks.redstone_block.getIcon(1, 1));
+            renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.beacon.getIcon(1, 1));
             return true;
         }
         else if (block == ApiBlockManager.dummyBlock) {
