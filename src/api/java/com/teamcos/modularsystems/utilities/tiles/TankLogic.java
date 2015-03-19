@@ -242,10 +242,13 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
 
         if(transferOffset > 0) {
             transferOffset -= 0.2;
+            if(renderOffset <= 0 && transferOffset > 1)
+                transferOffset = 1;
             worldObj.func_147479_m(xCoord, yCoord, zCoord);
         }
 
-        distributeFluids();
+        if(worldObj.getWorldInfo().getWorldTime() % 40 == 0)
+            distributeFluids();
     }
 
     public void distributeFluids() {
@@ -286,7 +289,7 @@ public class TankLogic extends DummyTile implements IFluidHandler, FuelProvider
     }
 
     public int drainRate() {
-        return Math.max(14000 / tank.getFluid().getFluid().getViscosity(), 5);
+        return Math.max(30000 / tank.getFluid().getFluid().getViscosity(), 70);
     }
 
     private int drainAmount() {

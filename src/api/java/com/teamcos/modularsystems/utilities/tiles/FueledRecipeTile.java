@@ -36,6 +36,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     private int furnaceCookTime;
     private boolean isDirty = true;
     private boolean wellFormed = false;
+
     private String custom_name;
 
     public FueledRecipeTile(int maxSize) {
@@ -258,7 +259,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
         } else if (values.getEfficiency() > -1) {
             return 1;
         } else {
-            return (int) Math.round(fuelValue / Math.abs(values.getEfficiency()));
+            return (int) Math.max(0.001, Math.round(fuelValue / Math.max(0.001, Math.abs(values.getEfficiency()))));
         }
     }
 
@@ -596,15 +597,18 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     private static final class FuelSorter implements Comparator<FuelProvider> {
         @Override
         public int compare(FuelProvider o1, FuelProvider o2) {
-            if (o1.canProvide() && !o2.canProvide()) {
-                return 1;
-            } else if (o2.canProvide() && !o1.canProvide()) {
-                return -1;
-            } else if (o1.type() == o2.type()) {
-                return Double.compare(o1.fuelProvided(), o2.fuelProvided());
-            } else {
-                return Integer.compare(o1.type().sortValue, o2.type().sortValue);
+            if(o1.type() != null && o2.type() != null) {
+                if (o1.canProvide() && !o2.canProvide()) {
+                    return 1;
+                } else if (o2.canProvide() && !o1.canProvide()) {
+                    return -1;
+                } else if (o1.type() == o2.type()) {
+                    return Double.compare(o1.fuelProvided(), o2.fuelProvided());
+                } else {
+                    return Integer.compare(o1.type().sortValue, o2.type().sortValue);
+                }
             }
+            return 0;
         }
 
         @Override

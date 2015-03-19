@@ -46,7 +46,7 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 						this.setInventorySlotContents(j - 1, inv[j].copy());
 						this.setInventorySlotContents(j, swapper);
 					}
-					else if(temp.equals(temp2))
+					else if(temp.equals(temp2) && (!inv[j - 1].hasTagCompound() && !inv[j].hasTagCompound()))
 					{
 						if(inv[j - 1].stackSize < inv[j - 1].getMaxStackSize())
 						{
@@ -100,7 +100,7 @@ public class TileEntityStorageCore extends ModularTileEntity implements IInvento
 						this.setInventorySlotContents(j - 1, inv[j].copy());
 						this.setInventorySlotContents(j, swapper);
 					}
-					else if(temp == temp2)
+					else if(temp == temp2 &&  (!inv[j - 1].hasTagCompound() && !inv[j].hasTagCompound()))
 					{
 						if(inv[j - 1].getItemDamage() > inv[j].getItemDamage())
 						{

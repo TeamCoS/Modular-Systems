@@ -7,9 +7,9 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class Coord implements Cloneable {
-    public final int x;
-    public final int y;
-    public final int z;
+    public int x;
+    public int y;
+    public int z;
 
     public Coord(ForgeDirection direction) {
         x = direction.offsetX;
@@ -181,11 +181,10 @@ public class Coord implements Cloneable {
         return pos != null && z == pos.z;
     }
 
-    public Coord readFromNBT(NBTTagCompound tagCompound) {
-        int x = tagCompound.getInteger("CoreX");
-        int y = tagCompound.getInteger("CoreY");
-        int z = tagCompound.getInteger("CoreZ");
-        return new Coord(x, y, z);
+    public void readFromNBT(NBTTagCompound tagCompound) {
+        x = tagCompound.getInteger("CoreX");
+        y = tagCompound.getInteger("CoreY");
+        z = tagCompound.getInteger("CoreZ");
     }
 
     public void writeToNBT(NBTTagCompound tagCompound) {

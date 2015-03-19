@@ -20,13 +20,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class DummyTile extends ModularTileEntity implements ISidedInventory, ModularSystemsTile {
 
-    private Coord coreLoc = new Coord(-100, -100, -100);
+    private Coord coreLoc;
     private int icon = 1;
     private int coolDown = 80;
     private int slot = 4;
     private int metadata = 0;
 
-    public DummyTile() {}
+    public DummyTile() {
+        coreLoc = new Coord(-100, -100, -100);
+    }
 
     public FueledRecipeTile getCore() {
         TileEntity te;
@@ -64,9 +66,7 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
     {
         super.writeToNBT(tagCompound);
 
-        if (coreLoc != null) {
-            coreLoc.writeToNBT(tagCompound);
-        }
+        coreLoc.writeToNBT(tagCompound);
 
         tagCompound.setInteger("Slot", slot);
         tagCompound.setInteger("Icon", icon);

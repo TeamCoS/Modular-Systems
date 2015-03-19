@@ -33,10 +33,6 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
         return is == null ? 0 : GameRegistry.getFuelValue(is);
     }
 
-    public void update() {
-        worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
-    }
-
     protected ItemStack recipe(ItemStack is) {
         return is == null ? null : FurnaceRecipes.smelting().getSmeltingResult(is);
     }

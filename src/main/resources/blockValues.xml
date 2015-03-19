@@ -40,7 +40,6 @@
     </block>
 	
 	<block name="minecraft:gold_block">
-        <speed/>
         <efficiency>
             <equation>log</equation>
             <yCoefficient>0.4</yCoefficient>
