@@ -2,6 +2,7 @@ package com.teamcos.modularsystems.manager;
 
 import com.teamcos.modularsystems.utilities.block.*;
 import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
+import com.teamcos.modularsystems.utilities.tiles.DummyRFTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.TankLogic;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -17,6 +18,7 @@ public class ApiModuleManager {
     public static void enableFurnaceModule(CreativeTabs tab, String textureName) {
         registerDummy(tab);
         registerDummyIO(tab);
+        registerDummyRF(tab);
         registerTank(tab);
         if (textureName != null) {
             ApiBlockManager.furnaceOverlay = new BlockFurnaceOverlay(textureName, "furnaceOverlay", true);
@@ -43,6 +45,7 @@ public class ApiModuleManager {
     public static void enableOreProcessing(CreativeTabs tab) {
         registerDummy(tab);
         registerDummyIO(tab);
+        registerDummyRF(tab);
         registerTank(tab);
 
         ApiBlockManager.smelteryOverlay = new BlockSmelteryOverlay();
@@ -52,6 +55,7 @@ public class ApiModuleManager {
 
     private static boolean registeredDummy = false;
     private static boolean registeredDummyIO = false;
+    private static boolean registeredDummyRF = false;
 
     public static void registerDummy(CreativeTabs tab) {
         if (!registeredDummy) {
@@ -70,6 +74,16 @@ public class ApiModuleManager {
             registeredDummyIO = true;
         }
     }
+
+    public static void registerDummyRF(CreativeTabs tab) {
+        if (!registeredDummyRF) {
+            ApiBlockManager.dummyRFBlock = new DummyRFBlock(tab, Material.rock, true);
+            GameRegistry.registerBlock(ApiBlockManager.dummyRFBlock, "modularDummyRF");
+            GameRegistry.registerTileEntity(DummyRFTile.class, "dummyRFTile");
+            registeredDummyRF = true;
+        }
+    }
+
     public static void registerTank(CreativeTabs tab) {
         if (ApiBlockManager.fluidTank == null) {
             ApiBlockManager.fluidTank = new BlockTank(tab);

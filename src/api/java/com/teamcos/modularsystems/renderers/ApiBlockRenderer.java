@@ -77,7 +77,7 @@ public class ApiBlockRenderer implements ISimpleBlockRenderingHandler {
     private static IIcon getOveryLay(Block block, RenderBlocks renderer) {
         IIcon output;
 
-        if(block == ApiBlockManager.dummyIOBlock || block == ApiBlockManager.dummyBlock) {
+        if(block == ApiBlockManager.dummyIOBlock || block == ApiBlockManager.dummyBlock || block == ApiBlockManager.dummyRFBlock) {
             output = renderer.getBlockIconFromSideAndMetadata(ApiBlockManager.furnaceOverlay, 0, 0);
         } else {
             output = renderer.getBlockIconFromSideAndMetadata(block, 0, 0);
@@ -113,7 +113,11 @@ public class ApiBlockRenderer implements ISimpleBlockRenderingHandler {
         if (block == ApiBlockManager.dummyIOBlock) {
             renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
             return true;
-        } else if (block == ApiBlockManager.dummyBlock) {
+        } else if (block == ApiBlockManager.dummyRFBlock) {
+            renderer.renderBlockUsingTexture(Blocks.redstone_block, x, y, z, Blocks.redstone_block.getIcon(1, 1));
+            return true;
+        }
+        else if (block == ApiBlockManager.dummyBlock) {
             DummyTile dummy = (DummyTile) world1.getTileEntity(x, y, z);
             renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMetadata()));
             return true;
