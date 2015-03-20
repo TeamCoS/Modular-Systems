@@ -31,7 +31,6 @@ public class ModularSystemsAPI {
     public static int notificationXPos;
 
     public static boolean ic2Present = false;
-    public static boolean cofhPresent = false;
 
     public static void set(String categoryName, String propertyName, int newValue) {
 
@@ -59,8 +58,6 @@ public class ModularSystemsAPI {
             notificationConfig.save();
         }
         if (Loader.isModLoaded("IC2")) ic2Present = true;
-        if (Loader.isModLoaded("CoFHCore"))  cofhPresent = true;
-
     }
 
     @Mod.EventHandler

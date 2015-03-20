@@ -16,7 +16,7 @@ public class ApiModuleManager {
     public static void enableFurnaceModule(CreativeTabs tab, String textureName) {
         registerDummy(tab);
         registerDummyIO(tab);
-        if (ModularSystemsAPI.cofhPresent) registerDummyRF(tab);
+        registerDummyRF(tab);
         if (ModularSystemsAPI.ic2Present) registerDummyEU(tab);
         registerTank(tab);
         if (textureName != null) {
@@ -44,7 +44,7 @@ public class ApiModuleManager {
     public static void enableOreProcessing(CreativeTabs tab) {
         registerDummy(tab);
         registerDummyIO(tab);
-        if (ModularSystemsAPI.cofhPresent) registerDummyRF(tab);
+        registerDummyRF(tab);
         if (ModularSystemsAPI.ic2Present) registerDummyEU(tab);
         registerTank(tab);
 

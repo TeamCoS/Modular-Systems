@@ -79,7 +79,7 @@ public class ApiBlockRenderer implements ISimpleBlockRenderingHandler {
         IIcon output;
 
         if(block == ApiBlockManager.dummyIOBlock || block == ApiBlockManager.dummyBlock ||
-                (block == ApiBlockManager.dummyRFBlock && ModularSystemsAPI.cofhPresent) ||
+                (block == ApiBlockManager.dummyRFBlock) ||
                 (block == ApiBlockManager.dummyEUBlock && ModularSystemsAPI.ic2Present)) {
             output = renderer.getBlockIconFromSideAndMetadata(ApiBlockManager.furnaceOverlay, 0, 0);
         } else {
@@ -116,7 +116,7 @@ public class ApiBlockRenderer implements ISimpleBlockRenderingHandler {
         if (block == ApiBlockManager.dummyIOBlock) {
             renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
             return true;
-        } else if (block == ApiBlockManager.dummyRFBlock && ModularSystemsAPI.cofhPresent) {
+        } else if (block == ApiBlockManager.dummyRFBlock) {
             renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.beacon.getIcon(1, 1));
             return true;
         } else if (block == ApiBlockManager.dummyEUBlock && ModularSystemsAPI.ic2Present) {
