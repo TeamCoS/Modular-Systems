@@ -1,5 +1,6 @@
 package com.teamcos.modularsystems.renderers;
 
+import com.teamcos.modularsystems.ModularSystemsAPI;
 import com.teamcos.modularsystems.manager.ApiBlockManager;
 import com.teamcos.modularsystems.utilities.block.ModularSystemsTile;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
@@ -77,7 +78,9 @@ public class ApiBlockRenderer implements ISimpleBlockRenderingHandler {
     private static IIcon getOveryLay(Block block, RenderBlocks renderer) {
         IIcon output;
 
-        if(block == ApiBlockManager.dummyIOBlock || block == ApiBlockManager.dummyBlock || block == ApiBlockManager.dummyRFBlock) {
+        if(block == ApiBlockManager.dummyIOBlock || block == ApiBlockManager.dummyBlock ||
+                (block == ApiBlockManager.dummyRFBlock && ModularSystemsAPI.cofhPresent) ||
+                (block == ApiBlockManager.dummyEUBlock && ModularSystemsAPI.ic2Present)) {
             output = renderer.getBlockIconFromSideAndMetadata(ApiBlockManager.furnaceOverlay, 0, 0);
         } else {
             output = renderer.getBlockIconFromSideAndMetadata(block, 0, 0);
@@ -113,11 +116,13 @@ public class ApiBlockRenderer implements ISimpleBlockRenderingHandler {
         if (block == ApiBlockManager.dummyIOBlock) {
             renderer.renderBlockUsingTexture(Blocks.dispenser, x, y, z, Blocks.dispenser.getIcon(1, 1));
             return true;
-        } else if (block == ApiBlockManager.dummyRFBlock) {
+        } else if (block == ApiBlockManager.dummyRFBlock && ModularSystemsAPI.cofhPresent) {
             renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.beacon.getIcon(1, 1));
             return true;
-        }
-        else if (block == ApiBlockManager.dummyBlock) {
+        } else if (block == ApiBlockManager.dummyEUBlock && ModularSystemsAPI.ic2Present) {
+            renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.command_block.getIcon(1, 1));
+            return true;
+        } else if (block == ApiBlockManager.dummyBlock) {
             DummyTile dummy = (DummyTile) world1.getTileEntity(x, y, z);
             renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMetadata()));
             return true;

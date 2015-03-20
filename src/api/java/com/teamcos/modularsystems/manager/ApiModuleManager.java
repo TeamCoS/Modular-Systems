@@ -1,10 +1,8 @@
 package com.teamcos.modularsystems.manager;
 
+import com.teamcos.modularsystems.ModularSystemsAPI;
 import com.teamcos.modularsystems.utilities.block.*;
-import com.teamcos.modularsystems.utilities.tiles.DummyIOTile;
-import com.teamcos.modularsystems.utilities.tiles.DummyRFTile;
-import com.teamcos.modularsystems.utilities.tiles.DummyTile;
-import com.teamcos.modularsystems.utilities.tiles.TankLogic;
+import com.teamcos.modularsystems.utilities.tiles.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -18,7 +16,8 @@ public class ApiModuleManager {
     public static void enableFurnaceModule(CreativeTabs tab, String textureName) {
         registerDummy(tab);
         registerDummyIO(tab);
-        registerDummyRF(tab);
+        if (ModularSystemsAPI.cofhPresent) registerDummyRF(tab);
+        if (ModularSystemsAPI.ic2Present) registerDummyEU(tab);
         registerTank(tab);
         if (textureName != null) {
             ApiBlockManager.furnaceOverlay = new BlockFurnaceOverlay(textureName, "furnaceOverlay", true);
@@ -45,7 +44,8 @@ public class ApiModuleManager {
     public static void enableOreProcessing(CreativeTabs tab) {
         registerDummy(tab);
         registerDummyIO(tab);
-        registerDummyRF(tab);
+        if (ModularSystemsAPI.cofhPresent) registerDummyRF(tab);
+        if (ModularSystemsAPI.ic2Present) registerDummyEU(tab);
         registerTank(tab);
 
         ApiBlockManager.smelteryOverlay = new BlockSmelteryOverlay();
@@ -56,6 +56,7 @@ public class ApiModuleManager {
     private static boolean registeredDummy = false;
     private static boolean registeredDummyIO = false;
     private static boolean registeredDummyRF = false;
+    private static boolean registeredDummyEU = false;
 
     public static void registerDummy(CreativeTabs tab) {
         if (!registeredDummy) {
@@ -81,6 +82,15 @@ public class ApiModuleManager {
             GameRegistry.registerBlock(ApiBlockManager.dummyRFBlock, "modularDummyRF");
             GameRegistry.registerTileEntity(DummyRFTile.class, "dummyRFTile");
             registeredDummyRF = true;
+        }
+    }
+
+    public static void registerDummyEU(CreativeTabs tab) {
+        if (!registeredDummyEU) {
+            ApiBlockManager.dummyEUBlock = new DummyEUBlock(tab, Material.rock, true);
+            GameRegistry.registerBlock(ApiBlockManager.dummyEUBlock, "modularDummyEU");
+            GameRegistry.registerTileEntity(DummyEUTile.class, "dummyEUTile");
+            registeredDummyEU = true;
         }
     }
 

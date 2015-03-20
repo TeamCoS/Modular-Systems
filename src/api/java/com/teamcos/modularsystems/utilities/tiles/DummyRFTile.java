@@ -14,6 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class DummyRFTile extends DummyTile implements IEnergyHandler, FuelProvider {
 
     public static final int RF_PROCESS = 80;
+    public static final int FUEL_USAGE = 80;
 
     protected EnergyStorage energyRF;
 
@@ -65,14 +66,14 @@ public class DummyRFTile extends DummyTile implements IEnergyHandler, FuelProvid
 
     @Override
     public double fuelProvided() {
-        return RF_PROCESS;
+        return FUEL_USAGE;
     }
 
     @Override
     public double consume() {
         int actual = energyRF.extractEnergy(RF_PROCESS, false);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        return actual;
+        return FUEL_USAGE;
     }
 
     @Override

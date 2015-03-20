@@ -6,6 +6,7 @@ import com.teamcos.modularsystems.notification.NotificationKeyBinding;
 import com.teamcos.modularsystems.notification.NotificationTickHandler;
 import com.teamcos.modularsystems.proxy.CommonProxyAPI;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -28,6 +29,9 @@ public class ModularSystemsAPI {
 
     public static Configuration notificationConfig;
     public static int notificationXPos;
+
+    public static boolean ic2Present = false;
+    public static boolean cofhPresent = false;
 
     public static void set(String categoryName, String propertyName, int newValue) {
 
@@ -54,6 +58,9 @@ public class ModularSystemsAPI {
             notificationXPos = notificationConfig.getInt("notification xpos", "notifications", 1, 0, 2, "0: Left\n1: Center\n2: Right");
             notificationConfig.save();
         }
+        if (Loader.isModLoaded("IC2")) ic2Present = true;
+        if (Loader.isModLoaded("CoFHCore"))  cofhPresent = true;
+
     }
 
     @Mod.EventHandler
