@@ -6,7 +6,6 @@ import com.teamcos.modularsystems.core.fakeplayer.ModularSystemsFakePlayer;
 import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.tiles.ModularTileEntity;
-import com.teamcos.modularsystems.utilities.WorldUtil;
 import com.teamcos.modularsystems.helpers.Coord;
 import net.minecraft.block.Block;
 import net.minecraft.command.IEntitySelector;
@@ -203,12 +202,12 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
                     TileEntityStorageExpansion buddy = (TileEntityStorageExpansion) tileEntity;
 
                     if (buddy.getCore() != null && buddy.isConnected &&
-                            WorldUtil.areTilesSame(this.getCore(), buddy.getCore()) && buddy.isConnected(coords)) {
+                            com.teamcos.modularsystems.helpers.WorldUtil.areTilesSame(this.getCore(), buddy.getCore()) && buddy.isConnected(coords)) {
                         return true;
                     }
                 } else if (tileEntity instanceof TileEntityStorageCore) {
                     TileEntityStorageCore core = (TileEntityStorageCore) tileEntity;
-                    if (WorldUtil.areTilesSame(this.getCore(), core)) return true;
+                    if (com.teamcos.modularsystems.helpers.WorldUtil.areTilesSame(this.getCore(), core)) return true;
                 }
             }
         }

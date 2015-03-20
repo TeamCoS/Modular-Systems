@@ -4,7 +4,6 @@ import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
 import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
 import com.teamcos.modularsystems.renderers.ApiRenderers;
-import com.teamcos.modularsystems.utilities.WorldUtil;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
 import net.minecraft.block.Block;
@@ -45,9 +44,9 @@ public class DummyBlock extends BlockContainer implements MSUpgradeBlock {
         int meta = dummy.getMetadata();
 
         if (world.isAirBlock(x, y, z)) {
-            float f = WorldUtil.random.nextFloat() * 0.8F + 0.1F;
-            float f1 = WorldUtil.random.nextFloat() * 0.8F + 0.1F;
-            float f2 = WorldUtil.random.nextFloat() * 0.8F + 0.1F;
+            float f = com.teamcos.modularsystems.helpers.WorldUtil.random.nextFloat() * 0.8F + 0.1F;
+            float f1 = com.teamcos.modularsystems.helpers.WorldUtil.random.nextFloat() * 0.8F + 0.1F;
+            float f2 = com.teamcos.modularsystems.helpers.WorldUtil.random.nextFloat() * 0.8F + 0.1F;
 
             EntityItem entityitem = new EntityItem(
                     world,

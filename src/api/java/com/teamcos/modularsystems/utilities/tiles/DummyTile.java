@@ -1,7 +1,6 @@
 package com.teamcos.modularsystems.utilities.tiles;
 
 import com.teamcos.modularsystems.inventory.InventoryUtil;
-import com.teamcos.modularsystems.utilities.WorldUtil;
 import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import com.teamcos.modularsystems.utilities.block.DummyIOBlock;
@@ -86,10 +85,10 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
                         if (te instanceof IInventory) {
                             if (te instanceof DummyTile) {
                                 DummyTile dummy = (DummyTile) te;
-                                if (dummy.getCore() == null || WorldUtil.areTilesSame(dummy.getCore(), this.getCore())) {
+                                if (dummy.getCore() == null || com.teamcos.modularsystems.helpers.WorldUtil.areTilesSame(dummy.getCore(), this.getCore())) {
                                     continue;
                                 }
-                            } else if (WorldUtil.areTilesSame(te, core)) {
+                            } else if (com.teamcos.modularsystems.helpers.WorldUtil.areTilesSame(te, core)) {
                                 continue;
                             }
 
