@@ -3,14 +3,14 @@ package com.teamcos.modularsystems.calculations;
 
 public class ConstantCalculation implements Calculation {
 
-    private final StandardValues values;
+    private final CalculationValues values;
 
-    public ConstantCalculation(StandardValues values) {
+    public ConstantCalculation(CalculationValues values) {
         this.values = values;
     }
 
     @Override
     public double calculate(int blockCount) {
-        return blockCount > 0 ? values.getyOffset() : 0;
+        return blockCount > 0 ? values.getConstantValue() : 0;
     }
 }

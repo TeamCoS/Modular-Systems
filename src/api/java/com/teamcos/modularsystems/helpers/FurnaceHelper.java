@@ -16,7 +16,6 @@ public class FurnaceHelper {
 
     //FURNACE
     public static boolean isBadBlock(Block blockId, World world) {
-
         if (blockId instanceof MSUpgradeBlock || blockId == Blocks.redstone_block) return false;
         if (blockId.hasTileEntity(0)) {
             if(world.isRemote)

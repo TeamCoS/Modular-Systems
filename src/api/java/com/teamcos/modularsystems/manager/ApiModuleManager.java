@@ -33,13 +33,9 @@ public class ApiModuleManager {
                 "XXX", 'X', Blocks.cobblestone, 'x', Blocks.dispenser);
     }
 
-    public static void enableStorageModule() {
+    public static void enableStorageModule() {}
 
-    }
-
-    public static void enableEnchantingModule() {
-
-    }
+    public static void enableEnchantingModule() {}
 
     public static void enableOreProcessing(CreativeTabs tab) {
         registerDummy(tab);

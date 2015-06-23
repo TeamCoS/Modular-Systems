@@ -1,7 +1,6 @@
 package com.teamcos.modularsystems.core.lib;
 
 public class Strings {
-
 	  /* Version check related constants */
     public static final String VERSION_CHECK_INIT_LOG_MESSAGE = "Modular Systems : Starting Version Check";
     public static final String UNINITIALIZED_MESSAGE = "Modular Systems : Version Check Failed";

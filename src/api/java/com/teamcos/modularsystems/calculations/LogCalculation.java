@@ -3,7 +3,7 @@ package com.teamcos.modularsystems.calculations;
 
 public class LogCalculation extends AbstractCalculation {
 
-    public LogCalculation(StandardValues values) {
+    public LogCalculation(CalculationValues values) {
         super(values);
     }
 

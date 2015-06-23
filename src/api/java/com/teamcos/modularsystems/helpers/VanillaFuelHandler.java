@@ -10,9 +10,7 @@ import net.minecraft.item.*;
 public class VanillaFuelHandler implements IFuelHandler {
     @Override
     public int getBurnTime(ItemStack fuel) {
-
         Item item;
-
         if (fuel == null ) {
             return 0;
         } else if ((item = fuel.getItem()) instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air) {

@@ -3,7 +3,7 @@ package com.teamcos.modularsystems.calculations;
 
 public class LinearCalculation extends AbstractCalculation {
 
-    public LinearCalculation(StandardValues value) {
+    public LinearCalculation(CalculationValues value) {
         super(value);
     }
 

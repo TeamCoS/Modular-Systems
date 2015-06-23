@@ -21,7 +21,6 @@ public class ConvertDummiesWorldFunction implements WorldFunction {
 
     @Override
     public void outerBlock(World world, int x, int y, int z) {
-
         bcFunc.outerBlock(world, x, y, z);
         Block block = world.getBlock(x, y, z);
         ModularSystemsTile msTile;

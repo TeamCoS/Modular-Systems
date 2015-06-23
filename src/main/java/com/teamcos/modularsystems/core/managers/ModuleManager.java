@@ -26,7 +26,9 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ModuleManager {
     public static void enableFurnaceModule() {
         String texture = ConfigHelper.useTextures ? ConfigHelper.textureName : null;
+
         ApiModuleManager.enableFurnaceModule(ModularSystems.tabModularSystems, texture);
+
         BlockManager.furnaceCore = new BlockFurnaceCore(false).setBlockName("modularsystems:blockFurnaceCore").setCreativeTab(ModularSystems.tabModularSystems);
         BlockManager.furnaceCoreActive = new BlockFurnaceCore(true).setLightLevel(1F).setBlockName("modularsystems:blockFurnaceCoreActive");
         BlockManager.furnaceCraftingUpgrade = new BlockCrafter();
@@ -57,6 +59,7 @@ public class ModuleManager {
 
     public static void enableStorageModule() {
         ApiModuleManager.enableStorageModule();
+
         BlockManager.storageCore = new BlockStorageCore();
         BlockManager.basicExpansion = new BlockBasicExpansion();
         BlockManager.storageExpansion = new BlockCapacityExpansion();
@@ -85,18 +88,22 @@ public class ModuleManager {
                 "XxX",
                 "XXX", 'X', Blocks.planks, 'x', Items.string);
 
-        CraftingManager.getInstance().addShapelessRecipe(new ItemStack(BlockManager.storageExpansion, 1), BlockManager.basicExpansion, Blocks.chest);
+        CraftingManager.getInstance().addShapelessRecipe(new ItemStack(BlockManager.storageExpansion, 1),
+                BlockManager.basicExpansion, Blocks.chest);
 
-        CraftingManager.getInstance().addShapelessRecipe(new ItemStack(BlockManager.storageHoppingExpansion, 1), BlockManager.basicExpansion, Items.ender_pearl, Blocks.hopper);
+        CraftingManager.getInstance().addShapelessRecipe(new ItemStack(BlockManager.storageHoppingExpansion, 1),
+                BlockManager.basicExpansion, Items.ender_pearl, Blocks.hopper);
 
         CraftingManager.getInstance().addRecipe(new ItemStack(BlockManager.storageArmorExpansion, 1),
                 " X ",
                 "XsX",
                 " X ", 'X', Items.leather, 's', BlockManager.basicExpansion);
 
-        CraftingManager.getInstance().addShapelessRecipe(new ItemStack(BlockManager.storageSmashingExpansion, 1), Items.diamond_pickaxe, BlockManager.basicExpansion);
+        CraftingManager.getInstance().addShapelessRecipe(new ItemStack(BlockManager.storageSmashingExpansion, 1),
+                Items.diamond_pickaxe, BlockManager.basicExpansion);
 
-        CraftingManager.getInstance().addShapelessRecipe(new ItemStack(BlockManager.storageCraftingExpansion, 1), Blocks.crafting_table, BlockManager.basicExpansion);
+        CraftingManager.getInstance().addShapelessRecipe(new ItemStack(BlockManager.storageCraftingExpansion, 1),
+                Blocks.crafting_table, BlockManager.basicExpansion);
 
         CraftingManager.getInstance().addRecipe(new ItemStack(BlockManager.storageSortingExpansion, 1),
                 "XXX",
@@ -143,16 +150,14 @@ public class ModuleManager {
 
     private static void initDustsAsNeeded()
     {
-        if(OreDictionary.getOres("dustIron").isEmpty())
-        {
+        if(OreDictionary.getOres("dustIron").isEmpty()) {
             ItemManager.ironDust = new ItemDust("modularsystems:ironDust");
             GameRegistry.registerItem(ItemManager.ironDust, "ironDust");
             OreDictionary.registerOre("dustIron", ItemManager.ironDust);
             GameRegistry.addSmelting(ItemManager.ironDust, new ItemStack(Items.iron_ingot, 1), 0.5F);
         }
 
-        if(OreDictionary.getOres("dustGold").isEmpty())
-        {
+        if(OreDictionary.getOres("dustGold").isEmpty()) {
             ItemManager.goldDust = new ItemDust("modularsystems:goldDust");
             GameRegistry.registerItem(ItemManager.goldDust, "goldDust");
             OreDictionary.registerOre("dustGold", ItemManager.goldDust);

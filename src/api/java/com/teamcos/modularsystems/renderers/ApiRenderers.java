@@ -6,6 +6,7 @@ public class ApiRenderers {
 
     public static int renderPass;
     public static int apiDummyRenderType;
+
     public static void init() {
         apiDummyRenderType = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new ApiBlockRenderer());

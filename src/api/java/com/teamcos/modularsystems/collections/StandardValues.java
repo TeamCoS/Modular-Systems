@@ -5,7 +5,7 @@ import com.teamcos.modularsystems.helpers.Coord;
 import com.teamcos.modularsystems.helpers.LocalBlockCollections;
 import com.teamcos.modularsystems.helpers.Locatable;
 import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
-import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
+import com.teamcos.modularsystems.registries.BlockValuesConfig;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,14 +22,19 @@ public class StandardValues {
     private boolean validSmelting = false;
     private boolean validCrafter = false;
     private boolean validTiles = false;
+
     private double speedMultiplier = 1;
     private double efficiencyMultiplier = 1;
     private int smeltingMultiplier = 1;
+
     private boolean hasCrafter = false;
+
     private BlockCountFunction blockCount;
+
     private ItemStack input;
     private ItemStack fuel;
     private ItemStack output;
+
     private Locatable entity;
     private List<Coord> tiles;
     private int maxSize;
@@ -110,7 +115,7 @@ public class StandardValues {
         if (!validTiles) {
             setValues();
         }
-        return new ArrayList(tiles);
+        return new ArrayList<Coord>(tiles);
     }
 
     public void setSmeltingMultiplier(int smeltingMultiplier) {
@@ -160,12 +165,11 @@ public class StandardValues {
                 smeltingMultiplier += upBlock.getMultiplier(worldObj, x, y, z, blockEntry.getValue());
                 hasCrafter |= upBlock.isCrafter();
             } else {
-                speedMultiplier += FurnaceConfigHandler.getSpeedMultiplierForBlock(worldObj, new Coord(x, y, z), blockEntry.getKey(), blockEntry.getValue());
-                efficiencyMultiplier += FurnaceConfigHandler.getEfficiencyMultiplierForBlock(worldObj, new Coord(x, y, z), blockEntry.getKey(), blockEntry.getValue());
-                smeltingMultiplier += FurnaceConfigHandler.getSmeltingMultiplierForBlock(worldObj, new Coord(x, y, z), blockEntry.getKey(), blockEntry.getValue());
+                speedMultiplier += BlockValuesConfig.getSpeedMultiplierForBlock(worldObj, new Coord(x, y, z), blockEntry.getKey(), blockEntry.getValue());
+                efficiencyMultiplier += BlockValuesConfig.getEfficiencyMultiplierForBlock(worldObj, new Coord(x, y, z), blockEntry.getKey(), blockEntry.getValue());
+                smeltingMultiplier += BlockValuesConfig.getSmeltingMultiplierForBlock(worldObj, new Coord(x, y, z), blockEntry.getKey(), blockEntry.getValue());
             }
         }
-
         return new Values(hasCrafter, speedMultiplier, efficiencyMultiplier, smeltingMultiplier, blockCount.getTiles());
     }
 

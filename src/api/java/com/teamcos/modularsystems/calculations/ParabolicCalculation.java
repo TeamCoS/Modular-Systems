@@ -3,7 +3,7 @@ package com.teamcos.modularsystems.calculations;
 
 public class ParabolicCalculation extends AbstractCalculation {
 
-    public ParabolicCalculation(StandardValues values) {
+    public ParabolicCalculation(CalculationValues values) {
         super(values);
     }
 

@@ -24,8 +24,7 @@ public class StatisticsPanel extends Gui {
      * @param x Location on Screen for X
      * @param y Location on Screen for Y
      */
-    public StatisticsPanel(int x, int y)
-    {
+    public StatisticsPanel(int x, int y) {
         this.xPos = x;
         this.yPos = y;
         stats = new ArrayList<StatisticNode>();
@@ -41,15 +40,13 @@ public class StatisticsPanel extends Gui {
         stats.get(pos).updateText(string);
     }
 
-    public void drawText(FontRenderer fontRendererObj)
-    {
+    public void drawText(FontRenderer fontRendererObj) {
         fontRendererObj.drawString("Stats:",  xPos + 5 , 6, 4210752);
         for(int i = 0; i < stats.size(); i++)
             fontRendererObj.drawString(stats.get(i).text, (xPos + 52) - fontRendererObj.getStringWidth(stats.get(i).text), 21 + (i * 16), 4210752);
     }
 
-    public void drawBackground(TextureManager textureManager, int width, int height, int parentXSize, int parentYSize)
-    {
+    public void drawBackground(TextureManager textureManager, int width, int height, int parentXSize, int parentYSize) {
         GL11.glColor4f(1f, 1f, 1f, 1f);
 
         int x = (width - parentXSize) / 2;
@@ -60,8 +57,7 @@ public class StatisticsPanel extends Gui {
         for(int i = 0; i < stats.size(); i++)
             drawTexturedModalRect(x + (xPos + 3), y + 16 + (i * 16), stats.get(i).iconX, stats.get(i).iconY, 16, 16);
 
-        if(VersionHelper.getResult() == VersionHelper.OUTDATED)
-        {
+        if(VersionHelper.getResult() == VersionHelper.OUTDATED) {
             if(xPos != 0)
                 drawTexturedModalRect(x, y, 0, 240, 16, 16);
             else
@@ -70,14 +66,12 @@ public class StatisticsPanel extends Gui {
     }
 
 
-    //Abstract Class for Statistics
-    public class StatisticNode
-    {
+    //Class for Statistics
+    public class StatisticNode {
         public int iconX;
         public int iconY;
         public String text;
-        public StatisticNode(int iconX, int iconY, String text)
-        {
+        public StatisticNode(int iconX, int iconY, String text) {
             this.iconX = iconX;
             this.iconY = iconY;
             this.text = text;

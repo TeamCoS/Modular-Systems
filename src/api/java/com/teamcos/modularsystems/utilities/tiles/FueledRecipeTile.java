@@ -30,6 +30,7 @@ public abstract class FueledRecipeTile extends ModularTileEntity implements ISid
     protected static final Random random = new Random();
     protected final StandardValues values;
     protected Cuboid cube;
+
     //Furnace related things
     private int furnaceBurnTime;
     private int currentItemBurnTime;

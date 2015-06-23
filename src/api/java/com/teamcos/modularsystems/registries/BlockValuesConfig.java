@@ -10,12 +10,12 @@ import net.minecraft.world.World;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public final class FurnaceConfigHandler {
+public final class BlockValuesConfig {
 
     private static Map<String, BlockConfig> blockConfigMap = new LinkedHashMap<String, BlockConfig>();
     private static Map<Material, BlockConfig> materialConfigMap = new LinkedHashMap<Material, BlockConfig>();
 
-    private FurnaceConfigHandler() {}
+    private BlockValuesConfig() {}
 
     public static void publishBlockConfig(String blockName, BlockConfig config) {
         blockConfigMap.put(blockName, config);

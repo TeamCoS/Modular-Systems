@@ -44,6 +44,4 @@ public class ModularTileEntity extends TileEntity {
 	{
 		readFromNBT(pkt.func_148857_g());
 	}
-	
-	
 }

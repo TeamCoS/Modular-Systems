@@ -110,7 +110,6 @@ public class ConfigHelper {
 		}
 
 		public static void set(String categoryName, String propertyName, String newValue) {
-
 			config.load();
 			if (config.getCategoryNames().contains(categoryName)) {
 				if (config.getCategory(categoryName).containsKey(propertyName)) {
@@ -119,5 +118,4 @@ public class ConfigHelper {
 			}
 			config.save();
 		}
-
 	}

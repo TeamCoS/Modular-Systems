@@ -2,7 +2,7 @@ package com.teamcos.modularsystems.core.helper;
 
 import com.teamcos.modularsystems.calculations.*;
 import com.teamcos.modularsystems.furnace.config.BlockConfig;
-import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
+import com.teamcos.modularsystems.registries.BlockValuesConfig;
 import com.teamcos.modularsystems.registries.MaterialRegistry;
 import net.minecraft.block.material.Material;
 import org.apache.commons.io.FileUtils;
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class BlockValueHelper {
+
     private BlockValueHelper() {
     }
 
@@ -48,7 +49,7 @@ public class BlockValueHelper {
                 Element speed = getElement(element, "speed");
                 Element efficiency = getElement(element, "efficiency");
                 Element smelting = getElement(element, "smelting");
-                FurnaceConfigHandler.publishBlockConfig(
+                BlockValuesConfig.publishBlockConfig(
                         name,
                         blockConfig(name, speed, efficiency, smelting)
                 );
@@ -68,7 +69,7 @@ public class BlockValueHelper {
                     Element efficiency = getElement(element, "efficiency");
                     Element smelting = getElement(element, "smelting");
 
-                    FurnaceConfigHandler.publishMaterialConfig(
+                    BlockValuesConfig.publishMaterialConfig(
                             material,
                             blockConfig(name, speed, efficiency, smelting)
                     );
@@ -95,7 +96,7 @@ public class BlockValueHelper {
         }
     }
 
-    private static Calculation getCalculation(StandardValues values) {
+    private static Calculation getCalculation(CalculationValues values) {
         String name = values.getEquation();
         if (name.equals("linear")) {
             return new LinearCalculation(values);
@@ -110,49 +111,39 @@ public class BlockValueHelper {
         }
     }
 
-    private static Calculation defaultCalculation() {
-        return new LinearCalculation(StandardValues.LinearIdentity);
-    }
-
-    private static Calculation defaultSmeltingCalculation() {
-        return new LinearCalculation(StandardValues.Constant0);
-    }
-
-    private static StandardValues getEfficiencyValues(Element node) {
+    private static CalculationValues getEfficiencyValues(Element node) {
         if (node == null) {
-            return StandardValues.LinearIdentity;
+            return CalculationValues.LinearIdentity;
         } else {
-            return getValues(node, StandardValues.LinearIdentity);
+            return getValues(node, CalculationValues.LinearIdentity);
         }
     }
 
-    private static StandardValues getSpeedValues(Element node) {
+    private static CalculationValues getSpeedValues(Element node) {
         if (node == null) {
-            return StandardValues.LinearIdentity;
+            return CalculationValues.LinearIdentity;
         } else {
-            return getValues(node, StandardValues.LinearIdentity);
+            return getValues(node, CalculationValues.LinearIdentity);
         }
     }
 
-    private static StandardValues getSmeltingValues(Element node) {
+    private static CalculationValues getSmeltingValues(Element node) {
         if (node == null) {
-            return StandardValues.Constant0;
+            return CalculationValues.Constant0;
         } else {
-            return getValues(node, StandardValues.Constant0);
+            return getValues(node, CalculationValues.Constant0);
         }
     }
 
-    private static StandardValues getValues(Element node, StandardValues defaultValue) {
+    private static CalculationValues getValues(Element node, CalculationValues defaultValue) {
         String value = node.getAttribute("value");
         if (value.isEmpty()) {
             String equation = getStringValue(node, "equation", "linear");
-            double xOffset = getDoubleValue(node, "xOffset", 0);
-            double yOffset = getDoubleValue(node, "yOffset", 0);
-            double xCoefficient = getDoubleValue(node, "xCoefficient", 1);
-            double yCoefficient = getDoubleValue(node, "yCoefficient", 1);
-            double perBlockCap = getDoubleValue(node, "perBlockCap", Double.MAX_VALUE);
-            double perBlockFloor = getDoubleValue(node, "perBlockFloor", -Double.MAX_VALUE);
-            return new StandardValues(equation, xOffset, yOffset, xCoefficient, yCoefficient, perBlockCap, perBlockFloor);
+            double yOffset = getDoubleValue(node, "constantValue", 0);
+            double yCoefficient = getDoubleValue(node, "factor", 1);
+            double perBlockCap = getDoubleValue(node, "ceiling", Double.MAX_VALUE);
+            double perBlockFloor = getDoubleValue(node, "floor", -Double.MAX_VALUE);
+            return new CalculationValues(equation, yOffset, yCoefficient, perBlockCap, perBlockFloor);
         } else {
             return defaultValue;
         }
@@ -173,15 +164,6 @@ public class BlockValueHelper {
         try {
             String value = getStringValue(node, name, defaultValue + "");
             return Double.parseDouble(value);
-        } catch (Exception e) {
-            return defaultValue;
-        }
-    }
-
-    private static int getIntValue(Element node, String name, int defaultValue) {
-        try {
-            String value = getStringValue(node, name, defaultValue + "");
-            return Integer.parseInt(value);
         } catch (Exception e) {
             return defaultValue;
         }

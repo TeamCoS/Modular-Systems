@@ -3,8 +3,6 @@ package com.teamcos.modularsystems.furnace.blocks;
 import com.teamcos.modularsystems.core.ModularSystems;
 import com.teamcos.modularsystems.core.managers.BlockManager;
 import com.teamcos.modularsystems.core.proxy.ClientProxy;
-import com.teamcos.modularsystems.helpers.Coord;
-import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
 import com.teamcos.modularsystems.utilities.block.DummyBlock;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import cpw.mods.fml.relauncher.Side;

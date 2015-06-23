@@ -34,48 +34,48 @@ public class ApiBlockRenderer implements ISimpleBlockRenderingHandler {
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, -1F, 0.0F);
         renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
-        renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, getOveryLay(block, renderer));
+        renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, getOverlayIcon(block, renderer));
         tessellator.draw();
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 1.0F, 0.0F);
         renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
-        renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, getOveryLay(block, renderer));
+        renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, getOverlayIcon(block, renderer));
 
         tessellator.draw();
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 0.0F, -1F);
         renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
-        renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, getOveryLay(block, renderer));
+        renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, getOverlayIcon(block, renderer));
 
         tessellator.draw();
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 0.0F, 1.0F);
         renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
-        renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, getOveryLay(block, renderer));
+        renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, getOverlayIcon(block, renderer));
 
         tessellator.draw();
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(-1F, 0.0F, 0.0F);
         renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
-        renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, getOveryLay(block, renderer));
+        renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, getOverlayIcon(block, renderer));
 
         tessellator.draw();
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(1.0F, 0.0F, 0.0F);
         renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 5, 5));
-        renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, getOveryLay(block, renderer));
+        renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, getOverlayIcon(block, renderer));
 
         tessellator.draw();
 
         GL11.glTranslatef(0.5F, 0.5F, 0.5F);
     }
 
-    private static IIcon getOveryLay(Block block, RenderBlocks renderer) {
+    private static IIcon getOverlayIcon(Block block, RenderBlocks renderer) {
         IIcon output;
 
         if(block == ApiBlockManager.dummyIOBlock || block == ApiBlockManager.dummyBlock ||
@@ -127,7 +127,6 @@ public class ApiBlockRenderer implements ISimpleBlockRenderingHandler {
             renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMetadata()));
             return true;
         } else {
-            int i = 0;
             return false;
         }
     }

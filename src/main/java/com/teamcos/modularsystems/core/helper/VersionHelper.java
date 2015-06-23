@@ -1,6 +1,5 @@
 package com.teamcos.modularsystems.core.helper;
 
-import com.teamcos.modularsystems.core.lib.Colours;
 import com.teamcos.modularsystems.core.lib.Reference;
 import com.teamcos.modularsystems.core.lib.Strings;
 import cpw.mods.fml.common.Loader;
@@ -39,10 +38,8 @@ public class VersionHelper implements Runnable {
 	 * appropriately
 	 */
 	public static void checkVersion() {
-
 		InputStream remoteVersionRepoStream = null;
 		result = UNINITIALIZED;
-
 		try {
 			URL remoteVersionURL = new URL(REMOTE_VERSION_XML_FILE);
 			remoteVersionRepoStream = remoteVersionURL.openStream();
@@ -98,7 +95,6 @@ public class VersionHelper implements Runnable {
 	}
 
 	private static String getVersionForCheck() {
-
 		String[] versionTokens = Reference.VERSION.split(" ");
 
 		if (versionTokens.length >= 1)
@@ -108,7 +104,6 @@ public class VersionHelper implements Runnable {
 	}
 
 	public static void logResult() {
-
 		if (result == CURRENT || result == OUTDATED) {
 			LogHelper.info(getResultMessage());
 		}
@@ -118,7 +113,6 @@ public class VersionHelper implements Runnable {
 	}
 
 	public static String getResultMessage() {
-
 		if (result == UNINITIALIZED) {
 			return StatCollector.translateToLocal(Strings.UNINITIALIZED_MESSAGE);
 		}
@@ -142,31 +136,19 @@ public class VersionHelper implements Runnable {
 			return StatCollector.translateToLocal(Strings.GENERAL_ERROR_MESSAGE);
 		}
 	}
-
-	public static String getResultMessageForClient() {
-
-		return StatCollector.translateToLocalFormatted(Strings.OUTDATED_MESSAGE, Colours.TEXT_COLOUR_PREFIX_YELLOW + Reference.MOD_NAME + Colours.TEXT_COLOUR_PREFIX_WHITE, Colours.TEXT_COLOUR_PREFIX_YELLOW + remoteVersion + Colours.TEXT_COLOUR_PREFIX_WHITE, Colours.TEXT_COLOUR_PREFIX_YELLOW + Loader.instance().getMCVersionString() + Colours.TEXT_COLOUR_PREFIX_WHITE, Colours.TEXT_COLOUR_PREFIX_YELLOW + remoteUpdateLocation + Colours.TEXT_COLOUR_PREFIX_WHITE);
-	}
-
 	public static byte getResult() {
-
 		return result;
 	}
 
 	@Override
 	public void run() {
-
 		int count = 0;
-
 		LogHelper.info(StatCollector.translateToLocalFormatted(Strings.VERSION_CHECK_INIT_LOG_MESSAGE, REMOTE_VERSION_XML_FILE));
-
 		try {
 			while (count < ConfigHelper.VERSION_CHECK_ATTEMPTS - 1 && (result == UNINITIALIZED || result == ERROR)) {
-
 				checkVersion();
 				count++;
 				logResult();
-
 				if (result == UNINITIALIZED || result == ERROR) {
 					Thread.sleep(10000);
 				}
@@ -181,8 +163,8 @@ public class VersionHelper implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	public static void execute() {
 
+	public static void execute() {
 		new Thread(instance).start();
 	}
 }	

@@ -4,8 +4,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class LiquidHelper {
-    public static double getLiquidBurnTime(FluidStack fluid)
-    {
+    public static double getLiquidBurnTime(FluidStack fluid) {
         if(fluid != null) {
             if (fluid.getFluid() == FluidRegistry.LAVA)
                 return 16000;

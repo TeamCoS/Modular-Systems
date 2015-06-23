@@ -6,7 +6,7 @@ import com.teamcos.modularsystems.interfaces.MSUpgradeBlock;
 import com.teamcos.modularsystems.notification.GuiColor;
 import com.teamcos.modularsystems.notification.Notification;
 import com.teamcos.modularsystems.notification.NotificationHelper;
-import com.teamcos.modularsystems.registries.FurnaceConfigHandler;
+import com.teamcos.modularsystems.registries.BlockValuesConfig;
 import com.teamcos.modularsystems.renderers.TankRenderer;
 import com.teamcos.modularsystems.utilities.tiles.DummyTile;
 import com.teamcos.modularsystems.utilities.tiles.FueledRecipeTile;
@@ -318,12 +318,12 @@ public class BlockTank extends BlockContainer implements MSUpgradeBlock {
 
     @Override
     public double getSpeed(World world, int x, int y, int z, int blockCount) {
-        return FurnaceConfigHandler.getSpeedMultiplierForBlock(world, new Coord(x, y, z), this, blockCount);
+        return BlockValuesConfig.getSpeedMultiplierForBlock(world, new Coord(x, y, z), this, blockCount);
     }
 
     @Override
     public int getMultiplier(World world, int x, int y, int z, int blockCount) {
-        return FurnaceConfigHandler.getSmeltingMultiplierForBlock(world, new Coord(x, y, z), this, blockCount);
+        return BlockValuesConfig.getSmeltingMultiplierForBlock(world, new Coord(x, y, z), this, blockCount);
     }
 
     @Override

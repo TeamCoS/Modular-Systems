@@ -110,7 +110,7 @@ public class TileEntityFurnaceCore extends FueledRecipeTile {
     }
 
     public double getGuiEfficiency() {
-        return Math.max(0.001, getEfficiency());
+        return values.getEfficiency();
     }
 
     public int getSmeltingMultiplier() {

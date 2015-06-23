@@ -382,31 +382,32 @@ public class TileEntityStorageExpansion extends ModularTileEntity implements IIn
 
     private void breakBlock(final int x, final int y, final int z, final Block block, final int metadata) {
         if (!(worldObj instanceof WorldServer)) return;
-        FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
-            @Override
-            public void usePlayer(ModularSystemsFakePlayer fakePlayer) {
-                fakePlayer.inventory.currentItem = 0;
-                fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Items.diamond_pickaxe, 0, 0));
+        try {
+            FakePlayerPool.instance.executeOnPlayer((WorldServer) worldObj, new PlayerUser() {
+                @Override
+                public void usePlayer(ModularSystemsFakePlayer fakePlayer) {
+                    fakePlayer.inventory.currentItem = 0;
+                    fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Items.diamond_pickaxe, 1, 0));
 
-                BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, blockMetadata, fakePlayer);
-                if (MinecraftForge.EVENT_BUS.post(event)) return;
+                    BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, blockMetadata, fakePlayer);
+                    if (MinecraftForge.EVENT_BUS.post(event)) return;
 
-                if (ForgeHooks.canHarvestBlock(block, fakePlayer, metadata)) {
-                    worldObj.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
-                    worldObj.setBlockToAir(x, y, z);
+                    if (ForgeHooks.canHarvestBlock(block, fakePlayer, metadata)) {
+                        worldObj.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
+                        worldObj.setBlockToAir(x, y, z);
 
-                    List<ItemStack> items = block.getDrops(worldObj, x, y, z, metadata, 0);
-                    if (items != null) {
-                        for(ItemStack item : items)
-                        {
-                            EntityItem stack = new EntityItem(worldObj, x + 0.5D, y + 0.5D, z + 0.5D, new ItemStack(item.getItem(), item.stackSize, item.getItemDamage()));
-                            worldObj.spawnEntityInWorld(stack);
+                        List<ItemStack> items = block.getDrops(worldObj, x, y, z, metadata, 0);
+                        if (items != null) {
+                            for (ItemStack item : items) {
+                                EntityItem stack = new EntityItem(worldObj, x + 0.5D, y + 0.5D, z + 0.5D, new ItemStack(item.getItem(), item.stackSize, item.getItemDamage()));
+                                worldObj.spawnEntityInWorld(stack);
+                            }
+
                         }
-
                     }
                 }
-            }
-        });
+            });
+        } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
     @Override

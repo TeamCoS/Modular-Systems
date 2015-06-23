@@ -7,12 +7,10 @@ import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 
-public class OreProcessingRecipies
-{
+public class OreProcessingRecipies {
     public static ArrayList<OreProcessingRecipe> recipes = new ArrayList<OreProcessingRecipe>();
 
-    public static void addOreProcessingRecipe(Object input,  Object output)
-    {
+    public static void addOreProcessingRecipe(Object input,  Object output) {
         ItemStack inputItem = null;
         ItemStack outputItem = null;
 
@@ -37,31 +35,26 @@ public class OreProcessingRecipies
         recipes.add(new OreProcessingRecipe(inputItem, outputItem));
     }
 
-    public static ItemStack getOutput (ItemStack input)
-    {
-        if(OreDictionaryHelper.getOreOutput(input) != null)
-        {
+    public static ItemStack getOutput (ItemStack input) {
+        if(OreDictionaryHelper.getOreOutput(input) != null) {
             return OreDictionaryHelper.getOreOutput(input);
         }
-        for (OreProcessingRecipe r : recipes)
-        {
+        for (OreProcessingRecipe r : recipes) {
             if (r.matches(input))
                 return r.getResult();
         }
-
         return null;
     }
 
-    public static class OreProcessingRecipe
-    {
+    public static class OreProcessingRecipe {
         public final ItemStack input;
         public final ItemStack output;
 
-        OreProcessingRecipe(ItemStack in, ItemStack out)
-        {
+        OreProcessingRecipe(ItemStack in, ItemStack out) {
             this.input = in;
             this.output = out;
         }
+
         public boolean matches (ItemStack input)
         {
             return ItemStack.areItemStacksEqual(this.input, input);

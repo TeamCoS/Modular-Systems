@@ -14,9 +14,7 @@ import java.util.List;
 /**
  * From OpenModLib
  */
-public class GenericInventory implements IInventory
-{
-
+public class GenericInventory implements IInventory {
     protected List<IInventoryCallback> callbacks;
     protected String inventoryTitle;
     protected int slotsCount;
@@ -37,22 +35,18 @@ public class GenericInventory implements IInventory
     }
 
     @Override
-    public ItemStack decrStackSize(int par1, int par2)
-    {
-        if (this.inventoryContents[par1] != null)
-        {
+    public ItemStack decrStackSize(int par1, int par2) {
+        if (this.inventoryContents[par1] != null) {
             ItemStack itemstack;
 
-            if (this.inventoryContents[par1].stackSize <= par2)
-            {
+            if (this.inventoryContents[par1].stackSize <= par2) {
                 itemstack = this.inventoryContents[par1];
                 this.inventoryContents[par1] = null;
                 onInventoryChanged(par1);
                 return itemstack;
             }
             itemstack = this.inventoryContents[par1].splitStack(par2);
-            if (this.inventoryContents[par1].stackSize == 0)
-            {
+            if (this.inventoryContents[par1].stackSize == 0) {
                 this.inventoryContents[par1] = null;
             }
 

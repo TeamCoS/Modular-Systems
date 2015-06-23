@@ -4,43 +4,34 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class EntityStaticItem extends EntityItem
-{
- 
-
+public class EntityStaticItem extends EntityItem {
     /**
      * The maximum age of this EntityItem.  The item is expired once this is reached.
      */
     public int lifespan = 6000;
 
-    public EntityStaticItem(World p_i1709_1_, double p_i1709_2_, double p_i1709_4_, double p_i1709_6_)
-    {
-        super(p_i1709_1_);
+    public EntityStaticItem(World world, double x, double y, double z) {
+        super(world);
         this.hoverStart = 0;
         this.setSize(0.25F, 0.25F);
         this.yOffset = this.height / 2.0F;
-        this.setPosition(p_i1709_2_, p_i1709_4_, p_i1709_6_);
+        this.setPosition(x, y, z);
         this.rotationYaw = (float)(Math.random() * 360.0D);
     }
 
-    public EntityStaticItem(World p_i1710_1_, double p_i1710_2_, double p_i1710_4_, double p_i1710_6_, ItemStack p_i1710_8_)
-    {
-        this(p_i1710_1_, p_i1710_2_, p_i1710_4_, p_i1710_6_);        
-        this.setEntityItemStack(p_i1710_8_);
-        this.lifespan = (p_i1710_8_.getItem() == null ? 6000 : p_i1710_8_.getItem().getEntityLifespan(p_i1710_8_, p_i1710_1_));
+    public EntityStaticItem(World world, double x, double y, double z, ItemStack stack) {
+        this(world, x, y, z);
+        this.setEntityItemStack(stack);
+        this.lifespan = (stack.getItem() == null ? 6000 : stack.getItem().getEntityLifespan(stack, world));
     }
 
-    public EntityStaticItem(World p_i1711_1_)
-    {
-        super(p_i1711_1_);
+    public EntityStaticItem(World world) {
+        super(world);
         this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
         this.setSize(0.25F, 0.25F);
         this.yOffset = this.height / 2.0F;
     }
  
     @Override
-    public void onUpdate()
-    {
-    	
-    }
+    public void onUpdate() {}
 }

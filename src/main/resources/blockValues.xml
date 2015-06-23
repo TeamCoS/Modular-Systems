@@ -3,128 +3,116 @@
 	<!-- Blocks /!-->
 	<block name="minecraft:redstone_block">
         <speed>
-            <xOffset>-1</xOffset>
-            <yOffset>-1</yOffset>
-            <xCoefficient>0.2</xCoefficient>
-            <equation>parabolic</equation>
-            <perBlockCap>3</perBlockCap>
+            <equation>log</equation>
+			<factor>10</factor>
+            <ceiling>3</ceiling>
         </speed>
         <efficiency>
             <equation>parabolic</equation>
-            <xOffset>-1</xOffset>
-            <yOffset>-1</yOffset>
-            <xCoefficient>-0.2</xCoefficient>
-            <yCoefficient>-1</yCoefficient>
-            <perBlockCap>1</perBlockCap>
-            <perBlockFloor>-2</perBlockFloor>
+            <factor>-2</factor>
+            <ceiling>0</ceiling>
+            <floor>-5</floor>
         </efficiency>
 	</block>
 
     <block name="minecraft:quartz_block">
         <speed>
-            <xOffset>-1</xOffset>
-            <yOffset>-1</yOffset>
-            <xCoefficient>0.5</xCoefficient>
-            <equation>parabolic</equation>
-            <perBlockCap>5</perBlockCap>
+		    <equation>parabolic</equation>
+            <constantValue>1</constantValue>
+            <ceiling>3</ceiling>
         </speed>
         <efficiency>
             <equation>parabolic</equation>
-            <xOffset>-2</xOffset>
-            <yOffset>-1</yOffset>
-            <xCoefficient>-0.2</xCoefficient>
-            <yCoefficient>-1</yCoefficient>
-            <perBlockCap>1</perBlockCap>
-            <perBlockFloor>-2</perBlockFloor>
+            <constantValue>0.5</constantValue>
+            <factor>0.2</factor>
+            <ceiling>2</ceiling>
+            <floor>0.1</floor>
         </efficiency>
     </block>
 	
 	<block name="minecraft:gold_block">
         <efficiency>
             <equation>log</equation>
-            <yCoefficient>0.4</yCoefficient>
+            <factor>2.0</factor>
         </efficiency>
 	</block>
 	
 	<block name="minecraft:diamond_block">
         <speed>
             <equation>parabolic</equation>
-            <yCoefficient>0.2</yCoefficient>
-            <xOffset>1</xOffset>
-            <perBlockCap>5</perBlockCap>
+            <factor>0.2</factor>
+            <ceiling>5</ceiling>
         </speed>
         <efficiency>
             <equation>log</equation>
-            <yCoefficient>0.2</yCoefficient>
+            <factor>0.2</factor>
         </efficiency>
 	</block>
 	
 	<block name="minecraft:lapis_block">
         <speed>
             <equation>parabolic</equation>
-            <yCoefficient>0.02</yCoefficient>
+            <factor>0.02</factor>
         </speed>
         <efficiency>
             <equation>parabolic</equation>
-            <yCoefficient>0.01</yCoefficient>
+            <factor>0.01</factor>
         </efficiency>
 	</block>
 	
 	<block name="minecraft:brick_block">
         <smelting>
             <equation>linear</equation>
-            <yCoefficient>0.5</yCoefficient>
+            <factor>0.5</factor>
         </smelting>
         <speed>
             <equation>log</equation>
-            <perBlockFloor>-1</perBlockFloor>
-            <perBlockCap>1</perBlockCap>
-            <yCoefficient>-0.25</yCoefficient>
-            <yOffset>-1</yOffset>
-            <xOffset>1</xOffset>
+            <floor>-1</floor>
+            <ceiling>1</ceiling>
+            <factor>0.25</factor>
+            <constantValue>-1</constantValue>
         </speed>
         <efficiency>
-            <yCoefficient>-2</yCoefficient>
-            <yOffset>2</yOffset>
-            <perBlockFloor>-2</perBlockFloor>
+            <factor>-2</factor>
+            <constantValue>2</constantValue>
+            <floor>-2</floor>
         </efficiency>
 	</block>
 
     <block name="minecraft:nether_brick">
         <smelting>
             <equation>linear</equation>
-            <yCoefficient>0.6</yCoefficient>
+            <factor>0.6</factor>
         </smelting>
         <speed>
             <equation>log</equation>
-            <perBlockFloor>-0.75</perBlockFloor>
-            <perBlockCap>1</perBlockCap>
-            <yCoefficient>-0.25</yCoefficient>
-            <yOffset>-1</yOffset>
-            <xOffset>1</xOffset>
+            <floor>0.75</floor>
+            <ceiling>3</ceiling>
+            <factor>0.25</factor>
+            <constantValue>1</constantValue>
         </speed>
         <efficiency>
-            <yCoefficient>-1.5</yCoefficient>
-            <yOffset>3</yOffset>
-            <perBlockFloor>-1.5</perBlockFloor>
+            <factor>-1.5</factor>
+            <constantValue>-3</constantValue>
+            <floor>-10</floor>
         </efficiency>
     </block>
 
     <block name="minecraft:netherrack">
         <smelting>
             <equation>linear</equation>
-            <yCoefficient>0.25</yCoefficient>
+            <factor>0.25</factor>
         </smelting>
         <speed>
-            <equation>poarabolic</equation>
-            <perBlockCap>0</perBlockCap>
-            <yCoefficient>-0.5</yCoefficient>
-            <yOffset>-1</yOffset>
+            <equation>parabolic</equation>
+            <ceiling>10</ceiling>
+            <factor>1.25</factor>
         </speed>
         <efficiency>
-            <yCoefficient>-2</yCoefficient>
-            <yOffset>2</yOffset>
-            <perBlockFloor>-2</perBlockFloor>
+			<equation>parabolic</equation>
+            <factor>-2</factor>
+            <constantValue>2</constantValue>
+            <floor>-10</floor>
         </efficiency>
     </block>
 	
@@ -145,11 +133,11 @@
 
     <material name="rock">
         <speed>
-            <yCoefficient>0.1</yCoefficient>
+            <factor>0.1</factor>
             <equation>log</equation>
         </speed>
         <efficiency>
-            <yCoefficient>0.1</yCoefficient>
+            <factor>0.1</factor>
             <equation>log</equation>
         </efficiency>
     </material>
@@ -157,11 +145,11 @@
 	<material name="iron">
         <speed>
             <equation>constant</equation>
-            <yOffset>2</yOffset>
+            <constantValue>2</constantValue>
         </speed>
         <efficiency>
             <equation>log</equation>
-            <yCoefficient>1.0</yCoefficient>
+            <factor>1.0</factor>
         </efficiency>
 	</material>
 	

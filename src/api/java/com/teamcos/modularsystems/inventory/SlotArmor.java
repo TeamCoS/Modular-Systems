@@ -15,7 +15,6 @@ public class SlotArmor extends Slot {
      */
     final int armorType;
 
-   
     /**
      * The Player
      */

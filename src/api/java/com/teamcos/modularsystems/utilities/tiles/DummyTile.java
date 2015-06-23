@@ -20,7 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class DummyTile extends ModularTileEntity implements ISidedInventory, ModularSystemsTile {
 
     private Coord coreLoc;
-    private int icon = 1;
+    private int storedId = 1;
     private int coolDown = 80;
     private int slot = 4;
     private int metadata = 0;
@@ -41,7 +41,7 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
     }
 
     public Block getBlock() {
-        Block block = Block.getBlockById(this.icon);
+        Block block = Block.getBlockById(this.storedId);
         return block == null ? Blocks.cobblestone : block;
     }
 
@@ -56,7 +56,7 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
         coreLoc.readFromNBT(tagCompound);
 
         slot = tagCompound.getInteger("Slot");
-        icon = tagCompound.getInteger("Icon");
+        storedId = tagCompound.getInteger("StoredID");
         metadata = tagCompound.getInteger("Meta");
     }
 
@@ -65,10 +65,11 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
     {
         super.writeToNBT(tagCompound);
 
-        coreLoc.writeToNBT(tagCompound);
+        if(coreLoc != null)
+            coreLoc.writeToNBT(tagCompound);
 
         tagCompound.setInteger("Slot", slot);
-        tagCompound.setInteger("Icon", icon);
+        tagCompound.setInteger("StoredID", storedId);
         tagCompound.setInteger("Meta", metadata);
     }
 
@@ -167,8 +168,8 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
         return core == null
                 ? false
                 : slot <= 3
-                    ? core.canExtractItem(i, itemstack, slot)
-                    : core.canExtractItem(i, itemstack, j);
+                ? core.canExtractItem(i, itemstack, slot)
+                : core.canExtractItem(i, itemstack, j);
     }
 
     @Override
@@ -197,8 +198,8 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
         return core == null
                 ? new int[]{0}
                 : slot <= 3
-                    ? core.getAccessibleSlotsFromSide(slot)
-                    : core.getAccessibleSlotsFromSide(var1);
+                ? core.getAccessibleSlotsFromSide(slot)
+                : core.getAccessibleSlotsFromSide(var1);
     }
 
     /******************************************************************************************************************
@@ -206,7 +207,7 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
      ******************************************************************************************************************/
 
     public void setBlock(int id) {
-        this.icon = id;
+        this.storedId = id;
     }
 
     public void setMetadata(int metadata) {
@@ -235,25 +236,16 @@ public class DummyTile extends ModularTileEntity implements ISidedInventory, Mod
         }
     }
 
-    public String getSlotName() {
-        switch (slot) {
-            case 0: return "Fuel";
-            case 1: return "Input";
-            case 2: return "Output";
-            default: return "Fuel";
-        }
-    }
-
     public String getSlotNameForChat() {
         switch (slot) {
-        case 0:
-            return EnumChatFormatting.YELLOW + "Mode: Fuel";
-        case 1:
-            return EnumChatFormatting.GREEN + "Mode: Input";
-        case 2:
-            return EnumChatFormatting.RED + "Mode: Output";
-        default:
-            return EnumChatFormatting.YELLOW + "Mode: Fuel";
+            case 0:
+                return EnumChatFormatting.YELLOW + "Mode: Fuel";
+            case 1:
+                return EnumChatFormatting.GREEN + "Mode: Input";
+            case 2:
+                return EnumChatFormatting.RED + "Mode: Output";
+            default:
+                return EnumChatFormatting.YELLOW + "Mode: Fuel";
         }
     }
 

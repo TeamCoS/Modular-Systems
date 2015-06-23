@@ -12,9 +12,7 @@ public class HasCraftingUpgrade implements WorldFunction {
     @Override
     public void outerBlock(World world, int x, int y, int z) {
         Block blockId = world.getBlock(x, y, z);
-        hasCrafting |= blockId instanceof MSUpgradeBlock
-                ? ((MSUpgradeBlock)blockId).isCrafter()
-                : false;
+        hasCrafting |= blockId instanceof MSUpgradeBlock && ((MSUpgradeBlock) blockId).isCrafter();
     }
 
     @Override

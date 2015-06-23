@@ -3,25 +3,25 @@ package com.teamcos.modularsystems.fuelprovider;
 public interface FuelProvider {
     /**
      * Whether the provider can provide any fuel.
-     * @return
+     * @return Can this provide
      */
     boolean canProvide();
 
     /**
      * How much fuel will be provided when consume is called. Should be mainly used for display purposes.
-     * @return
+     * @return How much would be consumed
      */
     double fuelProvided();
 
     /**
      * Consumes fuel and returns how much fuel is provided.
-     * @return
+     * @return How much was consumed
      */
     double consume();
 
     /**
      * Provides what type of fuel is used for sorting purposes.
-     * @return
+     * @return Type of provider
      */
     FuelProviderType type();
 
