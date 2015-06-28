@@ -53,7 +53,7 @@ dependencies {
     compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
     compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
     compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
-    compile "mcp.mobius.waila:Waila:1.5.6_dev1_1.7.10"
+    compile "mcp.mobius.waila:Waila:1.5.10_dev1_1.7.10"
 }
 
 processResources {
