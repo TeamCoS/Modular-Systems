@@ -3,9 +3,13 @@ package com.pauljoda.modularsystems.core.blocks;
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.blocks.rotation.IRotation;
 import com.pauljoda.modularsystems.core.blocks.rotation.NoRotation;
+import com.pauljoda.modularsystems.core.collections.BlockTextures;
 import com.pauljoda.modularsystems.core.lib.Reference;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -15,6 +19,9 @@ import net.minecraft.world.World;
 public class BaseBlock extends BlockContainer {
     protected String blockName;
     protected Class<? extends TileEntity> tileEntity;
+
+    @SideOnly(Side.CLIENT)
+    protected BlockTextures textures;
 
     /**
      * Used as a common class for all blocks. Makes things a bit easier
@@ -46,6 +53,21 @@ public class BaseBlock extends BlockContainer {
      */
     protected CreativeTabs getCreativeTab() {
         return ModularSystems.tabModularSystems;
+    }
+
+    @Override
+    public void registerBlockIcons(IIconRegister iconRegister) {
+        generateDefaultTextures(iconRegister);
+    }
+
+    /**
+     * Used to add the textures for the block. Uses block name by default
+     *
+     * Initilize the {@link com.pauljoda.modularsystems.core.collections.BlockTextures} object here
+     * @param iconRegister Icon Registry
+     */
+    public void generateDefaultTextures(IIconRegister iconRegister) {
+        textures = new BlockTextures(iconRegister, Reference.MOD_ID + ":" + blockName);
     }
 
     /**
