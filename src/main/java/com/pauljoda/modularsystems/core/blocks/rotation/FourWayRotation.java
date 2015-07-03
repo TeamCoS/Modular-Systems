@@ -48,13 +48,13 @@ public class FourWayRotation implements IRotation {
          */
         switch (direction) {
             case 0 :
-                return convertDirectionToMeta(ForgeDirection.SOUTH);
-            case 1 :
-                return convertDirectionToMeta(ForgeDirection.WEST);
-            case 2 :
                 return convertDirectionToMeta(ForgeDirection.NORTH);
-            case 3 :
+            case 1 :
                 return convertDirectionToMeta(ForgeDirection.EAST);
+            case 2 :
+                return convertDirectionToMeta(ForgeDirection.SOUTH);
+            case 3 :
+                return convertDirectionToMeta(ForgeDirection.WEST);
             default :
                 return 0;
         }

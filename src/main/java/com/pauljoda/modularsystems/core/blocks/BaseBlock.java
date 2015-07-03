@@ -5,6 +5,7 @@ import com.pauljoda.modularsystems.core.blocks.rotation.IRotation;
 import com.pauljoda.modularsystems.core.blocks.rotation.NoRotation;
 import com.pauljoda.modularsystems.core.collections.BlockTextures;
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.renderer.BasicBlockRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
@@ -34,8 +35,8 @@ public class BaseBlock extends BlockContainer {
         blockName = name;
         tileEntity = tile;
 
-        this.setBlockName(Reference.MOD_NAME + ":" + blockName);
-        this.setCreativeTab(getCreativeTabToDisplayOn());
+        this.setBlockName(Reference.MOD_ID + ":" + blockName);
+        this.setCreativeTab(ModularSystems.tabModularSystems);
         this.setHardness(getHardness());
     }
 
@@ -61,12 +62,22 @@ public class BaseBlock extends BlockContainer {
     }
 
     /**
+     * Used to get the block textures object
+     * @return {@link BlockTextures} object for this block
+     */
+    @SideOnly(Side.CLIENT)
+    public BlockTextures getBlockTextures() {
+        return textures;
+    }
+
+    /**
      * Used to add the textures for the block. Uses block name by default
      *
-     * Initilize the {@link com.pauljoda.modularsystems.core.collections.BlockTextures} object here
+     * Initialize the {@link com.pauljoda.modularsystems.core.collections.BlockTextures} object here
      * @param iconRegister Icon Registry
      */
     public void generateDefaultTextures(IIconRegister iconRegister) {
+        this.blockIcon = iconRegister.registerIcon(Reference.MOD_ID + ":" + blockName);
         textures = new BlockTextures(iconRegister, Reference.MOD_ID + ":" + blockName);
     }
 
@@ -74,7 +85,7 @@ public class BaseBlock extends BlockContainer {
      * Used to set the values needed for the block's rotation on placement
      * @return The rotation class needed, none by default
      */
-    protected IRotation getDefaultRotation() {
+    public IRotation getDefaultRotation() {
         return new NoRotation();
     }
 
@@ -82,6 +93,21 @@ public class BaseBlock extends BlockContainer {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase livingBase, ItemStack itemStack) {
         //Calls upon the default rotation to set the meta
         world.setBlockMetadataWithNotify(x, y, z, getDefaultRotation().getMetaFromEntity(livingBase), 2);
+    }
+
+    @Override
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public int getRenderType() {
+        return BasicBlockRenderer.renderID;
     }
 
     @Override

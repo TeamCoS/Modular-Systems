@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.core;
 
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -33,7 +34,11 @@ public class ModularSystems {
     };
 
     @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event){ }
+    public void preInit(FMLPreInitializationEvent event) {
+        BlockManager.init();
+
+        proxy.init();
+    }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) { }
