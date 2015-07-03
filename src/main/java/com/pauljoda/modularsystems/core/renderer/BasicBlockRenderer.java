@@ -1,13 +1,14 @@
 package com.pauljoda.modularsystems.core.renderer;
 
 import com.pauljoda.modularsystems.core.blocks.BaseBlock;
+import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.core.utils.RenderUtils;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 
 @SideOnly(Side.CLIENT)
@@ -21,23 +22,11 @@ public class BasicBlockRenderer implements ISimpleBlockRenderingHandler {
 
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-        BaseBlock baseBlock = (BaseBlock)block;
-
-        int meta = world.getBlockMetadata(x, y, z);
-
-        Tessellator.instance.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-        Tessellator.instance.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z) - 3);
-
-        renderer.renderFaceZPos(block, x, y, z, baseBlock.getBlockTextures().getSouth(meta, baseBlock.getDefaultRotation()));
-        renderer.renderFaceZNeg(block, x, y, z, baseBlock.getBlockTextures().getNorth(meta, baseBlock.getDefaultRotation()));
-
-        renderer.renderFaceXPos(block, x, y, z, baseBlock.getBlockTextures().getEast(meta, baseBlock.getDefaultRotation()));
-        renderer.renderFaceXNeg(block, x, y, z, baseBlock.getBlockTextures().getWest(meta, baseBlock.getDefaultRotation()));
-
-        renderer.renderFaceYPos(block, x, y, z, baseBlock.getBlockTextures().getUp(meta, baseBlock.getDefaultRotation()));
-        renderer.renderFaceYNeg(block, x, y, z, baseBlock.getBlockTextures().getDown(meta, baseBlock.getDefaultRotation()));
-
-        return false;
+        if(ClientProxy.renderPass == 0)
+            return renderer.renderStandardBlock(block, x, y, z);
+        else
+            renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
+        return true;
     }
 
     @Override

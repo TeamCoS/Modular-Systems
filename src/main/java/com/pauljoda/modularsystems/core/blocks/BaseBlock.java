@@ -5,6 +5,7 @@ import com.pauljoda.modularsystems.core.blocks.rotation.IRotation;
 import com.pauljoda.modularsystems.core.blocks.rotation.NoRotation;
 import com.pauljoda.modularsystems.core.collections.BlockTextures;
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.proxy.ClientProxy;
 import com.pauljoda.modularsystems.core.renderer.BasicBlockRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,6 +16,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class BaseBlock extends BlockContainer {
@@ -95,6 +97,28 @@ public class BaseBlock extends BlockContainer {
         world.setBlockMetadataWithNotify(x, y, z, getDefaultRotation().getMetaFromEntity(livingBase), 2);
     }
 
+    //The sides are: Bottom (0), Top (1), North (2), South (3), West (4), East (5).
+    @Override
+    @SideOnly(Side.CLIENT)
+    public final IIcon getIcon(int side, int metadata) {
+        switch(side) {
+            case 0 :
+                return textures.getDown(metadata, getDefaultRotation());
+            case 1 :
+                return textures.getUp(metadata, getDefaultRotation());
+            case 2 :
+                return textures.getNorth(metadata, getDefaultRotation());
+            case 3 :
+                return textures.getSouth(metadata, getDefaultRotation());
+            case 4 :
+                return textures.getWest(metadata, getDefaultRotation());
+            case 5 :
+                return textures.getEast(metadata, getDefaultRotation());
+            default :
+                return this.blockIcon;
+        }
+    }
+
     @Override
     public boolean renderAsNormalBlock() {
         return false;
@@ -108,6 +132,19 @@ public class BaseBlock extends BlockContainer {
     @Override
     public int getRenderType() {
         return BasicBlockRenderer.renderID;
+    }
+
+    @Override
+    public boolean canRenderInPass(int pass) {
+        //Set the static var in the client proxy
+        ClientProxy.renderPass = pass;
+        //the block can render in both passes, so return true always
+        return true;
+    }
+
+    @Override
+    public int getRenderBlockPass() {
+        return 1;
     }
 
     @Override

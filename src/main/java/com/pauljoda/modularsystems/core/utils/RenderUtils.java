@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.core.utils;
 
 import com.pauljoda.modularsystems.core.blocks.BaseBlock;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
@@ -50,5 +51,11 @@ public class RenderUtils {
         tessellator.draw();
 
         GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+    }
+
+    public static void enableLightmap() {
+        OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 }
