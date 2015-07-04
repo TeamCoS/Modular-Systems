@@ -1,30 +1,212 @@
 package com.pauljoda.modularsystems.furnace.tiles;
 
+import com.dyonovan.brlib.collections.Couplet;
 import com.dyonovan.brlib.common.tiles.BaseTile;
 import com.dyonovan.brlib.common.tiles.IOpensGui;
+import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.pauljoda.modularsystems.furnace.collections.FurnaceValues;
 import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 
 public class TileEntityFurnaceCore extends BaseTile implements ISidedInventory, IOpensGui {
     protected FurnaceValues values;
+    private static final int cookSpeed = 200;
+
 
     public TileEntityFurnaceCore() {
         values = new FurnaceValues();
     }
 
+    /******************************************************************************************************************
+     ************************************************  Furnace Methods  ***********************************************
+     ******************************************************************************************************************/
+
+    protected void doFurnaceWork() {
+        boolean didWork = false;
+        if (!worldObj.isRemote) {
+            if (this.values.getBurnTime() > 0) {
+                this.values.setBurnTime(values.getBurnTime() - 1);
+            }
+
+            if (canSmelt(values.getInput(), recipe(values.getInput()), values.getOutput())) {
+                if (this.values.getBurnTime() <= 0 && values.getFuel() != null) {
+                    int scaledBurnTime = getAdjustedBurnTime(TileEntityFurnace.getItemBurnTime(values.getFuel()));
+                    values.checkInventorySlots();
+                    this.values.currentItemBurnTime = this.values.burnTime = scaledBurnTime;
+                    this.values.consumeFuel();
+                    cook();
+                    didWork = true;
+                } else if (isBurning()) {
+                    didWork = cook();
+                } else {
+                    this.values.cookTime = 0;
+                    this.values.burnTime = 0;
+                    didWork = true;
+                }
+            }
+
+            if (didWork) {
+                updateBlockState(this.values.burnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                markDirty();
+            }
+        }
+    }
+
+    private boolean cook() {
+        ++this.values.cookTime;
+
+        if (this.values.cookTime >= getAdjustedCookTime()) {
+            this.values.cookTime = 0;
+            this.smeltItem();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean canSmelt(ItemStack input, ItemStack result, ItemStack output) {
+        if (input == null || result == null) {
+            return false;
+        } else if (output == null) {
+            return true;
+        } else if (!output.isItemEqual(result)) {
+            return false;
+        } else {
+            //The size below would be if the smeltingMultiplier = 1
+            //If the smelting multiplier is > 1,
+            //there is no guarantee that all potential operations will be completed.
+            int minStackSize = output.stackSize + result.stackSize;
+            return (minStackSize <= getInventoryStackLimit() && minStackSize <= result.getMaxStackSize());
+        }
+    }
+
+    private void smeltItem() {
+        values.checkInventorySlots();
+        Couplet<Integer, Integer> smeltCount = smeltCountAndSmeltSize();
+        if (smeltCount != null && smeltCount.getSecond() > 0) {
+            ItemStack recipeResult = recipe(values.getInput());
+            values.getInput().stackSize -= smeltCount.getFirst();
+            if (values.getOutput() == null) {
+                recipeResult = recipeResult.copy();
+                recipeResult.stackSize = smeltCount.getSecond();
+                values.setOutput(recipeResult);
+            } else {
+                values.getOutput().stackSize += smeltCount.getSecond();
+            }
+        }
+        values.checkInventorySlots();
+    }
+
+    private Couplet<Integer, Integer> smeltCountAndSmeltSize() {
+        ItemStack input = values.getInput();
+        if (input == null) {
+            return null;
+        }
+        ItemStack output = values.getOutput();
+        ItemStack recipeResult = recipe(input);
+        if (recipeResult == null) {
+            return null;
+        } else if (output != null && !output.isItemEqual(recipeResult)) {
+            return null;
+        } else if (output == null) {
+            output = recipeResult.copy();
+            output.stackSize = 0;
+        }
+
+        input = input.copy();
+
+        int recipeStackSize = recipeResult.stackSize > 0 ? recipeResult.stackSize : 1;
+
+        int outMax =
+                getInventoryStackLimit() < output.getMaxStackSize()
+                        ? output.getMaxStackSize()
+                        : getInventoryStackLimit();
+        int outAvailable = outMax - output.stackSize;
+        int smeltAvailable = (int)values.getMultiplicity() * recipeStackSize;
+        int inAvailable = input.stackSize * recipeStackSize;
+
+        int avail;
+        int count;
+
+        if (smeltAvailable < inAvailable) {
+            avail = smeltAvailable;
+            count = (int)values.getMultiplicity();
+        } else {
+            avail = inAvailable;
+            count = input.stackSize;
+        }
+
+        if (avail > outAvailable) {
+            //If there is a remainder, this results in a difference from just outputting outAvailable
+            count = outAvailable / recipeStackSize;
+            avail = count * recipeStackSize;
+        }
+
+        values.checkInventorySlots();
+
+        return new Couplet<>(count, avail);
+    }
+
+    public boolean isBurning() {
+        return values.burnTime > 0;
+    }
+
+    protected void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z) {
+        BlockFurnaceCore.updateFurnaceBlockState(positiveBurnTime, world, x, y, z);
+    }
+
+    protected ItemStack recipe(ItemStack is) {
+        return is == null ? null : FurnaceRecipes.smelting().getSmeltingResult(is);
+    }
+
+    public int getAdjustedBurnTime(double fuelValue) {
+        return (int) (fuelValue * values.getEfficiency());
+    }
+
+    private double getAdjustedCookTime() {
+       return cookSpeed * values.getSpeed();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int getCookProgressScaled(int scaleVal) {
+        return (int) ((this.values.cookTime * scaleVal) / getAdjustedCookTime());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int getBurnTimeRemainingScaled(int scaleVal) {
+        return (values.burnTime * scaleVal) / this.values.currentItemBurnTime;
+    }
+
     /**
-     * ****************************************************************************************************************
-     * ********************************************** Inventory methods ***********************************************
+     * ***************************************************************************************************************
+     * *************************************************  Tile Methods  ************************************************
      * ****************************************************************************************************************
      */
+
+    @Override
+    public void updateEntity() {
+        if (!worldObj.isRemote) {
+            //updateMultiblock();
+        }
+        doFurnaceWork();
+    }
+
+        /**
+         * ****************************************************************************************************************
+         * ********************************************** Inventory methods ***********************************************
+         * ****************************************************************************************************************
+         */
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {

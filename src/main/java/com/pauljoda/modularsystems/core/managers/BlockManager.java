@@ -10,10 +10,11 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockManager {
 
-    public static BlockFurnaceCore furnaceCore;
+    public static BlockFurnaceCore furnaceCore, furnaceCoreActive;
 
     public static void init() {
-        registerBlock(furnaceCore = new BlockFurnaceCore(), Reference.MOD_ID + ":furnaceCore", TileEntityFurnaceCore.class);
+        registerBlock(furnaceCore = new BlockFurnaceCore(false), Reference.MOD_ID + ":furnaceCore", TileEntityFurnaceCore.class);
+        registerBlock(furnaceCoreActive = new BlockFurnaceCore(true), Reference.MOD_ID + ":furnaceCoreActive", TileEntityFurnaceCore.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {
