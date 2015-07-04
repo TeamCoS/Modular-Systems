@@ -4,10 +4,10 @@ import com.dyonovan.brlib.collections.InventoryTile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class FurnaceValues {
+public class StandardValues {
     public int burnTime = 0;
     public int currentItemBurnTime = 0;
-    public int cookTime = 200;
+    public int cookTime = 0;
 
     public double speed = 1;
     public double efficiency = 1;
@@ -15,7 +15,7 @@ public class FurnaceValues {
 
     InventoryTile inventory;
 
-    public FurnaceValues() {
+    public StandardValues() {
         inventory = new InventoryTile(3);
     }
 

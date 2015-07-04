@@ -29,6 +29,8 @@ public class BlockFurnaceCore extends BaseBlock {
     public BlockFurnaceCore(boolean isActive) {
         super(Material.rock, Reference.MOD_ID + ":furnaceCore" + (isActive ? "Active" : ""), TileEntityFurnaceCore.class);
         active = isActive;
+        //Need to pull this back out because active has now been set
+        setCreativeTab(getCreativeTab());
     }
 
     @Override
