@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.core.collections;
 
+import com.dyonovan.brlib.collections.Location;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class Cuboid {

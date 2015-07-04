@@ -24,6 +24,9 @@ repositories {
         name 'CB Maven FS'
         url "http://chickenbones.net/maven/"
     }
+    maven {
+        url "http://www.beyondrealitypack.com/maven2/"
+    }
 }
 
 apply plugin: 'forge'
@@ -46,7 +49,7 @@ minecraft {
     replaceIn "core/lib/Reference.java"
     replace "@VERSION@", "${config.mod_version}"
 
-    assetDir = "src/main/resources"
+    assetDir = "/eclipse"
 }
 
 dependencies {
@@ -54,6 +57,7 @@ dependencies {
     compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
     compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
     compile "mcp.mobius.waila:Waila:1.5.10_dev1_1.7.10"
+    compile group: "com.dyonovan.brlib", name: "BR-Lib", version: "+", classifier: "dev"
 }
 
 processResources {
