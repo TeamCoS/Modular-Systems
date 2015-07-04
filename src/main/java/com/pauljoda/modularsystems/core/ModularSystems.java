@@ -11,7 +11,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 
 @Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID, version = Reference.VERSION)
@@ -23,13 +22,11 @@ public class ModularSystems {
     public static CommonProxy proxy;
 
     //Creates the Creative Tab
-    public static CreativeTabs tabModularSystems = new CreativeTabs("tabModularSystems"){
-
+    public static CreativeTabs tabModularSystems = new CreativeTabs("tabModularSystems") {
         @Override
         @SideOnly(Side.CLIENT)
         public Item getTabIconItem() {
-            return Item.getItemFromBlock(Blocks.furnace);
-
+            return Item.getItemFromBlock(BlockManager.furnaceCore);
         }
     };
 

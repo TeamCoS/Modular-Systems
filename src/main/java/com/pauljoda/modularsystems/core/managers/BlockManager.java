@@ -1,6 +1,8 @@
 package com.pauljoda.modularsystems.core.managers;
 
+import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
+import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
@@ -11,7 +13,7 @@ public class BlockManager {
     public static BlockFurnaceCore furnaceCore;
 
     public static void init() {
-        registerBlock(furnaceCore = new BlockFurnaceCore(), "furnaceCore", null);
+        registerBlock(furnaceCore = new BlockFurnaceCore(), Reference.MOD_ID + ":furnaceCore", TileEntityFurnaceCore.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {

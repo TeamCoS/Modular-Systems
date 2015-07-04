@@ -49,7 +49,7 @@ minecraft {
     replaceIn "core/lib/Reference.java"
     replace "@VERSION@", "${config.mod_version}"
 
-    assetDir = "/eclipse"
+    assetDir = "eclipse"
 }
 
 dependencies {

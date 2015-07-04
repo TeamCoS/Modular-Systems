@@ -1,0 +1,5 @@
+itemGroup.tabModularSystems=Modular Systems
+
+tile.modularsystems:furnaceCore.name=Modular Furnace Core
+
+inventory.furnace.title=Modular Furnace

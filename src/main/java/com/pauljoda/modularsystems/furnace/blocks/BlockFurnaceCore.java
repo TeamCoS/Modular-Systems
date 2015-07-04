@@ -6,6 +6,7 @@ import com.dyonovan.brlib.common.blocks.rotation.FourWayRotation;
 import com.dyonovan.brlib.common.blocks.rotation.IRotation;
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,7 +14,7 @@ import net.minecraft.creativetab.CreativeTabs;
 public class BlockFurnaceCore extends BaseBlock {
 
     public BlockFurnaceCore() {
-        super(Material.rock, Reference.MOD_ID + ":furnaceCore", null);
+        super(Material.rock, Reference.MOD_ID + ":furnaceCore", TileEntityFurnaceCore.class);
     }
 
     @Override
@@ -28,6 +29,7 @@ public class BlockFurnaceCore extends BaseBlock {
         textures.setFront(iconRegister.registerIcon("minecraft:furnace_front_off"));
         textures.setTop(iconRegister.registerIcon("minecraft:furnace_top"));
         textures.setBottom(iconRegister.registerIcon("minecraft:furnace_top"));
+        textures.setOverlay(iconRegister.registerIcon("minecraft:hopper_top"));
     }
 
     @Override
