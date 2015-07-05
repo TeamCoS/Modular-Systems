@@ -2,7 +2,6 @@ package com.pauljoda.modularsystems.core.tiles;
 
 import com.dyonovan.brlib.collections.Location;
 import com.dyonovan.brlib.common.tiles.BaseTile;
-import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -153,22 +152,41 @@ public abstract class AbstractDummy<C extends AbstractCore> extends BaseTile imp
      *************************************************  Helper Methods  ***********************************************
      ******************************************************************************************************************/
 
+    /**
+     * Set the block to be stored in the dummy
+     * @param id The block id
+     */
     public void setBlock(int id) {
         this.storedBlock = id;
     }
 
+    /**
+     * Set the metadata of the stored block
+     * @param metadata The metadata to store
+     */
     public void setMetadata(int metadata) {
         this.metadata = metadata;
     }
 
+    /**
+     * Get the stored metadata
+     * @return Metadata
+     */
     public int getMetadata() {
         return metadata;
     }
 
-    public void setCore(TileEntityFurnaceCore core) {
+    /**
+     * Set the core for this dummy
+     * @param core The core
+     */
+    public void setCore(C core) {
         this.coreLocation = new Location(core);
     }
 
+    /**
+     * Invalidate the core location
+     */
     public void unsetCore() {
         this.coreLocation = null;
     }

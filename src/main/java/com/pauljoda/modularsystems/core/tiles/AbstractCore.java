@@ -1,10 +1,15 @@
 package com.pauljoda.modularsystems.core.tiles;
 
 import com.dyonovan.brlib.collections.Couplet;
+import com.dyonovan.brlib.collections.Location;
+import com.dyonovan.brlib.common.blocks.BaseBlock;
 import com.dyonovan.brlib.common.tiles.BaseTile;
+import com.dyonovan.brlib.util.WorldUtils;
 import com.pauljoda.modularsystems.furnace.collections.StandardValues;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
@@ -12,10 +17,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.List;
 
 public abstract class AbstractCore extends BaseTile implements ISidedInventory {
     protected StandardValues values;
+    protected Couplet<Location, Location> corners;
     private static final int cookSpeed = 200;
+    private boolean isDirty = true;
+    public boolean wellFormed = false;
+    private static final int MAX_SIZE = 50;
 
     public AbstractCore() {
         values = new StandardValues();
@@ -27,11 +39,185 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
     protected abstract int getItemBurnTime(ItemStack stack);
 
+    protected abstract Block getDummyBlock();
+
+
+    /*******************************************************************************************************************
+     *******************************************  Multiblock Methods  **************************************************
+     *******************************************************************************************************************/
+
+    public boolean updateMultiblock() {
+        if (isDirty) {
+            if (isWellFormed()) {
+                buildMultiblock();
+            } else {
+                deconstructMultiblock();
+            }
+            isDirty = false;
+        }
+        return wellFormed;
+    }
+
+    protected boolean isWellFormed() {
+        wellFormed = false;
+
+        Couplet<Location, Location> test = getCorners();
+
+        if(test == null)
+            return false;
+
+        corners = getCorners();
+
+
+        List<Location> outside = corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true);
+        List<Location> inside = corners.getFirst().getAllWithinBounds(corners.getSecond(), true, false);
+
+        for(Location loc : outside) {
+            if(worldObj.isAirBlock(loc.x, loc.y, loc.z))
+                return false;
+        }
+
+        //Tells if is against wall
+        if(inside.size() <= 0)
+            return false;
+
+        for(Location loc : inside) {
+            if(!worldObj.isAirBlock(loc.x, loc.y, loc.z))
+                return false;
+        }
+        wellFormed = true;
+        return wellFormed;
+    }
+
+    protected void buildMultiblock() {
+        //Just to be safe, though it shouldn't ever be null
+        if(corners == null)
+            return;
+
+        List<Location> outside = corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true);
+        for(Location loc : outside) {
+            //Don't convert us!
+            if(loc.equals(getLocation()))
+                continue;
+
+            //Make sure we aren't already formed
+            if(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof AbstractDummy)
+                continue;
+
+            int id = Block.getIdFromBlock(worldObj.getBlock(loc.x, loc.y, loc.z));
+            int meta = worldObj.getBlockMetadata(loc.x, loc.y, loc.z);
+            worldObj.setBlock(loc.x, loc.y, loc.z, getDummyBlock());
+            AbstractDummy dummy = (AbstractDummy)worldObj.getTileEntity(loc.x, loc.y, loc.z);
+            dummy.setCore(this);
+            dummy.setBlock(id);
+            dummy.setMetadata(meta);
+        }
+    }
+
+    public void breakMultiBlock() {
+        deconstructMultiblock();
+    }
+
+    protected void deconstructMultiblock() {
+        //Just to be safe, though it shouldn't ever be null
+        if(corners == null)
+            return;
+
+        List<Location> outside = corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true);
+        for(Location loc : outside) {
+            //Don't convert us!
+            if(loc.equals(getLocation()))
+                continue;
+
+            //Just to be safe
+            if(!(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof AbstractDummy))
+                continue;
+
+            AbstractDummy dummy = (AbstractDummy)worldObj.getTileEntity(loc.x, loc.y, loc.z);
+            int meta = dummy.getMetadata();
+            worldObj.setBlock(loc.x, loc.y, loc.z, dummy.getStoredBlock());
+            worldObj.setBlockMetadataWithNotify(loc.x, loc.y, loc.z, meta, 2);
+        }
+        wellFormed = false;
+    }
+
+    protected Couplet<Location, Location> getCorners() {
+        Location local = getLocation();
+        Location firstCorner = local.createNew();
+        Location secondCorner = local.createNew();
+
+        ForgeDirection dir = ((BaseBlock)worldObj.getBlock(xCoord, yCoord, zCoord)).getDefaultRotation().convertMetaToDirection(worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
+
+        //Move inside
+        firstCorner.travel(dir.getOpposite());
+        secondCorner.travel(dir.getOpposite());
+
+        //Get our directions
+        ForgeDirection right = WorldUtils.rotateRight(dir);
+        ForgeDirection left = WorldUtils.rotateLeft(dir);
+
+        //Get first corner
+
+        //Find side
+        while(worldObj.isAirBlock(firstCorner.x, firstCorner.y, firstCorner.z)) {
+            firstCorner.travel(right);
+            if(getLocation().findDistance(firstCorner) > MAX_SIZE)
+                return null;
+        }
+
+        //Pop back inside
+        firstCorner.travel(right.getOpposite());
+
+        //Find floor
+        while(worldObj.isAirBlock(firstCorner.x, firstCorner.y, firstCorner.z)) {
+            firstCorner.travel(ForgeDirection.DOWN);
+            if(getLocation().findDistance(firstCorner) > MAX_SIZE)
+                return null;
+        }
+
+        //Found, so move to physical location
+        firstCorner.travel(right);
+        firstCorner.travel(dir);
+
+        //Find side
+        while(worldObj.isAirBlock(secondCorner.x, secondCorner.y, secondCorner.z)) {
+            secondCorner.travel(left);
+            if(getLocation().findDistance(secondCorner) > MAX_SIZE)
+                return null;
+        }
+
+        //Pop back inside
+        secondCorner.travel(left.getOpposite());
+
+        //Move To back
+        while(worldObj.isAirBlock(secondCorner.x, secondCorner.y, secondCorner.z)) {
+            secondCorner.travel(dir.getOpposite());
+            if(getLocation().findDistance(secondCorner) > MAX_SIZE)
+                return null;
+        }
+
+        //Pop back inside
+        secondCorner.travel(dir);
+
+        //Move Up
+        while(worldObj.isAirBlock(secondCorner.x, secondCorner.y, secondCorner.z)) {
+            secondCorner.travel(ForgeDirection.UP);
+            if(getLocation().findDistance(secondCorner) > MAX_SIZE)
+                return null;
+        }
+
+        //Found, so move to physical location
+        secondCorner.travel(left);
+        secondCorner.travel(dir.getOpposite());
+
+        return new Couplet<>(firstCorner, secondCorner);
+    }
+
     /******************************************************************************************************************
      ************************************************  Furnace Methods  ***********************************************
      ******************************************************************************************************************/
 
-    protected void doFurnaceWork() {
+    protected void doWork() {
         boolean didWork = false;
         if (!worldObj.isRemote) {
             if (this.values.getBurnTime() > 0) {
@@ -189,21 +375,34 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
     @Override
     public void updateEntity() {
         if (!worldObj.isRemote) {
-            //updateMultiblock();
+            if(updateMultiblock())
+                doWork();
         }
-        doFurnaceWork();
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
         values.readFromNBT(tagCompound);
+        this.isDirty = tagCompound.getBoolean("isDirty");
+
+        Location first = new Location();
+        Location second = new Location();
+        first.readFromNBT(tagCompound, "First");
+        second.readFromNBT(tagCompound, "Second");
+        corners = new Couplet<>(first, second);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
         values.writeToNBT(tagCompound);
+        tagCompound.setBoolean("isDirty", isDirty);
+
+        if(corners != null) {
+            corners.getFirst().writeToNBT(tagCompound, "First");
+            corners.getSecond().writeToNBT(tagCompound, "Second");
+        }
     }
 
     /**
@@ -319,6 +518,38 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
      * *****************************************************************************************************************
      */
 
+    public void expelItems() {
+        expelItem(values.getInput());
+        values.setInput(null);
+        expelItem(values.getOutput());
+        values.setOutput(null);
+        expelItem(values.getFuel());
+        values.setFuel(null);
+    }
+
+    private void expelItem(ItemStack itemstack) {
+        if (itemstack != null) {
+            EntityItem entityitem =
+                    new EntityItem(
+                            worldObj,
+                            (double) xCoord + worldObj.rand.nextFloat() * 0.8F + 0.1F,
+                            (double) yCoord + worldObj.rand.nextFloat() * 0.8F + 0.1F,
+                            (double) zCoord + worldObj.rand.nextFloat() * 0.8F + 0.1F,
+                            itemstack
+                    );
+
+            if (itemstack.hasTagCompound()) {
+                entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
+            }
+
+            float f3 = 0.05F;
+            entityitem.motionX = (double) ((float) this.worldObj.rand.nextGaussian() * f3);
+            entityitem.motionY = (double) ((float) this.worldObj.rand.nextGaussian() * f3 + 0.2F);
+            entityitem.motionZ = (double) ((float) this.worldObj.rand.nextGaussian() * f3);
+            worldObj.spawnEntityInWorld(entityitem);
+        }
+    }
+
     protected boolean isItemFuel(ItemStack par0ItemStack) {
         return getItemBurnTime(par0ItemStack) > 0;
     }
@@ -345,5 +576,9 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
     public void setFurnaceCookTime(int furnaceCookTime) {
         values.setCookTime(furnaceCookTime);
+    }
+
+    public void setDirty() {
+        isDirty = true;
     }
 }

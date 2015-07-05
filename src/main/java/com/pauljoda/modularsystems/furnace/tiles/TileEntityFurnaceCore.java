@@ -1,11 +1,13 @@
 package com.pauljoda.modularsystems.furnace.tiles;
 
 import com.dyonovan.brlib.common.tiles.IOpensGui;
+import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -26,6 +28,11 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui {
     @Override
     protected int getItemBurnTime(ItemStack is) {
         return is == null ? 0 : GameRegistry.getFuelValue(is);
+    }
+
+    @Override
+    public Block getDummyBlock() {
+        return BlockManager.furnaceDummy;
     }
 
     @Override

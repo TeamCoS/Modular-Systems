@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.furnace.blocks;
 
+import com.dyonovan.brlib.BRLib;
 import com.dyonovan.brlib.collections.BlockTextures;
 import com.dyonovan.brlib.common.blocks.BaseBlock;
 import com.dyonovan.brlib.common.blocks.rotation.FourWayRotation;
@@ -10,9 +11,11 @@ import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -74,6 +77,35 @@ public class BlockFurnaceCore extends BaseBlock {
             tileentity.validate();
             world.setTileEntity(x, y, z, tileentity);
         }
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
+        TileEntityFurnaceCore tileEntity = (TileEntityFurnaceCore) world.getTileEntity(x, y, z);
+        if (player.isSneaking()) {
+            return false;
+        }
+        if (tileEntity != null) {
+            tileEntity.setDirty();
+            if (tileEntity.updateMultiblock()) {
+                player.openGui(BRLib.instance, 0, world, x, y, z);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
+        if(!isChanging) {
+            TileEntityFurnaceCore core = (TileEntityFurnaceCore)world.getTileEntity(x, y, z);
+
+            if(core != null) {
+                core.expelItems();
+                core.breakMultiBlock();
+            }
+            world.func_147453_f(x, y, z, par5);
+        }
+        super.breakBlock(world, x, y, z, par5, par6);
     }
 
     public Item getItemDropped(int i, Random rand, int j) {
