@@ -1,5 +1,11 @@
 itemGroup.tabModularSystems=Modular Systems
 
 tile.modularsystems:furnaceCore.name=Modular Furnace Core
+tile.modularsystems:furnaceCoreActive.name=Modular Furnace Core Active
+tile.modularsystems:furnaceDummy.name=Modular Furnace Dummy
 
 inventory.furnace.title=Modular Furnace
+
+commands.addBannedFurnaceBlock.usage=Usage: <TileName> or "this" to add what is in your hand
+commands.addBannedFurnaceBlock.failure=Failed to add value, must pass a block name
+commands.addBannedFurnaceBlock.success=Block successfully added to registry

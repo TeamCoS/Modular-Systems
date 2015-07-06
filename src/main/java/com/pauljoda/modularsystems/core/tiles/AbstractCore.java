@@ -5,6 +5,7 @@ import com.dyonovan.brlib.collections.Location;
 import com.dyonovan.brlib.common.blocks.BaseBlock;
 import com.dyonovan.brlib.common.tiles.BaseTile;
 import com.dyonovan.brlib.util.WorldUtils;
+import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
 import com.pauljoda.modularsystems.furnace.collections.StandardValues;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -33,13 +34,49 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
         values = new StandardValues();
     }
 
+    /**
+     * Used to set the block to its active and non-active state
+     * @param positiveBurnTime True if active
+     * @param world World object
+     * @param x X Coord
+     * @param y Y Coord
+     * @param z Z Coord
+     */
     protected abstract void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z);
 
+    /**
+     * Get the output of the recipe
+     * @param is The input
+     * @return The output
+     */
     protected abstract ItemStack recipe(ItemStack is);
 
+    /**
+     * Get how long the item will burn, 0 if it won't
+     * @param stack The stack to check
+     * @return How many ticks it burns
+     */
     protected abstract int getItemBurnTime(ItemStack stack);
 
+    /**
+     * Get the dummy for this type of multi-block
+     * @return The block to set on convert
+     */
     protected abstract Block getDummyBlock();
+
+    /**
+     * Check if this block is not allowed in the structure
+     * @param block The block to check
+     * @param meta The meta data of said block
+     * @return True if it is banned
+     */
+    protected abstract boolean isBlockBanned(Block block, int meta);
+
+    /**
+     * Take the blocks in this structure and generate the speed etc values
+     * @param function The block count function
+     */
+    protected abstract void generateValues(BlockCountFunction function);
 
 
     /*******************************************************************************************************************
@@ -73,7 +110,11 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
         List<Location> inside = corners.getFirst().getAllWithinBounds(corners.getSecond(), true, false);
 
         for(Location loc : outside) {
-            if(worldObj.isAirBlock(loc.x, loc.y, loc.z))
+            //Us silly
+            if(loc.equals(getLocation()))
+                continue;
+            if(worldObj.isAirBlock(loc.x, loc.y, loc.z) ||
+                    isBlockBanned(worldObj.getBlock(loc.x, loc.y, loc.z), worldObj.getBlockMetadata(loc.x, loc.y, loc.z)))
                 return false;
         }
 
@@ -95,6 +136,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
             return;
 
         List<Location> outside = corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true);
+        BlockCountFunction blockCount = new BlockCountFunction();
         for(Location loc : outside) {
             //Don't convert us!
             if(loc.equals(getLocation()))
@@ -104,6 +146,8 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
             if(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof AbstractDummy)
                 continue;
 
+            blockCount.addBlock(worldObj.getBlock(loc.x, loc.y, loc.z));
+
             int id = Block.getIdFromBlock(worldObj.getBlock(loc.x, loc.y, loc.z));
             int meta = worldObj.getBlockMetadata(loc.x, loc.y, loc.z);
             worldObj.setBlock(loc.x, loc.y, loc.z, getDummyBlock());
@@ -112,6 +156,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
             dummy.setBlock(id);
             dummy.setMetadata(meta);
         }
+        generateValues(blockCount);
     }
 
     public void breakMultiBlock() {
@@ -353,7 +398,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
     }
 
     private double getAdjustedCookTime() {
-        return cookSpeed * values.getSpeed();
+        return cookSpeed * (1 / values.getSpeed());
     }
 
     @SideOnly(Side.CLIENT)

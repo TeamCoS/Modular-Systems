@@ -1,9 +1,12 @@
 package com.pauljoda.modularsystems.furnace.tiles;
 
 import com.dyonovan.brlib.common.tiles.IOpensGui;
+import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
+import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummy;
 import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -33,6 +36,17 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui {
     @Override
     public Block getDummyBlock() {
         return BlockManager.furnaceDummy;
+    }
+
+    @Override
+    @SuppressWarnings("all")
+    protected boolean isBlockBanned(Block block, int meta) {
+        return block instanceof BlockFurnaceDummy ? false : FurnaceBannedBlocks.INSTANCE.isBlockBanned(block, meta) || FurnaceBannedBlocks.isBadBlockFromBlock(block);
+    }
+
+    @Override
+    protected void generateValues(BlockCountFunction function) {
+        //TODO: Value stuff
     }
 
     @Override

@@ -27,8 +27,17 @@ public class BlockDummyRenderer implements ISimpleBlockRenderingHandler {
             renderer.renderBlockUsingTexture(dummy.getStoredBlock(), x, y, z, dummy.getStoredBlock().getIcon(0, dummy.getMetadata()));
             return true;
         }
-        else if(ClientProxy.renderPass == 1 && ((BaseBlock) block).getBlockTextures().getOverlay() != null)
-            renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BaseBlock)block).getBlockTextures().getOverlay());
+        else if(ClientProxy.renderPass == 1 && ((BaseBlock) block).getBlockTextures().getOverlay() != null) {
+            renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BaseBlock) block).getBlockTextures().getOverlay());
+
+            renderer.setRenderBounds(-0.01, -0.01, -0.01, 1.01, 1.01, 1.01);
+            renderer.renderFaceXPos(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
+            renderer.renderFaceXNeg(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
+            renderer.renderFaceYPos(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
+            renderer.renderFaceYNeg(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
+            renderer.renderFaceZPos(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
+            renderer.renderFaceZNeg(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
+        }
         return true;
     }
 

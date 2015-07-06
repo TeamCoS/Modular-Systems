@@ -74,7 +74,7 @@ public class BlockFurnaceDummy extends BaseBlock {
     public void generateDefaultTextures(IIconRegister iconRegister) {
         this.blockIcon = iconRegister.registerIcon("minecraft:stone");
         textures = new BlockTextures(iconRegister, "minecraft:stone");
-        textures.setOverlay(iconRegister.registerIcon("minecraft:hopper_top"));
+        textures.setOverlay(iconRegister.registerIcon(Reference.MOD_ID + ":furnaceDummy"));
     }
 
     @Override
