@@ -21,6 +21,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Random;
 
@@ -118,23 +119,23 @@ public class BlockFurnaceCore extends BaseBlock {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
         if (this.active) {
-            int l = world.getBlockMetadata(x, y, z);
+            ForgeDirection l = getDefaultRotation().convertMetaToDirection(world.getBlockMetadata(x, y, z));
             float f = (float) x + 0.5F;
             float f1 = (float) y + 0.0F + rand.nextFloat() * 6.0F / 16.0F;
             float f2 = (float) z + 0.5F;
             float f3 = 0.52F;
             float f4 = rand.nextFloat() * 0.6F - 0.3F;
 
-            if (l == 4) {
+            if (l == ForgeDirection.WEST) {
                 world.spawnParticle("smoke", (double) (f - f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
                 world.spawnParticle("flame", (double) (f - f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
-            } else if (l == 5) {
+            } else if (l == ForgeDirection.EAST) {
                 world.spawnParticle("smoke", (double) (f + f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
                 world.spawnParticle("flame", (double) (f + f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
-            } else if (l == 2) {
+            } else if (l == ForgeDirection.NORTH) {
                 world.spawnParticle("smoke", (double) (f + f4), (double) f1, (double) (f2 - f3), 0.0D, 0.0D, 0.0D);
                 world.spawnParticle("flame", (double) (f + f4), (double) f1, (double) (f2 - f3), 0.0D, 0.0D, 0.0D);
-            } else if (l == 3) {
+            } else if (l == ForgeDirection.SOUTH) {
                 world.spawnParticle("smoke", (double) (f + f4), (double) f1, (double) (f2 + f3), 0.0D, 0.0D, 0.0D);
                 world.spawnParticle("flame", (double) (f + f4), (double) f1, (double) (f2 + f3), 0.0D, 0.0D, 0.0D);
             }

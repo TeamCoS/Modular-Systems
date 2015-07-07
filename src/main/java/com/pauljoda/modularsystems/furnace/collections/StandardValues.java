@@ -9,14 +9,18 @@ public class StandardValues {
     public int currentItemBurnTime = 0;
     public int cookTime = 0;
 
-    public double speed = 1;
-    public double efficiency = 1;
-    public double multiplicity = 1;
+    public double speed = 0;
+    public double efficiency = 0;
+    public double multiplicity = 0;
 
     InventoryTile inventory;
 
     public StandardValues() {
         inventory = new InventoryTile(3);
+    }
+
+    public void resetStructureValues() {
+        speed = efficiency = multiplicity = 0;
     }
 
     /*******************************************************************************************************************
@@ -88,6 +92,14 @@ public class StandardValues {
     }
 
     /**
+     * Add a value to the speed
+     * @param i What to add
+     */
+    public void addToSpeed(double i) {
+        this.speed += i;
+    }
+
+    /**
      * Get the efficiency multiplier for this furnace
      * @return The efficiency multiplier
      */
@@ -104,6 +116,14 @@ public class StandardValues {
     }
 
     /**
+     * Add to the efficiency value
+     * @param i The value to add
+     */
+    public void addToEfficiency(double i) {
+        this.efficiency += i;
+    }
+
+    /**
      * Multiplicity multiplier for this furnace (heh)
      * @return Multiplicity multiplier
      */
@@ -117,6 +137,14 @@ public class StandardValues {
      */
     public void setMultiplicity(double multiplicity) {
         this.multiplicity = multiplicity;
+    }
+
+    /**
+     * Add to the multiplicity value
+     * @param i The value to add
+     */
+    public void addToMultiplicity(double i) {
+        this.multiplicity += i;
     }
 
     /*******************************************************************************************************************

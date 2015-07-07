@@ -4,6 +4,7 @@ import com.pauljoda.modularsystems.core.commands.AddBannedBlock;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
+import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -46,6 +47,7 @@ public class ModularSystems {
         BlockManager.init();
 
         MinecraftForge.EVENT_BUS.register(FurnaceBannedBlocks.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(BlockValueRegistry.INSTANCE);
         configFolderLocation = event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Modular Systems";
 
         proxy.init();
@@ -54,6 +56,7 @@ public class ModularSystems {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         FurnaceBannedBlocks.INSTANCE.init();
+        BlockValueRegistry.INSTANCE.init();
     }
 
     @Mod.EventHandler

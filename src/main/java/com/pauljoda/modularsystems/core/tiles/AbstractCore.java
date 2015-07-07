@@ -146,7 +146,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
             if(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof AbstractDummy)
                 continue;
 
-            blockCount.addBlock(worldObj.getBlock(loc.x, loc.y, loc.z));
+            blockCount.addBlock(worldObj.getBlock(loc.x, loc.y, loc.z), worldObj.getBlockMetadata(loc.x, loc.y, loc.z));
 
             int id = Block.getIdFromBlock(worldObj.getBlock(loc.x, loc.y, loc.z));
             int meta = worldObj.getBlockMetadata(loc.x, loc.y, loc.z);
@@ -167,6 +167,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
         //Just to be safe, though it shouldn't ever be null
         if(corners == null)
             return;
+        values.resetStructureValues();
 
         List<Location> outside = corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true);
         for(Location loc : outside) {
@@ -363,7 +364,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
                         ? output.getMaxStackSize()
                         : getInventoryStackLimit();
         int outAvailable = outMax - output.stackSize;
-        int smeltAvailable = (int)values.getMultiplicity() * recipeStackSize;
+        int smeltAvailable = (int)values.getMultiplicity() + recipeStackSize;
         int inAvailable = input.stackSize * recipeStackSize;
 
         int avail;
@@ -394,11 +395,11 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
 
     public int getAdjustedBurnTime(double fuelValue) {
-        return (int) (fuelValue * values.getEfficiency());
+        return (int) Math.max(fuelValue + values.getEfficiency(), 1);
     }
 
     private double getAdjustedCookTime() {
-        return cookSpeed * (1 / values.getSpeed());
+        return Math.max(cookSpeed + values.getSpeed(), 1);
     }
 
     @SideOnly(Side.CLIENT)

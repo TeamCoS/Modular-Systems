@@ -92,10 +92,10 @@ public class FurnaceBannedBlocks {
         if (block == Blocks.redstone_block) return false;
 
         if (block.hasTileEntity(0)) {
-           return true;
+            return true;
         }
         if (!block.isNormalCube()) {
-           return true;
+            return true;
         }
 
         int oreDictCheck = OreDictionary.getOreID(new ItemStack(block));
@@ -121,7 +121,8 @@ public class FurnaceBannedBlocks {
     public void addBannedBlock(Block block, int meta) {
         validateList();
         GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(block);
-        bannedBlocks.add(id.modId + ":" + id.name + ":" + meta);
+        if(!bannedBlocks.contains(id.modId + ":" + id.name + ":" + meta))
+            bannedBlocks.add(id.modId + ":" + id.name + ":" + meta);
     }
 
     /**
@@ -131,7 +132,8 @@ public class FurnaceBannedBlocks {
      */
     public void addBannedBlock(String blockName) {
         validateList();
-        bannedBlocks.add(blockName);
+        if(!bannedBlocks.contains(blockName))
+            bannedBlocks.add(blockName);
     }
 
     /**

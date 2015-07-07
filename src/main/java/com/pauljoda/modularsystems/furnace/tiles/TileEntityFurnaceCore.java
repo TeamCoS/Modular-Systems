@@ -2,7 +2,9 @@ package com.pauljoda.modularsystems.furnace.tiles;
 
 import com.dyonovan.brlib.common.tiles.IOpensGui;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
+import com.pauljoda.modularsystems.core.helpers.BlockHelper;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
@@ -46,7 +48,13 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui {
 
     @Override
     protected void generateValues(BlockCountFunction function) {
-        //TODO: Value stuff
+        for(String i : function.getBlockIds()) {
+            if (BlockValueRegistry.INSTANCE.isBlockRegistered(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond())) {
+                values.addToSpeed(BlockValueRegistry.INSTANCE.getSpeedValue(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond(), function.getBlockCount(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond())));
+                values.addToEfficiency(BlockValueRegistry.INSTANCE.getEfficiencyValue(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond(), function.getBlockCount(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond())));
+                values.addToMultiplicity(BlockValueRegistry.INSTANCE.getMultiplicityValue(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond(), function.getBlockCount(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond())));
+            }
+        }
     }
 
     @Override
