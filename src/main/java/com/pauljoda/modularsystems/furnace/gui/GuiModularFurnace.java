@@ -22,7 +22,7 @@ public class GuiModularFurnace extends GuiBase<ContainerModularFurnace> {
     public GuiModularFurnace(InventoryPlayer player, TileEntityFurnaceCore tile) {
         super(new ContainerModularFurnace(player, tile), 175, 165, "inventory.furnace.title");
         this.core = tile;
-        addComponents();
+        addRightTabs(rightTabs);
     }
 
     @Override
@@ -42,20 +42,32 @@ public class GuiModularFurnace extends GuiBase<ContainerModularFurnace> {
                     return core.getCookProgressScaled(24);
                 }
             });
-
-            GuiTabCollection tabs = new GuiTabCollection(this, 175, GuiTabCollection.TAB_SIDE.RIGHT);
-            List<BaseComponent> furnaceInfoSpeed = new ArrayList<>();
-
-            furnaceInfoSpeed.add(new GuiComponentText("Information", 26, 6, 0xFFCC00));
-            furnaceInfoSpeed.add(new GuiComponentText("Speed: ", 5, 23, 0xFFFFFF));
-            furnaceInfoSpeed.add(new GuiComponentText(String.format("%.2f", -(((core.getValues().getSpeed() + 200) / 200) - 1)) + "x", 15, 33, (-(((core.getValues().getSpeed() + 200) / 200) - 1)) > 0 ? 0x19A319 : 0x801A00));
-            furnaceInfoSpeed.add(new GuiComponentText("Efficiency: ", 5, 48, 0xFFFFFF));
-            furnaceInfoSpeed.add(new GuiComponentText(String.format("%.2f", -(((core.getValues().getEfficiency() + 200) / 200) - 1)) + "x", 15, 58, (-(((core.getValues().getEfficiency() + 200) / 200) - 1)) > 0 ? 0x19A319 : 0x801A00));
-            furnaceInfoSpeed.add(new GuiComponentText("Multiplicity: ", 5, 73, 0xFFFFFF));
-            furnaceInfoSpeed.add(new GuiComponentText((core.getValues().getMultiplicity() + 1) + "x", 15, 83, core.getValues().getMultiplicity() > 0 ? 0x19A319 : 0x000000));
-
-            tabs.addTab(furnaceInfoSpeed, 95, 100, new Color(100, 150, 150), new ItemStack(Items.book));
-            components.add(tabs);
         }
     }
-}
+
+        /**
+         * Adds the tabs to the right. Overwrite this if you want tabs on your GUI
+         * @param tabs List of tabs, put GuiTabs in
+         */
+        @Override
+        public void addRightTabs(GuiTabCollection tabs) {
+            if (core != null) {
+                List<BaseComponent> furnaceInfoSpeed = new ArrayList<>();
+                furnaceInfoSpeed.add(new GuiComponentText("Information", 26, 6, 0xFFCC00));
+                furnaceInfoSpeed.add(new GuiComponentText("Speed: ", 5, 23, 0xFFFFFF));
+                furnaceInfoSpeed.add(new GuiComponentText(String.format("%.2f", -(((core.getValues().getSpeed() + 200) / 200) - 1)) + "x", 15, 33, (-(((core.getValues().getSpeed() + 200) / 200) - 1)) > 0 ? 0x19A319 : 0x801A00));
+                furnaceInfoSpeed.add(new GuiComponentText("Efficiency: ", 5, 48, 0xFFFFFF));
+                furnaceInfoSpeed.add(new GuiComponentText(String.format("%.2f", -(((core.getValues().getEfficiency() + 200) / 200) - 1)) + "x", 15, 58, (-(((core.getValues().getEfficiency() + 200) / 200) - 1)) > 0 ? 0x19A319 : 0x801A00));
+                furnaceInfoSpeed.add(new GuiComponentText("Multiplicity: ", 5, 73, 0xFFFFFF));
+                furnaceInfoSpeed.add(new GuiComponentText((core.getValues().getMultiplicity() + 1) + "x", 15, 83, core.getValues().getMultiplicity() > 0 ? 0x19A319 : 0x000000));
+                tabs.addTab(furnaceInfoSpeed, 95, 100, new Color(100, 150, 150), new ItemStack(Items.book), false);
+            }
+        }
+
+        /**
+         * Add the tabs to the left. Overwrite this if you want tabs on your GUI
+         * @param tabs List of tabs, put GuiReverseTabs in
+         */
+        @Override
+        public void addLeftTabs(GuiTabCollection tabs) {}
+    }

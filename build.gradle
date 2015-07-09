@@ -42,6 +42,8 @@ configFile.withReader {
 version = "${config.minecraft_version}-${config.mod_version}"
 group= "com.teamcos.modularsystems" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Modular Systems"
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version
@@ -49,15 +51,15 @@ minecraft {
     replaceIn "core/lib/Reference.java"
     replace "@VERSION@", "${config.mod_version}"
 
-    assetDir = "eclipse"
+    runDir = "eclipse"
 }
 
 dependencies {
     compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
     compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
     compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
-    compile "mcp.mobius.waila:Waila:1.5.10_dev1_1.7.10"
-    compile group: "com.dyonovan.brlib", name: "BR-Lib", version: "+", classifier: "dev"
+    compile "mcp.mobius.waila:Waila:${config.WAILA_version}_${config.minecraft_version}:dev"
+    compile group: "com.teambr.bookshelf", name: "Bookshelf", version: "+", classifier: "dev"
 }
 
 processResources {
