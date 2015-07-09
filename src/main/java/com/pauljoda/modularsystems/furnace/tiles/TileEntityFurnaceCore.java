@@ -18,6 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui {
 
     @Override
@@ -66,4 +68,13 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui {
     public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
         return new GuiModularFurnace(entityPlayer.inventory, this);
     }
+
+    /*
+     * Waila Info
+     */
+    @Override
+    public void returnWailaHead(List<String> head) {
+
+    }
+
 }

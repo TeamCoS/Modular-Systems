@@ -34,6 +34,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
     public AbstractCore() {
         values = new StandardValues();
     }
+    public abstract void returnWailaHead(List<String> tip);
 
     /**
      * Used to set the block to its active and non-active state
