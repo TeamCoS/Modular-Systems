@@ -78,4 +78,14 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui, IW
 
     }
 
+    @Override
+    public void returnWailaBody(List<String> body) {
+
+    }
+
+    @Override
+    public void returnWailaTail(List<String> tail) {
+
+    }
+
 }

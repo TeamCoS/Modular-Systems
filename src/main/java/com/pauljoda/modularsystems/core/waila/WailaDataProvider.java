@@ -1,6 +1,5 @@
 package com.pauljoda.modularsystems.core.waila;
 
-import com.teambr.bookshelf.common.tiles.BaseTile;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
@@ -31,12 +30,20 @@ public class WailaDataProvider implements IWailaDataProvider {
 
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return null;
+        if(accessor.getTileEntity() instanceof IWaila) {
+            IWaila tile = (IWaila) accessor.getTileEntity();
+            tile.returnWailaBody(currenttip);
+        }
+        return currenttip;
     }
 
     @Override
     public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return null;
+        if(accessor.getTileEntity() instanceof IWaila) {
+            IWaila tile = (IWaila) accessor.getTileEntity();
+            tile.returnWailaTail(currenttip);
+        }
+        return currenttip;
     }
 
     @Override
@@ -45,6 +52,6 @@ public class WailaDataProvider implements IWailaDataProvider {
     }
 
     public static void callbackRegister(IWailaRegistrar registrar) {
-        registrar.registerHeadProvider(new WailaDataProvider(), BaseTile.class);
+        registrar.registerHeadProvider(new WailaDataProvider(), IWaila.class);
     }
 }
