@@ -12,11 +12,11 @@ import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.BlockHelper;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui, IW
 
     @Override
     protected int getItemBurnTime(ItemStack is) {
-        return is == null ? 0 : GameRegistry.getFuelValue(is);
+        return is == null ? 0 : TileEntityFurnace.getItemBurnTime(is);
     }
 
     @Override
@@ -70,9 +70,10 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui, IW
         return new GuiModularFurnace(entityPlayer.inventory, this);
     }
 
-    /*
-     * Waila Info
-     */
+    /*******************************************************************************************************************
+     *************************************************** Waila *********************************************************
+     *******************************************************************************************************************/
+
     @Override
     public void returnWailaHead(List<String> head) {
 

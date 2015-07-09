@@ -2,6 +2,8 @@ package com.pauljoda.modularsystems.core.tiles;
 
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.providers.FuelProvider;
+import com.pauljoda.modularsystems.core.providers.ItemFuelProvider;
 import com.pauljoda.modularsystems.furnace.collections.StandardValues;
 import com.teambr.bookshelf.collections.Couplet;
 import com.teambr.bookshelf.collections.Location;
@@ -17,10 +19,12 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractCore extends BaseTile implements ISidedInventory {
@@ -30,6 +34,10 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
     private boolean isDirty = true;
     public boolean wellFormed = false;
     private static final int MAX_SIZE = 50;
+
+    protected int[] sides = new int[] { 1 };
+    protected int[] top = new int[] { 0 };
+    protected int[] bottom = new int[] { 2 };
 
     public AbstractCore() {
         values = new StandardValues();
@@ -273,11 +281,22 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
             }
 
             if (canSmelt(values.getInput(), recipe(values.getInput()), values.getOutput())) {
-                if (this.values.getBurnTime() <= 0 && values.getFuel() != null) {
-                    int scaledBurnTime = getAdjustedBurnTime(TileEntityFurnace.getItemBurnTime(values.getFuel()));
+
+                //Check the structure to make sure we have the right stuff
+                if(corners == null)
+                    corners = getCorners();
+
+                //Still null?
+                if(corners == null) {
+                    markDirty();
+                    return;
+                }
+
+                List<FuelProvider> providers = getFuelProviders(corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true));
+                if (this.values.getBurnTime() <= 0 && !providers.isEmpty()) {
+                    int scaledBurnTime = getAdjustedBurnTime(providers.get(0).consume());
                     values.checkInventorySlots();
                     this.values.currentItemBurnTime = this.values.burnTime = scaledBurnTime;
-                    this.values.consumeFuel();
                     cook();
                     didWork = true;
                 } else if (isBurning()) {
@@ -296,6 +315,25 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
                 markDirty();
             }
         }
+    }
+
+    protected List<FuelProvider> getFuelProviders(List<Location> coords) {
+        List<FuelProvider> providers = new ArrayList<>();
+        FuelProvider provider;
+        for (Location coord : coords) {
+            TileEntity te = worldObj.getTileEntity(coord.x, coord.y, coord.z);
+            if (te != null) {
+                if (te instanceof FuelProvider && (provider = (FuelProvider) te).canProvide()) {
+                    providers.add(provider);
+                }
+            }
+        }
+        provider = new ItemFuelProvider(values.getFuel());
+        if (provider.canProvide()) {
+            providers.add(provider);
+        }
+        Collections.sort(providers, new FuelProvider.FuelSorter());
+        return providers;
     }
 
     private boolean cook() {
@@ -463,7 +501,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[0];
+        return side == 0 ? bottom : side == 1 ? top : sides;
     }
 
     @Override
