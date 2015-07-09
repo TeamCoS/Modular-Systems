@@ -50,13 +50,15 @@ public class ModularSystems {
         MinecraftForge.EVENT_BUS.register(BlockValueRegistry.INSTANCE);
         configFolderLocation = event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Modular Systems";
 
-        proxy.init();
+        proxy.preInit();
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         FurnaceBannedBlocks.INSTANCE.init();
         BlockValueRegistry.INSTANCE.init();
+
+        proxy.init();
     }
 
     @Mod.EventHandler
