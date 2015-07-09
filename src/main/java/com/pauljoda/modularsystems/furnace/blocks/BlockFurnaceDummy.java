@@ -12,12 +12,20 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockFurnaceDummy extends BaseBlock {
     public BlockFurnaceDummy() {
         super(Material.rock, Reference.MOD_ID + ":furnaceDummy", TileEntityFurnaceDummy.class);
+    }
+
+    @Override
+    public Item getItemDropped(int i, Random r, int e) {
+        return null;
     }
 
     /**
