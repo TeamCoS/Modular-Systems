@@ -46,7 +46,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 minecraft {
-    version = config.minecraft_version + "-" + config.forge_version
+    version = config.minecraft_version + "-" + config.forge_version + "-" + config.minecraft_version
 
     replaceIn "core/lib/Reference.java"
     replace "@VERSION@", "${config.mod_version}"
