@@ -40,7 +40,6 @@ public class GuiModularFurnace extends GuiBase<ContainerModularFurnace> {
                 return core.getCookProgressScaled(24);
             }
         });
-
     }
 
     /**
