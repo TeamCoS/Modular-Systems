@@ -1,6 +1,5 @@
 package com.pauljoda.modularsystems.core.waila;
 
-import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.teambr.bookshelf.common.tiles.BaseTile;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -23,8 +22,8 @@ public class WailaDataProvider implements IWailaDataProvider {
 
     @Override
     public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        if(accessor.getTileEntity() instanceof AbstractCore) {
-            AbstractCore tile = (AbstractCore)accessor.getTileEntity();
+        if(accessor.getTileEntity() instanceof IWaila) {
+            IWaila tile = (IWaila) accessor.getTileEntity();
             tile.returnWailaHead(currenttip);
         }
         return currenttip;

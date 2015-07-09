@@ -5,6 +5,7 @@ import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
+import com.pauljoda.modularsystems.core.waila.IWaila;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummy;
 import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
@@ -20,7 +21,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui {
+public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui, IWaila {
 
     @Override
     protected void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z) {
