@@ -1,9 +1,9 @@
 package com.pauljoda.modularsystems.core.registries;
 
+import com.teambr.bookshelf.helpers.LogHelper;
+import com.teambr.bookshelf.util.JsonUtils;
 import com.google.gson.reflect.TypeToken;
 import com.pauljoda.modularsystems.core.ModularSystems;
-import com.pauljoda.modularsystems.core.helpers.LogHelper;
-import com.pauljoda.modularsystems.core.utils.JsonUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -41,7 +41,8 @@ public class FurnaceBannedBlocks {
      */
     public boolean loadFromFile() {
         LogHelper.info("Loading Furnace Banned Blocks...");
-        bannedBlocks = JsonUtils.<ArrayList<String>>readFromJson(new TypeToken<ArrayList<String>>(){}, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "furnaceBannedBlocks.json");
+        bannedBlocks = JsonUtils.<ArrayList<String>>readFromJson(new TypeToken<ArrayList<String>>() {
+        }, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "furnaceBannedBlocks.json");
         return bannedBlocks != null;
     }
 
@@ -75,7 +76,7 @@ public class FurnaceBannedBlocks {
         addBannedBlock(Blocks.bedrock, -1);
         addBannedBlock(Blocks.diamond_ore, -1);
         addBannedBlock(Blocks.emerald_ore, -1);
-        addBannedBlock(Blocks.gold_block, -1);
+        addBannedBlock(Blocks.gold_ore, -1);
         addBannedBlock(Blocks.iron_door, -1);
 
         File path = new File(ModularSystems.configFolderLocation + File.separator + "Registries");

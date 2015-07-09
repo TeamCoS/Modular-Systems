@@ -1,14 +1,14 @@
 package com.pauljoda.modularsystems.furnace.blocks;
 
-import com.dyonovan.brlib.BRLib;
-import com.dyonovan.brlib.collections.BlockTextures;
-import com.dyonovan.brlib.common.blocks.BaseBlock;
-import com.dyonovan.brlib.common.blocks.rotation.FourWayRotation;
-import com.dyonovan.brlib.common.blocks.rotation.IRotation;
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
+import com.teambr.bookshelf.Bookshelf;
+import com.teambr.bookshelf.collections.BlockTextures;
+import com.teambr.bookshelf.common.blocks.BaseBlock;
+import com.teambr.bookshelf.common.blocks.rotation.FourWayRotation;
+import com.teambr.bookshelf.common.blocks.rotation.IRotation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -89,7 +89,7 @@ public class BlockFurnaceCore extends BaseBlock {
         if (tileEntity != null) {
             tileEntity.setDirty();
             if (tileEntity.updateMultiblock()) {
-                player.openGui(BRLib.instance, 0, world, x, y, z);
+                player.openGui(Bookshelf.instance, 0, world, x, y, z);
             }
         }
         return true;

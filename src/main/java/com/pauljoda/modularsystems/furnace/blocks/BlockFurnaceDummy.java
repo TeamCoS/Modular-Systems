@@ -1,8 +1,8 @@
 package com.pauljoda.modularsystems.furnace.blocks;
 
-import com.dyonovan.brlib.BRLib;
-import com.dyonovan.brlib.collections.BlockTextures;
-import com.dyonovan.brlib.common.blocks.BaseBlock;
+import com.teambr.bookshelf.Bookshelf;
+import com.teambr.bookshelf.collections.BlockTextures;
+import com.teambr.bookshelf.common.blocks.BaseBlock;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.renderers.BlockDummyRenderer;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
@@ -28,7 +28,7 @@ public class BlockFurnaceDummy extends BaseBlock {
         if(!player.isSneaking()) {
             TileEntityFurnaceDummy us = (TileEntityFurnaceDummy)world.getTileEntity(x, y, z);
             if(us.getCore() != null)
-                player.openGui(BRLib.instance, 0, world, us.getCore().xCoord, us.getCore().yCoord, us.getCore().zCoord);
+                player.openGui(Bookshelf.instance, 0, world, us.getCore().xCoord, us.getCore().yCoord, us.getCore().zCoord);
             return true;
         }
         return true;

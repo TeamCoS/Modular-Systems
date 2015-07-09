@@ -1,14 +1,15 @@
 package com.pauljoda.modularsystems.core.renderers;
 
-import com.dyonovan.brlib.client.ClientProxy;
-import com.dyonovan.brlib.common.blocks.BaseBlock;
-import com.dyonovan.brlib.util.RenderUtils;
+import com.teambr.bookshelf.client.ClientProxy;
+import com.teambr.bookshelf.common.blocks.BaseBlock;
+import com.teambr.bookshelf.util.RenderUtils;
 import com.pauljoda.modularsystems.core.tiles.AbstractDummy;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
+import org.lwjgl.opengl.GL11;
 
 public class BlockDummyRenderer implements ISimpleBlockRenderingHandler {
     public static int renderID;
@@ -25,18 +26,13 @@ public class BlockDummyRenderer implements ISimpleBlockRenderingHandler {
         AbstractDummy dummy = (AbstractDummy)world.getTileEntity(x, y, z);
         if(ClientProxy.renderPass == 0) {
             renderer.renderBlockUsingTexture(dummy.getStoredBlock(), x, y, z, dummy.getStoredBlock().getIcon(0, dummy.getMetadata()));
+            GL11.glEnable(GL11.GL_BLEND);
+            renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BaseBlock) block).getBlockTextures().getOverlay());
+            GL11.glDisable(GL11.GL_BLEND);
             return true;
         }
         else if(ClientProxy.renderPass == 1 && ((BaseBlock) block).getBlockTextures().getOverlay() != null) {
-            renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BaseBlock) block).getBlockTextures().getOverlay());
-
-            renderer.setRenderBounds(-0.01, -0.01, -0.01, 1.01, 1.01, 1.01);
-            renderer.renderFaceXPos(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
-            renderer.renderFaceXNeg(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
-            renderer.renderFaceYPos(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
-            renderer.renderFaceYNeg(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
-            renderer.renderFaceZPos(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
-            renderer.renderFaceZNeg(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
+            renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
         }
         return true;
     }

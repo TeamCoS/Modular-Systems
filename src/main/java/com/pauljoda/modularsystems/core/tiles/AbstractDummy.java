@@ -1,7 +1,7 @@
 package com.pauljoda.modularsystems.core.tiles;
 
-import com.dyonovan.brlib.collections.Location;
-import com.dyonovan.brlib.common.tiles.BaseTile;
+import com.teambr.bookshelf.collections.Location;
+import com.teambr.bookshelf.common.tiles.BaseTile;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;

@@ -1,8 +1,6 @@
 package com.pauljoda.modularsystems.furnace.tiles;
 
-import com.dyonovan.brlib.common.tiles.IOpensGui;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
-import com.pauljoda.modularsystems.core.helpers.BlockHelper;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
@@ -11,6 +9,8 @@ import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceDummy;
 import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
+import com.teambr.bookshelf.common.tiles.IOpensGui;
+import com.teambr.bookshelf.helpers.BlockHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

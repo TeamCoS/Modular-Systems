@@ -1,12 +1,12 @@
 package com.pauljoda.modularsystems.core.registries;
 
+import com.teambr.bookshelf.helpers.BlockHelper;
+import com.teambr.bookshelf.helpers.LogHelper;
+import com.teambr.bookshelf.util.JsonUtils;
 import com.google.gson.reflect.TypeToken;
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.calculations.Calculation;
 import com.pauljoda.modularsystems.core.collections.BlockValues;
-import com.pauljoda.modularsystems.core.helpers.BlockHelper;
-import com.pauljoda.modularsystems.core.helpers.LogHelper;
-import com.pauljoda.modularsystems.core.utils.JsonUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -41,7 +41,8 @@ public class BlockValueRegistry {
      */
     public boolean loadFromFile() {
         LogHelper.info("Loading Block Values...");
-        values = JsonUtils.<LinkedHashMap<String, BlockValues>>readFromJson(new TypeToken<LinkedHashMap<String, BlockValues>>() {}, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "blockValues.json");
+        values = JsonUtils.<LinkedHashMap<String, BlockValues>>readFromJson(new TypeToken<LinkedHashMap<String, BlockValues>>() {
+        }, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "blockValues.json");
         return values != null;
     }
 
@@ -60,13 +61,29 @@ public class BlockValueRegistry {
     public void generateDefaults() {
         validateList();
         addBlockValues(Blocks.redstone_block, -1,
-                new Calculation(-50, 0, 2, 0, -50, 0, true),
-                new Calculation(-50, 0, 2, 0, -50, 0, true),
-                new Calculation(0, 0, 0, 0, 0, 0, false));
+                new Calculation(-1, 50, 0, 2, 0, -50, 0),
+                new Calculation(-1, 50, 0, 2, 0, -50, 0),
+                new Calculation(1, 1, 0, 0, 0, 0, 0));
         addBlockValues(Blocks.quartz_block, -1,
-                new Calculation(1, 0, 1, 0, 0, 0, false),
-                new Calculation(1, 0, 1, 0, 0, 0, false),
-                new Calculation(1, 0, 1, 0, 1, 5, false));
+                new Calculation(1, 1, 0, 1, 0, 0, 0),
+                new Calculation(1, 1, 0, 1, 0, 0, 0),
+                new Calculation(1, 1, 0, 1, 0, 1, 3));
+        addBlockValues(Blocks.gold_block, -1,
+                new Calculation(1, 1, 0, 0, 0, 0, 0),
+                new Calculation(8, 1, 0, 1, 0, 0, 50),
+                new Calculation(1, 1, 0, 0, 0, 0, 0));
+        addBlockValues(Blocks.diamond_block, -1,
+                new Calculation(-8, 1, 0, 1, 0, -40, 0),
+                new Calculation(10, 1, 0, 1, 0, 0, 100),
+                new Calculation(1, 1, 0, 0, 0, 0, 0));
+        addBlockValues(Blocks.lapis_block, -1,
+                new Calculation(-5, 1, 0, 1, 0, -25, 0),
+                new Calculation(5, 1, 0, 1, 0, 0, 50),
+                new Calculation(1, 1, 0, 0, 0, 0, 0));
+        addBlockValues(Blocks.brick_block, -1,
+                new Calculation(10, 1, 0, 1, 0, 0, 50),
+                new Calculation(-10, 1, 0, 1, 0, -50, 0),
+                new Calculation(1, 1, 0, 1, 0, 0, 5));
     }
 
     public void addBlockValues(Block block, int meta, Calculation speed, Calculation efficiency, Calculation multiplicity) {

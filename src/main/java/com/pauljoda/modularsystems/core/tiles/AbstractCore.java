@@ -1,12 +1,13 @@
 package com.pauljoda.modularsystems.core.tiles;
 
-import com.dyonovan.brlib.collections.Couplet;
-import com.dyonovan.brlib.collections.Location;
-import com.dyonovan.brlib.common.blocks.BaseBlock;
-import com.dyonovan.brlib.common.tiles.BaseTile;
-import com.dyonovan.brlib.util.WorldUtils;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
+import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.furnace.collections.StandardValues;
+import com.teambr.bookshelf.collections.Couplet;
+import com.teambr.bookshelf.collections.Location;
+import com.teambr.bookshelf.common.blocks.BaseBlock;
+import com.teambr.bookshelf.common.tiles.BaseTile;
+import com.teambr.bookshelf.util.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -157,6 +158,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
             dummy.setMetadata(meta);
         }
         generateValues(blockCount);
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     public void breakMultiBlock() {
@@ -285,6 +287,8 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
                     this.values.burnTime = 0;
                     didWork = true;
                 }
+            } else if(worldObj.getBlock(xCoord, yCoord, zCoord) == BlockManager.furnaceCoreActive) {
+                didWork = true;
             }
 
             if (didWork) {
@@ -372,7 +376,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
         if (smeltAvailable < inAvailable) {
             avail = smeltAvailable;
-            count = (int)values.getMultiplicity();
+            count = (int) (recipeStackSize + values.getMultiplicity());
         } else {
             avail = inAvailable;
             count = input.stackSize;
@@ -626,5 +630,9 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
     public void setDirty() {
         isDirty = true;
+    }
+
+    public StandardValues getValues() {
+        return values;
     }
 }

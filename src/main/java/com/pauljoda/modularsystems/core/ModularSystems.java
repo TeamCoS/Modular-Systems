@@ -23,7 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.io.File;
 
-@Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID, version = Reference.VERSION)
+@Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID, version = Reference.VERSION, dependencies = Reference.DEPENDENCIES)
 public class ModularSystems {
     @Mod.Instance(Reference.MOD_ID)
     public static ModularSystems instance;

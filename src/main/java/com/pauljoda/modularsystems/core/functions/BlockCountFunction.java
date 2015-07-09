@@ -1,6 +1,6 @@
 package com.pauljoda.modularsystems.core.functions;
 
-import com.pauljoda.modularsystems.core.helpers.BlockHelper;
+import com.teambr.bookshelf.helpers.BlockHelper;
 import net.minecraft.block.Block;
 
 import java.util.HashMap;

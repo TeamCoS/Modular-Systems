@@ -1,6 +1,6 @@
 package com.pauljoda.modularsystems.furnace.collections;
 
-import com.dyonovan.brlib.collections.InventoryTile;
+import com.teambr.bookshelf.collections.InventoryTile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
