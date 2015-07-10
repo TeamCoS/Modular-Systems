@@ -7,7 +7,6 @@ import net.minecraft.nbt.NBTTagCompound;
 public class DummyIO extends DummyTile {
 
     protected boolean input = true;
-    protected boolean output = true;
 
     /******************************************************************************************************************
      **************************************************  Tile Methods  ************************************************
@@ -16,13 +15,13 @@ public class DummyIO extends DummyTile {
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
-
+        tagCompound.setBoolean("Input", input);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
-
+        input = tagCompound.getBoolean("Input");
     }
 
     /*****************************************************************************************************************
@@ -79,13 +78,13 @@ public class DummyIO extends DummyTile {
     @Override
     public boolean canInsertItem(int i, ItemStack itemstack, int j) {
         AbstractCore core = getCore();
-        return core != null && core.canInsertItem(i, itemstack, j);
+        return input && core != null && core.canInsertItem(i, itemstack, j);
     }
 
     @Override
     public boolean canExtractItem(int i, ItemStack itemstack, int j) {
         AbstractCore core = getCore();
-        return core != null && core.canExtractItem(i, itemstack, j);
+        return !input && core != null && core.canExtractItem(i, itemstack, j);
     }
 
     @Override

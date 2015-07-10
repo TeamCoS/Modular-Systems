@@ -77,6 +77,7 @@ public class BlockFurnaceCore extends BaseBlock {
         if (tileentity != null) {
             tileentity.validate();
             world.setTileEntity(x, y, z, tileentity);
+            world.markBlockForUpdate(x, y, z);
         }
     }
 

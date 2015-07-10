@@ -15,7 +15,7 @@ public class ContainerModularFurnace extends Container {
         this.tileEntity = tileEntity;
 
         // Input
-        addSlotToContainer(new Slot(tileEntity, 0, 56, 17));
+        addSlotToContainer(new Slot(tileEntity, 0, 56, 35));
 
         // Output
         addSlotToContainer(new SlotFurnace(playerInventory.player, tileEntity, 1, 116, 35));
