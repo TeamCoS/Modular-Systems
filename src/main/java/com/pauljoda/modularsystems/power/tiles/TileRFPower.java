@@ -23,18 +23,17 @@ public class TileRFPower extends TilePowerBase implements IEnergyHandler, FuelPr
 
     @Override
     public boolean canProvide() {
-        return energyRF.getEnergyStored() > RF_PROCESS;
+        return energyRF.getEnergyStored() > 0;
     }
 
     @Override
     public double fuelProvided() {
-        return FUEL_USAGE;
+        return energyRF.extractEnergy(RF_PROCESS, true);
     }
 
     @Override
     public double consume() {
-        energyRF.extractEnergy(RF_PROCESS, false);
-        return FUEL_USAGE;
+        return energyRF.extractEnergy(RF_PROCESS, false);
     }
 
     @Override

@@ -147,8 +147,10 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
                 continue;
 
             //Make sure we aren't already formed
-            if(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof DummyTile)
+            if(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof DummyTile) {
+                ((DummyTile)worldObj.getTileEntity(loc.x, loc.y, loc.z)).setCore(this);
                 continue;
+            }
 
             blockCount.addBlock(worldObj.getBlock(loc.x, loc.y, loc.z), worldObj.getBlockMetadata(loc.x, loc.y, loc.z));
 
@@ -181,13 +183,19 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
                 continue;
 
             //Just to be safe
-            if(!(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof DummyTile))
+            if(!(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof DummyTile)) {
                 continue;
+            }
 
             DummyTile dummy = (DummyTile)worldObj.getTileEntity(loc.x, loc.y, loc.z);
             int meta = dummy.getMetadata();
-            worldObj.setBlock(loc.x, loc.y, loc.z, dummy.getStoredBlock());
-            worldObj.setBlockMetadataWithNotify(loc.x, loc.y, loc.z, meta, 2);
+            if(dummy instanceof FuelProvider) {
+                dummy.unsetCore();
+                worldObj.markBlockForUpdate(loc.x, loc.y, loc.z);
+            } else {
+                worldObj.setBlock(loc.x, loc.y, loc.z, dummy.getStoredBlock());
+                worldObj.setBlockMetadataWithNotify(loc.x, loc.y, loc.z, meta, 2);
+            }
         }
         wellFormed = false;
     }
