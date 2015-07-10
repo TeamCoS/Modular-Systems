@@ -16,7 +16,7 @@ public class StandardValues {
     InventoryTile inventory;
 
     public StandardValues() {
-        inventory = new InventoryTile(3);
+        inventory = new InventoryTile(2);
     }
 
     public void resetStructureValues() {
@@ -155,8 +155,7 @@ public class StandardValues {
      * Set the itemstack into a slot
      *
      * 0 - Input
-     * 1 - Fuel
-     * 2 - Output
+     * 1 - Output
      *
      * @param slot What slot to insert into
      * @param stack The stack to set
@@ -165,8 +164,6 @@ public class StandardValues {
         if (slot == 0) {
             setInput(stack);
         } else if (slot == 1) {
-            setFuel(stack);
-        } else if (slot == 2) {
             setOutput(stack);
         }
     }
@@ -195,37 +192,11 @@ public class StandardValues {
     }
 
     /**
-     * Get the ItemStack in the fuel slot
-     * @return {@link ItemStack} in the fuel slot
-     */
-    public ItemStack getFuel() {
-        return inventory.getStackInSlot(1);
-    }
-
-    /**
-     * Set the fuel slot ItemStack
-     * @param is {@link ItemStack} to set in the fuel slot
-     */
-    public void setFuel(ItemStack is) {
-        inventory.setStackInSlot(is, 1);
-    }
-
-    /**
-     * Consumes one item from the fuel slot
-     */
-    public void consumeFuel() {
-        inventory.getStackInSlot(1).stackSize--;
-        if (inventory.getStackInSlot(1).stackSize == 0) {
-            setFuel(null);
-        }
-    }
-
-    /**
      * Get the ItemStack in the output slot
      * @return The ItemStack in the output slot
      */
     public ItemStack getOutput() {
-        return inventory.getStackInSlot(2);
+        return inventory.getStackInSlot(1);
     }
 
     /**
@@ -233,7 +204,7 @@ public class StandardValues {
      * @param is The ItemStack to set into the output
      */
     public void setOutput(ItemStack is) {
-        inventory.setStackInSlot(is, 2);
+        inventory.setStackInSlot(is, 1);
     }
 
     /**
@@ -242,7 +213,6 @@ public class StandardValues {
     public void checkInventorySlots() {
         checkInput();
         checkOutput();
-        checkFuel();
     }
 
     /**
@@ -260,15 +230,6 @@ public class StandardValues {
     public void checkOutput() {
         if (getOutput() != null && getOutput().stackSize <= 0) {
             setOutput(null);
-        }
-    }
-
-    /**
-     * Checks to make sure the fuel is valid, clears if below 0
-     */
-    public void checkFuel() {
-        if (getFuel() != null && getFuel().stackSize <= 0) {
-            setFuel(null);
         }
     }
 

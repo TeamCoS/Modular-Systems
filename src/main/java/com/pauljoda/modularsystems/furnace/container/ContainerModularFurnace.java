@@ -4,18 +4,12 @@ import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.tileentity.TileEntityFurnace;
 
 public class ContainerModularFurnace extends Container {
     private TileEntityFurnaceCore tileEntity;
-    private int lastCookTime;
-    private int lastBurnTime;
-    private int lastItemBurnTime;
 
     public ContainerModularFurnace(InventoryPlayer playerInventory, TileEntityFurnaceCore tileEntity) {
         this.tileEntity = tileEntity;
@@ -23,63 +17,10 @@ public class ContainerModularFurnace extends Container {
         // Input
         addSlotToContainer(new Slot(tileEntity, 0, 56, 17));
 
-        // Fuel
-        addSlotToContainer(new Slot(tileEntity, 1, 56, 53));
-
         // Output
-        addSlotToContainer(new SlotFurnace(playerInventory.player, tileEntity, 2, 116, 35));
+        addSlotToContainer(new SlotFurnace(playerInventory.player, tileEntity, 1, 116, 35));
 
         bindPlayerInventory(playerInventory);
-    }
-
-    @Override
-    public void addCraftingToCrafters(ICrafting par1ICrafting) {
-        super.addCraftingToCrafters(par1ICrafting);
-        par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.getFurnaceCookTime());
-        par1ICrafting.sendProgressBarUpdate(this, 1, this.tileEntity.getFurnaceBurnTime());
-        par1ICrafting.sendProgressBarUpdate(this, 2, this.tileEntity.getCurrentItemBurnTime());
-    }
-
-    @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
-        for (int i = 0; i < this.crafters.size(); ++i) {
-            ICrafting icrafting = (ICrafting)this.crafters.get(i);
-
-            if (this.lastCookTime != this.tileEntity.getFurnaceCookTime()) {
-                icrafting.sendProgressBarUpdate(this, 0, this.tileEntity.getFurnaceCookTime());
-            }
-
-            if (this.lastBurnTime != this.tileEntity.getFurnaceBurnTime()) {
-                icrafting.sendProgressBarUpdate(this, 1, this.tileEntity.getFurnaceBurnTime());
-            }
-
-            if (this.lastItemBurnTime != this.tileEntity.getCurrentItemBurnTime()) {
-                icrafting.sendProgressBarUpdate(this, 2, this.tileEntity.getCurrentItemBurnTime());
-            }
-        }
-
-        this.lastCookTime = this.tileEntity.getFurnaceCookTime();
-        this.lastBurnTime = this.tileEntity.getFurnaceBurnTime();
-        this.lastItemBurnTime = this.tileEntity.getCurrentItemBurnTime();
-    }
-
-    @Override
-    public void updateProgressBar(int par1, int par2)
-    {
-        if (par1 == 0) {
-            tileEntity.setFurnaceCookTime(par2);
-        } else if (par1 == 1) {
-            tileEntity.setFurnaceBurnTime(par2);
-        } else if (par1 == 2) {
-            tileEntity.setCurrentItemBurnTime(par2);
-        }
-    }
-
-    @Override
-    public boolean canInteractWith(EntityPlayer entityPlayer)
-    {
-        return tileEntity.isUseableByPlayer(entityPlayer);
     }
 
     private void bindPlayerInventory(InventoryPlayer playerInventory)
@@ -102,24 +43,14 @@ public class ContainerModularFurnace extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (par2 == 2) {
+            if (par2 == 1) {
                 if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
                     return null;
                 }
                 slot.onSlotChange(itemstack1, itemstack);
             }
-            else if (par2 != 1 && par2 != 0) {
-                if (FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null) {
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
-                        return null;
-                    }
-                }
-                else if (TileEntityFurnace.isItemFuel(itemstack1)) {
-                    if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
-                        return null;
-                    }
-                }
-                else if (par2 >= 3 && par2 < 30) {
+            else if (par2 != 0) {
+                if (par2 >= 3 && par2 < 30) {
                     if (!this.mergeItemStack(itemstack1, 30, 39, false)) {
                         return null;
                     }
@@ -146,5 +77,10 @@ public class ContainerModularFurnace extends Container {
             slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
         }
         return itemstack;
+    }
+
+    @Override
+    public boolean canInteractWith(EntityPlayer p_75145_1_) {
+        return true;
     }
 }

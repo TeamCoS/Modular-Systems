@@ -3,7 +3,6 @@ package com.pauljoda.modularsystems.core.tiles;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.providers.FuelProvider;
-import com.pauljoda.modularsystems.core.providers.ItemFuelProvider;
 import com.pauljoda.modularsystems.furnace.collections.StandardValues;
 import com.teambr.bookshelf.collections.Couplet;
 import com.teambr.bookshelf.collections.Location;
@@ -309,6 +308,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
                     this.values.burnTime = 0;
                     didWork = true;
                 }
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
             } else if(worldObj.getBlock(xCoord, yCoord, zCoord) == BlockManager.furnaceCoreActive) {
                 didWork = true;
             }
@@ -331,10 +331,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
                 }
             }
         }
-        provider = new ItemFuelProvider(values.getFuel());
-        if (provider.canProvide()) {
-            providers.add(provider);
-        }
+
         Collections.sort(providers, new FuelProvider.FuelSorter());
         return providers;
     }
@@ -528,8 +525,6 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
         if (slot == 0) {
             temp = values.getInput();
         } else if (slot == 1) {
-            temp = values.getFuel();
-        } else if (slot == 2) {
             temp = values.getOutput();
         }
         return temp;
@@ -559,8 +554,6 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
         if (slot == 0) {
             values.setInput(itemStack);
         } else if (slot == 1) {
-            values.setFuel(itemStack);
-        } else if (slot == 2) {
             values.setOutput(itemStack);
         }
 
@@ -614,8 +607,6 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
         values.setInput(null);
         expelItem(values.getOutput());
         values.setOutput(null);
-        expelItem(values.getFuel());
-        values.setFuel(null);
     }
 
     private void expelItem(ItemStack itemstack) {
