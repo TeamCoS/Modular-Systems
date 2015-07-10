@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core.waila;
+package com.pauljoda.modularsystems.core.api.waila;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;

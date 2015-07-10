@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.core.waila;
+package com.pauljoda.modularsystems.core.api.waila;
 
 import java.util.List;
 

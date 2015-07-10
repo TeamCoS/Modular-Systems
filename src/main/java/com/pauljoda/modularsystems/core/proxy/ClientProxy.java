@@ -22,6 +22,6 @@ public class ClientProxy extends CommonProxy {
 
         //Register with Waila
         FMLInterModComms.sendMessage("Waila", "register",
-                "com.pauljoda.modularsystems.core.waila.WailaDataProvider.callbackRegister");
+                "com.pauljoda.modularsystems.core.api.waila.WailaDataProvider.callbackRegister");
     }
 }
