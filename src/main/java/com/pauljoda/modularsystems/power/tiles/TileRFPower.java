@@ -15,9 +15,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class TileRFPower extends TilePowerBase implements IEnergyHandler, FuelProvider, IOpensGui {
 
     public static final int RF_PROCESS = 80;
-    public static final int FUEL_USAGE = 80;
 
-    protected EnergyStorage energyRF;
+    public EnergyStorage energyRF;
 
     public TileRFPower() {
         energyRF = new EnergyStorage(10000);

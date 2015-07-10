@@ -27,8 +27,12 @@ public abstract class GuiComponentPowerBar extends BaseComponent {
         GL11.glTranslated(guiLeft + xPos, guiTop + yPos, 0);
         RenderUtils.bindGuiComponentsSheet();
 
+        drawTexturedModalRect(0, 0, u, v, getWidth(), getHeight());
+        drawTexturedModalRect(0, 0, 19, v + (getEnergyPercent() - 100), getWidth(), getEnergyPercent());
 
         GL11.glPopMatrix();
+
+
     }
 
     @Override
@@ -38,11 +42,11 @@ public abstract class GuiComponentPowerBar extends BaseComponent {
 
     @Override
     public int getWidth() {
-        return 0;
+        return 18;
     }
 
     @Override
     public int getHeight() {
-        return 0;
+        return 74;
     }
 }
