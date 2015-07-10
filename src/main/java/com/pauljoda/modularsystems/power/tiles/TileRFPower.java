@@ -3,7 +3,6 @@ package com.pauljoda.modularsystems.power.tiles;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import com.pauljoda.modularsystems.core.providers.FuelProvider;
-import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
 import com.pauljoda.modularsystems.power.container.ContainerRFPower;
 import com.pauljoda.modularsystems.power.gui.GuiRFPower;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
