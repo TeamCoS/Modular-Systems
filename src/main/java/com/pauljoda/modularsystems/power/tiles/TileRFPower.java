@@ -38,7 +38,9 @@ public class TileRFPower extends TilePowerBase implements IEnergyHandler, FuelPr
 
     @Override
     public double consume() {
-        return energyRF.extractEnergy(RF_PROCESS, false);
+        int actual = energyRF.extractEnergy(RF_PROCESS, false);
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        return actual;
     }
 
     @Override
