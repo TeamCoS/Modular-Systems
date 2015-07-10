@@ -91,7 +91,7 @@ public class BlockValueRegistry {
         if(!isBlockRegistered(block, meta)) {
             values.put(BlockHelper.getBlockString(block, meta), new BlockValues(speed, efficiency, multiplicity));
         } else {
-            LogHelper.info("Someone attempted to add a value to a block that already has a value. Replacing...");
+            LogHelper.info("Someone attempted to add a value to a blocks that already has a value. Replacing...");
             values.get(BlockHelper.getBlockString(block, meta)).setSpeedFunction(speed);
             values.get(BlockHelper.getBlockString(block, meta)).setEfficiencyFunction(efficiency);
             values.get(BlockHelper.getBlockString(block, meta)).setMultiplicityFunction(multiplicity);
@@ -99,7 +99,7 @@ public class BlockValueRegistry {
     }
 
     /**
-     * Is this block registered in the registry
+     * Is this blocks registered in the registry
      * @param block Block to check
      * @return True if found
      */

@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.core.registries;
 
+import com.pauljoda.modularsystems.power.blocks.BlockPower;
 import com.teambr.bookshelf.helpers.LogHelper;
 import com.teambr.bookshelf.util.JsonUtils;
 import com.google.gson.reflect.TypeToken;
@@ -86,7 +87,7 @@ public class FurnaceBannedBlocks {
 
     /**
      * Check on the fly if this is bad
-     * @param block The block to check
+     * @param block The blocks to check
      * @return True if it shouldn't be there
      */
     public static boolean isBadBlockFromBlock(Block block) {
@@ -115,8 +116,8 @@ public class FurnaceBannedBlocks {
     }
 
     /**
-     * Add a block to the ban registry
-     * @param block The block to ban
+     * Add a blocks to the ban registry
+     * @param block The blocks to ban
      * @param meta The blocks metadata
      */
     public void addBannedBlock(Block block, int meta) {
@@ -128,7 +129,7 @@ public class FurnaceBannedBlocks {
 
     /**
      * Used for adding by name, useful with command
-     * @param blockName The name of the block
+     * @param blockName The name of the blocks
      *                  'modid:blockname:meta'
      */
     public void addBannedBlock(String blockName) {
@@ -138,9 +139,9 @@ public class FurnaceBannedBlocks {
     }
 
     /**
-     * Check if the block has been listed as banned
-     * @param block The block to check
-     * @param meta The block's metadata
+     * Check if the blocks has been listed as banned
+     * @param block The blocks to check
+     * @param meta The blocks's metadata
      * @return True if is banned
      */
     public boolean isBlockBanned(Block block, int meta) {

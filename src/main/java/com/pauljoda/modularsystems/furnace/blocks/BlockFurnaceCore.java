@@ -58,7 +58,7 @@ public class BlockFurnaceCore extends BaseBlock {
     }
 
     /**
-     * Update which block the furnace is using depending on whether or not it is burning
+     * Update which blocks the furnace is using depending on whether or not it is burning
      */
     public static void updateFurnaceBlockState(boolean active, World world, int x, int y, int z) {
         int l = world.getBlockMetadata(x, y, z);
@@ -143,7 +143,7 @@ public class BlockFurnaceCore extends BaseBlock {
     }
 
     /**
-     * If this returns true, then comparators facing away from this block will use the value from
+     * If this returns true, then comparators facing away from this blocks will use the value from
      * getComparatorInputOverride instead of the actual redstone signal strength.
      */
     public boolean hasComparatorInputOverride() {
@@ -152,7 +152,7 @@ public class BlockFurnaceCore extends BaseBlock {
 
     /**
      * If hasComparatorInputOverride returns true, the return value from this is used instead of the redstone signal
-     * strength when this block inputs to a comparator.
+     * strength when this blocks inputs to a comparator.
      */
     public int getComparatorInputOverride(World world, int x, int y, int z, int meta) {
         return Container.calcRedstoneFromInventory((IInventory) world.getTileEntity(x, y, z));

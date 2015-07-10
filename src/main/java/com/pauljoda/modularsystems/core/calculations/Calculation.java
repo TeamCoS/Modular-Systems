@@ -39,7 +39,7 @@ public class Calculation {
 
     /**
      * Calculate the result using the defined function
-     * @param x The block count or 'x' in the function
+     * @param x The blocks count or 'x' in the function
      * @return F(x)
      */
     public double F(int x) {

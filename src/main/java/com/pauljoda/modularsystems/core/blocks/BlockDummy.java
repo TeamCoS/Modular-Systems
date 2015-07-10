@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.furnace.blocks;
+package com.pauljoda.modularsystems.core.blocks;
 
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.renderers.BlockDummyRenderer;
@@ -14,13 +14,14 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
 public class BlockDummy extends BaseBlock {
-    public BlockDummy() {
-        super(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class);
+    public BlockDummy(Material mat, String name, Class<? extends TileEntity> tile) {
+        super(mat, name, tile);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class BlockDummy extends BaseBlock {
     }
 
     /**
-     * Called when the block is activated. We are using it to open our GUI
+     * Called when the blocks is activated. We are using it to open our GUI
      */
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
@@ -74,7 +75,7 @@ public class BlockDummy extends BaseBlock {
 
 
     /**
-     * Used to add the textures for the block. Uses block name by default
+     * Used to add the textures for the blocks. Uses blocks name by default
      *
      * Initialize the {@link BlockTextures} object here
      * @param iconRegister Icon Registry

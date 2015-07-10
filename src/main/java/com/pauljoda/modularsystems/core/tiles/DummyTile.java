@@ -31,8 +31,8 @@ public class DummyTile extends BaseTile implements ISidedInventory {
     }
 
     /**
-     * Returns the block stored
-     * @return The block if found, cobblestone if not
+     * Returns the blocks stored
+     * @return The blocks if found, cobblestone if not
      */
     public Block getStoredBlock() {
         return Block.getBlockById(storedBlock) != null ? Block.getBlockById(storedBlock) : Blocks.cobblestone;
@@ -151,15 +151,15 @@ public class DummyTile extends BaseTile implements ISidedInventory {
      ******************************************************************************************************************/
 
     /**
-     * Set the block to be stored in the dummy
-     * @param id The block id
+     * Set the blocks to be stored in the dummy
+     * @param id The blocks id
      */
     public void setBlock(int id) {
         this.storedBlock = id;
     }
 
     /**
-     * Set the metadata of the stored block
+     * Set the metadata of the stored blocks
      * @param metadata The metadata to store
      */
     public void setMetadata(int metadata) {

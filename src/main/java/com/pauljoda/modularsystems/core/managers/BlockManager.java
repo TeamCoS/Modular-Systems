@@ -1,22 +1,27 @@
 package com.pauljoda.modularsystems.core.managers;
 
+import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
-import com.pauljoda.modularsystems.furnace.blocks.BlockDummy;
+import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
+import com.pauljoda.modularsystems.power.blocks.BlockPower;
+import com.pauljoda.modularsystems.power.tiles.TileRFPower;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockManager {
 
-    public static Block furnaceCore, furnaceCoreActive, dummy;
+    public static Block furnaceCore, furnaceCoreActive, dummy, powerRF;
 
     public static void init() {
         registerBlock(furnaceCore = new BlockFurnaceCore(false), "furnaceCore", TileEntityFurnaceCore.class);
         registerBlock(furnaceCoreActive = new BlockFurnaceCore(true), "furnaceCoreActive", TileEntityFurnaceCore.class);
-        registerBlock(dummy = new BlockDummy(), "dummy", DummyTile.class);
+        registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);
+        registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFPower.class), "powerRF", TileRFPower.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {

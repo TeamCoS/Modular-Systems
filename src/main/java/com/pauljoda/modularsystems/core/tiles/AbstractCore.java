@@ -44,7 +44,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
     }
 
     /**
-     * Used to set the block to its active and non-active state
+     * Used to set the blocks to its active and non-active state
      * @param positiveBurnTime True if active
      * @param world World object
      * @param x X Coord
@@ -69,16 +69,16 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
 
     /**
-     * Check if this block is not allowed in the structure
-     * @param block The block to check
-     * @param meta The meta data of said block
+     * Check if this blocks is not allowed in the structure
+     * @param block The blocks to check
+     * @param meta The meta data of said blocks
      * @return True if it is banned
      */
     protected abstract boolean isBlockBanned(Block block, int meta);
 
     /**
      * Take the blocks in this structure and generate the speed etc values
-     * @param function The block count function
+     * @param function The blocks count function
      */
     protected abstract void generateValues(BlockCountFunction function);
 

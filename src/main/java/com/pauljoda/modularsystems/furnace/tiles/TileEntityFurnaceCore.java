@@ -5,7 +5,7 @@ import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
-import com.pauljoda.modularsystems.furnace.blocks.BlockDummy;
+import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
 import com.teambr.bookshelf.api.waila.IWaila;
