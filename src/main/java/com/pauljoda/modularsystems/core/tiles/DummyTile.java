@@ -9,15 +9,13 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class AbstractDummy<C extends AbstractCore> extends BaseTile implements ISidedInventory {
+public class DummyTile extends BaseTile implements ISidedInventory {
     private Location coreLocation;
     private int storedBlock;
     private int metadata = 0;
-    private Class<C> coreType;
 
-    public AbstractDummy(Class<C> coreClass) {
+    public DummyTile() {
         coreLocation = new Location();
-        coreType = coreClass;
     }
 
     /**
@@ -25,11 +23,11 @@ public abstract class AbstractDummy<C extends AbstractCore> extends BaseTile imp
      * @return The core object
      */
     @SuppressWarnings("all")
-    public C getCore() {
+    public AbstractCore getCore() {
         if(coreLocation == null) return null;
 
-        return coreType.isInstance(worldObj.getTileEntity(coreLocation.x, coreLocation.y, coreLocation.z)) ?
-                (C) worldObj.getTileEntity(coreLocation.x, coreLocation.y, coreLocation.z) : null;
+        return worldObj.getTileEntity(coreLocation.x, coreLocation.y, coreLocation.z) instanceof AbstractCore ?
+                (AbstractCore) worldObj.getTileEntity(coreLocation.x, coreLocation.y, coreLocation.z) : null;
     }
 
     /**
@@ -67,37 +65,37 @@ public abstract class AbstractDummy<C extends AbstractCore> extends BaseTile imp
 
     @Override
     public int getSizeInventory() {
-        C core = getCore();
+        AbstractCore core = getCore();
         return core == null ? 0 : core.getSizeInventory();
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        C core = getCore();
+        AbstractCore core = getCore();
         return core == null ? null : core.getStackInSlot(i);
     }
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
-        C core = getCore();
+        AbstractCore core = getCore();
         return core == null ? null : core.decrStackSize(i, j);
     }
 
     @Override
     public ItemStack getStackInSlotOnClosing(int i) {
-        C core = getCore();
+        AbstractCore core = getCore();
         return core == null ? null : core.getStackInSlotOnClosing(i);
     }
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
-        C core = getCore();
+        AbstractCore core = getCore();
         if(core != null) core.setInventorySlotContents(i, itemstack);
     }
 
     @Override
     public int getInventoryStackLimit() {
-        C core = getCore();
+        AbstractCore core = getCore();
         return core == null ? 0 : core.getInventoryStackLimit();
     }
 
@@ -108,31 +106,31 @@ public abstract class AbstractDummy<C extends AbstractCore> extends BaseTile imp
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-        C core = getCore();
+        AbstractCore core = getCore();
         return core != null && core.isItemValidForSlot(i, itemstack);
     }
 
     @Override
     public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-        C core = getCore();
+        AbstractCore core = getCore();
         return core != null && core.canInsertItem(i, itemstack, j);
     }
 
     @Override
     public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-        C core = getCore();
+        AbstractCore core = getCore();
         return core != null && core.canExtractItem(i, itemstack, j);
     }
 
     @Override
     public String getInventoryName() {
-        C core = getCore();
+        AbstractCore core = getCore();
         return core == null ? "" : core.getInventoryName();
     }
 
     @Override
     public boolean hasCustomInventoryName() {
-        C core = getCore();
+        AbstractCore core = getCore();
         return core != null && core.hasCustomInventoryName();
     }
 
@@ -144,7 +142,7 @@ public abstract class AbstractDummy<C extends AbstractCore> extends BaseTile imp
 
     @Override
     public int[] getAccessibleSlotsFromSide(int var1) {
-        C core = getCore();
+        AbstractCore core = getCore();
         return core != null ? core.getAccessibleSlotsFromSide(var1) : new int[1];
     }
 
@@ -180,7 +178,7 @@ public abstract class AbstractDummy<C extends AbstractCore> extends BaseTile imp
      * Set the core for this dummy
      * @param core The core
      */
-    public void setCore(C core) {
+    public void setCore(AbstractCore core) {
         this.coreLocation = new Location(core);
     }
 

@@ -67,11 +67,6 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
      */
     protected abstract int getItemBurnTime(ItemStack stack);
 
-    /**
-     * Get the dummy for this type of multi-block
-     * @return The block to set on convert
-     */
-    protected abstract Block getDummyBlock();
 
     /**
      * Check if this block is not allowed in the structure
@@ -152,15 +147,15 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
                 continue;
 
             //Make sure we aren't already formed
-            if(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof AbstractDummy)
+            if(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof DummyTile)
                 continue;
 
             blockCount.addBlock(worldObj.getBlock(loc.x, loc.y, loc.z), worldObj.getBlockMetadata(loc.x, loc.y, loc.z));
 
             int id = Block.getIdFromBlock(worldObj.getBlock(loc.x, loc.y, loc.z));
             int meta = worldObj.getBlockMetadata(loc.x, loc.y, loc.z);
-            worldObj.setBlock(loc.x, loc.y, loc.z, getDummyBlock());
-            AbstractDummy dummy = (AbstractDummy)worldObj.getTileEntity(loc.x, loc.y, loc.z);
+            worldObj.setBlock(loc.x, loc.y, loc.z, BlockManager.dummy);
+            DummyTile dummy = (DummyTile)worldObj.getTileEntity(loc.x, loc.y, loc.z);
             dummy.setCore(this);
             dummy.setBlock(id);
             dummy.setMetadata(meta);
@@ -186,10 +181,10 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
                 continue;
 
             //Just to be safe
-            if(!(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof AbstractDummy))
+            if(!(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof DummyTile))
                 continue;
 
-            AbstractDummy dummy = (AbstractDummy)worldObj.getTileEntity(loc.x, loc.y, loc.z);
+            DummyTile dummy = (DummyTile)worldObj.getTileEntity(loc.x, loc.y, loc.z);
             int meta = dummy.getMetadata();
             worldObj.setBlock(loc.x, loc.y, loc.z, dummy.getStoredBlock());
             worldObj.setBlockMetadataWithNotify(loc.x, loc.y, loc.z, meta, 2);

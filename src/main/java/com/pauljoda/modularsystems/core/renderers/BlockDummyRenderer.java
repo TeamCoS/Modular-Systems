@@ -3,7 +3,7 @@ package com.pauljoda.modularsystems.core.renderers;
 import com.teambr.bookshelf.client.ClientProxy;
 import com.teambr.bookshelf.common.blocks.BaseBlock;
 import com.teambr.bookshelf.util.RenderUtils;
-import com.pauljoda.modularsystems.core.tiles.AbstractDummy;
+import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -23,7 +23,7 @@ public class BlockDummyRenderer implements ISimpleBlockRenderingHandler {
 
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-        AbstractDummy dummy = (AbstractDummy)world.getTileEntity(x, y, z);
+        DummyTile dummy = (DummyTile)world.getTileEntity(x, y, z);
         if(ClientProxy.renderPass == 0) {
             renderer.renderBlockUsingTexture(dummy.getStoredBlock(), x, y, z, dummy.getStoredBlock().getIcon(0, dummy.getMetadata()));
             GL11.glEnable(GL11.GL_BLEND);

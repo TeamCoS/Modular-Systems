@@ -1,12 +1,12 @@
 package com.pauljoda.modularsystems.furnace.blocks;
 
+import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.renderers.BlockDummyRenderer;
+import com.pauljoda.modularsystems.core.tiles.AbstractCore;
+import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.collections.BlockTextures;
 import com.teambr.bookshelf.common.blocks.BaseBlock;
-import com.pauljoda.modularsystems.core.lib.Reference;
-import com.pauljoda.modularsystems.core.renderers.BlockDummyRenderer;
-import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
-import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceDummy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -18,9 +18,9 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockFurnaceDummy extends BaseBlock {
-    public BlockFurnaceDummy() {
-        super(Material.rock, Reference.MOD_ID + ":furnaceDummy", TileEntityFurnaceDummy.class);
+public class BlockDummy extends BaseBlock {
+    public BlockDummy() {
+        super(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class BlockFurnaceDummy extends BaseBlock {
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
         if(!player.isSneaking()) {
-            TileEntityFurnaceDummy us = (TileEntityFurnaceDummy)world.getTileEntity(x, y, z);
+            DummyTile us = (DummyTile)world.getTileEntity(x, y, z);
             if(us.getCore() != null)
                 player.openGui(Bookshelf.instance, 0, world, us.getCore().xCoord, us.getCore().yCoord, us.getCore().zCoord);
             return true;
@@ -44,8 +44,8 @@ public class BlockFurnaceDummy extends BaseBlock {
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
-        TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getTileEntity(x, y, z);
-        TileEntityFurnaceCore core = dummy.getCore();
+        DummyTile dummy = (DummyTile)world.getTileEntity(x, y, z);
+        AbstractCore core = dummy.getCore();
 
         if(core != null) {
             core.setDirty();
@@ -82,7 +82,7 @@ public class BlockFurnaceDummy extends BaseBlock {
     public void generateDefaultTextures(IIconRegister iconRegister) {
         this.blockIcon = iconRegister.registerIcon("minecraft:stone");
         textures = new BlockTextures(iconRegister, "minecraft:stone");
-        textures.setOverlay(iconRegister.registerIcon(Reference.MOD_ID + ":furnaceDummy"));
+        textures.setOverlay(iconRegister.registerIcon(Reference.MOD_ID + ":dummyOverlay"));
     }
 
     @Override
