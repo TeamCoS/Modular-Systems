@@ -17,6 +17,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -45,7 +46,7 @@ public class TileSolidsPower extends TilePowerBase implements IOpensGui, ISidedI
             cooldown = 0;
             for (int i = 0; i < 27; i++) {
                 if (inventory.getStackInSlot(i) != null) {
-                    int value = getFuelValue(inventory.getStackInSlot(i));
+                    int value = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(i));
                     if (value <= 0) continue;
                     if (value + energy.getEnergyStored() < energy.getMaxEnergyStored()) {
                         energy.modifyEnergyStored(value);
@@ -55,38 +56,6 @@ public class TileSolidsPower extends TilePowerBase implements IOpensGui, ISidedI
                 }
             }
         }
-    }
-
-    private int getFuelValue(ItemStack itemStack) {
-        if (itemStack == null) return 0;
-
-        Item item = itemStack.getItem();
-        if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air) {
-            Block block = Block.getBlockFromItem(item);
-            if (block == Blocks.wooden_slab)
-            {
-                return 150;
-            }
-
-            if (block.getMaterial() == Material.wood)
-            {
-                return 300;
-            }
-
-            if (block == Blocks.coal_block)
-            {
-                return 16000;
-            }
-        }
-        if (item instanceof ItemTool && ((ItemTool)item).getToolMaterialName().equals("WOOD")) return 200;
-        if (item instanceof ItemSword && ((ItemSword)item).getToolMaterialName().equals("WOOD")) return 200;
-        if (item instanceof ItemHoe && ((ItemHoe)item).getToolMaterialName().equals("WOOD")) return 200;
-        if (item == Items.stick) return 100;
-        if (item == Items.coal) return 1600;
-        if (item == Items.lava_bucket) return 20000;
-        if (item == Item.getItemFromBlock(Blocks.sapling)) return 100;
-        if (item == Items.blaze_rod) return 2400;
-        return GameRegistry.getFuelValue(itemStack);
     }
 
     /*
@@ -186,7 +155,7 @@ public class TileSolidsPower extends TilePowerBase implements IOpensGui, ISidedI
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-        return getFuelValue(itemstack) > 0;
+        return TileEntityFurnace.isItemFuel(itemstack);
     }
 
     @Override
@@ -207,6 +176,4 @@ public class TileSolidsPower extends TilePowerBase implements IOpensGui, ISidedI
         }
         return sides;
     }
-
-
 }
