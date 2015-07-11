@@ -6,6 +6,7 @@ tile.modularsystems:dummy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O
 tile.modularsystems:powerRF.name=RF Power Supplier
 tile.modularsystems:powerSolids.name=Solid Fuel Power Provider
+tile.modularsystems:powerLiquids.name=Liquid Fuel Power Provider
 
 inventory.furnace.title=Modular Furnace
 
@@ -15,7 +16,7 @@ inventory.io.export=Export
 inventory.io.auto=Auto
 
 inventory.rfpower.title=RF Power Provider
-
+inventory.liquidspower.title=Liquid Fuel Power Provider
 inventory.solidspower.title=Solid Fuel Power Provider
 
 commands.addBannedFurnaceBlock.usage=Usage: <TileName> or "this" to add what is in your hand

@@ -8,6 +8,7 @@ import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.power.blocks.BlockPower;
+import com.pauljoda.modularsystems.power.tiles.TileLiquidsPower;
 import com.pauljoda.modularsystems.power.tiles.TileRFPower;
 import com.pauljoda.modularsystems.power.tiles.TileSolidsPower;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -18,7 +19,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockManager {
 
-    public static Block furnaceCore, furnaceCoreActive, dummy, io, powerRF, powerSolids;
+    public static Block furnaceCore, furnaceCoreActive, dummy, io, powerRF, powerSolids, powerLiquids;
 
     public static void init() {
         registerBlock(furnaceCore = new BlockFurnaceCore(false), "furnaceCore", TileEntityFurnaceCore.class);
@@ -27,6 +28,7 @@ public class BlockManager {
         registerBlock(io = new BlockDummyIO(Material.rock, Reference.MOD_ID + ":dummyIO", DummyIO.class), "dummyIO", DummyIO.class);
         registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFPower.class), "powerRF", TileRFPower.class);
         registerBlock(powerSolids = new BlockPower(Reference.MOD_ID + ":powerSolids", TileSolidsPower.class), "powerSolids", TileSolidsPower.class);
+        registerBlock(powerLiquids = new BlockPower(Reference.MOD_ID + ":powerLiquids", TileLiquidsPower.class), "powerLiquids", TileLiquidsPower.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {
