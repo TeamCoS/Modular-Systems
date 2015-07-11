@@ -1,6 +1,6 @@
 package com.pauljoda.modularsystems.power.container;
 
-import com.pauljoda.modularsystems.furnace.container.ContainerGeneric;
+import com.teambr.bookshelf.inventory.ContainerGeneric;
 
 public class ContainerRFPower extends ContainerGeneric {
 

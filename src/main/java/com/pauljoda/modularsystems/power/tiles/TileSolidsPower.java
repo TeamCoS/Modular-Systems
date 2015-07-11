@@ -13,13 +13,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpensGui, IEnergyHandler, IInventory {
+public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpensGui, IEnergyHandler, ISidedInventory {
 
     public static final int POWER_PROCESS = 200;
 
@@ -44,6 +44,7 @@ public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpe
             for (int i = 0; i < 27; i++) {
                 if (inventory.getStackInSlot(i) != null) {
                     int value = getFuelValue(inventory.getStackInSlot(i));
+                    if (value <= 0) continue;
                     if (value + energySolids.getEnergyStored() < energySolids.getMaxEnergyStored()) {
                         energySolids.modifyEnergyStored(value);
                         decrStackSize(i, 1);
@@ -219,5 +220,29 @@ public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpe
     @Override
     public int getInventoryStackLimit() {
         return 64;
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+        return getFuelValue(itemstack) > 0;
+    }
+
+    @Override
+    public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+        return getCore() != null && isItemValidForSlot(i, itemstack);
+    }
+
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        return false;
+    }
+
+    @Override
+    public int[] getAccessibleSlotsFromSide(int var1) {
+        int[] sides = new int[inventory.getSizeInventory()];
+        for (int x = 0; x < inventory.getSizeInventory(); x++) {
+            sides[x] = x;
+        }
+        return sides;
     }
 }
