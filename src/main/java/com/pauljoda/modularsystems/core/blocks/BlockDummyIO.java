@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 
 public class BlockDummyIO extends BlockDummy {
 
-
     public BlockDummyIO(Material mat, String name, Class<? extends TileEntity> tile) {
         super(mat, name, tile);
     }
@@ -47,8 +46,8 @@ public class BlockDummyIO extends BlockDummy {
      * @param iconRegister Icon Registry
      */
     public void generateDefaultTextures(IIconRegister iconRegister) {
-        this.blockIcon = iconRegister.registerIcon("minecraft:dispenser_top");
-        textures = new BlockTextures(iconRegister, "minecraft:dispenser_top");
-        textures.setOverlay(iconRegister.registerIcon(Reference.MOD_ID + ":dummyOverlay"));
+        this.blockIcon = iconRegister.registerIcon("minecraft:dispenser_front_vertical");
+        textures = new BlockTextures(iconRegister, "minecraft:dispenser_front_vertical");
+        textures.setOverlay(iconRegister.registerIcon(Reference.MOD_ID + ":furnaceOverlay"));
     }
 }

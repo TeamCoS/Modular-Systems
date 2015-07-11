@@ -1,19 +1,35 @@
 package com.pauljoda.modularsystems.core.tiles;
 
+import com.pauljoda.modularsystems.core.utils.InventoryUtils;
 import com.pauljoda.modularsystems.furnace.container.ContainerGeneric;
 import com.pauljoda.modularsystems.furnace.gui.GuiIO;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class DummyIO extends DummyTile implements IOpensGui {
 
     public boolean input = true;
+    public boolean output = true;
+    public boolean auto = true;
+
+    private int coolDown = 80;
 
     public void setInput(boolean bool) {
         input = bool;
+    }
+
+    public void setOutput(boolean bool) {
+        output = bool;
+    }
+
+    public void setAuto(boolean bool) {
+        auto = bool;
     }
 
     /******************************************************************************************************************
@@ -24,12 +40,45 @@ public class DummyIO extends DummyTile implements IOpensGui {
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
         input = tagCompound.getBoolean("Input");
+        output = tagCompound.getBoolean("Output");
+        auto = tagCompound.getBoolean("Auto");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
         tagCompound.setBoolean("Input", input);
+        tagCompound.setBoolean("Output", output);
+        tagCompound.setBoolean("Auto", auto);
+    }
+
+    @Override
+    public void updateEntity() {
+        if(coolDown <= 0) {
+            for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                TileEntity tile = getTileInDirection(dir);
+                if(tile != null && getCore() != null && (!(tile instanceof DummyTile) && !(tile instanceof AbstractCore)) && tile instanceof IInventory && auto) {
+                    if(input) {
+                        for(int i = 0; i < ((IInventory)tile).getSizeInventory(); i++) {
+                            if (InventoryUtils.moveItemInto((IInventory) tile, i, getCore(), -1, 64, dir.getOpposite(), true, true) > 0) {
+                                worldObj.markBlockForUpdate(getCore().xCoord, getCore().yCoord, getCore().zCoord);
+                                return;
+                            }
+                        }
+                    }
+                    if(output) {
+                        for(int i = 0; i < ((IInventory)tile).getSizeInventory(); i++) {
+                            if (InventoryUtils.moveItemInto(getCore(), 1, tile, i, 64, dir.getOpposite(), true, true) > 0) {
+                                worldObj.markBlockForUpdate(getCore().xCoord, getCore().yCoord, getCore().zCoord);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            coolDown = 80;
+        }
+        coolDown--;
     }
 
     /*****************************************************************************************************************
@@ -92,7 +141,7 @@ public class DummyIO extends DummyTile implements IOpensGui {
     @Override
     public boolean canExtractItem(int i, ItemStack itemstack, int j) {
         AbstractCore core = getCore();
-        return !input && core != null && core.canExtractItem(i, itemstack, j);
+        return output && core != null && core.canExtractItem(i, itemstack, j);
     }
 
     @Override
@@ -126,6 +175,6 @@ public class DummyIO extends DummyTile implements IOpensGui {
 
     @Override
     public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new GuiIO(this, new ContainerGeneric(), 100, 100, "inventory.io.title");
+        return new GuiIO(this, new ContainerGeneric(), 100, 70, "inventory.io.title");
     }
 }

@@ -72,8 +72,7 @@ public class BlockDummy extends BaseBlock {
         }
         super.breakBlock(world, x, y, z, par5, par6);
     }
-
-
+    
     /**
      * Used to add the textures for the blocks. Uses blocks name by default
      *
@@ -83,7 +82,7 @@ public class BlockDummy extends BaseBlock {
     public void generateDefaultTextures(IIconRegister iconRegister) {
         this.blockIcon = iconRegister.registerIcon("minecraft:stone");
         textures = new BlockTextures(iconRegister, "minecraft:stone");
-        textures.setOverlay(iconRegister.registerIcon(Reference.MOD_ID + ":dummyOverlay"));
+        textures.setOverlay(iconRegister.registerIcon(Reference.MOD_ID + ":furnaceOverlay"));
     }
 
     @Override

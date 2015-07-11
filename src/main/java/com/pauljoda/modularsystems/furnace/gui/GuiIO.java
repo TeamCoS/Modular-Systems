@@ -18,10 +18,30 @@ public class GuiIO extends GuiBase<ContainerGeneric> {
     @Override
     public void addComponents() {
         if (dummy != null) {
-            components.add(new GuiComponentCheckBox(10, 40, "Hello", dummy.input) {
+            components.add(new GuiComponentCheckBox(20, 20, "inventory.io.import", dummy.input) {
                 @Override
                 public void setValue(boolean bool) {
                     dummy.setInput(bool);
+                    NBTTagCompound tag = new NBTTagCompound();
+                    dummy.writeToNBT(tag);
+                    PacketManager.net.sendToServer(new ClientTileUpdate.Message(dummy.xCoord, dummy.yCoord, dummy.zCoord, tag));
+                }
+            });
+
+            components.add(new GuiComponentCheckBox(20, 35, "inventory.io.export", dummy.output) {
+                @Override
+                public void setValue(boolean bool) {
+                    dummy.setOutput(bool);
+                    NBTTagCompound tag = new NBTTagCompound();
+                    dummy.writeToNBT(tag);
+                    PacketManager.net.sendToServer(new ClientTileUpdate.Message(dummy.xCoord, dummy.yCoord, dummy.zCoord, tag));
+                }
+            });
+
+            components.add(new GuiComponentCheckBox(20, 50, "inventory.io.auto", dummy.auto) {
+                @Override
+                public void setValue(boolean bool) {
+                    dummy.setAuto(bool);
                     NBTTagCompound tag = new NBTTagCompound();
                     dummy.writeToNBT(tag);
                     PacketManager.net.sendToServer(new ClientTileUpdate.Message(dummy.xCoord, dummy.yCoord, dummy.zCoord, tag));

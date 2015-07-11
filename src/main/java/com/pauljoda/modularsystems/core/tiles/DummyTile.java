@@ -45,6 +45,8 @@ public class DummyTile extends BaseTile implements ISidedInventory {
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
+        if(coreLocation == null)
+            coreLocation = new Location();
         coreLocation.readFromNBT(tagCompound);
         storedBlock = tagCompound.getInteger("Stored Block");
         metadata = tagCompound.getInteger("MetaData");

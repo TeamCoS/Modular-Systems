@@ -14,7 +14,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,9 +33,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
     public boolean wellFormed = false;
     private static final int MAX_SIZE = 50;
 
-    protected int[] sides = new int[] { 1 };
-    protected int[] top = new int[] { 0 };
-    protected int[] bottom = new int[] { 2 };
+    protected int[] sides = new int[] { 0, 1 };
 
     public AbstractCore() {
         values = new StandardValues();
@@ -188,7 +185,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
             DummyTile dummy = (DummyTile)worldObj.getTileEntity(loc.x, loc.y, loc.z);
             int meta = dummy.getMetadata();
-            if(dummy instanceof FuelProvider) {
+            if(dummy instanceof FuelProvider || dummy instanceof DummyIO) {
                 dummy.unsetCore();
                 worldObj.markBlockForUpdate(loc.x, loc.y, loc.z);
             } else {
@@ -501,7 +498,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return side == 0 ? bottom : side == 1 ? top : sides;
+        return sides;
     }
 
     @Override
@@ -511,12 +508,12 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return side != 0 || slot != 1 || stack.getItem() == Items.bucket;
+        return slot == 1;
     }
 
     @Override
     public int getSizeInventory() {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -589,11 +586,11 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if (slot == 2)
+        if (slot == 1)
             return false;
-        if (slot == 1 && isItemFuel(stack))
+        else if (recipe(stack) != null)
             return true;
-        return slot == 0;
+        return false;
     }
 
     /**
