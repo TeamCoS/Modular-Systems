@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 
 public class ContainerLiquidsPower extends Container {
@@ -13,6 +14,9 @@ public class ContainerLiquidsPower extends Container {
 
     public ContainerLiquidsPower(InventoryPlayer playerInventory, TileLiquidsPower tileEntity) {
         this.tileEntity = tileEntity;
+
+        addSlotToContainer(new Slot(tileEntity, tileEntity.BUCKET_IN, 60, 40));
+        addSlotToContainer(new SlotFurnace(playerInventory.player, tileEntity, tileEntity.BUCKET_OUT, 120, 40));
 
         bindPlayerInventory(playerInventory);
     }
