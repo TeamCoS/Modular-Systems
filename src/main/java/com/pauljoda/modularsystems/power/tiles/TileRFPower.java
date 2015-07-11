@@ -102,7 +102,7 @@ public class TileRFPower extends TilePowerBase implements IEnergyHandler, FuelPr
 
     @Override
     public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new ContainerRFPower(entityPlayer.inventory, this);
+        return new ContainerRFPower();
     }
 
     @Override

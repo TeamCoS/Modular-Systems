@@ -16,9 +16,9 @@ public class ContainerSolidsPower extends Container {
 
         for (int y = 0; y < 3; y++)
             for (int x = 0; x < 9; x++)
-                addSlotToContainer(new Slot(tileEntity, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
+                addSlotToContainer(new Slot(tileEntity, x + y * 9, 30 + x * 18, 20 + y * 18));
 
-        //bindPlayerInventory(playerInventory);
+        bindPlayerInventory(playerInventory);
     }
 
     @Override
@@ -31,11 +31,11 @@ public class ContainerSolidsPower extends Container {
         // Inventory
         for(int y = 0; y < 3; y++)
             for(int x = 0; x < 9; x++)
-                addSlotToContainer(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
+                addSlotToContainer(new Slot(playerInventory, x + y * 9 + 9, 20 + x * 18, 84 + y * 18));
 
         // Action Bar
         for(int x = 0; x < 9; x++)
-            addSlotToContainer(new Slot(playerInventory, x, 8 + x * 18, 142));
+            addSlotToContainer(new Slot(playerInventory, x, 20 + x * 18, 142));
     }
 
     @Override

@@ -26,7 +26,7 @@ public class GuiRFPower extends GuiBase<ContainerRFPower> {
 
 
     public GuiRFPower(InventoryPlayer player, TileRFPower tileEntity) {
-        super(new ContainerRFPower(player, tileEntity), 175, 165, "inventory.rfpower.title");
+        super(new ContainerRFPower(), 130, 120, "inventory.rfpower.title");
 
         core = tileEntity.getCore();
         this.tileEntity = tileEntity;

@@ -21,7 +21,7 @@ public class GuiSolidsPower extends GuiBase<ContainerSolidsPower> {
 
     @Override
     public void addComponents() {
-        components.add(new GuiComponentPowerBar(10, 10) {
+        components.add(new GuiComponentPowerBar(8, 8) {
             @Override
             public int getEnergyPercent() {
                 return tileEntity.energySolids.getEnergyStored() * 72 / tileEntity.energySolids.getMaxEnergyStored();
