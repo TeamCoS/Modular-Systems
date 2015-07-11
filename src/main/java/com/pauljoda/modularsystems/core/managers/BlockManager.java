@@ -1,6 +1,8 @@
 package com.pauljoda.modularsystems.core.managers;
 
+import com.pauljoda.modularsystems.core.blocks.BlockDummyIO;
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.tiles.DummyIO;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
@@ -16,12 +18,13 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockManager {
 
-    public static Block furnaceCore, furnaceCoreActive, dummy, powerRF, powerSolids;
+    public static Block furnaceCore, furnaceCoreActive, dummy, io, powerRF, powerSolids;
 
     public static void init() {
         registerBlock(furnaceCore = new BlockFurnaceCore(false), "furnaceCore", TileEntityFurnaceCore.class);
         registerBlock(furnaceCoreActive = new BlockFurnaceCore(true), "furnaceCoreActive", TileEntityFurnaceCore.class);
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);
+        registerBlock(io = new BlockDummyIO(Material.rock, Reference.MOD_ID + ":dummyIO", DummyIO.class), "dummyIO", DummyIO.class);
         registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFPower.class), "powerRF", TileRFPower.class);
         registerBlock(powerSolids = new BlockPower(Reference.MOD_ID + ":powerSolids", TileSolidsPower.class), "powerSolids", TileSolidsPower.class);
     }

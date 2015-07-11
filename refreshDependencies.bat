@@ -1,2 +1,2 @@
 ECHO OFF
-gradlew idea --refresh-dependencies
+gradlew idea

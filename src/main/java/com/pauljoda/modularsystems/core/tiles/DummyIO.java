@@ -1,12 +1,20 @@
 package com.pauljoda.modularsystems.core.tiles;
 
+import com.pauljoda.modularsystems.furnace.container.ContainerGeneric;
+import com.pauljoda.modularsystems.furnace.gui.GuiIO;
+import com.teambr.bookshelf.common.tiles.IOpensGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
-public class DummyIO extends DummyTile {
+public class DummyIO extends DummyTile implements IOpensGui {
 
-    protected boolean input = true;
+    public boolean input = true;
+
+    public void setInput(boolean bool) {
+        input = bool;
+    }
 
     /******************************************************************************************************************
      **************************************************  Tile Methods  ************************************************
@@ -15,13 +23,13 @@ public class DummyIO extends DummyTile {
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
-        tagCompound.setBoolean("Input", input);
+        input = tagCompound.getBoolean("Input");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
-        input = tagCompound.getBoolean("Input");
+        tagCompound.setBoolean("Input", input);
     }
 
     /*****************************************************************************************************************
@@ -109,5 +117,15 @@ public class DummyIO extends DummyTile {
     public int[] getAccessibleSlotsFromSide(int var1) {
         AbstractCore core = getCore();
         return core != null ? core.getAccessibleSlotsFromSide(var1) : new int[1];
+    }
+
+    @Override
+    public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
+        return new ContainerGeneric();
+    }
+
+    @Override
+    public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
+        return new GuiIO(this, new ContainerGeneric(), 100, 100, "inventory.io.title");
     }
 }
