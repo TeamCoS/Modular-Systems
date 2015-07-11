@@ -1,7 +1,6 @@
 package com.pauljoda.modularsystems.power.gui;
 
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
-import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.power.container.ContainerRFPower;
 import com.pauljoda.modularsystems.power.tiles.TileRFPower;
 import com.teambr.bookshelf.Bookshelf;
@@ -19,17 +18,25 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiRFPower extends GuiBase<ContainerRFPower> {
+public class GuiRFPower extends GuiPowerBase<ContainerRFPower, TileRFPower> {
 
-    protected AbstractCore core;
     protected TileRFPower tileEntity;
 
-
     public GuiRFPower(InventoryPlayer player, TileRFPower tileEntity) {
-        super(new ContainerRFPower(), 130, 120, "inventory.rfpower.title");
+        super(new ContainerRFPower(), tileEntity, 130, 120, "inventory.rfpower.title");
 
-        core = tileEntity.getCore();
         this.tileEntity = tileEntity;
+    }
+
+    @Override
+    public void drawGuiContainerForegroundLayer(int x, int y) {
+        super.drawGuiContainerForegroundLayer(x, y);
+
+        ArrayList<String> toolTipPower = new ArrayList<>();
+        toolTipPower.add(tileEntity.getEnergyStored(null) + " / " + tileEntity.getMaxEnergyStored(null));
+        components.get(0).setToolTip(toolTipPower);
+
+        rightTabs.getTabs().get(0).setIcon(new ItemStack(core.getWorldObj().getBlock(core.xCoord, core.yCoord, core.zCoord)));
     }
 
     @Override
@@ -42,30 +49,5 @@ public class GuiRFPower extends GuiBase<ContainerRFPower> {
         });
     }
 
-    /*
-     * Side Tabs
-     */
-    @Override
-    public void addRightTabs(GuiTabCollection tabs) {
-        List<BaseComponent> coreTab = new ArrayList<>();
-        tabs.addTab(coreTab, 95, 100, new Color(100, 150, 150), new ItemStack(Blocks.furnace), false);
-        tabs.getTabs().get(0).setMouseEventListener(new IMouseEventListener() {
-            @Override
-            public void onMouseDown(BaseComponent baseComponent, int i, int i1, int i2) {
 
-                if(tileEntity.getCore() != null)
-                    Minecraft.getMinecraft().thePlayer.openGui(Bookshelf.instance, 0, tileEntity.getWorldObj(), tileEntity.getCore().xCoord, tileEntity.getCore().yCoord, tileEntity.getCore().zCoord);
-            }
-
-            @Override
-            public void onMouseUp(BaseComponent baseComponent, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onMouseDrag(BaseComponent baseComponent, int i, int i1, int i2, long l) {
-
-            }
-        });
-    }
 }

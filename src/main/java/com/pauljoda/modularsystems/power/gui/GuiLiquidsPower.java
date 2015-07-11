@@ -64,9 +64,13 @@ public class GuiLiquidsPower extends GuiBase<ContainerLiquidsPower> {
     public void drawGuiContainerForegroundLayer(int x, int y) {
         super.drawGuiContainerForegroundLayer(x, y);
 
-        ArrayList<String> toolTip = new ArrayList<>();
-        toolTip.add(tileEntity.getEnergyStored(null) + " / " + tileEntity.getMaxEnergyStored(null));
-        components.get(0).setToolTip(toolTip);
+
+        ArrayList<String> toolTipLiquid = new ArrayList<>();
+        toolTipLiquid.add(tileEntity.tank.getFluidAmount() + " / " + tileEntity.tank.getCapacity());
+        components.get(1).setToolTip(toolTipLiquid);
+
+        rightTabs.getTabs().get(0).setIcon(new ItemStack(core.getWorldObj().getBlock(core.xCoord, core.yCoord, core.zCoord)));
+
     }
 
     /*
