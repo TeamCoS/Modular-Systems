@@ -1,14 +1,10 @@
 package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
-import com.pauljoda.modularsystems.core.providers.FuelProvider;
-import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.power.container.ContainerRFPower;
 import com.pauljoda.modularsystems.power.gui.GuiRFPower;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -63,6 +59,6 @@ public class TileRFPower extends TilePowerBase implements IOpensGui {
 
     @Override
     public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new GuiRFPower(entityPlayer.inventory, this);
+        return new GuiRFPower(this);
     }
 }

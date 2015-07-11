@@ -1,27 +1,16 @@
 package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
-import com.pauljoda.modularsystems.core.providers.FuelProvider;
 import com.pauljoda.modularsystems.power.container.ContainerSolidsPower;
 import com.pauljoda.modularsystems.power.gui.GuiSolidsPower;
-import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.collections.InventoryTile;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.List;
 
 public class TileSolidsPower extends TilePowerBase implements IOpensGui, ISidedInventory {
 

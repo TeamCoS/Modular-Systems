@@ -1,29 +1,19 @@
 package com.pauljoda.modularsystems.power.gui;
 
-import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.power.container.ContainerRFPower;
 import com.pauljoda.modularsystems.power.tiles.TileRFPower;
-import com.teambr.bookshelf.Bookshelf;
-import com.teambr.bookshelf.client.gui.GuiBase;
-import com.teambr.bookshelf.client.gui.component.BaseComponent;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentPowerBar;
-import com.teambr.bookshelf.client.gui.component.display.GuiTabCollection;
-import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
-public class GuiRFPower extends GuiPowerBase<ContainerRFPower, TileRFPower> {
+public class GuiRFPower extends GuiPowerBase<ContainerRFPower> {
 
     protected TileRFPower tileEntity;
 
-    public GuiRFPower(InventoryPlayer player, TileRFPower tileEntity) {
-        super(new ContainerRFPower(), tileEntity, 130, 120, "inventory.rfpower.title");
+    public GuiRFPower(TileRFPower tileEntity) {
+        super(new ContainerRFPower(), tileEntity.getCore(), 130, 120, "inventory.rfpower.title");
 
         this.tileEntity = tileEntity;
     }
@@ -48,6 +38,4 @@ public class GuiRFPower extends GuiPowerBase<ContainerRFPower, TileRFPower> {
             }
         });
     }
-
-
 }

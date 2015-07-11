@@ -18,15 +18,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiSolidsPower extends GuiBase<ContainerSolidsPower> {
+public class GuiSolidsPower extends GuiPowerBase<ContainerSolidsPower> {
 
-    protected AbstractCore core;
-    protected TileSolidsPower tileEntity;
+   protected TileSolidsPower tileEntity;
 
     public GuiSolidsPower(InventoryPlayer player, TileSolidsPower tileEntity) {
-        super(new ContainerSolidsPower(player, tileEntity), 200, 165, "inventory.solidspower.title");
+        super(new ContainerSolidsPower(player, tileEntity), tileEntity.getCore(), 200, 165, "inventory.solidspower.title");
 
-        core = tileEntity.getCore();
         this.tileEntity = tileEntity;
     }
 
@@ -53,32 +51,5 @@ public class GuiSolidsPower extends GuiBase<ContainerSolidsPower> {
         powerBar.setToolTip(toolTip);
 
         components.add(powerBar);
-    }
-
-    /*
-     * Side Tabs
-     */
-    @Override
-    public void addRightTabs(GuiTabCollection tabs) {
-        List<BaseComponent> coreTab = new ArrayList<>();
-        tabs.addTab(coreTab, 95, 100, new Color(100, 150, 150), new ItemStack(Blocks.furnace), false);
-        tabs.getTabs().get(0).setMouseEventListener(new IMouseEventListener() {
-            @Override
-            public void onMouseDown(BaseComponent baseComponent, int i, int i1, int i2) {
-
-                if (tileEntity.getCore() != null)
-                    Minecraft.getMinecraft().thePlayer.openGui(Bookshelf.instance, 0, tileEntity.getWorldObj(), tileEntity.getCore().xCoord, tileEntity.getCore().yCoord, tileEntity.getCore().zCoord);
-            }
-
-            @Override
-            public void onMouseUp(BaseComponent baseComponent, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onMouseDrag(BaseComponent baseComponent, int i, int i1, int i2, long l) {
-
-            }
-        });
     }
 }

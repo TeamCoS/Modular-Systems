@@ -80,6 +80,11 @@ public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProv
     }
 
     @Override
+    public int getPriority() {
+        return 0;
+    }
+
+    @Override
     public FuelProviderType type() {
         return FuelProviderType.POWER;
     }

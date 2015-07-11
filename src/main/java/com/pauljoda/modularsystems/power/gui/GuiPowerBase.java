@@ -1,7 +1,6 @@
 package com.pauljoda.modularsystems.power.gui;
 
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
-import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.client.gui.GuiBase;
 import com.teambr.bookshelf.client.gui.component.BaseComponent;
@@ -16,16 +15,15 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiPowerBase<C extends Container, T extends DummyTile> extends GuiBase<C> {
+public class GuiPowerBase<C extends Container> extends GuiBase<C> {
 
     protected AbstractCore core;
 
 
-    public GuiPowerBase(C container, T tileEntity, int width, int height, String name) {
+    public GuiPowerBase(C container, AbstractCore core, int width, int height, String name) {
         super(container, width, height, name);
 
-        core = (AbstractCore) tileEntity.getWorldObj().getTileEntity(tileEntity.getCore().xCoord, tileEntity.getCore().yCoord, tileEntity.getCore().zCoord);
-
+        this.core = core;
     }
 
     @Override
