@@ -41,7 +41,7 @@ public class GuiSolidsPower extends GuiBase<ContainerSolidsPower> {
 
     @Override
     public void addComponents() {
-        GuiComponentPowerBar powerBar = new GuiComponentPowerBar(8, 8, 18, 74, new Color(255, 255, 255)) {
+        GuiComponentPowerBar powerBar = new GuiComponentPowerBar(8, 8, 18, 74, new Color(255, 0, 0)) {
             @Override
             public int getEnergyPercent(int scale) {
                 return tileEntity.getEnergyStored(null) * 74 / tileEntity.getMaxEnergyStored(null);
@@ -53,7 +53,6 @@ public class GuiSolidsPower extends GuiBase<ContainerSolidsPower> {
         powerBar.setToolTip(toolTip);
 
         components.add(powerBar);
-
     }
 
     /*

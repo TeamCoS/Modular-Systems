@@ -177,7 +177,9 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
 
     @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-        return tank.fill(resource, doFill);
+        int amount = tank.fill(resource, doFill);
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        return amount;
     }
 
     @Override

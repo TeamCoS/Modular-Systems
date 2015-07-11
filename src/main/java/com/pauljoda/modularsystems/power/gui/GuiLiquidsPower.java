@@ -6,6 +6,7 @@ import com.pauljoda.modularsystems.power.tiles.TileLiquidsPower;
 import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.client.gui.GuiBase;
 import com.teambr.bookshelf.client.gui.component.BaseComponent;
+import com.teambr.bookshelf.client.gui.component.display.GuiComponentPowerBar;
 import com.teambr.bookshelf.client.gui.component.display.GuiTabCollection;
 import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener;
 import net.minecraft.client.Minecraft;
@@ -31,7 +32,41 @@ public class GuiLiquidsPower extends GuiBase<ContainerLiquidsPower> {
 
     @Override
     public void addComponents() {
+        GuiComponentPowerBar powerBar = new GuiComponentPowerBar(30, 18, 18, 60, new Color(255, 0, 0)) {
+            @Override
+            public int getEnergyPercent(int scale) {
+                return tileEntity.getEnergyStored(null) * scale / tileEntity.getMaxEnergyStored(null);
+            }
+        };
 
+        ArrayList<String> toolTipPower = new ArrayList<>();
+        toolTipPower.add("");
+        powerBar.setToolTip(toolTipPower);
+
+        components.add(powerBar);
+
+        GuiComponentPowerBar liquidBar = new GuiComponentPowerBar(152, 18, 18, 60, new Color(255, 0, 0)) {
+            @Override
+            public int getEnergyPercent(int scale) {
+                int display = tileEntity.tank == null ? 0 : tileEntity.tank.getFluidAmount() * scale / tileEntity.tank.getCapacity();
+                return display;
+            }
+        };
+
+        ArrayList<String> toolTipLiquid = new ArrayList<>();
+        toolTipLiquid.add("");
+        liquidBar.setToolTip(toolTipLiquid);
+
+        components.add(liquidBar);
+    }
+
+    @Override
+    public void drawGuiContainerForegroundLayer(int x, int y) {
+        super.drawGuiContainerForegroundLayer(x, y);
+
+        ArrayList<String> toolTip = new ArrayList<>();
+        toolTip.add(tileEntity.getEnergyStored(null) + " / " + tileEntity.getMaxEnergyStored(null));
+        components.get(0).setToolTip(toolTip);
     }
 
     /*
