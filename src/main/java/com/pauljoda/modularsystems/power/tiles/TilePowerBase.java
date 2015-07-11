@@ -3,7 +3,6 @@ package com.pauljoda.modularsystems.power.tiles;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import com.pauljoda.modularsystems.core.providers.FuelProvider;
-import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.teambr.bookshelf.api.waila.IWaila;
 import net.minecraft.nbt.NBTTagCompound;
