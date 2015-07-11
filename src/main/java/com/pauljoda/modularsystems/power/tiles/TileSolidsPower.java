@@ -5,6 +5,7 @@ import cofh.api.energy.IEnergyHandler;
 import com.pauljoda.modularsystems.core.providers.FuelProvider;
 import com.pauljoda.modularsystems.power.container.ContainerSolidsPower;
 import com.pauljoda.modularsystems.power.gui.GuiSolidsPower;
+import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.collections.InventoryTile;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -19,7 +20,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpensGui, IEnergyHandler, ISidedInventory {
+import java.util.List;
+
+public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpensGui, IEnergyHandler, ISidedInventory, IWaila {
 
     public static final int POWER_PROCESS = 200;
 
@@ -244,5 +247,25 @@ public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpe
             sides[x] = x;
         }
         return sides;
+    }
+
+    /*
+     * Waila Info
+     */
+
+    @Override
+    public void returnWailaHead(List<String> list) {
+        list.add("Available Power: " + energySolids.getEnergyStored() + "/" + energySolids.getMaxEnergyStored());
+        list.add("§oShift+Click to access GUI");
+    }
+
+    @Override
+    public void returnWailaBody(List<String> list) {
+
+    }
+
+    @Override
+    public void returnWailaTail(List<String> list) {
+
     }
 }

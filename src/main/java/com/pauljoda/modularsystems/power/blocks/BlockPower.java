@@ -2,21 +2,29 @@ package com.pauljoda.modularsystems.power.blocks;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
+import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.power.tiles.TilePowerBase;
 import com.teambr.bookshelf.Bookshelf;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class BlockPower extends BlockDummy {
+
+    String name;
 
     public BlockPower(String name, Class<? extends TileEntity> tile) {
         super(Material.rock, name, tile);
 
         setCreativeTab(ModularSystems.tabModularSystems);
         setHardness(3.5f);
+        this.name = name;
     }
 
     @Override
@@ -33,5 +41,22 @@ public class BlockPower extends BlockDummy {
             }
         }
         return true;
+    }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
+        DummyTile dummy = (DummyTile) world.getTileEntity(x, y, z);
+        AbstractCore core = dummy.getCore();
+
+        if (core != null) {
+            core.setDirty();
+        }
+
+        dropItems(world, x, y, z);
+    }
+
+    @Override
+    public Item getItemDropped(int i, Random rand, int j) {
+        return Item.getItemFromBlock(Block.getBlockFromName(name));
     }
 }
