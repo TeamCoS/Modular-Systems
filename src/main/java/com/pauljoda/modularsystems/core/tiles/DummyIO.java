@@ -1,9 +1,9 @@
 package com.pauljoda.modularsystems.core.tiles;
 
-import com.pauljoda.modularsystems.core.utils.InventoryUtils;
-import com.pauljoda.modularsystems.furnace.container.ContainerGeneric;
-import com.pauljoda.modularsystems.furnace.gui.GuiIO;
+import com.pauljoda.modularsystems.core.gui.GuiIO;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
+import com.teambr.bookshelf.inventory.ContainerGeneric;
+import com.teambr.bookshelf.util.InventoryUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
