@@ -22,39 +22,29 @@ public interface FuelProvider {
     double consume();
 
     /**
+     * Used to set the priority for this provider
+     * @return 0 First, higher last
+     */
+    int getPriority();
+
+    /**
      * Provides what type of fuel is used for sorting purposes.
      * @return Type of provider
      */
     FuelProviderType type();
 
-    public static enum FuelProviderType {
-        LIQUID(5),
-        POWER(10),
-        ITEM(1),
-        OTHER(0);
 
-        public final int sortValue;
-
-        private FuelProviderType(int sortValue) {
-            this.sortValue = sortValue;
-        }
+    enum FuelProviderType {
+        LIQUID,
+        POWER,
+        ITEM,
+        OTHER
     }
 
     final class FuelSorter implements Comparator<FuelProvider> {
         @Override
         public int compare(FuelProvider o1, FuelProvider o2) {
-            if(o1.type() != null && o2.type() != null) {
-                if (o1.canProvide() && !o2.canProvide()) {
-                    return 1;
-                } else if (o2.canProvide() && !o1.canProvide()) {
-                    return -1;
-                } else if (o1.type() == o2.type()) {
-                    return Double.compare(o1.fuelProvided(), o2.fuelProvided());
-                } else {
-                    return Integer.compare(o1.type().sortValue, o2.type().sortValue);
-                }
-            }
-            return 0;
+            return Integer.compare(o1.getPriority(), o2.getPriority());
         }
 
         @Override
