@@ -22,16 +22,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 
-public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpensGui, IEnergyHandler, ISidedInventory, IWaila {
+public class TileSolidsPower extends TilePowerBase implements IOpensGui, ISidedInventory {
 
     public static final int POWER_PROCESS = 200;
 
-    public EnergyStorage energySolids;
     private InventoryTile inventory;
     private int cooldown;
 
     public TileSolidsPower() {
-        energySolids = new EnergyStorage(6400);
+        energy = new EnergyStorage(6400);
         inventory = new InventoryTile(27);
         cooldown = 0;
     }
@@ -42,14 +41,14 @@ public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpe
         if (cooldown >= 0)
             cooldown++;
 
-        if (energySolids.getEnergyStored() < energySolids.getMaxEnergyStored() && cooldown >= 20) {
+        if (energy.getEnergyStored() < energy.getMaxEnergyStored() && cooldown >= 20) {
             cooldown = 0;
             for (int i = 0; i < 27; i++) {
                 if (inventory.getStackInSlot(i) != null) {
                     int value = getFuelValue(inventory.getStackInSlot(i));
                     if (value <= 0) continue;
-                    if (value + energySolids.getEnergyStored() < energySolids.getMaxEnergyStored()) {
-                        energySolids.modifyEnergyStored(value);
+                    if (value + energy.getEnergyStored() < energy.getMaxEnergyStored()) {
+                        energy.modifyEnergyStored(value);
                         decrStackSize(i, 1);
                         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                     }
@@ -93,55 +92,17 @@ public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpe
     /*
      * Fuel Provider Functions
      */
-    @Override
-    public boolean canProvide() {
-        return true;
-    }
 
     @Override
     public double fuelProvided() {
-        return energySolids.extractEnergy(POWER_PROCESS, true);
+        return energy.extractEnergy(POWER_PROCESS, true);
     }
 
     @Override
     public double consume() {
-        int actual = energySolids.extractEnergy(POWER_PROCESS, false);
+        int actual = energy.extractEnergy(POWER_PROCESS, false);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         return actual;
-    }
-
-    @Override
-    public FuelProviderType type() {
-        return FuelProviderType.POWER;
-    }
-
-    /*
-     * Power Storage Functions
-     */
-
-    @Override
-    public int receiveEnergy(ForgeDirection forgeDirection, int i, boolean b) {
-        return 0;
-    }
-
-    @Override
-    public int extractEnergy(ForgeDirection forgeDirection, int i, boolean b) {
-        return 0;
-    }
-
-    @Override
-    public int getEnergyStored(ForgeDirection forgeDirection) {
-        return energySolids.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(ForgeDirection forgeDirection) {
-        return energySolids.getMaxEnergyStored();
-    }
-
-    @Override
-    public boolean canConnectEnergy(ForgeDirection forgeDirection) {
-        return false;
     }
 
     /*
@@ -152,7 +113,6 @@ public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpe
     public void readFromNBT (NBTTagCompound tags)
     {
         super.readFromNBT(tags);
-        energySolids.readFromNBT(tags);
         inventory.readFromNBT(tags, 27);
         cooldown = tags.getInteger("cooldown");
     }
@@ -161,7 +121,6 @@ public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpe
     public void writeToNBT (NBTTagCompound tags)
     {
         super.writeToNBT(tags);
-        energySolids.writeToNBT(tags);
         inventory.writeToNBT(tags);
         tags.setInteger("cooldown", cooldown);
     }
@@ -249,23 +208,5 @@ public class TileSolidsPower extends TilePowerBase implements FuelProvider, IOpe
         return sides;
     }
 
-    /*
-     * Waila Info
-     */
 
-    @Override
-    public void returnWailaHead(List<String> list) {
-        list.add("Available Power: " + energySolids.getEnergyStored() + "/" + energySolids.getMaxEnergyStored());
-        list.add("§oShift+Click to access GUI");
-    }
-
-    @Override
-    public void returnWailaBody(List<String> list) {
-
-    }
-
-    @Override
-    public void returnWailaTail(List<String> list) {
-
-    }
 }

@@ -11,14 +11,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileRFPower extends TilePowerBase implements IEnergyHandler, FuelProvider, IOpensGui {
+public class TileRFPower extends TilePowerBase implements IOpensGui {
 
     public static final int RF_PROCESS = 80;
 
-    public EnergyStorage energyRF;
-
     public TileRFPower() {
-        energyRF = new EnergyStorage(10000);
+        energy = new EnergyStorage(10000);
     }
 
     /*
@@ -26,25 +24,15 @@ public class TileRFPower extends TilePowerBase implements IEnergyHandler, FuelPr
      */
 
     @Override
-    public boolean canProvide() {
-        return energyRF.getEnergyStored() > 0;
-    }
-
-    @Override
     public double fuelProvided() {
-        return energyRF.extractEnergy(RF_PROCESS, true);
+        return energy.extractEnergy(RF_PROCESS, true);
     }
 
     @Override
     public double consume() {
-        int actual = energyRF.extractEnergy(RF_PROCESS, false);
+        int actual = energy.extractEnergy(RF_PROCESS, false);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         return actual;
-    }
-
-    @Override
-    public FuelProviderType type() {
-        return FuelProviderType.POWER;
     }
 
     /*
@@ -53,47 +41,14 @@ public class TileRFPower extends TilePowerBase implements IEnergyHandler, FuelPr
 
     @Override
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-        int actual = energyRF.receiveEnergy(maxReceive, simulate);
+        int actual = energy.receiveEnergy(maxReceive, simulate);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         return actual;
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-        return 0;
-    }
-
-    @Override
-    public int getEnergyStored(ForgeDirection from) {
-        return energyRF.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(ForgeDirection from) {
-        return energyRF.getMaxEnergyStored();
-    }
-
-    @Override
     public boolean canConnectEnergy(ForgeDirection from) {
         return true;
-    }
-
-    /*
-     * Tile Entity Functions
-     */
-
-    @Override
-    public void readFromNBT (NBTTagCompound tags)
-    {
-        super.readFromNBT(tags);
-        energyRF.readFromNBT(tags);
-    }
-
-    @Override
-    public void writeToNBT (NBTTagCompound tags)
-    {
-        super.writeToNBT(tags);
-        energyRF.writeToNBT(tags);
     }
 
     /*
