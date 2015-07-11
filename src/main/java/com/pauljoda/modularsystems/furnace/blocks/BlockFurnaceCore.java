@@ -107,7 +107,6 @@ public class BlockFurnaceCore extends BaseBlock {
             }
             world.func_147453_f(x, y, z, par5);
         }
-        super.breakBlock(world, x, y, z, par5, par6);
     }
 
     public Item getItemDropped(int i, Random rand, int j) {
