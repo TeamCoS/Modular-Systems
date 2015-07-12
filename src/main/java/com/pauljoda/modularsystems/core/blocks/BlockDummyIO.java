@@ -2,9 +2,11 @@ package com.pauljoda.modularsystems.core.blocks;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.collections.BlockTextures;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -37,6 +39,16 @@ public class BlockDummyIO extends BlockDummy {
             player.openGui(Bookshelf.instance, 0, world, x, y, z);
         }
         return true;
+    }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
+        DummyTile dummy = (DummyTile) world.getTileEntity(x, y, z);
+        AbstractCore core = dummy.getCore();
+
+        if (core != null) {
+            core.setDirty();
+        }
     }
 
     /**
