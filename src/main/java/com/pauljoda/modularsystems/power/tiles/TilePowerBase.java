@@ -13,6 +13,11 @@ import java.util.List;
 public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProvider, IWaila {
 
     protected EnergyStorage energy;
+    protected int priority;
+
+    public TilePowerBase() {
+        priority = 0;
+    }
 
     public int getPowerLevelScaled(int scale) {
         return energy.getEnergyStored() * scale / energy.getMaxEnergyStored();
@@ -22,12 +27,14 @@ public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProv
     public void readFromNBT (NBTTagCompound tags) {
         super.readFromNBT(tags);
         energy.readFromNBT(tags);
+        priority = tags.getInteger("priority");
     }
 
     @Override
     public void writeToNBT (NBTTagCompound tags) {
         super.writeToNBT(tags);
         energy.writeToNBT(tags);
+        tags.setInteger("priority", priority);
     }
 
     /*
@@ -79,12 +86,16 @@ public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProv
 
     @Override
     public int getPriority() {
-        return 0;
+        return priority;
     }
 
     @Override
     public FuelProviderType type() {
         return FuelProviderType.POWER;
+    }
+
+    public void setPriority(int value) {
+        priority = value;
     }
 
     /*

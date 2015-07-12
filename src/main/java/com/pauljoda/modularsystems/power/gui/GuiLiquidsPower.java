@@ -14,7 +14,7 @@ public class GuiLiquidsPower extends GuiPowerBase<ContainerLiquidsPower> {
     protected TileLiquidsPower tileEntity;
 
     public GuiLiquidsPower(InventoryPlayer inventory, TileLiquidsPower tileEntity) {
-        super(new ContainerLiquidsPower(inventory, tileEntity), tileEntity.getCore(), 200, 165, "inventory.liquidspower.title");
+        super(new ContainerLiquidsPower(inventory, tileEntity), tileEntity, 200, 165, "inventory.liquidspower.title");
 
         this.tileEntity = tileEntity;
     }

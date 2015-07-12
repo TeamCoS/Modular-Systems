@@ -23,7 +23,7 @@ public class GuiSolidsPower extends GuiPowerBase<ContainerSolidsPower> {
    protected TileSolidsPower tileEntity;
 
     public GuiSolidsPower(InventoryPlayer player, TileSolidsPower tileEntity) {
-        super(new ContainerSolidsPower(player, tileEntity), tileEntity.getCore(), 200, 165, "inventory.solidspower.title");
+        super(new ContainerSolidsPower(player, tileEntity), tileEntity, 200, 165, "inventory.solidspower.title");
 
         this.tileEntity = tileEntity;
     }

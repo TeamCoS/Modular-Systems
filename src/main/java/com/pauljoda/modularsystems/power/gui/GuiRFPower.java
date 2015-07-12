@@ -13,7 +13,7 @@ public class GuiRFPower extends GuiPowerBase<ContainerRFPower> {
     protected TileRFPower tileEntity;
 
     public GuiRFPower(TileRFPower tileEntity) {
-        super(new ContainerRFPower(), tileEntity.getCore(), 130, 120, "inventory.rfpower.title");
+        super(new ContainerRFPower(), tileEntity, 130, 120, "inventory.rfpower.title");
 
         this.tileEntity = tileEntity;
     }
