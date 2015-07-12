@@ -145,6 +145,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
             //Make sure we aren't already formed
             if(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof DummyTile) {
                 ((DummyTile)worldObj.getTileEntity(loc.x, loc.y, loc.z)).setCore(this);
+                worldObj.markBlockForUpdate(loc.x, loc.y, loc.z);
                 continue;
             }
 
