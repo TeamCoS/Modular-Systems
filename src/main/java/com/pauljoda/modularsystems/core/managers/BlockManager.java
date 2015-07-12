@@ -28,7 +28,7 @@ public class BlockManager {
         registerBlock(furnaceCore = new BlockFurnaceCore(false), "furnaceCore", TileEntityFurnaceCore.class);
         registerBlock(furnaceCoreActive = new BlockFurnaceCore(true), "furnaceCoreActive", TileEntityFurnaceCore.class);
         registerBlock(crusherCore = new BlockCrusherCore(false), "crusherCore", TileCrusherCore.class);
-        registerBlock(crusherCoreActive = new BlockCrusherCore(false), "crusherCoreActive", TileCrusherCore.class);
+        registerBlock(crusherCoreActive = new BlockCrusherCore(true), "crusherCoreActive", TileCrusherCore.class);
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);
         registerBlock(io = new BlockDummyIO(Material.rock, Reference.MOD_ID + ":dummyIO", DummyIO.class), "dummyIO", DummyIO.class);
         registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFPower.class), "powerRF", TileRFPower.class);
