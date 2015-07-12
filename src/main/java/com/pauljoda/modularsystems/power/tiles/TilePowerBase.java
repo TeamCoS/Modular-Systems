@@ -94,8 +94,10 @@ public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProv
 
     @Override
     public void returnWailaHead(List<String> list) {
-        list.add("Available Power: " + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored());
-        list.add("§oShift+Click to access GUI");
+        if (energy.getMaxEnergyStored() > 0) {
+            list.add("Available Power: " + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored());
+            list.add("§oShift+Click to access GUI");
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
+import com.pauljoda.modularsystems.core.registries.FluidFuelValues;
 import com.pauljoda.modularsystems.power.container.ContainerLiquidsPower;
 import com.pauljoda.modularsystems.power.gui.GuiLiquidsPower;
 import com.teambr.bookshelf.collections.InventoryTile;
@@ -15,7 +16,6 @@ import net.minecraftforge.fluids.*;
 
 public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluidHandler {
 
-    public static final int POWER_PROCESS = 200;
     public static final int BUCKET_IN = 0;
     public static final int BUCKET_OUT = 1;
 
@@ -51,15 +51,32 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
 
     @Override
     public double fuelProvided() {
-        FluidStack fluid = tank.drain(POWER_PROCESS, false);
-        return fluid.amount;
+        if (tank.getFluid() != null && tank.getFluidAmount() > 0) {
+            FluidStack fluid = tank.getFluid();
+            int value = FluidFuelValues.INSTANCE.getFluidFuelValue(fluid.getFluid().getName());
+            FluidStack actualFluid = tank.drain(FluidContainerRegistry.BUCKET_VOLUME, false);
+
+            return (actualFluid.amount / FluidContainerRegistry.BUCKET_VOLUME) * value;
+        }
+        return 0;
     }
 
     @Override
     public double consume() {
-        FluidStack fluid = tank.drain(POWER_PROCESS, true);
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        return fluid.amount;
+        if (tank.getFluid() != null && tank.getFluidAmount() > 0) {
+            FluidStack fluid = tank.getFluid();
+            int value = FluidFuelValues.INSTANCE.getFluidFuelValue(fluid.getFluid().getName());
+            FluidStack actualFluid = tank.drain(FluidContainerRegistry.BUCKET_VOLUME, false);
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+
+            return (actualFluid.amount / FluidContainerRegistry.BUCKET_VOLUME) * value;
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean canProvide() {
+        return tank.getFluid() != null && tank.getFluidAmount() > 0;
     }
 
     /*

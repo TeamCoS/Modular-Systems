@@ -83,6 +83,13 @@ public class FluidFuelValues {
         values.put(name, value);
     }
 
+    public int getFluidFuelValue(String name) {
+        if (values.containsKey(name)) {
+            return values.get(name);
+        }
+        return 0;
+    }
+
     @SubscribeEvent
     public void onWorldSaveEvent(WorldEvent.Save event) {
         saveToFile();
