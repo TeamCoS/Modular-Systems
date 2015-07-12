@@ -64,6 +64,7 @@ dependencies {
     compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}_${config.minecraft_version}:dev"
     compile group: "com.teambr.bookshelf", name: "Bookshelf", version: "+", classifier: "dev", changing: true
+
 }
 
 processResources {

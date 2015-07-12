@@ -24,9 +24,9 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
     private int cooldown;
 
     public TileLiquidsPower() {
-        energy = new EnergyStorage(10000);
         inventory = new InventoryTile(2);
         tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
+        energy = new EnergyStorage(0);
         cooldown = 0;
     }
 
@@ -37,11 +37,6 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
 
         if (cooldown >= 20) {
             cooldown = 0;
-
-            //Convert Liquid to Power
-            if (energy.getEnergyStored() < energy.getMaxEnergyStored()) {
-
-            }
 
             //Fill Tank from Buckets
             if (inventory.getStackInSlot(BUCKET_IN) != null && tank.getFluidAmount() <= 9000) {
@@ -56,14 +51,15 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
 
     @Override
     public double fuelProvided() {
-        return energy.extractEnergy(POWER_PROCESS, true);
+        FluidStack fluid = tank.drain(POWER_PROCESS, false);
+        return fluid.amount;
     }
 
     @Override
     public double consume() {
-        int actual = energy.extractEnergy(POWER_PROCESS, false);
+        FluidStack fluid = tank.drain(POWER_PROCESS, true);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        return actual;
+        return fluid.amount;
     }
 
     /*

@@ -22,3 +22,7 @@ inventory.solidspower.title=Solid Fuel Power Provider
 commands.addBannedFurnaceBlock.usage=Usage: <TileName> or "this" to add what is in your hand
 commands.addBannedFurnaceBlock.failure=Failed to add value, must pass a block name
 commands.addBannedFurnaceBlock.success=Block successfully added to registry
+
+commands.addFluidFuel.usage=Usage: /addFluidFuel <fuelname> <value>
+commands.addFluidFuel.failure=Failed to add Liquid Fuel
+commands.addFluidFuel.success=Liquid Fuel successfully added to registry

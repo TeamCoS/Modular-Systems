@@ -1,10 +1,12 @@
 package com.pauljoda.modularsystems.core;
 
 import com.pauljoda.modularsystems.core.commands.AddBannedBlock;
+import com.pauljoda.modularsystems.core.commands.AddFluidFuel;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
+import com.pauljoda.modularsystems.core.registries.FluidFuelValues;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -57,6 +59,7 @@ public class ModularSystems {
     public void init(FMLInitializationEvent event) {
         FurnaceBannedBlocks.INSTANCE.init();
         BlockValueRegistry.INSTANCE.init();
+        FluidFuelValues.INSTANCE.init();
 
         proxy.init();
     }
@@ -70,5 +73,6 @@ public class ModularSystems {
         ICommandManager command = server.getCommandManager();
         ServerCommandManager manager = (ServerCommandManager) command;
         manager.registerCommand(new AddBannedBlock());
+        manager.registerCommand(new AddFluidFuel());
     }
 }

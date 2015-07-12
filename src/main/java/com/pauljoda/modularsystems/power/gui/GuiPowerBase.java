@@ -45,6 +45,7 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
     public void addRightTabs(GuiTabCollection tabs) {
         List<BaseComponent> coreTab = new ArrayList<>();
         tabs.addTab(coreTab, 95, 100, new Color(100, 150, 150), new ItemStack(Blocks.furnace), false);
+        tabs.addTab(coreTab, 95, 100, new Color(255, 0, 0), new ItemStack(Blocks.anvil), true);
         tabs.getTabs().get(0).setMouseEventListener(new IMouseEventListener() {
             @Override
             public void onMouseDown(BaseComponent baseComponent, int i, int i1, int i2) {
