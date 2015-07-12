@@ -26,7 +26,7 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         GL11.glDisable(GL11.GL_LIGHTING);
 
 
-        float level = Math.max(3 / 16F, ((TilePowerBase)tile).getPowerLevelScaled(10) + 3 / 16F);
+        float level = Math.max(3 / 16F, (((TilePowerBase)tile).getPowerLevelScaled(10) + 3) / 16F);
 
         drawLevel(7 / 16F, 3 / 16F, -0.001F, 9 / 16F, level, -0.001F, tess);
         drawLevel(-0.001F, 3 / 16F, 7 / 16F, -0.001F, level, 9 / 16F, tess);
