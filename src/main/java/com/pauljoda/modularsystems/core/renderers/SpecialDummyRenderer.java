@@ -15,7 +15,7 @@ public class SpecialDummyRenderer implements ISimpleBlockRenderingHandler {
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
-        RenderUtils.render3DInventory((BaseBlock) block, renderer);
+        RenderUtils.render3DInventory((BaseBlock) block, Blocks.iron_block.getIcon(0, 0), renderer);
         if(((BaseBlock)block).getBlockTextures().getOverlay() != null)
             RenderUtils.render3DInventory((BaseBlock) block, ((BaseBlock)block).getBlockTextures().getOverlay(), renderer);
     }
@@ -26,7 +26,7 @@ public class SpecialDummyRenderer implements ISimpleBlockRenderingHandler {
         if(ClientProxy.renderPass == 0) {
             renderer.renderBlockUsingTexture(Blocks.iron_block, x, y, z, Blocks.iron_block.getIcon(0, 0));
             return true;
-        } else if (ClientProxy.renderPass == 1) {
+        } else if (ClientProxy.renderPass == 1 && dummy.getCore() != null) {
             renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
         }
         return true;

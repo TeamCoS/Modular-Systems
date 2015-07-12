@@ -7,8 +7,10 @@ import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.power.tiles.TilePowerBase;
 import com.teambr.bookshelf.Bookshelf;
+import com.teambr.bookshelf.collections.BlockTextures;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -17,7 +19,6 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class BlockPower extends BlockDummy {
-
     String name;
 
     public BlockPower(String name, Class<? extends TileEntity> tile) {
@@ -59,6 +60,18 @@ public class BlockPower extends BlockDummy {
     @Override
     public Item getItemDropped(int i, Random rand, int j) {
         return Item.getItemFromBlock(Block.getBlockFromName(name));
+    }
+
+    /**
+     * Used to add the textures for the blocks. Uses blocks name by default
+     *
+     * Initialize the {@link BlockTextures} object here
+     * @param iconRegister Icon Registry
+     */
+    public void generateDefaultTextures(IIconRegister iconRegister) {
+        this.blockIcon = iconRegister.registerIcon("minecraft:iron_block");
+        textures = new BlockTextures(iconRegister, "minecraft:iron_block");
+        textures.setOverlay(iconRegister.registerIcon("minecraft:hopper_top"));
     }
 
     @Override
