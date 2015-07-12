@@ -2,6 +2,7 @@ package com.pauljoda.modularsystems.core.proxy;
 
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.renderers.BlockDummyRenderer;
+import com.pauljoda.modularsystems.core.renderers.SpecialDummyRenderer;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInterModComms;
@@ -11,6 +12,9 @@ public class ClientProxy extends CommonProxy {
     public void preInit() {
         BlockDummyRenderer.renderID = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new BlockDummyRenderer());
+
+        SpecialDummyRenderer.renderID = RenderingRegistry.getNextAvailableRenderId();
+        RenderingRegistry.registerBlockHandler(new SpecialDummyRenderer());
     }
 
     public void init() {

@@ -1,7 +1,6 @@
 package com.pauljoda.modularsystems.core.renderers;
 
-import com.pauljoda.modularsystems.core.tiles.DummyIO;
-import com.pauljoda.modularsystems.core.tiles.DummyTile;
+import com.pauljoda.modularsystems.power.tiles.TilePowerBase;
 import com.teambr.bookshelf.client.ClientProxy;
 import com.teambr.bookshelf.common.blocks.BaseBlock;
 import com.teambr.bookshelf.util.RenderUtils;
@@ -9,9 +8,7 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import org.lwjgl.opengl.GL11;
 
 public class SpecialDummyRenderer implements ISimpleBlockRenderingHandler {
     public static int renderID;
@@ -25,22 +22,14 @@ public class SpecialDummyRenderer implements ISimpleBlockRenderingHandler {
 
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-        DummyTile dummy = (DummyTile)world.getTileEntity(x, y, z);
+        TilePowerBase dummy = (TilePowerBase)world.getTileEntity(x, y, z);
         if(ClientProxy.renderPass == 0) {
-            renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, getBase(dummy));
-            GL11.glEnable(GL11.GL_BLEND);
-            if(dummy.getCore() != null)
-                renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BaseBlock) block).getBlockTextures().getOverlay());
-            GL11.glDisable(GL11.GL_BLEND);
+            renderer.renderBlockUsingTexture(Blocks.iron_block, x, y, z, Blocks.iron_block.getIcon(0, 0));
             return true;
         } else if (ClientProxy.renderPass == 1) {
             renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
         }
         return true;
-    }
-
-    private IIcon getBase(DummyTile tile) {
-        return tile instanceof DummyIO ? Blocks.dispenser.getIcon(1, 1) : tile.getStoredBlock().getIcon(0, tile.getMetadata());
     }
 
     @Override

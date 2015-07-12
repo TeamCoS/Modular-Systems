@@ -14,8 +14,8 @@ public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProv
 
     protected EnergyStorage energy;
 
-    public TilePowerBase() {
-
+    public int getPowerLevelScaled(int scale) {
+        return energy.getEnergyStored() * scale / energy.getMaxEnergyStored();
     }
 
     @Override
@@ -25,8 +25,7 @@ public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProv
     }
 
     @Override
-    public void writeToNBT (NBTTagCompound tags)
-    {
+    public void writeToNBT (NBTTagCompound tags) {
         super.writeToNBT(tags);
         energy.writeToNBT(tags);
     }

@@ -2,6 +2,7 @@ package com.pauljoda.modularsystems.power.blocks;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
+import com.pauljoda.modularsystems.core.renderers.SpecialDummyRenderer;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.power.tiles.TilePowerBase;
@@ -58,5 +59,10 @@ public class BlockPower extends BlockDummy {
     @Override
     public Item getItemDropped(int i, Random rand, int j) {
         return Item.getItemFromBlock(Block.getBlockFromName(name));
+    }
+
+    @Override
+    public int getRenderType() {
+        return SpecialDummyRenderer.renderID;
     }
 }
