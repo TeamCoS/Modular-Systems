@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.power.container;
 
 import com.pauljoda.modularsystems.power.tiles.TileLiquidsPower;
+import com.teambr.bookshelf.inventory.BaseContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -8,22 +9,18 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 
-public class ContainerLiquidsPower extends Container {
+public class ContainerLiquidsPower extends BaseContainer {
 
     private TileLiquidsPower tileEntity;
 
     public ContainerLiquidsPower(InventoryPlayer playerInventory, TileLiquidsPower tileEntity) {
+        super(playerInventory, tileEntity);
         this.tileEntity = tileEntity;
 
         addSlotToContainer(new Slot(tileEntity, tileEntity.BUCKET_IN, 60, 40));
         addSlotToContainer(new SlotFurnace(playerInventory.player, tileEntity, tileEntity.BUCKET_OUT, 120, 40));
 
         bindPlayerInventory(playerInventory);
-    }
-
-    @Override
-    public boolean canInteractWith(EntityPlayer entityPlayer) {
-        return tileEntity.isUseableByPlayer(entityPlayer);
     }
 
     private void bindPlayerInventory(InventoryPlayer playerInventory)
@@ -36,49 +33,5 @@ public class ContainerLiquidsPower extends Container {
         // Action Bar
         for(int x = 0; x < 9; x++)
             addSlotToContainer(new Slot(playerInventory, x, 20 + x * 18, 142));
-    }
-
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
-        ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(par2);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
-
-            if (par2 == 1) {
-                if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
-                    return null;
-                }
-                slot.onSlotChange(itemstack1, itemstack);
-            }
-            else if (par2 != 0) {
-                if (par2 >= 3 && par2 < 30) {
-                    if (!this.mergeItemStack(itemstack1, 30, 39, false)) {
-                        return null;
-                    }
-                }
-                else if (par2 >= 30 && par2 < 39 && !this.mergeItemStack(itemstack1, 3, 30, false)) {
-                    return null;
-                }
-            }
-            else if (!this.mergeItemStack(itemstack1, 3, 39, false)) {
-                return null;
-            }
-
-            if (itemstack1.stackSize == 0) {
-                slot.putStack((ItemStack)null);
-            }
-            else {
-                slot.onSlotChanged();
-            }
-
-            if (itemstack1.stackSize == itemstack.stackSize) {
-                return null;
-            }
-
-            slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
-        }
-        return itemstack;
     }
 }
