@@ -30,7 +30,7 @@ public class AddFluidFuel extends CommandBase {
         if(args.length < 2)
             sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("commands.addFluidFuel.usage")));
         else {
-            FluidFuelValues.INSTANCE.addFluidFuel(args[0], Integer.getInteger(args[1]));
+            FluidFuelValues.INSTANCE.addFluidFuel(args[0], Integer.valueOf(args[1]));
             sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("commands.addFluidFuel.success")));
         }
     }
