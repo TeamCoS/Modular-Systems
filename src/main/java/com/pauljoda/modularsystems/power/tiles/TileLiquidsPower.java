@@ -34,7 +34,7 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
 
     @Override
     public void updateEntity() {
-        if (!worldObj.isRemote) return;
+        if (worldObj.isRemote) return;
 
         if (cooldown >= 0)
             cooldown++;
@@ -43,11 +43,25 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
             cooldown = 0;
 
             //Fill Tank from Buckets
-            if (inventory.getStackInSlot(BUCKET_IN) != null && tank.getFluidAmount() <= 9000) {
+            if (inventory.getStackInSlot(BUCKET_IN) != null &&
+                    FluidContainerRegistry.isFilledContainer(inventory.getStackInSlot(BUCKET_IN)) &&
+                    FluidFuelValues.INSTANCE.getFluidFuelValue(FluidContainerRegistry.getFluidForFilledItem(inventory.getStackInSlot(BUCKET_IN)).getFluid().getName()) > 0 &&
+                    tank.getFluidAmount() + FluidContainerRegistry.getContainerCapacity(inventory.getStackInSlot(BUCKET_IN)) <= tank.getCapacity()) {
 
+                if (tank.getFluid() == null ||
+                        tank.getFluid().getFluid() == FluidContainerRegistry.getFluidForFilledItem(inventory.getStackInSlot(BUCKET_IN)).getFluid()) {
+                    fill(null, FluidContainerRegistry.getFluidForFilledItem(inventory.getStackInSlot(BUCKET_IN)), true);
+
+                    //return Empty Container
+                    inventory.setStackInSlot(FluidContainerRegistry.drainFluidContainer(inventory.getStackInSlot(BUCKET_IN)), BUCKET_OUT);
+
+                    //clear input slot
+                    inventory.setStackInSlot(null, BUCKET_IN);
+
+                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                }
             }
         }
-
     }
 
     /*

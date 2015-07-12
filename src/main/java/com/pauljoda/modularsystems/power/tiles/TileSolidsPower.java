@@ -28,7 +28,7 @@ public class TileSolidsPower extends TilePowerBase implements IOpensGui, ISidedI
     @Override
     public void updateEntity()
     {
-        if (!worldObj.isRemote) return;
+        if (worldObj.isRemote) return;
 
         if (cooldown >= 0)
             cooldown++;
