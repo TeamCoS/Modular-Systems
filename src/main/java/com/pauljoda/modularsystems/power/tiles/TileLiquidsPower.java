@@ -9,7 +9,6 @@ import com.teambr.bookshelf.common.tiles.IOpensGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
@@ -48,17 +47,25 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
                     FluidFuelValues.INSTANCE.getFluidFuelValue(FluidContainerRegistry.getFluidForFilledItem(inventory.getStackInSlot(BUCKET_IN)).getFluid().getName()) > 0 &&
                     tank.getFluidAmount() + FluidContainerRegistry.getContainerCapacity(inventory.getStackInSlot(BUCKET_IN)) <= tank.getCapacity()) {
 
-                if (tank.getFluid() == null ||
-                        tank.getFluid().getFluid() == FluidContainerRegistry.getFluidForFilledItem(inventory.getStackInSlot(BUCKET_IN)).getFluid()) {
-                    fill(null, FluidContainerRegistry.getFluidForFilledItem(inventory.getStackInSlot(BUCKET_IN)), true);
+                if (inventory.getStackInSlot(BUCKET_OUT) == null ||
+                        inventory.getStackInSlot(BUCKET_OUT).isItemEqual(FluidContainerRegistry.drainFluidContainer(inventory.getStackInSlot(BUCKET_IN))) ||
+                        inventory.getStackInSlot(BUCKET_IN).stackSize < inventory.getStackInSlot(BUCKET_IN).getMaxStackSize()) {
 
-                    //return Empty Container
-                    inventory.setStackInSlot(FluidContainerRegistry.drainFluidContainer(inventory.getStackInSlot(BUCKET_IN)), BUCKET_OUT);
+                    if (tank.getFluid() == null ||
+                            tank.getFluid().getFluid() == FluidContainerRegistry.getFluidForFilledItem(inventory.getStackInSlot(BUCKET_IN)).getFluid()) {
+                        fill(null, FluidContainerRegistry.getFluidForFilledItem(inventory.getStackInSlot(BUCKET_IN)), true);
 
-                    //clear input slot
-                    inventory.setStackInSlot(null, BUCKET_IN);
+                        //return Empty Container
+                        if (inventory.getStackInSlot(BUCKET_OUT) == null)
+                            inventory.setStackInSlot(FluidContainerRegistry.drainFluidContainer(inventory.getStackInSlot(BUCKET_IN)), BUCKET_OUT);
+                        else
+                            inventory.getStackInSlot(BUCKET_OUT).stackSize++;
 
-                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                        //clear input slot
+                        decrStackSize(BUCKET_IN, 1);
+
+                        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                    }
                 }
             }
         }
@@ -179,13 +186,12 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-        //TODO
-        return TileEntityFurnace.isItemFuel(itemstack);
+        return false;
     }
 
     @Override
     public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-        return getCore() != null && isItemValidForSlot(i, itemstack);
+        return false;
     }
 
     @Override

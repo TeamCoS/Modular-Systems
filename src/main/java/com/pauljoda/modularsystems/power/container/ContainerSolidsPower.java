@@ -10,12 +10,8 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerSolidsPower extends BaseContainer {
 
-    private TileSolidsPower tileEntity;
-
     public ContainerSolidsPower(InventoryPlayer playerInventory, TileSolidsPower tileEntity) {
         super(playerInventory, tileEntity);
-
-        this.tileEntity = tileEntity;
 
         for (int y = 0; y < 3; y++)
             for (int x = 0; x < 9; x++)

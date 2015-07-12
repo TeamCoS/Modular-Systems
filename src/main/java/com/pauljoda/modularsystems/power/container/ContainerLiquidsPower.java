@@ -11,11 +11,8 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerLiquidsPower extends BaseContainer {
 
-    private TileLiquidsPower tileEntity;
-
     public ContainerLiquidsPower(InventoryPlayer playerInventory, TileLiquidsPower tileEntity) {
         super(playerInventory, tileEntity);
-        this.tileEntity = tileEntity;
 
         addSlotToContainer(new Slot(tileEntity, tileEntity.BUCKET_IN, 60, 40));
         addSlotToContainer(new SlotFurnace(playerInventory.player, tileEntity, tileEntity.BUCKET_OUT, 120, 40));

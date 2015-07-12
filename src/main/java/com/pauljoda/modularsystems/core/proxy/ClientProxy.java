@@ -26,6 +26,7 @@ public class ClientProxy extends CommonProxy {
         //Hide Blocks from NEI
         if (Loader.isModLoaded("NotEnoughItems")) {
             codechicken.nei.api.API.hideItem(new ItemStack(BlockManager.furnaceCoreActive));
+            codechicken.nei.api.API.hideItem(new ItemStack(BlockManager.crusherCoreActive));
             codechicken.nei.api.API.hideItem(new ItemStack(BlockManager.dummy));
         }
 
