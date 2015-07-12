@@ -34,7 +34,7 @@ public class GuiRFPower extends GuiPowerBase<ContainerRFPower> {
         components.add(new GuiComponentPowerBar(56, 23, 18, 74, new Color(255, 0, 0)) {
             @Override
             public int getEnergyPercent(int scale) {
-                return tileEntity.getEnergyStored(null) * 74 / tileEntity.getMaxEnergyStored(null);
+                return tileEntity.getEnergyStored(null) * scale / tileEntity.getMaxEnergyStored(null);
             }
         });
     }

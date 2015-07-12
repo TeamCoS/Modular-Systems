@@ -14,6 +14,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
+import java.util.List;
+
 public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluidHandler {
 
     public static final int BUCKET_IN = 0;
@@ -26,12 +28,14 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
     public TileLiquidsPower() {
         inventory = new InventoryTile(2);
         tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
-        energy = new EnergyStorage(0);
+        energy = new EnergyStorage(FluidContainerRegistry.BUCKET_VOLUME * 10);
         cooldown = 0;
     }
 
     @Override
     public void updateEntity() {
+        if (!worldObj.isRemote) return;
+
         if (cooldown >= 0)
             cooldown++;
 
@@ -43,6 +47,7 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
 
             }
         }
+
     }
 
     /*
@@ -66,7 +71,8 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
         if (tank.getFluid() != null && tank.getFluidAmount() > 0) {
             FluidStack fluid = tank.getFluid();
             int value = FluidFuelValues.INSTANCE.getFluidFuelValue(fluid.getFluid().getName());
-            FluidStack actualFluid = tank.drain(FluidContainerRegistry.BUCKET_VOLUME, false);
+            FluidStack actualFluid = tank.drain(FluidContainerRegistry.BUCKET_VOLUME, true);
+            energy.extractEnergy(actualFluid.amount, false);
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 
             return (actualFluid.amount / FluidContainerRegistry.BUCKET_VOLUME) * value;
@@ -84,8 +90,7 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
      */
 
     @Override
-    public void readFromNBT (NBTTagCompound tags)
-    {
+    public void readFromNBT(NBTTagCompound tags) {
         super.readFromNBT(tags);
         inventory.readFromNBT(tags, 27);
         tank.readFromNBT(tags);
@@ -93,8 +98,7 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
     }
 
     @Override
-    public void writeToNBT (NBTTagCompound tags)
-    {
+    public void writeToNBT(NBTTagCompound tags) {
         super.writeToNBT(tags);
         inventory.writeToNBT(tags);
         tank.writeToNBT(tags);
@@ -190,28 +194,36 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
 
     @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-        int amount = tank.fill(resource, doFill);
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        return amount;
+        if (FluidFuelValues.INSTANCE.getFluidFuelValue(resource.getFluid().getName()) > 0) {
+            int amount = tank.fill(resource, doFill);
+            energy.receiveEnergy(amount, false);
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            return amount;
+        }
+        return 0;
     }
 
     @Override
     public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-        if (resource == null || !resource.isFluidEqual(tank.getFluid()))
-        {
+        if (resource == null || !resource.isFluidEqual(tank.getFluid())) {
             return null;
         }
-        return tank.drain(resource.amount, doDrain);
+        FluidStack fluid = tank.drain(resource.amount, doDrain);
+        energy.extractEnergy(fluid.amount, false);
+        return fluid;
     }
 
     @Override
     public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-        return tank.drain(maxDrain, doDrain);
+        FluidStack fluid = tank.drain(maxDrain, doDrain);
+        energy.extractEnergy(fluid.amount, false);
+        return fluid;
     }
 
     @Override
     public boolean canFill(ForgeDirection from, Fluid fluid) {
-        return true;
+        int value = FluidFuelValues.INSTANCE.getFluidFuelValue(fluid.getName());
+        return value > 0;
     }
 
     @Override
@@ -221,6 +233,16 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-        return new FluidTankInfo[] {tank.getInfo()};
+        return new FluidTankInfo[]{tank.getInfo()};
+    }
+
+    /*
+     * Waila
+     */
+    @Override
+    public void returnWailaHead(List<String> list) {
+        list.add(tank.getFluid() != null ? tank.getFluid().getLocalizedName() : "Empty");
+        list.add((tank.getFluid() != null ? tank.getFluidAmount() : "0") + "/" + tank.getCapacity() + " mB");
+        list.add("§oShift+Click to access GUI");
     }
 }

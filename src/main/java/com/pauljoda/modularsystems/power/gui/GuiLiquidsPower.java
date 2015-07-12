@@ -42,6 +42,7 @@ public class GuiLiquidsPower extends GuiPowerBase<ContainerLiquidsPower> {
 
         ArrayList<String> toolTipLiquid = new ArrayList<>();
         toolTipLiquid.add(tileEntity.tank.getFluidAmount() + " / " + tileEntity.tank.getCapacity());
+        toolTipLiquid.add(tileEntity.tank.getFluid() != null ? tileEntity.tank.getFluid().getLocalizedName() : "Empty");
         components.get(1).setToolTip(toolTipLiquid);
     }
 }
