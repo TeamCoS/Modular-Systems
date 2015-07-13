@@ -52,6 +52,14 @@ public class TileCrusherCore extends AbstractCore implements IOpensGui, IWaila {
                 values.addToMultiplicity(BlockValueRegistry.INSTANCE.getMultiplicityValue(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond(), function.getBlockCount(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond())));
             }
         }
+
+        for(String i : function.getMaterialStrings()) {
+            if(BlockValueRegistry.INSTANCE.isMaterialRegistered(i)) {
+                values.addToSpeed(BlockValueRegistry.INSTANCE.getSpeedValueMaterial(i, function.getMaterialCount(i)));
+                values.addToEfficiency(BlockValueRegistry.INSTANCE.getEfficiencyValueMaterial(i, function.getMaterialCount(i)));
+                values.addToMultiplicity(BlockValueRegistry.INSTANCE.getMultiplicityValueMaterial(i, function.getMaterialCount(i)));
+            }
+        }
     }
 
     @Override

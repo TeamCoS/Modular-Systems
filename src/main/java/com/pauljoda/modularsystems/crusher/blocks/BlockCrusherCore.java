@@ -4,7 +4,6 @@ import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.crusher.tiles.TileCrusherCore;
-import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.collections.BlockTextures;
 import com.teambr.bookshelf.common.blocks.BaseBlock;
@@ -43,7 +42,7 @@ public class BlockCrusherCore extends BaseBlock {
     public void generateDefaultTextures(IIconRegister iconRegister) {
         this.blockIcon = iconRegister.registerIcon("minecraft:furnace_side");
         textures = new BlockTextures(iconRegister, "minecraft:furnace_side");
-        textures.setFront(iconRegister.registerIcon(active ? "minecraft:redstone_lamp_on" : "minecraft:redstone_lamp_off"));
+        textures.setFront(iconRegister.registerIcon(active ? Reference.MOD_ID + ":crusherFront_On" : Reference.MOD_ID + ":crusherFront_off"));
         textures.setTop(iconRegister.registerIcon("minecraft:furnace_top"));
         textures.setBottom(iconRegister.registerIcon("minecraft:furnace_top"));
         textures.setOverlay(iconRegister.registerIcon("minecraft:hopper_top"));

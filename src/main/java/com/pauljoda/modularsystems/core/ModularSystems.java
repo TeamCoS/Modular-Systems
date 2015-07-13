@@ -52,7 +52,7 @@ public class ModularSystems {
         MinecraftForge.EVENT_BUS.register(FurnaceBannedBlocks.INSTANCE);
         MinecraftForge.EVENT_BUS.register(BlockValueRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidFuelValues.INSTANCE);
-        configFolderLocation = event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Modular Systems";
+        configFolderLocation = event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Modular-Systems";
 
         proxy.preInit();
     }

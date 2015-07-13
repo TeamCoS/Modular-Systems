@@ -1,4 +1,4 @@
-package com.pauljoda.modularsystems.furnace.collections;
+package com.pauljoda.modularsystems.core.collections;
 
 import com.teambr.bookshelf.collections.InventoryTile;
 import net.minecraft.item.ItemStack;

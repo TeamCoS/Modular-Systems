@@ -3,7 +3,7 @@ package com.pauljoda.modularsystems.core.tiles;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.providers.FuelProvider;
-import com.pauljoda.modularsystems.furnace.collections.StandardValues;
+import com.pauljoda.modularsystems.core.collections.StandardValues;
 import com.teambr.bookshelf.collections.Couplet;
 import com.teambr.bookshelf.collections.Location;
 import com.teambr.bookshelf.common.blocks.BaseBlock;
