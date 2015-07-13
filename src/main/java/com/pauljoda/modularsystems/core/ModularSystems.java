@@ -6,6 +6,7 @@ import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
+import com.pauljoda.modularsystems.core.registries.CrusherRecipeRegistry;
 import com.pauljoda.modularsystems.core.registries.FluidFuelValues;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
 import cpw.mods.fml.common.Mod;
@@ -61,6 +62,7 @@ public class ModularSystems {
         FurnaceBannedBlocks.INSTANCE.init();
         BlockValueRegistry.INSTANCE.init();
         FluidFuelValues.INSTANCE.init();
+        CrusherRecipeRegistry.INSTANCE.init();
 
         proxy.init();
     }
