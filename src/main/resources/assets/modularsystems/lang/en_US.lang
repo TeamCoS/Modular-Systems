@@ -1,12 +1,12 @@
 itemGroup.tabModularSystems=Modular Systems
 
 tile.modularsystems:furnaceCore.name=Modular Furnace Core
-tile.modularsystems:furnaceCoreActive.name=Modular Furnace Core Active
+tile.modularsystems:furnaceCoreActive.name=Modular Furnace Core
 tile.modularsystems:crusherCore.name=Modular Crusher Core
-tile.modularsystems:crusherCoreActive.name=Modular Crusher Core Active
+tile.modularsystems:crusherCoreActive.name=Modular Crusher Core
 tile.modularsystems:dummy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O
-tile.modularsystems:powerRF.name=RF Power Supplier
+tile.modularsystems:powerRF.name=RF Power Provider
 tile.modularsystems:powerSolids.name=Solid Fuel Power Provider
 tile.modularsystems:powerLiquids.name=Liquid Fuel Power Provider
 

@@ -5,6 +5,8 @@ import com.pauljoda.modularsystems.crusher.tiles.TileCrusherCore;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.teambr.bookshelf.client.gui.GuiBase;
 import com.teambr.bookshelf.client.gui.component.BaseComponent;
+import com.teambr.bookshelf.client.gui.component.display.GuiComponentArrow;
+import com.teambr.bookshelf.client.gui.component.display.GuiComponentFlame;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentText;
 import com.teambr.bookshelf.client.gui.component.display.GuiTabCollection;
 import com.teambr.bookshelf.collections.Location;
@@ -21,17 +23,33 @@ public class GuiCrusher extends GuiBase<ContainerCrusher> {
     protected TileCrusherCore core;
     protected Location tileLocation;
 
-    public GuiCrusher(InventoryPlayer inventory, TileCrusherCore tileEntity) {
-        super(new ContainerCrusher(inventory, tileEntity), 175, 165, "inventory.crusher.title");
+    public GuiCrusher(InventoryPlayer player, TileCrusherCore tileEntity) {
+        super(new ContainerCrusher(player, tileEntity), 175, 165, "inventory.crusher.title");
 
         this.core = tileEntity;
         tileLocation = core.getLocation();
         addRightTabs(rightTabs);
     }
 
+    protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
+        core = (TileCrusherCore) core.getWorldObj().getTileEntity(core.xCoord, core.yCoord, core.zCoord);
+        super.drawGuiContainerBackgroundLayer(f, i, j);
+    }
+
     @Override
     public void addComponents() {
-
+        components.add(new GuiComponentFlame(81, 55) {
+            @Override
+            public int getCurrentBurn() {
+                return core.isBurning() ? core.getBurnTimeRemainingScaled(14) : 0;
+            }
+        });
+        components.add(new GuiComponentArrow(79, 34) {
+            @Override
+            public int getCurrentProgress() {
+                return core.getCookProgressScaled(24);
+            }
+        });
     }
 
     @Override

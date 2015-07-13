@@ -3,6 +3,7 @@ package com.pauljoda.modularsystems.crusher.tiles;
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
+import com.pauljoda.modularsystems.core.registries.CrusherRecipeRegistry;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.crusher.blocks.BlockCrusherCore;
@@ -28,7 +29,7 @@ public class TileCrusherCore extends AbstractCore implements IOpensGui, IWaila {
 
     @Override
     protected ItemStack recipe(ItemStack is) {
-        return null;
+        return is == null ? null : CrusherRecipeRegistry.INSTANCE.getOutput(is);
     }
 
     @Override
