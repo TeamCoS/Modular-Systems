@@ -2,7 +2,6 @@ package com.pauljoda.modularsystems.crusher.gui;
 
 import com.pauljoda.modularsystems.crusher.container.ContainerCrusher;
 import com.pauljoda.modularsystems.crusher.tiles.TileCrusherCore;
-import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.teambr.bookshelf.client.gui.GuiBase;
 import com.teambr.bookshelf.client.gui.component.BaseComponent;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentArrow;

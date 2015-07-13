@@ -70,6 +70,7 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
             });
             priorityTab.add(new GuiComponentText("Fuel Priority", 22, 7));
             tabs.addTab(priorityTab, 95, 55, new Color(255, 68, 51), new ItemStack(Blocks.anvil));
+            tabs.getTabs().get(0).setToolTip(Arrays.asList(new String[] {"Core Gui"}));
             tabs.getTabs().get(1).setToolTip(Arrays.asList(new String[] {"Fuel Priority"}));
 
             //Link Core tab to core Gui

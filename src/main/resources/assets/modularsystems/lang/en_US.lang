@@ -29,3 +29,5 @@ commands.addBannedFurnaceBlock.success=Block successfully added to registry
 commands.addFluidFuel.usage=Usage: /addFluidFuel <fuelname> <value>
 commands.addFluidFuel.failure=Failed to add Liquid Fuel
 commands.addFluidFuel.success=Liquid Fuel successfully added to registry
+
+modularsystems.nei.crusherrecipes=Crusher

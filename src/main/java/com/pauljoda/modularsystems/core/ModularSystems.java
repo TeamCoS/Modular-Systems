@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.core;
 
+import com.pauljoda.modularsystems.core.api.nei.INEICallback;
 import com.pauljoda.modularsystems.core.commands.AddBannedBlock;
 import com.pauljoda.modularsystems.core.commands.AddFluidFuel;
 import com.pauljoda.modularsystems.core.lib.Reference;
@@ -33,6 +34,8 @@ public class ModularSystems {
 
     @SidedProxy( clientSide="com.pauljoda.modularsystems.core.proxy.ClientProxy", serverSide="com.pauljoda.modularsystems.core.proxy.CommonProxy")
     public static CommonProxy proxy;
+
+    public static INEICallback nei;
 
     public static String configFolderLocation;
 

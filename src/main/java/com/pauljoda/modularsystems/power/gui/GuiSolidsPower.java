@@ -34,7 +34,7 @@ public class GuiSolidsPower extends GuiPowerBase<ContainerSolidsPower> {
 
         ArrayList<String> toolTip = new ArrayList<>();
         toolTip.add(tileEntity.getEnergyStored(null) + " / " + tileEntity.getMaxEnergyStored(null));
-        components.get(0).setToolTip(toolTip);
+        components.get(1).setToolTip(toolTip);
     }
 
     @Override
@@ -42,14 +42,9 @@ public class GuiSolidsPower extends GuiPowerBase<ContainerSolidsPower> {
         GuiComponentPowerBar powerBar = new GuiComponentPowerBar(8, 8, 18, 74, new Color(255, 0, 0)) {
             @Override
             public int getEnergyPercent(int scale) {
-                return tileEntity.getEnergyStored(null) * 74 / tileEntity.getMaxEnergyStored(null);
+                return tileEntity.getEnergyStored(null) * scale / tileEntity.getMaxEnergyStored(null);
             }
         };
-
-        ArrayList<String> toolTip = new ArrayList<>();
-        toolTip.add("");
-        powerBar.setToolTip(toolTip);
-
         components.add(powerBar);
     }
 }

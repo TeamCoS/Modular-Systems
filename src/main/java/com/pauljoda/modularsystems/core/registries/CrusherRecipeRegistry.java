@@ -7,8 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class CrusherRecipeRegistry {
@@ -66,6 +65,7 @@ public class CrusherRecipeRegistry {
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.glowstone_dust, 4), "glowstone"));
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.coal, 4), "oreCoal"));
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.string, 4), "blockCloth"));
+        //todo Glass to sand, fix items with dmg value;
 
         LogHelper.info("Finished adding " + crusherRecipes.size() + " Crusher Recipes");
     }
@@ -98,5 +98,21 @@ public class CrusherRecipeRegistry {
 
     public boolean isItemValid(ItemStack itemStack) {
         return getOutput(itemStack) != null;
+    }
+
+    public Map<ItemStack, ItemStack> getCrusherInputList() {
+        HashMap<ItemStack, ItemStack> listRecipes = new HashMap<>();
+
+        for (ShapelessOreRecipe crusherRecipe : crusherRecipes) {
+            List<Object> list = crusherRecipe.getInput();
+            for (Object items : list) {
+                ArrayList<OreDictionary> o = (ArrayList<OreDictionary>) items;
+                for (Object item : o) {
+                    ItemStack itemIn = (ItemStack) item;
+                    listRecipes.put(itemIn, crusherRecipe.getRecipeOutput());
+                }
+            }
+        }
+        return listRecipes;
     }
 }

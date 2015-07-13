@@ -24,7 +24,7 @@ public class GuiRFPower extends GuiPowerBase<ContainerRFPower> {
 
         ArrayList<String> toolTipPower = new ArrayList<>();
         toolTipPower.add(tileEntity.getEnergyStored(null) + " / " + tileEntity.getMaxEnergyStored(null));
-        components.get(0).setToolTip(toolTipPower);
+        components.get(1).setToolTip(toolTipPower);
 
         rightTabs.getTabs().get(0).setIcon(new ItemStack(core.getWorldObj().getBlock(core.xCoord, core.yCoord, core.zCoord)));
     }
