@@ -38,13 +38,13 @@ public class CrusherRecipeRegistry {
                     for (int j = 0; j < inputOre.size(); j++) {
                         switch (inputOre.get(j).getUnlocalizedName()) {
                             case "tile.oreRedstone":
-                                crusherRecipes.put(inputOre.get(j), new ItemStack(outputDust.get(0).getItem(), 8, outputDust.get(j).getItemDamage()));
+                                crusherRecipes.put(inputOre.get(j), new ItemStack(outputDust.get(0).getItem(), 8, outputDust.get(0).getItemDamage()));
                                 break;
                             case "tile.oreLapis":
-                                crusherRecipes.put(inputOre.get(j), new ItemStack(outputDust.get(0).getItem(), 8, outputDust.get(j).getItemDamage()));
+                                crusherRecipes.put(inputOre.get(j), new ItemStack(outputDust.get(0).getItem(), 8, outputDust.get(0).getItemDamage()));
                                 break;
                             default:
-                                crusherRecipes.put(inputOre.get(j), new ItemStack(outputDust.get(0).getItem(), 2, outputDust.get(j).getItemDamage()));
+                                crusherRecipes.put(inputOre.get(j), new ItemStack(outputDust.get(0).getItem(), 2, outputDust.get(0).getItemDamage()));
                         }
                     }
                 }
@@ -60,7 +60,7 @@ public class CrusherRecipeRegistry {
                     List<ItemStack> outputDust = OreDictionary.getOres("dust" + dust);
 
                     for (int j = 0; j < inputOre.size(); j++) {
-                        crusherRecipes.put(inputOre.get(j), new ItemStack(outputDust.get(0).getItem(), 2, outputDust.get(j).getItemDamage()));
+                        crusherRecipes.put(inputOre.get(j), new ItemStack(outputDust.get(0).getItem(), 2, outputDust.get(0).getItemDamage()));
                     }
                 }
             }
