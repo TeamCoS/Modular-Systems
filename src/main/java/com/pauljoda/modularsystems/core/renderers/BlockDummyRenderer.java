@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import org.lwjgl.opengl.GL11;
 
 public class BlockDummyRenderer implements ISimpleBlockRenderingHandler {
     public static int renderID;
@@ -28,12 +27,10 @@ public class BlockDummyRenderer implements ISimpleBlockRenderingHandler {
         DummyTile dummy = (DummyTile)world.getTileEntity(x, y, z);
         if(ClientProxy.renderPass == 0) {
             renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, getBase(dummy));
-            GL11.glEnable(GL11.GL_BLEND);
-            if(dummy.getCore() != null)
-                renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BaseBlock) block).getBlockTextures().getOverlay());
-            GL11.glDisable(GL11.GL_BLEND);
             return true;
         } else if (ClientProxy.renderPass == 1) {
+            if(dummy.getCore() != null)
+                renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BaseBlock) block).getBlockTextures().getOverlay());
             renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
         }
         return true;
