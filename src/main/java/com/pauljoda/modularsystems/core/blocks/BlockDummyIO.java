@@ -1,7 +1,6 @@
 package com.pauljoda.modularsystems.core.blocks;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
-import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.teambr.bookshelf.Bookshelf;
@@ -58,8 +57,9 @@ public class BlockDummyIO extends BlockDummy {
      * @param iconRegister Icon Registry
      */
     public void generateDefaultTextures(IIconRegister iconRegister) {
+        super.generateDefaultTextures(iconRegister);
         this.blockIcon = iconRegister.registerIcon("minecraft:dispenser_front_vertical");
         textures = new BlockTextures(iconRegister, "minecraft:dispenser_front_vertical");
-        textures.setOverlay(iconRegister.registerIcon(Reference.MOD_ID + ":furnaceOverlay"));
+        textures.setOverlay(iconRegister.registerIcon("minecraft:hopper_top"));
     }
 }

@@ -32,6 +32,7 @@ public class DummyIO extends DummyTile implements IOpensGui {
         auto = bool;
     }
 
+
     /******************************************************************************************************************
      **************************************************  Tile Methods  ************************************************
      ******************************************************************************************************************/
@@ -54,7 +55,7 @@ public class DummyIO extends DummyTile implements IOpensGui {
 
     @Override
     public void updateEntity() {
-        if(coolDown <= 0) {
+        if(coolDown <= 0 && getCore() != null) {
             for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                 TileEntity tile = getTileInDirection(dir);
                 if(tile != null && getCore() != null && (!(tile instanceof DummyTile) && !(tile instanceof AbstractCore)) && tile instanceof IInventory && auto) {
@@ -77,6 +78,7 @@ public class DummyIO extends DummyTile implements IOpensGui {
                 }
             }
             coolDown = 80;
+            worldObj.markBlockForUpdate(getCore().xCoord, getCore().yCoord, getCore().zCoord);
         }
         coolDown--;
     }

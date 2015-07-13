@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.core.renderers;
 
+import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.core.tiles.DummyIO;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.teambr.bookshelf.client.ClientProxy;
@@ -30,7 +31,7 @@ public class BlockDummyRenderer implements ISimpleBlockRenderingHandler {
             return true;
         } else if (ClientProxy.renderPass == 1) {
             if(dummy.getCore() != null)
-                renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BaseBlock) block).getBlockTextures().getOverlay());
+                renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BlockDummy) block).getOverlayIcon(dummy.getCore()));
             renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
         }
         return true;

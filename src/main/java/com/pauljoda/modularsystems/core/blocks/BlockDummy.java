@@ -4,10 +4,13 @@ import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.renderers.BlockDummyRenderer;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
-import com.pauljoda.modularsystems.power.blocks.BlockPower;
+import com.pauljoda.modularsystems.crusher.tiles.TileCrusherCore;
+import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.collections.BlockTextures;
 import com.teambr.bookshelf.common.blocks.BaseBlock;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -16,11 +19,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
 public class BlockDummy extends BaseBlock {
+    @SideOnly(Side.CLIENT)
+    protected IIcon furnaceOverlay, crusherOverlay;
+
     public BlockDummy(Material mat, String name, Class<? extends TileEntity> tile) {
         super(mat, name, tile);
     }
@@ -82,8 +89,20 @@ public class BlockDummy extends BaseBlock {
      */
     public void generateDefaultTextures(IIconRegister iconRegister) {
         this.blockIcon = iconRegister.registerIcon("minecraft:stone");
+        this.furnaceOverlay = iconRegister.registerIcon(Reference.MOD_ID + ":furnaceOverlay");
+        this.crusherOverlay = iconRegister.registerIcon(Reference.MOD_ID + ":crusherOverlay");
+
         textures = new BlockTextures(iconRegister, "minecraft:stone");
-        textures.setOverlay(iconRegister.registerIcon(Reference.MOD_ID + ":furnaceOverlay"));
+        textures.setOverlay(iconRegister.registerIcon("minecraft:hopper_top"));
+    }
+
+    /**
+     * Get the overlay for the dummy based on the core
+     * @param core The core this is attached to
+     * @return The correct overlay icon
+     */
+    public IIcon getOverlayIcon(AbstractCore core) {
+        return core instanceof TileEntityFurnaceCore ? furnaceOverlay : core instanceof TileCrusherCore ? crusherOverlay : textures.getOverlay();
     }
 
     @Override
