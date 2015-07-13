@@ -66,7 +66,7 @@ public class CrusherRecipeRegistry {
             }
         }
 
-        //misc recipes TODO WOOL
+        //misc recipes
         crusherRecipes.put(new ItemStack(Items.blaze_rod), new ItemStack(Items.blaze_powder, 4));
         crusherRecipes.put(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.sand));
         crusherRecipes.put(new ItemStack(Items.bone), new ItemStack(Items.dye, 6, 15));
@@ -80,5 +80,23 @@ public class CrusherRecipeRegistry {
             crusherRecipes.put(new ItemStack(Blocks.wool, 1, i), new ItemStack(Items.string, 4));
 
         LogHelper.info("Finished adding " + crusherRecipes.size() + " Crusher Recipes");
+    }
+
+    /**
+     *
+     * @param itemStack to check
+     * @return boolean
+     */
+    public boolean isItemValid(ItemStack itemStack) {
+        return crusherRecipes.containsKey(new ItemStack(itemStack.getItem(), 1, itemStack.getItemDamage()));
+    }
+
+    /**
+     *
+     * @param itemStack
+     * @return output Itemstack or Null
+     */
+    public ItemStack getCrusherOutput(ItemStack itemStack) {
+        return crusherRecipes.get(new ItemStack(itemStack.getItem(), 1, itemStack.getItemDamage()));
     }
 }
