@@ -38,29 +38,38 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         RenderUtils.setColor(getBackground(tile));
         float min = 2 / 16F - 0.002F;
         float max = 14 / 16F + 0.002F;
-        drawLevel(min,  min, -0.001F, max, max, -0.001F, tess);
-        drawLevel(-0.001F, min, min, -0.001F, max, max, tess);
-        drawLevel(1.001F, min, min, 1.001F, max, max, tess);
-        drawLevel(min, min, 1.001F, max, max, 1.001F, tess);
+        drawLevel(min,  min, -0.0005F, max, max, -0.0005F, tess);
+        drawLevel(-0.0005F, min, min, -0.0005F, max, max, tess);
+        drawLevel(1.0005F, min, min, 1.0005F, max, max, tess);
+        drawLevel(min, min, 1.0005F, max, max, 1.0005F, tess);
         tess.startDrawingQuads();
-        tess.addVertexWithUV(min, 1.001, min, 2 / 255F, 2 / 255F);
-        tess.addVertexWithUV(min, 1.001, max, 2 / 255F, 4 / 255F);
-        tess.addVertexWithUV(max, 1.001, max, 3 / 255F, 4 / 255F);
-        tess.addVertexWithUV(max, 1.001, min, 3 / 255F, 2 / 255F);
+        tess.addVertexWithUV(min, 1.0005, min, 2 / 255F, 2 / 255F);
+        tess.addVertexWithUV(min, 1.0005, max, 2 / 255F, 4 / 255F);
+        tess.addVertexWithUV(max, 1.0005, max, 3 / 255F, 4 / 255F);
+        tess.addVertexWithUV(max, 1.0005, min, 3 / 255F, 2 / 255F);
         tess.draw();
         tess.startDrawingQuads();
-        tess.addVertexWithUV(min, -0.001, min, 2 / 255F, 2 / 255F);
-        tess.addVertexWithUV(min, -0.001, max, 2 / 255F, 4 / 255F);
-        tess.addVertexWithUV(max, -0.001, max, 3 / 255F, 4 / 255F);
-        tess.addVertexWithUV(max, -0.001, min, 3 / 255F, 2 / 255F);
+        tess.addVertexWithUV(min, -0.0005, min, 2 / 255F, 2 / 255F);
+        tess.addVertexWithUV(min, -0.0005, max, 2 / 255F, 4 / 255F);
+        tess.addVertexWithUV(max, -0.0005, max, 3 / 255F, 4 / 255F);
+        tess.addVertexWithUV(max, -0.0005, min, 3 / 255F, 2 / 255F);
         tess.draw();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
+        //Outer bar background
         RenderUtils.setColor(new Color(57, 57, 57));
-        drawLevel(6 / 16F, 3 / 16F, -0.002F, 10 / 16F,  13 / 16F,  -0.002F, tess);
-        drawLevel(-0.002F, 3 / 16F, 6 / 16F,  -0.002F,  13 / 16F, 10 / 16F, tess);
-        drawLevel( 1.002F, 3 / 16F, 6 / 16F,   1.002F,  13 / 16F, 10 / 16F, tess);
-        drawLevel(6 / 16F, 3 / 16F,  1.002F, 10 / 16F,  13 / 16F,   1.002F, tess);
+        drawLevel(6 / 16F, 3 / 16F, -0.002F, 10 / 16F, 13 / 16F, -0.002F, tess);
+        drawLevel(-0.002F, 3 / 16F, 6 / 16F, -0.002F, 13 / 16F, 10 / 16F, tess);
+        drawLevel(1.002F, 3 / 16F, 6 / 16F, 1.002F, 13 / 16F, 10 / 16F, tess);
+        drawLevel(6 / 16F, 3 / 16F, 1.002F, 10 / 16F, 13 / 16F, 1.002F, tess);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        //Inner Background
+        RenderUtils.setColor(new Color(12, 12, 12));
+        drawLevel(7 / 16F, 4 / 16F, -0.0025F, 9 / 16F,  12 / 16F,  -0.0025F, tess);
+        drawLevel(-0.0025F, 4 / 16F, 7 / 16F,  -0.0025F,  12 / 16F, 9 / 16F, tess);
+        drawLevel( 1.0025F, 4 / 16F, 7 / 16F,   1.0025F,  12 / 16F, 9 / 16F, tess);
+        drawLevel(7 / 16F, 4 / 16F,  1.0025F, 9 / 16F,  12 / 16F,   1.0025F, tess);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         float level = Math.max(3 / 16F, (((TilePowerBase)tile).getPowerLevelScaled(8) + 4) / 16F);
@@ -116,11 +125,11 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
 
     protected Color getBackground(TileEntity tile) {
         if(tile instanceof TileSolidsPower)
-            return new Color(74, 57, 14, 100);
+            return new Color(74, 57, 14, 160);
         else if(tile instanceof TileRFPower)
-            return new Color(174, 0, 36, 100);
+            return new Color(140, 0, 3, 160);
         else if(tile instanceof TileLiquidsPower)
-            return new Color(33, 80, 69, 100);
+            return new Color(33, 80, 69, 160);
         return new Color(255, 255, 255, 0);
     }
 }

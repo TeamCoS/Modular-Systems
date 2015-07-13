@@ -44,7 +44,7 @@ public interface FuelProvider {
     final class FuelSorter implements Comparator<FuelProvider> {
         @Override
         public int compare(FuelProvider o1, FuelProvider o2) {
-            return Integer.compare(o1.getPriority(), o2.getPriority());
+            return -Integer.compare(o1.getPriority(), o2.getPriority());
         }
 
         @Override
