@@ -9,9 +9,9 @@ import com.pauljoda.modularsystems.crusher.gui.GuiCrusher;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import scala.actors.threadpool.Arrays;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
