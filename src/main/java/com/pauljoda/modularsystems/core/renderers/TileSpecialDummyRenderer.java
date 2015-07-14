@@ -1,9 +1,9 @@
 package com.pauljoda.modularsystems.core.renderers;
 
-import com.pauljoda.modularsystems.power.tiles.TileLiquidsPower;
+import com.pauljoda.modularsystems.power.tiles.TileLiquidsPank;
 import com.pauljoda.modularsystems.power.tiles.TilePowerBase;
-import com.pauljoda.modularsystems.power.tiles.TileRFPower;
-import com.pauljoda.modularsystems.power.tiles.TileSolidsPower;
+import com.pauljoda.modularsystems.power.tiles.TileRFBank;
+import com.pauljoda.modularsystems.power.tiles.TileSolidsBank;
 import com.teambr.bookshelf.util.RenderUtils;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -74,8 +74,8 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
 
         float level = Math.max(3 / 16F, (((TilePowerBase)tile).getPowerLevelScaled(8) + 4) / 16F);
 
-        if(tile instanceof TileLiquidsPower) {
-            TileLiquidsPower fluidTile = (TileLiquidsPower)tile;
+        if(tile instanceof TileLiquidsPank) {
+            TileLiquidsPank fluidTile = (TileLiquidsPank)tile;
             FluidTankInfo info = fluidTile.getTankInfo(ForgeDirection.UNKNOWN)[0];
             if(info != null && info.fluid != null) {
                 IIcon fluidTexture = info.fluid.getFluid().getIcon();
@@ -124,11 +124,11 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
     }
 
     protected Color getBackground(TileEntity tile) {
-        if(tile instanceof TileSolidsPower)
+        if(tile instanceof TileSolidsBank)
             return new Color(74, 57, 14, 160);
-        else if(tile instanceof TileRFPower)
+        else if(tile instanceof TileRFBank)
             return new Color(140, 0, 3, 160);
-        else if(tile instanceof TileLiquidsPower)
+        else if(tile instanceof TileLiquidsPank)
             return new Color(33, 80, 69, 160);
         return new Color(255, 255, 255, 0);
     }

@@ -2,8 +2,8 @@ package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
 import com.pauljoda.modularsystems.core.registries.FluidFuelValues;
-import com.pauljoda.modularsystems.power.container.ContainerLiquidsPower;
-import com.pauljoda.modularsystems.power.gui.GuiLiquidsPower;
+import com.pauljoda.modularsystems.power.container.ContainerLiquidsBank;
+import com.pauljoda.modularsystems.power.gui.GuiLiquidsBank;
 import com.teambr.bookshelf.collections.InventoryTile;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.GuiHelper;
@@ -16,7 +16,7 @@ import net.minecraftforge.fluids.*;
 
 import java.util.List;
 
-public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluidHandler {
+public class TileLiquidsPank extends TilePowerBase implements IOpensGui, IFluidHandler {
 
     public static final int BUCKET_IN = 0;
     public static final int BUCKET_OUT = 1;
@@ -25,7 +25,7 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
     public FluidTank tank;
     private int cooldown;
 
-    public TileLiquidsPower() {
+    public TileLiquidsPank() {
         inventory = new InventoryTile(2);
         tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 20);
         energy = new EnergyStorage(FluidContainerRegistry.BUCKET_VOLUME * 20);
@@ -148,12 +148,12 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
      */
     @Override
     public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return getCore() != null ? new ContainerLiquidsPower(entityPlayer.inventory, this) : null;
+        return getCore() != null ? new ContainerLiquidsBank(entityPlayer.inventory, this) : null;
     }
 
     @Override
     public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return getCore() != null ? new GuiLiquidsPower(entityPlayer.inventory, this) : null;
+        return getCore() != null ? new GuiLiquidsBank(entityPlayer.inventory, this) : null;
     }
 
     /*

@@ -1,19 +1,19 @@
 package com.pauljoda.modularsystems.power.gui;
 
-import com.pauljoda.modularsystems.power.container.ContainerRFPower;
-import com.pauljoda.modularsystems.power.tiles.TileRFPower;
+import com.pauljoda.modularsystems.power.container.ContainerRFBank;
+import com.pauljoda.modularsystems.power.tiles.TileRFBank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentPowerBar;
 import net.minecraft.item.ItemStack;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GuiRFPower extends GuiPowerBase<ContainerRFPower> {
+public class GuiRFBank extends GuiPowerBase<ContainerRFBank> {
 
-    protected TileRFPower tileEntity;
+    protected TileRFBank tileEntity;
 
-    public GuiRFPower(TileRFPower tileEntity) {
-        super(new ContainerRFPower(), tileEntity, 130, 120, "inventory.rfpower.title");
+    public GuiRFBank(TileRFBank tileEntity) {
+        super(new ContainerRFBank(), tileEntity, 130, 120, "inventory.rfpower.title");
 
         this.tileEntity = tileEntity;
     }

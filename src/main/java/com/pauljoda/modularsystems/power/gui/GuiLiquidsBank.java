@@ -1,7 +1,7 @@
 package com.pauljoda.modularsystems.power.gui;
 
-import com.pauljoda.modularsystems.power.container.ContainerLiquidsPower;
-import com.pauljoda.modularsystems.power.tiles.TileLiquidsPower;
+import com.pauljoda.modularsystems.power.container.ContainerLiquidsBank;
+import com.pauljoda.modularsystems.power.tiles.TileLiquidsPank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentArrow;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentFluidTank;
 import com.teambr.bookshelf.helpers.GuiHelper;
@@ -10,12 +10,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiLiquidsPower extends GuiPowerBase<ContainerLiquidsPower> {
+public class GuiLiquidsBank extends GuiPowerBase<ContainerLiquidsBank> {
 
-    protected TileLiquidsPower tileEntity;
+    protected TileLiquidsPank tileEntity;
 
-    public GuiLiquidsPower(InventoryPlayer inventory, TileLiquidsPower tileEntity) {
-        super(new ContainerLiquidsPower(inventory, tileEntity), tileEntity, 175, 165, "inventory.liquidspower.title");
+    public GuiLiquidsBank(InventoryPlayer inventory, TileLiquidsPank tileEntity) {
+        super(new ContainerLiquidsBank(inventory, tileEntity), tileEntity, 175, 165, "inventory.liquidspower.title");
 
         this.tileEntity = tileEntity;
         addComponents();

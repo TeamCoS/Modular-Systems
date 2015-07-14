@@ -1,8 +1,8 @@
 package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
-import com.pauljoda.modularsystems.power.container.ContainerSolidsPower;
-import com.pauljoda.modularsystems.power.gui.GuiSolidsPower;
+import com.pauljoda.modularsystems.power.container.ContainerSolidsBank;
+import com.pauljoda.modularsystems.power.gui.GuiSolidsBank;
 import com.teambr.bookshelf.collections.InventoryTile;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,14 +12,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 
-public class TileSolidsPower extends TilePowerBase implements IOpensGui, ISidedInventory {
+public class TileSolidsBank extends TilePowerBase implements IOpensGui, ISidedInventory {
 
     public static final int POWER_PROCESS = 200;
 
     private InventoryTile inventory;
     private int cooldown;
 
-    public TileSolidsPower() {
+    public TileSolidsBank() {
         energy = new EnergyStorage(6400);
         inventory = new InventoryTile(27);
         cooldown = 0;
@@ -91,12 +91,12 @@ public class TileSolidsPower extends TilePowerBase implements IOpensGui, ISidedI
 
     @Override
     public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new ContainerSolidsPower(entityPlayer.inventory, this);
+        return new ContainerSolidsBank(entityPlayer.inventory, this);
     }
 
     @Override
     public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new GuiSolidsPower(entityPlayer.inventory, this);
+        return new GuiSolidsBank(entityPlayer.inventory, this);
     }
 
     /*

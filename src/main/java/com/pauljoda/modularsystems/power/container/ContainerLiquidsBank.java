@@ -1,14 +1,14 @@
 package com.pauljoda.modularsystems.power.container;
 
-import com.pauljoda.modularsystems.power.tiles.TileLiquidsPower;
+import com.pauljoda.modularsystems.power.tiles.TileLiquidsPank;
 import com.teambr.bookshelf.inventory.BaseContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 
-public class ContainerLiquidsPower extends BaseContainer {
+public class ContainerLiquidsBank extends BaseContainer {
 
-    public ContainerLiquidsPower(InventoryPlayer playerInventory, TileLiquidsPower tileEntity) {
+    public ContainerLiquidsBank(InventoryPlayer playerInventory, TileLiquidsPank tileEntity) {
         super(playerInventory, tileEntity);
 
         addSlotToContainer(new Slot(tileEntity, tileEntity.BUCKET_IN, 25, 20));

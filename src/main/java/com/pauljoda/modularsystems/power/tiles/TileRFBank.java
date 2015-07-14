@@ -1,18 +1,18 @@
 package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
-import com.pauljoda.modularsystems.power.container.ContainerRFPower;
-import com.pauljoda.modularsystems.power.gui.GuiRFPower;
+import com.pauljoda.modularsystems.power.container.ContainerRFBank;
+import com.pauljoda.modularsystems.power.gui.GuiRFBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileRFPower extends TilePowerBase implements IOpensGui {
+public class TileRFBank extends TilePowerBase implements IOpensGui {
 
     public static final int RF_PROCESS = 80;
 
-    public TileRFPower() {
+    public TileRFBank() {
         energy = new EnergyStorage(10000);
     }
 
@@ -54,11 +54,11 @@ public class TileRFPower extends TilePowerBase implements IOpensGui {
 
     @Override
     public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new ContainerRFPower();
+        return new ContainerRFBank();
     }
 
     @Override
     public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new GuiRFPower(this);
+        return new GuiRFBank(this);
     }
 }

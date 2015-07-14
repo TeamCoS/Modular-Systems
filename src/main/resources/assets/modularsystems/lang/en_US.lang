@@ -6,9 +6,9 @@ tile.modularsystems:crusherCore.name=Modular Crusher Core
 tile.modularsystems:crusherCoreActive.name=Modular Crusher Core
 tile.modularsystems:dummy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O
-tile.modularsystems:powerRF.name=RF Power Provider
-tile.modularsystems:powerSolids.name=Solid Fuel Power Provider
-tile.modularsystems:powerLiquids.name=Liquid Fuel Power Provider
+tile.modularsystems:powerRF.name=RestoneFlux Power Bank
+tile.modularsystems:powerSolids.name=Solid Fuel Power Bank
+tile.modularsystems:powerLiquids.name=Liquid Fuel Power Bank
 
 inventory.furnace.title=Modular Furnace
 inventory.crusher.title=Modular Crusher
@@ -18,9 +18,9 @@ inventory.io.import=Import
 inventory.io.export=Export
 inventory.io.auto=Auto
 
-inventory.rfpower.title=RF Power Provider
-inventory.liquidspower.title=Liquid Fuel Power Provider
-inventory.solidspower.title=Solid Fuel Power Provider
+inventory.rfpower.title=RestoneFlux Power Bank
+inventory.liquidspower.title=Liquid Fuel Power Bank
+inventory.solidspower.title=Solid Fuel Power Bank
 
 inventory.nei.recipes=Recipes
 
