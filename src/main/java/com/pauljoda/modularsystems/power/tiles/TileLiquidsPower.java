@@ -148,12 +148,12 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
      */
     @Override
     public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new ContainerLiquidsPower(entityPlayer.inventory, this);
+        return getCore() != null ? new ContainerLiquidsPower(entityPlayer.inventory, this) : null;
     }
 
     @Override
     public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new GuiLiquidsPower(entityPlayer.inventory, this);
+        return getCore() != null ? new GuiLiquidsPower(entityPlayer.inventory, this) : null;
     }
 
     /*
