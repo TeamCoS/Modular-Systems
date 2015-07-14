@@ -5,13 +5,18 @@ import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.providers.FuelProvider;
 import com.pauljoda.modularsystems.core.collections.StandardValues;
 import com.pauljoda.modularsystems.core.registries.GeneralConfigRegistry;
+import com.teambr.bookshelf.api.waila.IWaila;
+import com.teambr.bookshelf.client.gui.component.display.GuiComponentText;
 import com.teambr.bookshelf.collections.Couplet;
 import com.teambr.bookshelf.collections.Location;
 import com.teambr.bookshelf.common.blocks.BaseBlock;
 import com.teambr.bookshelf.common.tiles.BaseTile;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import com.teambr.bookshelf.util.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,18 +26,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractCore extends BaseTile implements ISidedInventory {
+public abstract class AbstractCore extends BaseTile implements ISidedInventory, IWaila {
     protected StandardValues values;
     protected Couplet<Location, Location> corners;
     private static final int cookSpeed = 200;
     private boolean isDirty = true;
     public boolean wellFormed = false;
-    //private static final int MAX_SIZE = 50;
 
     protected int[] sides = new int[] { 0, 1 };
 
@@ -671,5 +676,38 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
 
     public StandardValues getValues() {
         return values;
+    }
+
+    /*******************************************************************************************************************
+     *************************************************** Waila *********************************************************
+     *******************************************************************************************************************/
+    @Override
+    public void returnWailaHead(List<String> tip) {
+
+    }
+
+    @Override
+    public void returnWailaBody(List<String> tip) {
+        if (isWellFormed()) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                double speed = (-1 * (((getValues().getSpeed() + 200) / 200) - 1)) != 0 ? ((-1 * (((getValues().getSpeed() + 200) / 200) - 1)) * 100) : 0.00;
+                tip.add(GuiHelper.GuiColor.ORANGE + "Speed: " + (speed >= 0 ? GuiHelper.GuiColor.GREEN : GuiHelper.GuiColor.RED) + String.format("%.2f", speed) + "%");
+                double efficiency = (((getValues().getEfficiency() + 200) / 200) - 1) != 0 ? ((((getValues().getEfficiency() + 200) / 200) - 1) * 100) : 0.00;
+                tip.add(GuiHelper.GuiColor.ORANGE + "Efficiency: " + (efficiency >= 0 ? GuiHelper.GuiColor.GREEN : GuiHelper.GuiColor.RED) + String.format("%.2f", efficiency) + "%");
+                double multiplicity = getValues().getMultiplicity() + 1;
+                tip.add(GuiHelper.GuiColor.ORANGE + "Multiplicity: " + (multiplicity > 1.0D ? GuiHelper.GuiColor.GREEN : GuiHelper.GuiColor.WHITE) + multiplicity + "x");
+            } else
+                tip.add(GuiHelper.GuiColor.ORANGE + "Press Shift for Information");
+        }
+    }
+
+    @Override
+    public void returnWailaTail(List<String> tip) {
+
+    }
+
+    @Override
+    public ItemStack returnWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+        return null;
     }
 }

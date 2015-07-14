@@ -9,7 +9,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.*;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class CrusherRecipeRegistry {
     public static CrusherRecipeRegistry INSTANCE = new CrusherRecipeRegistry();
 

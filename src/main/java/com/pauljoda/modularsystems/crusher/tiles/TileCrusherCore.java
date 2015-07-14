@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class TileCrusherCore extends AbstractCore implements IOpensGui, IWaila {
+public class TileCrusherCore extends AbstractCore implements IOpensGui {
 
     @Override
     protected void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z) {
@@ -77,25 +77,5 @@ public class TileCrusherCore extends AbstractCore implements IOpensGui, IWaila {
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         return new GuiCrusher(player.inventory, this);
-    }
-
-    @Override
-    public void returnWailaHead(List<String> tip) {
-
-    }
-
-    @Override
-    public void returnWailaBody(List<String> tip) {
-
-    }
-
-    @Override
-    public void returnWailaTail(List<String> tip) {
-
-    }
-
-    @Override
-    public ItemStack returnWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return null;
     }
 }

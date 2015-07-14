@@ -79,29 +79,4 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui, IW
     public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
         return new GuiModularFurnace(entityPlayer.inventory, this);
     }
-
-    /*******************************************************************************************************************
-     *************************************************** Waila *********************************************************
-     *******************************************************************************************************************/
-
-    @Override
-    public void returnWailaHead(List<String> head) {
-
-    }
-
-    @Override
-    public void returnWailaBody(List<String> body) {
-
-    }
-
-    @Override
-    public void returnWailaTail(List<String> tail) {
-
-    }
-
-    @Override
-    public ItemStack returnWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return null;
-    }
-
 }
