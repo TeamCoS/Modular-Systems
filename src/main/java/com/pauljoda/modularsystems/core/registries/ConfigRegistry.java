@@ -5,13 +5,13 @@ import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
 
-public class GeneralConfigRegistry {
+public class ConfigRegistry {
 
     private static Configuration config;
 
     public static int multiblockSize, versionNotify, versionRetry;
     public static boolean debug, updateTab;
-    public static String lastVersion;
+    public static String lastVersion, updateURL;
 
     public static void init(String configFolderLocation) {
 
@@ -23,6 +23,7 @@ public class GeneralConfigRegistry {
         versionNotify       = config.get(Reference.VERSIONCHECK, "Notify if out of Date? (0=Always, 1=Once, 2=Never)", 0).getInt();
         updateTab           = config.get(Reference.VERSIONCHECK, Reference.UPDATE_TAB, false).getBoolean();
         versionRetry        = config.get(Reference.VERSIONCHECK, "# of attempts to check for updates?", 3).getInt();
+        updateURL           = config.get(Reference.VERSIONCHECK, Reference.UPDATE_URL, "").getString();
 
         multiblockSize      = config.get(Reference.MULTIBLOCK_CONFIG, "Max Size (Blocks From Core)", 32).getInt();
 

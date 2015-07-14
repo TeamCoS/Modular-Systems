@@ -11,4 +11,5 @@ public class Reference {
     public static final String VERSIONCHECK = "Version Checker";
     public static final String REMOTE_VERSION = "Last Remote Version Found";
     public static final String UPDATE_TAB = "Hide Update Tab?";
+    public static final String UPDATE_URL = "Update URL";
 }

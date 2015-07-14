@@ -9,9 +9,11 @@ import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.managers.GuiManager;
 import com.pauljoda.modularsystems.core.managers.RecipeManager;
+import com.pauljoda.modularsystems.core.managers.VersionManager;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
 import com.pauljoda.modularsystems.core.registries.*;
 import com.pauljoda.modularsystems.core.managers.PacketManager;
+import com.teambr.bookshelf.util.VersionChecker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -61,13 +63,13 @@ public class ModularSystems {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiManager());
 
         configFolderLocation = event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Modular-Systems";
-        GeneralConfigRegistry.init(configFolderLocation);
+        ConfigRegistry.init(configFolderLocation);
 
         proxy.preInit();
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
+    public void init(FMLInitializationEvent event) throws InterruptedException {
         FurnaceBannedBlocks.INSTANCE.init();
         BlockValueRegistry.INSTANCE.init();
         FluidFuelValues.INSTANCE.init();
@@ -78,7 +80,7 @@ public class ModularSystems {
 
         proxy.init();
 
-        VersionCheckerFunction.execute();
+        VersionManager.init();
     }
 
     @Mod.EventHandler
