@@ -1,18 +1,15 @@
 package com.pauljoda.modularsystems.power.gui;
 
+import com.pauljoda.modularsystems.core.network.OpenContainerPacket;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
-import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.power.tiles.TilePowerBase;
-import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.client.gui.GuiBase;
 import com.teambr.bookshelf.client.gui.component.BaseComponent;
-import com.teambr.bookshelf.client.gui.component.control.GuiComponentCheckBox;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentSetNumber;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentText;
 import com.teambr.bookshelf.client.gui.component.display.GuiTabCollection;
 import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener;
 import com.teambr.bookshelf.manager.PacketManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
@@ -39,6 +36,8 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y) {
         super.drawGuiContainerForegroundLayer(x, y);
+
+        core = (AbstractCore) core.getWorldObj().getTileEntity(core.xCoord, core.yCoord, core.zCoord);
         rightTabs.getTabs().get(0).setIcon(new ItemStack(core.getWorldObj().getBlock(
                 core.xCoord, core.yCoord, core.zCoord)));
     }
@@ -78,9 +77,12 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
                 @Override
                 public void onMouseDown(BaseComponent baseComponent, int i, int i1, int i2) {
 
-                    if (tileEntity.getCore() != null)
-                        Minecraft.getMinecraft().thePlayer.openGui(Bookshelf.instance, 0, core.getWorldObj(),
-                                core.xCoord, core.yCoord, core.zCoord);
+                    if (tileEntity.getCore() != null) {
+                        /*Minecraft.getMinecraft().thePlayer.openGui(Bookshelf.instance, 0, core.getWorldObj(),
+                                core.xCoord, core.yCoord, core.zCoord);*/
+                        com.pauljoda.modularsystems.core.managers.PacketManager.net.sendToServer(
+                                new OpenContainerPacket.UpdateMessage(core.xCoord, core.yCoord, core.zCoord));
+                    }
                 }
 
                 @Override

@@ -11,6 +11,7 @@ import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.pauljoda.modularsystems.core.registries.CrusherRecipeRegistry;
 import com.pauljoda.modularsystems.core.registries.FluidFuelValues;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
+import com.pauljoda.modularsystems.core.managers.PacketManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -69,6 +70,7 @@ public class ModularSystems {
         CrusherRecipeRegistry.INSTANCE.init();
 
         RecipeManager.init();
+        PacketManager.initPackets();
 
         proxy.init();
     }
