@@ -12,6 +12,6 @@ public class NEICallback implements INEICallback {
         if (gui instanceof ContainerCrusher)
             GuiCraftingRecipe.openRecipeGui("crusher");
         else if(gui instanceof ContainerModularFurnace)
-            GuiCraftingRecipe.openRecipeGui("smelting");
+            GuiCraftingRecipe.openRecipeGui("furnace");
     }
 }
