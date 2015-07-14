@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.furnace.gui;
 
+import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.teambr.bookshelf.client.gui.GuiBase;
@@ -12,9 +13,11 @@ import com.teambr.bookshelf.collections.Location;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GuiModularFurnace extends GuiBase<ContainerModularFurnace> {
@@ -47,6 +50,19 @@ public class GuiModularFurnace extends GuiBase<ContainerModularFurnace> {
             public int getCurrentProgress() {
                 return core.getCookProgressScaled(24);
             }
+
+            @Override
+            public List<String> getDynamicToolTip(int mouseX, int mouseY) {
+                if(ModularSystems.nei != null)
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.nei.recipes"));
+                return null;
+            }
+
+            @Override
+            public void mouseDown(int mouseX, int mouseY, int button) {
+                if(ModularSystems.nei != null)
+                    ModularSystems.nei.onArrowClicked(inventory);
+            }
         });
     }
 
@@ -68,11 +84,4 @@ public class GuiModularFurnace extends GuiBase<ContainerModularFurnace> {
             tabs.addTab(furnaceInfoSpeed, 95, 100, new Color(100, 150, 150), new ItemStack(Items.book));
         }
     }
-
-    /**
-     * Add the tabs to the left. Overwrite this if you want tabs on your GUI
-     * @param tabs List of tabs, put GuiReverseTabs in
-     */
-    @Override
-    public void addLeftTabs(GuiTabCollection tabs) {}
 }

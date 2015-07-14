@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.crusher.gui;
 
+import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.crusher.container.ContainerCrusher;
 import com.pauljoda.modularsystems.crusher.tiles.TileCrusherCore;
 import com.teambr.bookshelf.client.gui.GuiBase;
@@ -12,9 +13,11 @@ import com.teambr.bookshelf.collections.Location;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GuiCrusher extends GuiBase<ContainerCrusher> {
@@ -47,6 +50,19 @@ public class GuiCrusher extends GuiBase<ContainerCrusher> {
             @Override
             public int getCurrentProgress() {
                 return core.getCookProgressScaled(24);
+            }
+
+            @Override
+            public List<String> getDynamicToolTip(int mouseX, int mouseY) {
+                if(ModularSystems.nei != null)
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.nei.recipes"));
+                return null;
+            }
+
+            @Override
+            public void mouseDown(int mouseX, int mouseY, int button) {
+                if(ModularSystems.nei != null)
+                    ModularSystems.nei.onArrowClicked(inventory);
             }
         });
     }

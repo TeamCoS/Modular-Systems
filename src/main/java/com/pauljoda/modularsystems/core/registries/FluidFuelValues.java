@@ -56,17 +56,17 @@ public class FluidFuelValues {
      */
     public void generateDefaults() {
         validateList();
-        values.put(FluidRegistry.LAVA.getName(), 16000);
-        values.put("oil", 2000);
-        values.put("fuel", 22000);
-        values.put("rocket_fuel", 600);
-        values.put("fire_water", 800);
-        values.put("bioethanol", 20000);
-        values.put("biofuel", 20000);
-        values.put("redstone", 8000);
-        values.put("glowstone", 10000);
-        values.put("ender", 12000);
-        values.put("pyrotheum", 12000);
+        values.put(FluidRegistry.LAVA.getName(), 1600);
+        values.put("oil", 200);
+        values.put("fuel", 2200);
+        values.put("rocket_fuel", 60);
+        values.put("fire_water", 80);
+        values.put("bioethanol", 2000);
+        values.put("biofuel", 2000);
+        values.put("redstone", 800);
+        values.put("glowstone", 1000);
+        values.put("ender", 1200);
+        values.put("pyrotheum", 1200);
         saveToFile();
     }
 
