@@ -15,7 +15,7 @@ public class GuiLiquidsPower extends GuiPowerBase<ContainerLiquidsPower> {
     protected TileLiquidsPower tileEntity;
 
     public GuiLiquidsPower(InventoryPlayer inventory, TileLiquidsPower tileEntity) {
-        super(new ContainerLiquidsPower(inventory, tileEntity), tileEntity, 200, 165, "inventory.liquidspower.title");
+        super(new ContainerLiquidsPower(inventory, tileEntity), tileEntity, 175, 165, "inventory.liquidspower.title");
 
         this.tileEntity = tileEntity;
         addComponents();
@@ -24,7 +24,7 @@ public class GuiLiquidsPower extends GuiPowerBase<ContainerLiquidsPower> {
     @Override
     public void addComponents() {
         if(tileEntity != null) {
-            components.add(new GuiComponentFluidTank(19, 18, 18, 60, tileEntity.tank) {
+            components.add(new GuiComponentFluidTank(80, 18, 75, 60, tileEntity.tank) {
                 @Override
                 public List<String> getDynamicToolTip(int mouseX, int mouseY) {
                     ArrayList<String> toolTipLiquid = new ArrayList<>();
@@ -34,7 +34,7 @@ public class GuiLiquidsPower extends GuiPowerBase<ContainerLiquidsPower> {
                 }
             });
 
-            components.add(new GuiComponentArrow(84, 40) {
+            components.add(new GuiComponentArrow(48, 20) {
                 @Override
                 public int getCurrentProgress() {
                     return 0;

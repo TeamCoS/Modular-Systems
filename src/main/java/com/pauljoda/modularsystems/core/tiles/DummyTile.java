@@ -204,7 +204,6 @@ public class DummyTile extends BaseTile implements ISidedInventory, IWaila {
     @Override
     public void returnWailaHead(List<String> tip) {
         if(getStoredBlock() != Blocks.air) {
-            tip.add(GuiHelper.GuiColor.YELLOW + "Stored Block: " + GuiHelper.GuiColor.WHITE + new ItemStack(getStoredBlock(), 1, getMetadata()).getDisplayName());
             if (BlockValueRegistry.INSTANCE.isBlockRegistered(getStoredBlock(), getMetadata()) && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
                 BlockValues values = BlockValueRegistry.INSTANCE.values.get(BlockHelper.getBlockString(getStoredBlock(), getMetadata())) != null ? BlockValueRegistry.INSTANCE.values.get(BlockHelper.getBlockString(getStoredBlock(), getMetadata())) : BlockValueRegistry.INSTANCE.values.get(BlockHelper.getBlockString(getStoredBlock()));
                 tip.add(GuiHelper.GuiColor.RED + "Speed Function:      " + GuiHelper.GuiColor.WHITE + values.getSpeedFunction().toString());
@@ -223,6 +222,8 @@ public class DummyTile extends BaseTile implements ISidedInventory, IWaila {
 
     @Override
     public ItemStack returnWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return new ItemStack(Blocks.anvil);
+        if(getStoredBlock() != Blocks.air)
+            return new ItemStack(getStoredBlock(), 1, getMetadata());
+        else return null;
     }
 }
