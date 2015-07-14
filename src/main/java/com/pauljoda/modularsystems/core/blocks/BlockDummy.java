@@ -75,10 +75,16 @@ public class BlockDummy extends BaseBlock {
                     (double) z + f2,
                     new ItemStack(block, 1, meta)
             );
-
             world.spawnEntityInWorld(entityitem);
+            world.func_147453_f(x, y, z, par5);
         }
         super.breakBlock(world, x, y, z, par5, par6);
+    }
+
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block changedBlock) {
+        DummyTile tile = (DummyTile)world.getTileEntity(x, y, z);
+        tile.validateCore();
     }
     
     /**

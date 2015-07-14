@@ -199,6 +199,17 @@ public class DummyTile extends BaseTile implements ISidedInventory, IWaila {
      */
     public void unsetCore() {
         this.coreLocation = null;
+        worldObj.func_147453_f(xCoord, yCoord, zCoord, this.blockType);
+    }
+
+    public void validateCore() {
+        if(getCore() == null || !getCore().isWellFormed()) {
+            if(getStoredBlock() != Blocks.air) {
+                worldObj.setBlock(xCoord, yCoord, zCoord, getStoredBlock());
+                worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, getMetadata(), 2);
+            } else
+                unsetCore();
+        }
     }
 
     @Override
