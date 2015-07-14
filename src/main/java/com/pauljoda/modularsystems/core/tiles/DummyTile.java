@@ -7,6 +7,8 @@ import com.teambr.bookshelf.collections.Location;
 import com.teambr.bookshelf.common.tiles.BaseTile;
 import com.teambr.bookshelf.helpers.BlockHelper;
 import com.teambr.bookshelf.helpers.GuiHelper;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -218,4 +220,9 @@ public class DummyTile extends BaseTile implements ISidedInventory, IWaila {
 
     @Override
     public void returnWailaTail(List<String> tip) {}
+
+    @Override
+    public ItemStack returnWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+        return new ItemStack(Blocks.anvil);
+    }
 }
