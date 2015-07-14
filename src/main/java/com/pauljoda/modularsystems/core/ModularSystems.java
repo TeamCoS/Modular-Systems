@@ -3,8 +3,10 @@ package com.pauljoda.modularsystems.core;
 import com.pauljoda.modularsystems.core.api.nei.INEICallback;
 import com.pauljoda.modularsystems.core.commands.AddBannedBlock;
 import com.pauljoda.modularsystems.core.commands.AddFluidFuel;
+import com.pauljoda.modularsystems.core.commands.OpenValueConfig;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.managers.GuiManager;
 import com.pauljoda.modularsystems.core.managers.RecipeManager;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
 import com.pauljoda.modularsystems.core.registries.*;
@@ -15,6 +17,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.command.ICommandManager;
@@ -54,6 +57,8 @@ public class ModularSystems {
         MinecraftForge.EVENT_BUS.register(FurnaceBannedBlocks.INSTANCE);
         MinecraftForge.EVENT_BUS.register(BlockValueRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidFuelValues.INSTANCE);
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiManager());
+
         configFolderLocation = event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Modular-Systems";
         GeneralConfigRegistry.init(configFolderLocation);
 
@@ -83,5 +88,6 @@ public class ModularSystems {
         ServerCommandManager manager = (ServerCommandManager) command;
         manager.registerCommand(new AddBannedBlock());
         manager.registerCommand(new AddFluidFuel());
+        manager.registerCommand(new OpenValueConfig());
     }
 }
