@@ -32,16 +32,17 @@ public class CrusherRecipeRegistry {
                 String ore = anOreDict1.replaceFirst("dust", "");
                 if (OreDictionary.doesOreNameExist("ore" + ore)) {
                     List<ItemStack> outputDust = OreDictionary.getOres(anOreDict1);
-
-                    switch ("ore" + ore) {
-                        case "oreRedstone":
-                            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.redstone, 8), "oreRedstone"));
-                            break;
-                        case "oreLapis":
-                            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.dye, 8, 4), "oreLapis"));
-                            break;
-                        default:
-                            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(outputDust.get(0).getItem(), 2, outputDust.get(0).getItemDamage()), "ore" + ore));
+                    if(outputDust.size() > 0 && !outputDust.isEmpty()) {
+                        switch ("ore" + ore) {
+                            case "oreRedstone":
+                                crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.redstone, 8), "oreRedstone"));
+                                break;
+                            case "oreLapis":
+                                crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.dye, 8, 4), "oreLapis"));
+                                break;
+                            default:
+                                crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(outputDust.get(0).getItem(), 2, outputDust.get(0).getItemDamage()), "ore" + ore));
+                        }
                     }
                 }
             } else if (anOreDict1.startsWith("ingot")) { //Ingot to Dust
