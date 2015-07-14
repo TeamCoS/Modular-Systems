@@ -3,6 +3,7 @@ package com.pauljoda.modularsystems.core;
 import com.pauljoda.modularsystems.core.api.nei.INEICallback;
 import com.pauljoda.modularsystems.core.commands.AddBannedBlock;
 import com.pauljoda.modularsystems.core.commands.AddFluidFuel;
+import com.pauljoda.modularsystems.core.functions.VersionCheckerFunction;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.managers.RecipeManager;
@@ -71,6 +72,8 @@ public class ModularSystems {
         PacketManager.initPackets();
 
         proxy.init();
+
+        VersionCheckerFunction.execute();
     }
 
     @Mod.EventHandler
