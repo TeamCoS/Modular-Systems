@@ -1,15 +1,23 @@
 package com.pauljoda.modularsystems.core.tiles;
 
+import com.pauljoda.modularsystems.core.collections.BlockValues;
+import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
+import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.collections.Location;
 import com.teambr.bookshelf.common.tiles.BaseTile;
+import com.teambr.bookshelf.helpers.BlockHelper;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import org.lwjgl.input.Keyboard;
 
-public class DummyTile extends BaseTile implements ISidedInventory {
+import java.util.List;
+
+public class DummyTile extends BaseTile implements ISidedInventory, IWaila {
     protected Location coreLocation;
     protected int storedBlock;
     protected int metadata = 0;
@@ -35,7 +43,7 @@ public class DummyTile extends BaseTile implements ISidedInventory {
      * @return The blocks if found, cobblestone if not
      */
     public Block getStoredBlock() {
-        return Block.getBlockById(storedBlock) != null ? Block.getBlockById(storedBlock) : Blocks.cobblestone;
+        return Block.getBlockById(storedBlock) != null ? Block.getBlockById(storedBlock) : Blocks.air;
     }
 
     /******************************************************************************************************************
@@ -190,4 +198,24 @@ public class DummyTile extends BaseTile implements ISidedInventory {
     public void unsetCore() {
         this.coreLocation = null;
     }
+
+    @Override
+    public void returnWailaHead(List<String> tip) {
+        if(getStoredBlock() != Blocks.air) {
+            tip.add(GuiHelper.GuiColor.YELLOW + "Stored Block: " + GuiHelper.GuiColor.WHITE + new ItemStack(getStoredBlock(), 1, getMetadata()).getDisplayName());
+            if (BlockValueRegistry.INSTANCE.isBlockRegistered(getStoredBlock(), getMetadata()) && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                BlockValues values = BlockValueRegistry.INSTANCE.values.get(BlockHelper.getBlockString(getStoredBlock(), getMetadata())) != null ? BlockValueRegistry.INSTANCE.values.get(BlockHelper.getBlockString(getStoredBlock(), getMetadata())) : BlockValueRegistry.INSTANCE.values.get(BlockHelper.getBlockString(getStoredBlock()));
+                tip.add(GuiHelper.GuiColor.RED + "Speed Function:      " + GuiHelper.GuiColor.WHITE + values.getSpeedFunction().toString());
+                tip.add(GuiHelper.GuiColor.GREEN + "Efficiency Function: " + GuiHelper.GuiColor.WHITE + values.getEfficiencyFunction().toString());
+                tip.add(GuiHelper.GuiColor.ORANGE + "Multiplicity Function: " + GuiHelper.GuiColor.WHITE + values.getMultiplicityFunction().toString());
+            } else if(BlockValueRegistry.INSTANCE.isBlockRegistered(getStoredBlock(), getMetadata()))
+                tip.add(GuiHelper.GuiColor.ORANGE + "Press <SHIFT> to display functions");
+        }
+    }
+
+    @Override
+    public void returnWailaBody(List<String> tip) {}
+
+    @Override
+    public void returnWailaTail(List<String> tip) {}
 }

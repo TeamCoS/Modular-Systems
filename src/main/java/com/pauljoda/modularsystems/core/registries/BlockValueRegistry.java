@@ -20,8 +20,8 @@ import java.util.LinkedHashMap;
 public class BlockValueRegistry {
     public static BlockValueRegistry INSTANCE = new BlockValueRegistry();
 
-    protected HashMap<String, BlockValues> values;
-    protected HashMap<String, BlockValues> materialValues;
+    public HashMap<String, BlockValues> values;
+    public HashMap<String, BlockValues> materialValues;
 
     public BlockValueRegistry() {
         values = new LinkedHashMap<>();
