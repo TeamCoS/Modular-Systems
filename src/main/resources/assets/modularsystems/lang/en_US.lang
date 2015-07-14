@@ -54,3 +54,5 @@ commands.addFluidFuel.success=Liquid Fuel successfully added to registry
 
 modularsystems.nei.crusherrecipes=Modular Crusher
 modularsystems.nei.furnacerecipes=Modular Furnace
+
+modularsystems.versioncheck.start=Starting version check...
