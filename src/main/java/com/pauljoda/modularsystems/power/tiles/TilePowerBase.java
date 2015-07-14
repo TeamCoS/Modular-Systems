@@ -5,6 +5,9 @@ import cofh.api.energy.IEnergyHandler;
 import com.pauljoda.modularsystems.core.providers.FuelProvider;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.teambr.bookshelf.api.waila.IWaila;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -116,5 +119,10 @@ public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProv
     @Override
     public void returnWailaTail(List<String> list) {
 
+    }
+
+    @Override
+    public ItemStack returnWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+        return null;
     }
 }

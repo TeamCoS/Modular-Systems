@@ -12,6 +12,8 @@ import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
 import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.BlockHelper;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -95,6 +97,11 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui, IW
     @Override
     public void returnWailaTail(List<String> tail) {
 
+    }
+
+    @Override
+    public ItemStack returnWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+        return null;
     }
 
 }

@@ -33,3 +33,4 @@ commands.addFluidFuel.failure=Failed to add Liquid Fuel
 commands.addFluidFuel.success=Liquid Fuel successfully added to registry
 
 modularsystems.nei.crusherrecipes=Modular Crusher
+modularsystems.nei.furnacerecipes=Modular Furnace
