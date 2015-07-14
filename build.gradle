@@ -41,7 +41,7 @@ configFile.withReader {
 
 version = "${config.minecraft_version}-${config.mod_version}"
 group= "com.teamcos.modularsystems" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Modular Systems"
+archivesBaseName = "ModularSystems"
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 

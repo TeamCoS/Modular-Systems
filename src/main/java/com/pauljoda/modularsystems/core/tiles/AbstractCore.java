@@ -4,6 +4,7 @@ import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.providers.FuelProvider;
 import com.pauljoda.modularsystems.core.collections.StandardValues;
+import com.pauljoda.modularsystems.core.registries.GeneralConfigRegistry;
 import com.teambr.bookshelf.collections.Couplet;
 import com.teambr.bookshelf.collections.Location;
 import com.teambr.bookshelf.common.blocks.BaseBlock;
@@ -31,7 +32,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
     private static final int cookSpeed = 200;
     private boolean isDirty = true;
     public boolean wellFormed = false;
-    private static final int MAX_SIZE = 50;
+    //private static final int MAX_SIZE = 50;
 
     protected int[] sides = new int[] { 0, 1 };
 
@@ -223,7 +224,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
         //Find side
         while(worldObj.isAirBlock(firstCorner.x, firstCorner.y, firstCorner.z)) {
             firstCorner.travel(right);
-            if(getLocation().findDistance(firstCorner) > MAX_SIZE)
+            if(getLocation().findDistance(firstCorner) > GeneralConfigRegistry.multiblockSize)
                 return null;
         }
 
@@ -233,7 +234,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
         //Find floor
         while(worldObj.isAirBlock(firstCorner.x, firstCorner.y, firstCorner.z)) {
             firstCorner.travel(ForgeDirection.DOWN);
-            if(getLocation().findDistance(firstCorner) > MAX_SIZE)
+            if(getLocation().findDistance(firstCorner) > GeneralConfigRegistry.multiblockSize)
                 return null;
         }
 
@@ -244,7 +245,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
         //Find side
         while(worldObj.isAirBlock(secondCorner.x, secondCorner.y, secondCorner.z)) {
             secondCorner.travel(left);
-            if(getLocation().findDistance(secondCorner) > MAX_SIZE)
+            if(getLocation().findDistance(secondCorner) > GeneralConfigRegistry.multiblockSize)
                 return null;
         }
 
@@ -254,7 +255,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
         //Move To back
         while(worldObj.isAirBlock(secondCorner.x, secondCorner.y, secondCorner.z)) {
             secondCorner.travel(dir.getOpposite());
-            if(getLocation().findDistance(secondCorner) > MAX_SIZE)
+            if(getLocation().findDistance(secondCorner) > GeneralConfigRegistry.multiblockSize)
                 return null;
         }
 
@@ -264,7 +265,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
         //Move Up
         while(worldObj.isAirBlock(secondCorner.x, secondCorner.y, secondCorner.z)) {
             secondCorner.travel(ForgeDirection.UP);
-            if(getLocation().findDistance(secondCorner) > MAX_SIZE)
+            if(getLocation().findDistance(secondCorner) > GeneralConfigRegistry.multiblockSize)
                 return null;
         }
 

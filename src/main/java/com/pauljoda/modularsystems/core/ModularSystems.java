@@ -7,10 +7,7 @@ import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.managers.RecipeManager;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
-import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
-import com.pauljoda.modularsystems.core.registries.CrusherRecipeRegistry;
-import com.pauljoda.modularsystems.core.registries.FluidFuelValues;
-import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
+import com.pauljoda.modularsystems.core.registries.*;
 import com.pauljoda.modularsystems.core.managers.PacketManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -58,6 +55,7 @@ public class ModularSystems {
         MinecraftForge.EVENT_BUS.register(BlockValueRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidFuelValues.INSTANCE);
         configFolderLocation = event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Modular-Systems";
+        GeneralConfigRegistry.init(configFolderLocation);
 
         proxy.preInit();
     }
