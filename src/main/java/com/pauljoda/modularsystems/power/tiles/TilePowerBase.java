@@ -5,6 +5,7 @@ import cofh.api.energy.IEnergyHandler;
 import com.pauljoda.modularsystems.core.providers.FuelProvider;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.teambr.bookshelf.api.waila.IWaila;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.item.ItemStack;
@@ -107,8 +108,7 @@ public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProv
 
     @Override
     public void returnWailaHead(List<String> list) {
-        list.add("Available Power: " + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored());
-        list.add("§oShift+Click to access GUI");
+        list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored());
     }
 
     @Override
@@ -118,7 +118,7 @@ public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProv
 
     @Override
     public void returnWailaTail(List<String> list) {
-
+        list.add(GuiHelper.GuiColor.ORANGE + "§oShift+Click to access GUI");
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.pauljoda.modularsystems.power.container.ContainerLiquidsPower;
 import com.pauljoda.modularsystems.power.gui.GuiLiquidsPower;
 import com.teambr.bookshelf.collections.InventoryTile;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,8 +27,8 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
 
     public TileLiquidsPower() {
         inventory = new InventoryTile(2);
-        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
-        energy = new EnergyStorage(FluidContainerRegistry.BUCKET_VOLUME * 10);
+        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 20);
+        energy = new EnergyStorage(FluidContainerRegistry.BUCKET_VOLUME * 20);
         cooldown = 0;
     }
 
@@ -67,6 +68,22 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
                         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                     }
                 }
+            } else if (inventory.getStackInSlot(BUCKET_IN) != null &&
+                    FluidContainerRegistry.isEmptyContainer(inventory.getStackInSlot(BUCKET_IN)) &&
+                    tank.getFluid() != null &&
+                    tank.getFluidAmount() > FluidContainerRegistry.getContainerCapacity(inventory.getStackInSlot(BUCKET_IN))) {
+
+                if (inventory.getStackInSlot(BUCKET_OUT) != null) return;
+
+                //return full container
+                inventory.setStackInSlot(FluidContainerRegistry.fillFluidContainer(tank.getFluid(), inventory.getStackInSlot(BUCKET_IN)), BUCKET_OUT);
+
+                drain(null, FluidContainerRegistry.BUCKET_VOLUME, true);
+
+                //clear input slot
+                decrStackSize(BUCKET_IN, 1);
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+
             }
         }
     }
@@ -261,8 +278,8 @@ public class TileLiquidsPower extends TilePowerBase implements IOpensGui, IFluid
      */
     @Override
     public void returnWailaHead(List<String> list) {
-        list.add(tank.getFluid() != null ? tank.getFluid().getLocalizedName() : "Empty");
-        list.add((tank.getFluid() != null ? tank.getFluidAmount() : "0") + "/" + tank.getCapacity() + " mB");
-        list.add("§oShift+Click to access GUI");
+        list.add(tank.getFluid() != null ? GuiHelper.GuiColor.YELLOW + tank.getFluid().getLocalizedName() : "Empty");
+        list.add((tank.getFluid() != null ? GuiHelper.GuiColor.WHITE + Integer.toString(tank.getFluidAmount()) : "0")
+                + "/" + tank.getCapacity() + GuiHelper.GuiColor.WHITE + " mB");
     }
 }

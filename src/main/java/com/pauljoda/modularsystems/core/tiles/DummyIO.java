@@ -1,9 +1,13 @@
 package com.pauljoda.modularsystems.core.tiles;
 
 import com.pauljoda.modularsystems.core.gui.GuiIO;
+import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import com.teambr.bookshelf.inventory.ContainerGeneric;
 import com.teambr.bookshelf.util.InventoryUtils;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -11,6 +15,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.List;
 
 public class DummyIO extends DummyTile implements IOpensGui {
 
@@ -178,5 +184,13 @@ public class DummyIO extends DummyTile implements IOpensGui {
     @Override
     public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
         return new GuiIO(this, new ContainerGeneric(), 100, 70, "inventory.io.title");
+    }
+
+    /*
+     * Waila
+     */
+    @Override
+    public void returnWailaTail(List<String> list) {
+        list.add(GuiHelper.GuiColor.ORANGE + "§oShift+Click to access GUI");
     }
 }
