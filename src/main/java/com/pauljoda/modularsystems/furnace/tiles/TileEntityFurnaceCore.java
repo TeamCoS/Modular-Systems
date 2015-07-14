@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.furnace.tiles;
 
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
+import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
@@ -60,6 +61,11 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui, IW
                 values.addToMultiplicity(BlockValueRegistry.INSTANCE.getMultiplicityValueMaterial(i, function.getMaterialCount(i)));
             }
         }
+    }
+
+    @Override
+    protected Block getOnBlock() {
+        return BlockManager.furnaceCoreActive;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.pauljoda.modularsystems.crusher.tiles;
 
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
+import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.pauljoda.modularsystems.core.registries.CrusherRecipeRegistry;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
@@ -20,7 +21,6 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class TileCrusherCore extends AbstractCore implements IOpensGui, IWaila {
-
 
     @Override
     protected void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z) {
@@ -60,6 +60,11 @@ public class TileCrusherCore extends AbstractCore implements IOpensGui, IWaila {
                 values.addToMultiplicity(BlockValueRegistry.INSTANCE.getMultiplicityValueMaterial(i, function.getMaterialCount(i)));
             }
         }
+    }
+
+    @Override
+    protected Block getOnBlock() {
+        return BlockManager.crusherCoreActive;
     }
 
     @Override

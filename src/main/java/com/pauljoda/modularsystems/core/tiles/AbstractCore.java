@@ -78,6 +78,12 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
      */
     protected abstract void generateValues(BlockCountFunction function);
 
+    /**
+     * Gets around that last little bit where the values line up weird and it doesn't convert back
+     * @return The block to set when on
+     */
+    protected abstract Block getOnBlock();
+
 
     /*******************************************************************************************************************
      *******************************************  Multiblock Methods  **************************************************
@@ -307,7 +313,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory {
                     didWork = true;
                 }
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-            } else if(worldObj.getBlock(xCoord, yCoord, zCoord) == BlockManager.furnaceCoreActive) {
+            } else if(worldObj.getBlock(xCoord, yCoord, zCoord) == getOnBlock()) {
                 didWork = true;
             }
 
