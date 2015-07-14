@@ -5,6 +5,7 @@ import com.pauljoda.modularsystems.core.commands.AddBannedBlock;
 import com.pauljoda.modularsystems.core.commands.AddFluidFuel;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.managers.RecipeManager;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.pauljoda.modularsystems.core.registries.CrusherRecipeRegistry;
@@ -66,6 +67,8 @@ public class ModularSystems {
         BlockValueRegistry.INSTANCE.init();
         FluidFuelValues.INSTANCE.init();
         CrusherRecipeRegistry.INSTANCE.init();
+
+        RecipeManager.init();
 
         proxy.init();
     }
