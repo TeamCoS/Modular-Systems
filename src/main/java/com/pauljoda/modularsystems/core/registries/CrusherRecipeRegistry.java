@@ -48,8 +48,8 @@ public class CrusherRecipeRegistry {
                 String ingot = anOreDict1.replaceFirst("ingot", "");
                 if (OreDictionary.doesOreNameExist("dust" + ingot)) {
                     List<ItemStack> outputDust = OreDictionary.getOres("dust" + ingot);
-
-                    crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(outputDust.get(0).getItem(), 1, outputDust.get(0).getItemDamage()), anOreDict1));
+                    if(outputDust.size() > 0 && !outputDust.isEmpty())
+                        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(outputDust.get(0).getItem(), 1, outputDust.get(0).getItemDamage()), anOreDict1));
                 }
             }
         }
