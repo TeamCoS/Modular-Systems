@@ -73,7 +73,6 @@ public class ModularSystems {
         PacketManager.initPackets();
 
         proxy.init();
-
         VersionManager.init();
     }
 

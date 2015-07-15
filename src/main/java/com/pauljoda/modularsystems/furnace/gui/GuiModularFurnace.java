@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.furnace.gui;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.gui.GuiCoreBase;
 import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.teambr.bookshelf.client.gui.GuiBase;
@@ -20,12 +21,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GuiModularFurnace extends GuiBase<ContainerModularFurnace> {
+public class GuiModularFurnace extends GuiCoreBase<ContainerModularFurnace> {
     protected TileEntityFurnaceCore core;
     protected Location tileLocation;
 
     public GuiModularFurnace(InventoryPlayer player, TileEntityFurnaceCore tile) {
-        super(new ContainerModularFurnace(player, tile), 175, 165, "inventory.furnace.title");
+        super(new ContainerModularFurnace(player, tile), tile, 175, 165, "inventory.furnace.title");
         this.core = tile;
         tileLocation = core.getLocation();
         addRightTabs(rightTabs);

@@ -8,12 +8,15 @@ import java.io.File;
 public class ConfigRegistry {
 
     private static Configuration config;
+    private static String configLocation;
 
     public static int multiblockSize, versionNotify, versionRetry;
     public static boolean debug, updateTab;
     public static String lastVersion, updateURL;
 
     public static void init(String configFolderLocation) {
+
+        configLocation = configFolderLocation;
 
         config = new Configuration(new File(configFolderLocation + File.separator + "ModularSystems.cfg"));
 
@@ -40,6 +43,7 @@ public class ConfigRegistry {
             }
         }
         config.save();
+        init(configLocation);
     }
 
     public static void set(String categoryName, String propertyName, Boolean newValue) {
@@ -50,5 +54,6 @@ public class ConfigRegistry {
             }
         }
         config.save();
+        init(configLocation);
     }
 }
