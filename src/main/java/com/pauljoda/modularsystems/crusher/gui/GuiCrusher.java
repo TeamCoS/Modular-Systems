@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.crusher.gui;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.gui.GuiCoreBase;
 import com.pauljoda.modularsystems.crusher.container.ContainerCrusher;
 import com.pauljoda.modularsystems.crusher.tiles.TileCrusherCore;
 import com.teambr.bookshelf.client.gui.GuiBase;
@@ -20,13 +21,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GuiCrusher extends GuiBase<ContainerCrusher> {
+public class GuiCrusher extends GuiCoreBase<ContainerCrusher> {
 
     protected TileCrusherCore core;
     protected Location tileLocation;
 
     public GuiCrusher(InventoryPlayer player, TileCrusherCore tileEntity) {
-        super(new ContainerCrusher(player, tileEntity), 175, 165, "inventory.crusher.title");
+        super(new ContainerCrusher(player, tileEntity), tileEntity, 175, 165, "inventory.crusher.title");
 
         this.core = tileEntity;
         tileLocation = core.getLocation();
