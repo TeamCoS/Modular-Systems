@@ -109,6 +109,10 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
     protected boolean isWellFormed() {
         wellFormed = false;
 
+        //Weird bug
+        if(worldObj.isAirBlock(xCoord, yCoord, zCoord))
+            return false;
+
         Couplet<Location, Location> test = getCorners();
 
         if(test == null)
