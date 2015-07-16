@@ -19,6 +19,11 @@ public class OpenValueConfig extends CommandBase {
     }
 
     @Override
+    public int getRequiredPermissionLevel() {
+        return 3;
+    }
+
+    @Override
     public void processCommand(ICommandSender sender, String[] args) {
         EntityPlayerMP player = getCommandSenderAsPlayer(sender);
         player.openGui(ModularSystems.instance, GuiManager.VALUE_CONFIG, player.worldObj, (int)player.posX, (int)player.posY, (int)player.posZ);

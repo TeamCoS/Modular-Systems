@@ -116,9 +116,10 @@ public class BlockValueRegistry {
             values.put(BlockHelper.getBlockString(block, meta), new BlockValues(speed, efficiency, multiplicity));
         } else {
             LogHelper.info("Someone attempted to add a value to a blocks that already has a value. Replacing...");
-            values.get(BlockHelper.getBlockString(block, meta)).setSpeedFunction(speed);
-            values.get(BlockHelper.getBlockString(block, meta)).setEfficiencyFunction(efficiency);
-            values.get(BlockHelper.getBlockString(block, meta)).setMultiplicityFunction(multiplicity);
+            String id = values.get(BlockHelper.getBlockString(block, meta)) != null ? BlockHelper.getBlockString(block, meta) : BlockHelper.getBlockString(block);
+            values.get(id).setSpeedFunction(speed);
+            values.get(id).setEfficiencyFunction(efficiency);
+            values.get(id).setMultiplicityFunction(multiplicity);
             LogHelper.info("Replaced");
         }
     }
@@ -255,6 +256,14 @@ public class BlockValueRegistry {
             return blockValues.getMultiplicityFunction().F(x);
         } else
             return 0;
+    }
+
+    public BlockValues getBlockValues(Block block, int meta) {
+        if(isBlockRegistered(block, meta)) {
+            BlockValues blockValues = values.get(BlockHelper.getBlockString(block)) != null ? values.get(BlockHelper.getBlockString(block)) : values.get(BlockHelper.getBlockString(block, meta));
+            return blockValues;
+        } else
+            return null;
     }
 
     /**

@@ -41,6 +41,7 @@ inventory.blockValuesConfig.power.toolTip=This is the power of the function
 inventory.blockValuesConfig.yOffset.toolTip=This will offset on the y axis
 inventory.blockValuesConfig.floor.toolTip=This is the lower limit of the function
 inventory.blockValuesConfig.ceiling.toolTip=This is the upper limit of the function
+inventory.blockValuesConfig.ignoreMeta=Meta?
 
 inventory.nei.recipes=Recipes
 

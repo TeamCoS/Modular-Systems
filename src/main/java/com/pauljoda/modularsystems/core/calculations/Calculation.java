@@ -46,6 +46,62 @@ public class Calculation {
         return Math.max(floor, Math.min(ceiling, ((scaleFactorNumerator / scaleFactorDenominator) * (Math.pow((x + xOffset), power))) + yOffset));
     }
 
+    public double getScaleFactorDenominator() {
+        return scaleFactorDenominator;
+    }
+
+    public void setScaleFactorDenominator(double scaleFactorDenominator) {
+        this.scaleFactorDenominator = scaleFactorDenominator;
+    }
+
+    public double getCeiling() {
+        return ceiling;
+    }
+
+    public void setCeiling(double ceiling) {
+        this.ceiling = ceiling;
+    }
+
+    public double getFloor() {
+        return floor;
+    }
+
+    public void setFloor(double floor) {
+        this.floor = floor;
+    }
+
+    public double getyOffset() {
+        return yOffset;
+    }
+
+    public void setyOffset(double yOffset) {
+        this.yOffset = yOffset;
+    }
+
+    public double getPower() {
+        return power;
+    }
+
+    public void setPower(double power) {
+        this.power = power;
+    }
+
+    public double getxOffset() {
+        return xOffset;
+    }
+
+    public void setxOffset(double xOffset) {
+        this.xOffset = xOffset;
+    }
+
+    public double getScaleFactorNumerator() {
+        return scaleFactorNumerator;
+    }
+
+    public void setScaleFactorNumerator(double scaleFactorNumerator) {
+        this.scaleFactorNumerator = scaleFactorNumerator;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
