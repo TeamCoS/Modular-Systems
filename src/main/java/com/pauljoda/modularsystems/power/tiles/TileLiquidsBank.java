@@ -231,11 +231,13 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
 
     @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-        if (FluidFuelValues.INSTANCE.getFluidFuelValue(resource.getFluid().getName()) > 0) {
-            int amount = tank.fill(resource, doFill);
-            energy.receiveEnergy(amount, false);
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-            return amount;
+        if (getCore() != null) {
+            if (FluidFuelValues.INSTANCE.getFluidFuelValue(resource.getFluid().getName()) > 0) {
+                int amount = tank.fill(resource, doFill);
+                energy.receiveEnergy(amount, false);
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return amount;
+            }
         }
         return 0;
     }
@@ -260,7 +262,7 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
     @Override
     public boolean canFill(ForgeDirection from, Fluid fluid) {
         int value = FluidFuelValues.INSTANCE.getFluidFuelValue(fluid.getName());
-        return value > 0;
+        return getCore() != null && value > 0;
     }
 
     @Override
