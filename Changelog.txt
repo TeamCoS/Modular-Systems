@@ -5,7 +5,7 @@
 -Added Bookshelf API requirement
 -Added furnace and ore processor
 -Added version checker
--Made structures require a fuel bank, RF, liquid, or solids
+-Made structures require a fuel bank: RF, liquid, or solids
 -Added new render to dummies
 -Added tabs
 -Added priority to fuel banks

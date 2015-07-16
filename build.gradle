@@ -30,8 +30,11 @@ repositories {
 }
 
 apply plugin: 'forge'
+apply plugin: 'curseforge'
 
 ext.configFile = file "build.properties"
+ext.configFile = file "APIToken"
+ext.changelogFile = file "Changelog.txt"
 
 configFile.withReader {
     def prop = new Properties()
@@ -83,4 +86,13 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude '**/*.info'
     }
+}
+
+curse {
+    projectId = '68528'
+    apiKey = project.hasProperty('curseForgeApiKey') ? project.curseForgeApiKey : ''
+    changelog = changelogFile
+    releaseType = 'release'
+    addGameVersion '1.7.10'
+    relatedProject 'bookshelf-api-library'
 }
