@@ -1,7 +1,7 @@
 package com.pauljoda.modularsystems.power.gui;
 
 import com.pauljoda.modularsystems.power.container.ContainerLiquidsBank;
-import com.pauljoda.modularsystems.power.tiles.TileLiquidsPank;
+import com.pauljoda.modularsystems.power.tiles.TileLiquidsBank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentArrow;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentFluidTank;
 import com.teambr.bookshelf.helpers.GuiHelper;
@@ -12,9 +12,9 @@ import java.util.List;
 
 public class GuiLiquidsBank extends GuiPowerBase<ContainerLiquidsBank> {
 
-    protected TileLiquidsPank tileEntity;
+    protected TileLiquidsBank tileEntity;
 
-    public GuiLiquidsBank(InventoryPlayer inventory, TileLiquidsPank tileEntity) {
+    public GuiLiquidsBank(InventoryPlayer inventory, TileLiquidsBank tileEntity) {
         super(new ContainerLiquidsBank(inventory, tileEntity), tileEntity, 175, 165, "inventory.liquidspower.title");
 
         this.tileEntity = tileEntity;

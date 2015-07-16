@@ -10,7 +10,7 @@ import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.power.blocks.BlockPower;
-import com.pauljoda.modularsystems.power.tiles.TileLiquidsPank;
+import com.pauljoda.modularsystems.power.tiles.TileLiquidsBank;
 import com.pauljoda.modularsystems.power.tiles.TileRFBank;
 import com.pauljoda.modularsystems.power.tiles.TileSolidsBank;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -33,7 +33,7 @@ public class BlockManager {
         registerBlock(io = new BlockDummyIO(Material.rock, Reference.MOD_ID + ":dummyIO", DummyIO.class), "dummyIO", DummyIO.class);
         registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFBank.class), "powerRF", TileRFBank.class);
         registerBlock(powerSolids = new BlockPower(Reference.MOD_ID + ":powerSolids", TileSolidsBank.class), "powerSolids", TileSolidsBank.class);
-        registerBlock(powerLiquids = new BlockPower(Reference.MOD_ID + ":powerLiquids", TileLiquidsPank.class), "powerLiquids", TileLiquidsPank.class);
+        registerBlock(powerLiquids = new BlockPower(Reference.MOD_ID + ":powerLiquids", TileLiquidsBank.class), "powerLiquids", TileLiquidsBank.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {
