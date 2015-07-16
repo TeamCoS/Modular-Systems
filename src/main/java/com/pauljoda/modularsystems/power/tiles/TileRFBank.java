@@ -38,14 +38,17 @@ public class TileRFBank extends TilePowerBase implements IOpensGui {
 
     @Override
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-        int actual = energy.receiveEnergy(maxReceive, simulate);
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        return actual;
+        if (getCore() != null) {
+            int actual = energy.receiveEnergy(maxReceive, simulate);
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            return actual;
+        }
+        return 0;
     }
 
     @Override
     public boolean canConnectEnergy(ForgeDirection from) {
-        return getCore() != null;
+        return true;
     }
 
     /*

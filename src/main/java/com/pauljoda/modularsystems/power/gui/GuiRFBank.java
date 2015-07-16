@@ -13,7 +13,7 @@ public class GuiRFBank extends GuiPowerBase<ContainerRFBank> {
     protected TileRFBank tileEntity;
 
     public GuiRFBank(TileRFBank tileEntity) {
-        super(new ContainerRFBank(), tileEntity, 130, 120, "inventory.rfpower.title");
+        super(new ContainerRFBank(), tileEntity, 140, 120, "inventory.rfpower.title");
 
         this.tileEntity = tileEntity;
     }
