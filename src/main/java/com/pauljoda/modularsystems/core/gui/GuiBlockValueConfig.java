@@ -14,6 +14,7 @@ import java.util.List;
 public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
 
     protected GuiComponentSetNumber m1, m2, t, p, b, f, c;
+
     /**
      * Constructor for All Guis
      *
@@ -86,6 +87,62 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
             }
         });
         components.add(t = new GuiComponentSetNumber(30, 67, 40, 0, -100, 100) {
+            @Override
+            public void setValue(int i) {
+                numbersChanged();
+            }
+        });
+
+        //Power
+        components.add(new GuiComponentText("inventory.blockValuesConfig.power", 8, 90) {
+            @Override
+            public List<String> getDynamicToolTip(int x, int y) {
+                return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.power.toolTip"));
+            }
+        });
+        components.add(p = new GuiComponentSetNumber(30, 87, 40, 0, -100, 100) {
+            @Override
+            public void setValue(int i) {
+                numbersChanged();
+            }
+        });
+
+        //Y Offset
+        components.add(new GuiComponentText("inventory.blockValuesConfig.yOffset", 80, 30) {
+            @Override
+            public List<String> getDynamicToolTip(int x, int y) {
+                return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.yOffset.toolTip"));
+            }
+        });
+        components.add(m1 = new GuiComponentSetNumber(97, 27, 40, 0, -100, 100) {
+            @Override
+            public void setValue(int i) {
+                numbersChanged();
+            }
+        });
+
+        //Floor
+        components.add(new GuiComponentText("inventory.blockValuesConfig.floor", 80, 50) {
+            @Override
+            public List<String> getDynamicToolTip(int x, int y) {
+                return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.floor.toolTip"));
+            }
+        });
+        components.add(f = new GuiComponentSetNumber(97, 47, 40, 0, -100, 100) {
+            @Override
+            public void setValue(int i) {
+                numbersChanged();
+            }
+        });
+
+        //Ceiling
+        components.add(new GuiComponentText("inventory.blockValuesConfig.ceiling", 80, 70) {
+            @Override
+            public List<String> getDynamicToolTip(int x, int y) {
+                return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.ceiling.toolTip"));
+            }
+        });
+        components.add(c = new GuiComponentSetNumber(97, 67, 40, 0, -100, 100) {
             @Override
             public void setValue(int i) {
                 numbersChanged();
