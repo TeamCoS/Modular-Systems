@@ -39,8 +39,6 @@ if (file('APIToken').exists()) {
     APIToken = new File('APIToken').text
 }
 
-String changelog = new File('Changelog.txt').text
-
 configFile.withReader {
     def prop = new Properties()
     prop.load(it)
@@ -102,9 +100,7 @@ processResources {
 curse {
     projectId = '68528'
     apiKey = APIToken
-    changelog = """
-            ${changelog}
-    """
+    changelog = 'https://github.com/TeamCoS/Modular-Systems/wiki/Changelog'
     releaseType = 'release'
     addGameVersion '1.7.10'
     relatedProject 'bookshelf-api-library'
