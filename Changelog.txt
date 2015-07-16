@@ -1,0 +1,11 @@
+-Changed Everything
+-All old code is gone, rewritten from scratch
+-Fixed all existing bugs from old version
+-Improved efficiency
+-Added Bookshelf API requirement
+-Added furnace and ore processor
+-Added version checker
+-Made structures require a fuel bank, RF, liquid, or solids
+-Added new render to dummies
+-Added tabs
+-Added priority to fuel banks
