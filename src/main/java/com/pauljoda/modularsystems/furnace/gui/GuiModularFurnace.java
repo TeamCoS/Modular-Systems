@@ -4,7 +4,6 @@ import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.gui.GuiCoreBase;
 import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
-import com.teambr.bookshelf.client.gui.GuiBase;
 import com.teambr.bookshelf.client.gui.component.BaseComponent;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentArrow;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentFlame;

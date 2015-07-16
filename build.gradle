@@ -42,7 +42,12 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 
-version = "${config.minecraft_version}-${config.mod_version}"
+if (System.getenv("BUILD_NUMBER") == null || System.genenv("BUILD_NUMBER") == "") {
+    version = "${config.minecraft_version}-${config.mod_version}"
+} else {
+    version = "${config.minecraft_version}-${config.mod_version}-B" + System.getenv("BUILD_NUMBER")
+}
+
 group= "com.teamcos.modularsystems" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ModularSystems"
 sourceCompatibility = 1.7
@@ -90,7 +95,7 @@ processResources {
 
 curse {
     projectId = '68528'
-    apiKey = APIToken
+    apiKey = APIToken == null ? '' : APIToken
     changelog = """
             ${changelog}
     """
