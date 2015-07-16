@@ -48,8 +48,6 @@ archivesBaseName = "ModularSystems"
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-println """${changelog}"""
-
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version + "-" + config.minecraft_version
 
