@@ -11,8 +11,11 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.event.world.WorldEvent;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -66,7 +69,18 @@ public class BlockValueRegistry {
      */
     public void generateDefaults() {
         validateList();
-        //TODO: Move file and load it
+        //Move file and load it
+        File file = new File(ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "blockValues.json");
+        if (!file.exists()) {
+            URL fileURL = ModularSystems.class.getResource(File.separator + "blockValues.json");
+            try {
+                FileUtils.copyURLToFile(fileURL, file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        values = JsonUtils.<LinkedHashMap<String, BlockValues>>readFromJson(new TypeToken<LinkedHashMap<String, BlockValues>>() {
+        }, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "blockValues.json");
 
         addMaterialValues(Material.rock,
                 new Calculation(-1, 200, 0, 1, 0, -100, 0),

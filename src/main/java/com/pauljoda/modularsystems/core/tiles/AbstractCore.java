@@ -418,7 +418,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
                         ? output.getMaxStackSize()
                         : getInventoryStackLimit();
         int outAvailable = outMax - output.stackSize;
-        int avail = (int)values.getMultiplicity() < input.stackSize ? (int)values.getMultiplicity() : input.stackSize;// + recipeStackSize;
+        int avail = (int)values.getMultiplicity() + 1 < input.stackSize ? (int)values.getMultiplicity() + 1 : input.stackSize;// + recipeStackSize;
         int count = recipeStackSize * avail;
 
         if (count > outAvailable) {
