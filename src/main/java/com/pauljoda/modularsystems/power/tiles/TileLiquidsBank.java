@@ -282,6 +282,6 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
     public void returnWailaHead(List<String> list) {
         list.add(tank.getFluid() != null ? GuiHelper.GuiColor.YELLOW + tank.getFluid().getLocalizedName() : "Empty");
         list.add((tank.getFluid() != null ? GuiHelper.GuiColor.WHITE + Integer.toString(tank.getFluidAmount()) : "0")
-                + "/" + tank.getCapacity() + GuiHelper.GuiColor.WHITE + " mB");
+                + " / " + tank.getCapacity() + GuiHelper.GuiColor.WHITE + " mB");
     }
 }

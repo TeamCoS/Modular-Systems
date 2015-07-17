@@ -188,6 +188,6 @@ public class DummyIO extends DummyTile implements IOpensGui {
      */
     @Override
     public void returnWailaTail(List<String> list) {
-        list.add(GuiHelper.GuiColor.ORANGE + "§oShift+Click to access GUI");
+        list.add(GuiHelper.GuiColor.ORANGE + GuiHelper.GuiTextFormat.ITALICS.toString() + "Shift+Click to access GUI");
     }
 }
