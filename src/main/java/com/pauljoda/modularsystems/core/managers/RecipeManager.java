@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.core.managers;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -44,5 +45,11 @@ public class RecipeManager {
                 "RIR",
                 "IPI",
                 "RIR", 'R', Blocks.redstone_block, 'I', Items.iron_ingot, 'P', Blocks.piston);
+
+        if (Loader.isModLoaded("IC2"))
+            GameRegistry.addRecipe(new ItemStack(BlockManager.powerIC2, 1),
+                    "IiI",
+                    "IPI",
+                    "IiI", 'I', Blocks.iron_block, 'i', Items.iron_ingot, 'P', Blocks.piston);
     }
 }
