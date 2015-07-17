@@ -4,6 +4,8 @@ tile.modularsystems:furnaceCore.name=Modular Furnace Core
 tile.modularsystems:furnaceCoreActive.name=Modular Furnace Core
 tile.modularsystems:crusherCore.name=Modular Crusher Core
 tile.modularsystems:crusherCoreActive.name=Modular Crusher Core
+tile.modularsystems:generatorCore.name=Modular Generator Core
+tile.modularsystems:generatorCoreActive.name=Modular Generator Core
 tile.modularsystems:dummy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O
 tile.modularsystems:powerRF.name=RestoneFlux Power Bank
@@ -13,6 +15,7 @@ tile.modularsystems:powerIC2.name=IC2 LV Fuel Power Bank
 
 inventory.furnace.title=Modular Furnace
 inventory.crusher.title=Modular Crusher
+inventory.generator.title=Modular Generator
 
 inventory.io.title=I/O Configure
 inventory.io.import=Import

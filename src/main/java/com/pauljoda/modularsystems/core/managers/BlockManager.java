@@ -9,6 +9,8 @@ import com.pauljoda.modularsystems.crusher.tiles.TileCrusherCore;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
+import com.pauljoda.modularsystems.generator.blocks.BlockGeneratorCore;
+import com.pauljoda.modularsystems.generator.tiles.TileGeneratorCore;
 import com.pauljoda.modularsystems.power.blocks.BlockPower;
 import com.pauljoda.modularsystems.power.tiles.TileIC2Bank;
 import com.pauljoda.modularsystems.power.tiles.TileLiquidsBank;
@@ -24,6 +26,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class BlockManager {
 
     public static Block furnaceCore, furnaceCoreActive, crusherCore, crusherCoreActive;
+    public static Block generatorCore, generatorCoreActive;
     public static Block dummy, io, powerRF, powerSolids, powerLiquids, powerIC2;
 
     public static void init() {
@@ -31,6 +34,8 @@ public class BlockManager {
         registerBlock(furnaceCoreActive = new BlockFurnaceCore(true), "furnaceCoreActive", TileEntityFurnaceCore.class);
         registerBlock(crusherCore = new BlockCrusherCore(false), "crusherCore", TileCrusherCore.class);
         registerBlock(crusherCoreActive = new BlockCrusherCore(true), "crusherCoreActive", TileCrusherCore.class);
+        registerBlock(generatorCore = new BlockGeneratorCore(false), "generatorCore", TileGeneratorCore.class);
+        registerBlock(generatorCoreActive = new BlockGeneratorCore(true), "generatorCoreActive", TileGeneratorCore.class);
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);
         registerBlock(io = new BlockDummyIO(Material.rock, Reference.MOD_ID + ":dummyIO", DummyIO.class), "dummyIO", DummyIO.class);
         registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFBank.class), "powerRF", TileRFBank.class);
