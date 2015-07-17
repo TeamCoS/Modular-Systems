@@ -75,17 +75,14 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
         switch (button.id) {
             case 0 :
                 currentMode = MODE.SPEED;
-                graph.setEquation(speed);
                 tryLoadFunctions();
                 break;
             case 1 :
                 currentMode = MODE.EFFICIENCY;
-                graph.setEquation(efficiency);
                 tryLoadFunctions();
                 break;
             case 2 :
                 currentMode = MODE.MULTIPLICITY;
-                graph.setEquation(multiplicity);
                 tryLoadFunctions();
                 break;
             case 3 :
@@ -94,6 +91,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                             speed,
                             efficiency,
                             multiplicity);
+                    tryLoadFunctions();
                 }
         }
         if(currentBlock != null)
@@ -113,7 +111,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                     return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.scaleFactorNumerator.toolTip"));
                 }
             });
-            components.add(m1 = new GuiComponentSetNumber(30, 27, 40, 0, -100, 100) {
+            components.add(m1 = new GuiComponentSetNumber(30, 27, 40, 0, -1000, 1000) {
                 @Override
                 public void setValue(int i) {
                     numbersChanged();
@@ -127,7 +125,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                     return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.scaleDenominator.toolTip"));
                 }
             });
-            components.add(m2 = new GuiComponentSetNumber(30, 47, 40, 1, -100, 100) {
+            components.add(m2 = new GuiComponentSetNumber(30, 47, 40, 1, -1000, 1000) {
                 @Override
                 public void setValue(int i) {
                     numbersChanged();
@@ -141,7 +139,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                     return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.xOffset.toolTip"));
                 }
             });
-            components.add(t = new GuiComponentSetNumber(30, 67, 40, 0, -100, 100) {
+            components.add(t = new GuiComponentSetNumber(30, 67, 40, 0, -1000, 1000) {
                 @Override
                 public void setValue(int i) {
                     numbersChanged();
@@ -155,7 +153,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                     return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.power.toolTip"));
                 }
             });
-            components.add(p = new GuiComponentSetNumber(30, 87, 40, 0, -100, 100) {
+            components.add(p = new GuiComponentSetNumber(30, 87, 40, 0, -1000, 1000) {
                 @Override
                 public void setValue(int i) {
                     numbersChanged();
@@ -169,7 +167,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                     return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.yOffset.toolTip"));
                 }
             });
-            components.add(b = new GuiComponentSetNumber(97, 27, 40, 0, -100, 100) {
+            components.add(b = new GuiComponentSetNumber(97, 27, 40, 0, -1000, 1000) {
                 @Override
                 public void setValue(int i) {
                     numbersChanged();
@@ -183,7 +181,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                     return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.floor.toolTip"));
                 }
             });
-            components.add(f = new GuiComponentSetNumber(97, 47, 40, 0, -100, 100) {
+            components.add(f = new GuiComponentSetNumber(97, 47, 40, 0, -1000, 1000) {
                 @Override
                 public void setValue(int i) {
                     numbersChanged();
@@ -197,7 +195,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                     return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.ceiling.toolTip"));
                 }
             });
-            components.add(c = new GuiComponentSetNumber(97, 67, 40, 0, -100, 100) {
+            components.add(c = new GuiComponentSetNumber(97, 67, 40, 0, -1000, 1000) {
                 @Override
                 public void setValue(int i) {
                     numbersChanged();
@@ -210,7 +208,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                     return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.ceiling.toolTip"));
                 }
             });
-            components.add(new GuiComponentSetNumber(-100000, 67, 40, 0, -100, 100) {
+            components.add(new GuiComponentSetNumber(-100000, 67, 40, 0, -1000, 1000) {
                 @Override
                 public void setValue(int i) {
                     numbersChanged();
@@ -222,6 +220,11 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                 @Override
                 public void setValue(boolean bool) {
                     ignoreMeta = !bool;
+                }
+
+                @Override
+                public List<String> getDynamicToolTip(int x, int y) {
+                    return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.ignoreMeta.toolTip"));
                 }
             });
 
@@ -255,8 +258,9 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
     }
 
     protected void tryLoadFunctions() {
+        Calculation current;
+
         if(currentBlock != null && BlockValueRegistry.INSTANCE.isBlockRegistered(currentBlock, ignoreMeta ? -1 : meta)) {
-            Calculation current;
 
             speed = BlockValueRegistry.INSTANCE.getBlockValues(currentBlock, ignoreMeta ? -1 : meta).getSpeedFunction();
             efficiency = BlockValueRegistry.INSTANCE.getBlockValues(currentBlock, ignoreMeta ? -1 : meta).getEfficiencyFunction();
@@ -274,20 +278,36 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                     current = multiplicity;
                     break;
             }
-
-            m1.setCurrentValue((int) current.getScaleFactorNumerator());
-            m2.setCurrentValue((int) current.getScaleFactorDenominator());
-            t.setCurrentValue((int) current.getxOffset());
-            p.setCurrentValue((int) current.getPower());
-            b.setCurrentValue((int) current.getyOffset());
-            f.setCurrentValue((int) current.getFloor());
-            c.setCurrentValue((int) current.getCeiling());
-            graph.setEquation(current);
         } else {
-            speed = new Calculation(0, 0, 0, 0, 0, 0, 0);
-            efficiency = new Calculation(0, 0, 0, 0, 0, 0, 0);
-            multiplicity = new Calculation(0, 0, 0, 0, 0, 0, 0);
+
+            switch (currentMode) {
+                default :
+                case SPEED:
+                    current = speed;
+                    break;
+                case EFFICIENCY:
+                    current = efficiency;
+                    break;
+                case MULTIPLICITY:
+                    current = multiplicity;
+                    break;
+            }
         }
+        m1.setCurrentValue((int) current.getScaleFactorNumerator());
+        m2.setCurrentValue((int) current.getScaleFactorDenominator());
+        t.setCurrentValue((int) current.getxOffset());
+        p.setCurrentValue((int) current.getPower());
+        b.setCurrentValue((int) current.getyOffset());
+        f.setCurrentValue((int) current.getFloor());
+        c.setCurrentValue((int) current.getCeiling());
+        graph.setEquation(current);
+    }
+
+    protected void reloadNewFunctions() {
+        speed = new Calculation(0, 0, 0, 0, 0, 0, 0);
+        efficiency = new Calculation(0, 0, 0, 0, 0, 0, 0);
+        multiplicity = new Calculation(0, 0, 0, 0, 0, 0, 0);
+        tryLoadFunctions();
     }
 
     @Override
@@ -298,8 +318,8 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
             this.title.setXPos(this.title.getXPos() - (Minecraft.getMinecraft().fontRenderer.getStringWidth(this.title.getText()) / 2));
             currentBlock = inventory.currentBlock;
             meta = ignoreMeta ? -1 : inventory.meta;
+            reloadNewFunctions();
         }
-        tryLoadFunctions();
         super.drawGuiContainerForegroundLayer(x, y);
     }
 }
