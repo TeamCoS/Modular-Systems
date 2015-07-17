@@ -46,6 +46,15 @@ public class Calculation {
         return Math.max(floor, Math.min(ceiling, ((scaleFactorNumerator / scaleFactorDenominator) * (Math.pow((x + xOffset), power))) + yOffset));
     }
 
+    /**
+     * Calculate the result using the defined function
+     * @param x The blocks count or 'x' in the function
+     * @return F(x)
+     */
+    public double F_NoClamp(int x) {
+        return ((scaleFactorNumerator / scaleFactorDenominator) * (Math.pow((x + xOffset), power))) + yOffset;
+    }
+
     public double getScaleFactorDenominator() {
         return scaleFactorDenominator;
     }

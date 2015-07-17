@@ -88,9 +88,9 @@ public class GuiComponentGraph extends BaseComponent {
     private void adjustXAxis() {
         int x;
         for(x = 0; x <= 1000; x++) {
-            if(equation.F(x) >= equation.getCeiling())
+            if(equation.F_NoClamp(x) > equation.getCeiling())
                 break;
-            else if(equation.F(x) <= equation.getFloor())
+            else if(equation.F_NoClamp(x) < equation.getFloor())
                 break;
         }
         xMax = x;
