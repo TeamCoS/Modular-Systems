@@ -10,7 +10,6 @@ import com.teambr.bookshelf.util.JsonUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraftforge.event.world.WorldEvent;
 
 import java.io.File;
@@ -67,30 +66,7 @@ public class BlockValueRegistry {
      */
     public void generateDefaults() {
         validateList();
-        addBlockValues(Blocks.redstone_block, -1,
-                new Calculation(-1, 50, 0, 2, 0, -50, 0),
-                new Calculation(-1, 50, 0, 2, 0, -50, 0),
-                new Calculation(1, 1, 0, 0, 0, 0, 0));
-        addBlockValues(Blocks.quartz_block, -1,
-                new Calculation(1, 1, 0, 1, 0, 0, 0),
-                new Calculation(1, 1, 0, 1, 0, 0, 0),
-                new Calculation(1, 1, 0, 1, 0, 1, 3));
-        addBlockValues(Blocks.gold_block, -1,
-                new Calculation(1, 1, 0, 0, 0, 0, 0),
-                new Calculation(8, 1, 0, 1, 0, 0, 50),
-                new Calculation(1, 1, 0, 0, 0, 0, 0));
-        addBlockValues(Blocks.diamond_block, -1,
-                new Calculation(-8, 1, 0, 1, 0, -40, 0),
-                new Calculation(10, 1, 0, 1, 0, 0, 100),
-                new Calculation(1, 1, 0, 0, 0, 0, 0));
-        addBlockValues(Blocks.lapis_block, -1,
-                new Calculation(-5, 1, 0, 1, 0, -25, 0),
-                new Calculation(5, 1, 0, 1, 0, 0, 50),
-                new Calculation(1, 1, 0, 0, 0, 0, 0));
-        addBlockValues(Blocks.brick_block, -1,
-                new Calculation(10, 1, 0, 1, 0, 0, 50),
-                new Calculation(-10, 1, 0, 1, 0, -50, 0),
-                new Calculation(1, 1, 0, 1, 0, 0, 5));
+        //TODO: Move file and load it
 
         addMaterialValues(Material.rock,
                 new Calculation(-1, 200, 0, 1, 0, -100, 0),
