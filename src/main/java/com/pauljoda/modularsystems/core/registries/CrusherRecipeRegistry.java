@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.core.registries;
 
 import com.teambr.bookshelf.helpers.LogHelper;
+import com.teambr.bookshelf.util.JsonUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -58,7 +59,7 @@ public class CrusherRecipeRegistry {
         //misc recipes
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.blaze_powder, 4), getOreDict(new ItemStack(Items.blaze_rod))));
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Blocks.sand), "cobblestone"));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.dye, 6, 15), "dyeWhite"));
+        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.dye, 6, 15), getOreDict(new ItemStack(Items.bone))));
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.quartz, 4), "oreQuartz"));
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.clay_ball, 4), getOreDict(new ItemStack(Blocks.clay))));
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.diamond, 2), "oreDiamond"));
@@ -67,6 +68,21 @@ public class CrusherRecipeRegistry {
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.coal, 4), "oreCoal"));
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.string, 4), "blockCloth"));
         //todo Glass to sand, fix items with dmg value;
+
+        if (ConfigRegistry.debug) {
+            Map<String, String> test = new HashMap<>();
+            for (ShapelessOreRecipe crusherRecipe : crusherRecipes) {
+                List<Object> list = crusherRecipe.getInput();
+                for (Object items : list) {
+                    ArrayList<OreDictionary> o = (ArrayList<OreDictionary>) items;
+                    for (Object item : o) {
+                        ItemStack itemIn = (ItemStack) item;
+                        test.put(itemIn.getDisplayName(), crusherRecipe.getRecipeOutput().getDisplayName());
+                    }
+                }
+            }
+            JsonUtils.writeToJson(test, "crusherrecipes.json");
+        }
 
         LogHelper.info("Finished adding " + crusherRecipes.size() + " Crusher Recipes");
     }
