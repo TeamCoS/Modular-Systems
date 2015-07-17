@@ -79,7 +79,7 @@ public class GuiCrusher extends GuiCoreBase<ContainerCrusher> {
             crusherInfoSpeed.add(new GuiComponentText(String.format("%.2f", (((core.getValues().getEfficiency() + 200) / 200) - 1) != 0 ? ((((core.getValues().getEfficiency() + 200) / 200) - 1) * 100) : 0.00) + "%", 15, 58, (((core.getValues().getEfficiency() + 200) / 200) - 1) > 0 ? 0x5CE62E : (((core.getValues().getEfficiency() + 200) / 200) - 1) == 0 ? 0x000000 : 0xE62E00));
             crusherInfoSpeed.add(new GuiComponentText("Multiplicity: ", 5, 73, 0xFFFFFF));
             crusherInfoSpeed.add(new GuiComponentText((core.getValues().getMultiplicity() + 1) + "x", 15, 83, core.getValues().getMultiplicity() > 0 ? 0x5CE62E : 0x000000));
-            tabs.addTab(crusherInfoSpeed, 95, 100, new Color(100, 150, 150), new ItemStack(Items.book));
+            tabs.addTab(crusherInfoSpeed, 95, 100, new Color(150, 112, 50), new ItemStack(Items.book));
         }
     }
 }

@@ -100,6 +100,10 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         RenderUtils.bindMinecraftBlockSheet();
         tess.addTranslation((float) -x, (float) -y, (float) -z);
 
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        RenderHelper.enableStandardItemLighting();
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_CULL_FACE);
         RenderUtils.restoreRenderState();
         GL11.glPopMatrix();
