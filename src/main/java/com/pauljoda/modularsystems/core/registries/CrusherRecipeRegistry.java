@@ -67,22 +67,7 @@ public class CrusherRecipeRegistry {
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.glowstone_dust, 4), "glowstone"));
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.coal, 4), "oreCoal"));
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.string, 4), "blockCloth"));
-        //todo Glass to sand, fix items with dmg value;
-
-        if (ConfigRegistry.debug) {
-            Map<String, String> test = new HashMap<>();
-            for (ShapelessOreRecipe crusherRecipe : crusherRecipes) {
-                List<Object> list = crusherRecipe.getInput();
-                for (Object items : list) {
-                    ArrayList<OreDictionary> o = (ArrayList<OreDictionary>) items;
-                    for (Object item : o) {
-                        ItemStack itemIn = (ItemStack) item;
-                        test.put(itemIn.getDisplayName(), crusherRecipe.getRecipeOutput().getDisplayName());
-                    }
-                }
-            }
-            JsonUtils.writeToJson(test, "crusherrecipes.json");
-        }
+        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Blocks.sand), "blockGlass"));
 
         LogHelper.info("Finished adding " + crusherRecipes.size() + " Crusher Recipes");
     }
@@ -105,7 +90,11 @@ public class CrusherRecipeRegistry {
                 ArrayList<OreDictionary> o = (ArrayList<OreDictionary>) items;
                 for (Object item : o) {
                     ItemStack itemIn = (ItemStack) item;
-                    if (itemIn.isItemEqual(itemStack))
+                    if (itemIn.getItemDamage() == 32767) {
+                        if (itemIn.getItem() == itemStack.getItem())
+                            return crusherRecipe.getRecipeOutput();
+                    }
+                    else if (itemIn.isItemEqual(itemStack))
                         return crusherRecipe.getRecipeOutput();
                 }
             }
