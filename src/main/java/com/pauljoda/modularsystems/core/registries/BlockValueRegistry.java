@@ -250,8 +250,7 @@ public class BlockValueRegistry {
 
     public BlockValues getBlockValues(Block block, int meta) {
         if(isBlockRegistered(block, meta)) {
-            BlockValues blockValues = values.get(BlockHelper.getBlockString(block)) != null ? values.get(BlockHelper.getBlockString(block)) : values.get(BlockHelper.getBlockString(block, meta));
-            return blockValues;
+            return values.get(BlockHelper.getBlockString(block)) != null ? values.get(BlockHelper.getBlockString(block)) : values.get(BlockHelper.getBlockString(block, meta));
         } else
             return null;
     }

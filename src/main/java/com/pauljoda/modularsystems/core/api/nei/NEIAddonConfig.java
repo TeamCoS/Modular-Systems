@@ -4,6 +4,7 @@ import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.api.nei.machines.RecipeHandlerBlockValues;
 import com.pauljoda.modularsystems.core.api.nei.machines.RecipeHandlerCrusher;
 import com.pauljoda.modularsystems.core.api.nei.machines.RecipeHandlerFurnace;
 import com.pauljoda.modularsystems.core.lib.Reference;
@@ -15,6 +16,7 @@ public class NEIAddonConfig implements IConfigureNEI {
 
         registerHandler(new RecipeHandlerCrusher());
         registerHandler(new RecipeHandlerFurnace());
+        registerHandler(new RecipeHandlerBlockValues());
 
         ModularSystems.nei = new NEICallback();
     }

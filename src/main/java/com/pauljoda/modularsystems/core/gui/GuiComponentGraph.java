@@ -39,7 +39,6 @@ public class GuiComponentGraph extends BaseComponent {
         GL11.glPushMatrix();
 
         GL11.glTranslated(xPos, yPos, 0);
-
         RenderUtils.bindGuiComponentsSheet();
 
         renderer.render(this, 0, 0, width, height);
@@ -47,6 +46,13 @@ public class GuiComponentGraph extends BaseComponent {
         for(int x = 1; x <= xMax; x++)
             drawLine(convertXToGraph(x - 1), convertYToGraph(equation.F(x - 1)), convertXToGraph(x), convertYToGraph(equation.F(x)), new Color(0, 0, 0));
 
+        GL11.glPopMatrix();
+    }
+
+    @Override
+    public void renderOverlay(int guiLeft, int guiTop) {
+        GL11.glPushMatrix();
+        GL11.glTranslated(xPos, yPos, 0);
 
         //Render ceiling
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -70,12 +76,8 @@ public class GuiComponentGraph extends BaseComponent {
         fontRenderer.drawString(String.valueOf(xMax), 0, 0, 0x000000);
         GL11.glPopMatrix();
 
-
         GL11.glPopMatrix();
     }
-
-    @Override
-    public void renderOverlay(int guiLeft, int guiTop) {}
 
     private double convertXToGraph(double x) {
         return (x * (width - 2)) / xMax;
