@@ -402,9 +402,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
         }
         ItemStack output = values.getOutput();
         ItemStack recipeResult = recipe(input);
-        if (recipeResult == null) {
-            return null;
-        } else if (output != null && !output.isItemEqual(recipeResult)) {
+        if (recipeResult == null && output != null && !output.isItemEqual(recipeResult)) {
             return null;
         } else if (output == null) {
             output = recipeResult.copy();
@@ -420,29 +418,18 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
                         ? output.getMaxStackSize()
                         : getInventoryStackLimit();
         int outAvailable = outMax - output.stackSize;
-        int smeltAvailable = (int)values.getMultiplicity() + recipeStackSize;
-        int inAvailable = input.stackSize * recipeStackSize;
+        int avail = (int)values.getMultiplicity() < input.stackSize ? (int)values.getMultiplicity() : input.stackSize;// + recipeStackSize;
+        int count = recipeStackSize * avail;
 
-        int avail;
-        int count;
-
-        if (smeltAvailable < inAvailable) {
-            avail = smeltAvailable;
-            count = (int) (recipeStackSize + values.getMultiplicity());
-        } else {
-            avail = inAvailable;
-            count = input.stackSize;
-        }
-
-        if (avail > outAvailable) {
+        if (count > outAvailable) {
             //If there is a remainder, this results in a difference from just outputting outAvailable
-            count = outAvailable / recipeStackSize;
-            avail = count * recipeStackSize;
+            avail = outAvailable / recipeStackSize;
+            count = avail * recipeStackSize;
         }
 
         values.checkInventorySlots();
 
-        return new Couplet<>(count, avail);
+        return new Couplet<>(avail, count);
     }
 
     public boolean isBurning() {
