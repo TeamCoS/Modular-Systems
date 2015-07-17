@@ -80,12 +80,6 @@ public class BlockDummy extends BaseBlock {
         }
         super.breakBlock(world, x, y, z, par5, par6);
     }
-
-    @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block changedBlock) {
-        DummyTile tile = (DummyTile)world.getTileEntity(x, y, z);
-        tile.validateCore();
-    }
     
     /**
      * Used to add the textures for the blocks. Uses blocks name by default

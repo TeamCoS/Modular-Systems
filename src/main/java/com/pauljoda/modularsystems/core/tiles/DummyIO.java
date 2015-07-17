@@ -1,13 +1,10 @@
 package com.pauljoda.modularsystems.core.tiles;
 
 import com.pauljoda.modularsystems.core.gui.GuiIO;
-import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.GuiHelper;
 import com.teambr.bookshelf.inventory.ContainerGeneric;
 import com.teambr.bookshelf.util.InventoryUtils;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -24,7 +21,7 @@ public class DummyIO extends DummyTile implements IOpensGui {
     public boolean output = true;
     public boolean auto = true;
 
-    private int coolDown = 80;
+    protected int coolDown = 80;
 
     public void setInput(boolean bool) {
         input = bool;

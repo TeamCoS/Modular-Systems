@@ -176,6 +176,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
         }
         generateValues(blockCount);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        wellFormed = true;
     }
 
     public void breakMultiBlock() {
