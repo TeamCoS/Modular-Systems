@@ -20,7 +20,7 @@ public class TileSolidsBank extends TilePowerBase implements IOpensGui, ISidedIn
     private int cooldown;
 
     public TileSolidsBank() {
-        energy = new EnergyStorage(6400);
+        energy = new EnergyStorage(20000);
         inventory = new InventoryTile(27);
         cooldown = 0;
     }
