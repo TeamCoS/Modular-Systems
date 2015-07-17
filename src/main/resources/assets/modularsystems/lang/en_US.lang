@@ -9,6 +9,7 @@ tile.modularsystems:dummyIO.name=Modular Systems I/O
 tile.modularsystems:powerRF.name=RestoneFlux Power Bank
 tile.modularsystems:powerSolids.name=Solid Fuel Power Bank
 tile.modularsystems:powerLiquids.name=Liquid Fuel Power Bank
+tile.modularsystems:powerIC2.name=IC2 LV Fuel Power Bank
 
 inventory.furnace.title=Modular Furnace
 inventory.crusher.title=Modular Crusher
@@ -21,6 +22,7 @@ inventory.io.auto=Auto
 inventory.rfpower.title=RedstoneFlux Power Bank
 inventory.liquidspower.title=Liquid Fuel Power Bank
 inventory.solidspower.title=Solid Fuel Power Bank
+inventory.eupower.title=EU LV Power Bank
 
 inventory.blockValuesConfig.speed=Speed
 inventory.blockValuesConfig.efficiency=Efficiency

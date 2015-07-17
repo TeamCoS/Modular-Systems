@@ -10,9 +10,11 @@ import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.furnace.tiles.TileEntityFurnaceCore;
 import com.pauljoda.modularsystems.power.blocks.BlockPower;
+import com.pauljoda.modularsystems.power.tiles.TileIC2Bank;
 import com.pauljoda.modularsystems.power.tiles.TileLiquidsBank;
 import com.pauljoda.modularsystems.power.tiles.TileRFBank;
 import com.pauljoda.modularsystems.power.tiles.TileSolidsBank;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -22,7 +24,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class BlockManager {
 
     public static Block furnaceCore, furnaceCoreActive, crusherCore, crusherCoreActive;
-    public static Block dummy, io, powerRF, powerSolids, powerLiquids;
+    public static Block dummy, io, powerRF, powerSolids, powerLiquids, powerIC2;
 
     public static void init() {
         registerBlock(furnaceCore = new BlockFurnaceCore(false), "furnaceCore", TileEntityFurnaceCore.class);
@@ -34,6 +36,8 @@ public class BlockManager {
         registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFBank.class), "powerRF", TileRFBank.class);
         registerBlock(powerSolids = new BlockPower(Reference.MOD_ID + ":powerSolids", TileSolidsBank.class), "powerSolids", TileSolidsBank.class);
         registerBlock(powerLiquids = new BlockPower(Reference.MOD_ID + ":powerLiquids", TileLiquidsBank.class), "powerLiquids", TileLiquidsBank.class);
+        if (Loader.isModLoaded("IC2"))
+            registerBlock(powerIC2 = new BlockPower(Reference.MOD_ID + ":powerIC2", TileIC2Bank.class), "powerIC2", TileIC2Bank.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {

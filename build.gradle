@@ -27,6 +27,10 @@ repositories {
     maven {
         url "http://www.beyondrealitypack.com/maven2/"
     }
+    maven {
+        name = "ic2"
+        url = "http://maven.ic2.player.to/"
+    }
 }
 
 apply plugin: 'forge'
@@ -75,6 +79,7 @@ dependencies {
     compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
     compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}_${config.minecraft_version}:dev"
+    compile "net.industrial-craft:industrialcraft-2:${config.IC2_version}-experimental:dev"
     compile group: "com.teambr.bookshelf", name: "Bookshelf", version: "+", classifier: "dev", changing: true
 
 }
