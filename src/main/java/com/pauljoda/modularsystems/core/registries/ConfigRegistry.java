@@ -11,6 +11,7 @@ public class ConfigRegistry {
     private static String configLocation;
 
     public static int multiblockSize, versionNotify, versionRetry;
+    public static double rfPower, EUPower;
     public static boolean debug, updateTab;
     public static String lastVersion, updateURL;
 
@@ -29,6 +30,9 @@ public class ConfigRegistry {
         updateURL           = config.get(Reference.VERSIONCHECK, Reference.UPDATE_URL, "").getString();
 
         multiblockSize      = config.get(Reference.MULTIBLOCK_CONFIG, "Max Size (Blocks From Core)", 32).getInt();
+
+        rfPower             = config.get(Reference.POWER, "RedstoneFlux (RF)", 10.0).getDouble();
+        EUPower             = config.get(Reference.POWER, "IC2 EU", 1.0).getDouble();
 
         debug               = config.get(Reference.DEBUG, "Enable Debug Mode?", false).getBoolean();
 

@@ -43,7 +43,7 @@ public class BlockGeneratorCore extends BaseBlock {
     public void generateDefaultTextures(IIconRegister iconRegister) {
         this.blockIcon = iconRegister.registerIcon("minecraft:furnace_side");
         textures = new BlockTextures(iconRegister, "minecraft:furnace_side");
-        textures.setFront(iconRegister.registerIcon(active ? Reference.MOD_ID + ":crusherFront_On" : Reference.MOD_ID + ":crusherFront_off"));
+        textures.setFront(iconRegister.registerIcon(active ? Reference.MOD_ID + ":generatorFront_on" : Reference.MOD_ID + ":generatorFront_off"));
         textures.setTop(iconRegister.registerIcon("minecraft:furnace_top"));
         textures.setBottom(iconRegister.registerIcon("minecraft:furnace_top"));
         textures.setOverlay(iconRegister.registerIcon("minecraft:hopper_top"));

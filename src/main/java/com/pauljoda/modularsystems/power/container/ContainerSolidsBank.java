@@ -4,6 +4,7 @@ import com.pauljoda.modularsystems.power.tiles.TileSolidsBank;
 import com.teambr.bookshelf.inventory.BaseContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class ContainerSolidsBank extends BaseContainer {
 
@@ -12,7 +13,7 @@ public class ContainerSolidsBank extends BaseContainer {
 
         for (int y = 0; y < 3; y++)
             for (int x = 0; x < 9; x++)
-                addSlotToContainer(new Slot(tileEntity, x + y * 9, 30 + x * 18, 20 + y * 18));
+                addSlotToContainer(new RestrictedSlot(tileEntity, x + y * 9, 30 + x * 18, 20 + y * 18));
 
         bindPlayerInventory(playerInventory);
     }

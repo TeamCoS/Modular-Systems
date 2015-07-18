@@ -203,6 +203,13 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+        if (FluidContainerRegistry.isContainer(itemstack)) {
+            if (FluidContainerRegistry.isEmptyContainer(itemstack)) {
+                return true;
+            } else if (FluidContainerRegistry.isFilledContainer(itemstack) && FluidFuelValues.isFluidFuel(FluidContainerRegistry.getFluidForFilledItem(itemstack).getFluid().getName())) {
+                return true;
+            }
+        }
         return false;
     }
 

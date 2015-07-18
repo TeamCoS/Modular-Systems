@@ -1,5 +1,7 @@
 package com.pauljoda.modularsystems.generator.tiles;
 
+import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyHandler;
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
@@ -15,8 +17,15 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileGeneratorCore extends AbstractCore implements IOpensGui {
+public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnergyHandler {
+
+    protected EnergyStorage energy;
+
+    public TileGeneratorCore() {
+        energy = new EnergyStorage(32000);
+    }
 
     @Override
     public void doWork() {
@@ -75,5 +84,35 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui {
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         return new GuiGenerator(player.inventory, this);
+    }
+
+
+    /*
+     * Energy Functions
+     */
+
+    @Override
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+        return energy.receiveEnergy(maxReceive, simulate);
+    }
+
+    @Override
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+        return energy.extractEnergy(maxExtract, simulate);
+    }
+
+    @Override
+    public int getEnergyStored(ForgeDirection from) {
+        return energy.getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored(ForgeDirection from) {
+        return energy.getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean canConnectEnergy(ForgeDirection from) {
+        return false;
     }
 }

@@ -15,7 +15,7 @@ import java.util.LinkedHashMap;
 public class FluidFuelValues {
     public static FluidFuelValues INSTANCE = new FluidFuelValues();
 
-    protected HashMap<String, Integer> values;
+    protected static HashMap<String, Integer> values;
 
     public FluidFuelValues() {
         values = new LinkedHashMap<>();
@@ -88,6 +88,10 @@ public class FluidFuelValues {
             return values.get(name);
         }
         return 0;
+    }
+
+    public static boolean isFluidFuel(String name) {
+        return values.containsKey(name);
     }
 
     @SubscribeEvent
