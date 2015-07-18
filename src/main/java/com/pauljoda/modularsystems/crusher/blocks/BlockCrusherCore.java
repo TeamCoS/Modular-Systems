@@ -9,6 +9,8 @@ import com.teambr.bookshelf.collections.BlockTextures;
 import com.teambr.bookshelf.common.blocks.BaseBlock;
 import com.teambr.bookshelf.common.blocks.rotation.FourWayRotation;
 import com.teambr.bookshelf.common.blocks.rotation.IRotation;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -19,6 +21,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Random;
 
@@ -102,6 +105,35 @@ public class BlockCrusherCore extends BaseBlock {
                 core.breakMultiBlock();
             }
             world.func_147453_f(x, y, z, par5);
+        }
+    }
+
+    /**
+     * A randomly called display update to be able to add particles or other items for display
+     */
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+        if (this.active) {
+            ForgeDirection l = getDefaultRotation().convertMetaToDirection(world.getBlockMetadata(x, y, z));
+            float f = (float) x + 0.5F;
+            float f1 = (float) y + 0.3F + rand.nextFloat() * 6.0F / 16.0F;
+            float f2 = (float) z + 0.5F;
+            float f3 = 0.52F;
+            float f4 = rand.nextFloat() * 0.6F - 0.3F;
+
+            if (l == ForgeDirection.WEST) {
+                world.spawnParticle("smoke", (double) (f - f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("smoke", (double) (f - f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
+            } else if (l == ForgeDirection.EAST) {
+                world.spawnParticle("smoke", (double) (f + f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("smoke", (double) (f + f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
+            } else if (l == ForgeDirection.NORTH) {
+                world.spawnParticle("smoke", (double) (f + f4), (double) f1, (double) (f2 - f3), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("smoke", (double) (f + f4), (double) f1, (double) (f2 - f3), 0.0D, 0.0D, 0.0D);
+            } else if (l == ForgeDirection.SOUTH) {
+                world.spawnParticle("smoke", (double) (f + f4), (double) f1, (double) (f2 + f3), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("smoke", (double) (f + f4), (double) f1, (double) (f2 + f3), 0.0D, 0.0D, 0.0D);
+            }
         }
     }
 
