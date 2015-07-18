@@ -72,7 +72,7 @@ public class BlockValueRegistry {
         //Move file and load it
         File file = new File(ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "blockValues.json");
         if (!file.exists()) {
-            URL fileURL = ModularSystems.class.getResource(File.separator + "blockValues.json");
+            URL fileURL = ModularSystems.class.getResource("/blockValues.json");
             try {
                 FileUtils.copyURLToFile(fileURL, file);
             } catch (IOException e) {
