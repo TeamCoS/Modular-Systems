@@ -13,6 +13,9 @@ tile.modularsystems:powerSolids.name=Solid Fuel Power Bank
 tile.modularsystems:powerLiquids.name=Liquid Fuel Power Bank
 tile.modularsystems:powerIC2.name=IC2 LV Fuel Power Bank
 
+item.modularsystems:dustIron.name=Iron Dust
+item.modularsystems:dustGold.name=Gold Dust
+
 inventory.furnace.title=Modular Furnace
 inventory.crusher.title=Modular Crusher
 inventory.generator.title=Modular Generator

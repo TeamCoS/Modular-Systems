@@ -23,6 +23,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.File;
 
@@ -64,6 +65,9 @@ public class ModularSystems {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) throws InterruptedException {
+        if (!OreDictionary.doesOreNameExist("dustIron"))
+            ItemManager.init(true);
+
         FurnaceBannedBlocks.INSTANCE.init();
         BlockValueRegistry.INSTANCE.init();
         FluidFuelValues.INSTANCE.init();
