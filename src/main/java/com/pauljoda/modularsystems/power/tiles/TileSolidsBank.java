@@ -73,7 +73,7 @@ public class TileSolidsBank extends TilePowerBase implements IOpensGui, ISidedIn
     public void readFromNBT (NBTTagCompound tags)
     {
         super.readFromNBT(tags);
-        inventory.readFromNBT(tags, 27);
+        inventory.readFromNBT(tags);
         cooldown = tags.getInteger("cooldown");
     }
 

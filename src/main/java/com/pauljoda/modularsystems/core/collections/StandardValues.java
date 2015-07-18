@@ -242,7 +242,7 @@ public class StandardValues {
         setEfficiency(tagCompound.getDouble("Efficiency"));
         setMultiplicity(tagCompound.getDouble("Multiplicity"));
 
-        inventory.readFromNBT(tagCompound, 3);
+        inventory.readFromNBT(tagCompound);
     }
 
     public void writeToNBT(NBTTagCompound tagCompound) {

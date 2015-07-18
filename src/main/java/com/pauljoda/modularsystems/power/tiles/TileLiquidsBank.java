@@ -130,7 +130,7 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
     @Override
     public void readFromNBT(NBTTagCompound tags) {
         super.readFromNBT(tags);
-        inventory.readFromNBT(tags, 27);
+        inventory.readFromNBT(tags);
         tank.readFromNBT(tags);
         cooldown = tags.getInteger("cooldown");
     }

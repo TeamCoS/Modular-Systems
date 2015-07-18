@@ -252,7 +252,7 @@
     },
     "multiplicityFunction": {
       "scaleFactorNumerator": 0.0,
-      "scaleFactorDenominator": 0.0,
+      "scaleFactorDenominator": 1.0,
       "xOffset": 0.0,
       "power": 0.0,
       "yOffset": 0.0,
@@ -281,7 +281,7 @@
     },
     "multiplicityFunction": {
       "scaleFactorNumerator": 0.0,
-      "scaleFactorDenominator": 0.0,
+      "scaleFactorDenominator": 1.0,
       "xOffset": 0.0,
       "power": 0.0,
       "yOffset": 0.0,
@@ -310,7 +310,7 @@
     },
     "multiplicityFunction": {
       "scaleFactorNumerator": 0.0,
-      "scaleFactorDenominator": 0.0,
+      "scaleFactorDenominator": 1.0,
       "xOffset": 0.0,
       "power": 0.0,
       "yOffset": 0.0,
@@ -339,7 +339,7 @@
     },
     "multiplicityFunction": {
       "scaleFactorNumerator": 0.0,
-      "scaleFactorDenominator": 0.0,
+      "scaleFactorDenominator": 1.0,
       "xOffset": 0.0,
       "power": 0.0,
       "yOffset": 0.0,
@@ -368,7 +368,7 @@
     },
     "multiplicityFunction": {
       "scaleFactorNumerator": 0.0,
-      "scaleFactorDenominator": 0.0,
+      "scaleFactorDenominator": 1.0,
       "xOffset": 0.0,
       "power": 0.0,
       "yOffset": 0.0,
@@ -379,7 +379,7 @@
   "minecraft:emerald_block:-1": {
     "speedFunction": {
       "scaleFactorNumerator": 0.0,
-      "scaleFactorDenominator": 0.0,
+      "scaleFactorDenominator": 1.0,
       "xOffset": 0.0,
       "power": 0.0,
       "yOffset": 0.0,
@@ -388,7 +388,7 @@
     },
     "efficiencyFunction": {
       "scaleFactorNumerator": 0.0,
-      "scaleFactorDenominator": 0.0,
+      "scaleFactorDenominator": 1.0,
       "xOffset": 0.0,
       "power": 0.0,
       "yOffset": 0.0,
@@ -437,7 +437,7 @@
   "minecraft:coal_block:-1": {
     "speedFunction": {
       "scaleFactorNumerator": 0.0,
-      "scaleFactorDenominator": 0.0,
+      "scaleFactorDenominator": 1.0,
       "xOffset": 0.0,
       "power": 0.0,
       "yOffset": 0.0,
@@ -455,7 +455,7 @@
     },
     "multiplicityFunction": {
       "scaleFactorNumerator": 0.0,
-      "scaleFactorDenominator": 0.0,
+      "scaleFactorDenominator": 1.0,
       "xOffset": 0.0,
       "power": 0.0,
       "yOffset": 0.0,
