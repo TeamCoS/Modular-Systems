@@ -61,7 +61,7 @@ public class DummyIO extends DummyTile implements IOpensGui {
         if(coolDown <= 0 && getCore() != null) {
             for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                 TileEntity tile = getTileInDirection(dir);
-                if(tile != null && getCore() != null && (!(tile instanceof DummyTile) && !(tile instanceof AbstractCore)) && tile instanceof IInventory && auto) {
+                if(tile != null && getCore() != null && ((!(tile instanceof DummyTile) || (tile instanceof DummyIO)) && !(tile instanceof AbstractCore)) && tile instanceof IInventory && auto) {
                     if(input) {
                         for(int i = 0; i < ((IInventory)tile).getSizeInventory(); i++) {
                             if (InventoryUtils.moveItemInto((IInventory) tile, i, getCore(), -1, 64, dir.getOpposite(), true, true) > 0) {
