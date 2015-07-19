@@ -32,6 +32,7 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         //Color Background
         RenderUtils.setColor(getBackground(tile));
@@ -54,6 +55,7 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         tess.addVertexWithUV(max, -0.0005, min, 3 / 255F, 2 / 255F);
         tess.draw();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glDisable(GL11.GL_BLEND);
 
         //Outer bar background
         RenderUtils.setColor(new Color(57, 57, 57));
@@ -102,7 +104,6 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         RenderHelper.enableStandardItemLighting();
         GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_CULL_FACE);
         RenderUtils.restoreRenderState();
         GL11.glPopMatrix();
