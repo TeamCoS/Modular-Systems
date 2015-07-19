@@ -59,22 +59,24 @@ public class DummyIO extends DummyTile implements IOpensGui {
     @Override
     public void updateEntity() {
         if(coolDown <= 0 && getCore() != null) {
-            for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-                TileEntity tile = getTileInDirection(dir);
-                if(tile != null && getCore() != null && ((!(tile instanceof DummyTile) || (tile instanceof DummyIO)) && !(tile instanceof AbstractCore)) && tile instanceof IInventory && auto) {
-                    if(input) {
-                        for(int i = 0; i < ((IInventory)tile).getSizeInventory(); i++) {
-                            if (InventoryUtils.moveItemInto((IInventory) tile, i, getCore(), -1, 64, dir.getOpposite(), true, true) > 0) {
-                                worldObj.markBlockForUpdate(getCore().xCoord, getCore().yCoord, getCore().zCoord);
-                                return;
+            if(!isPowered()) {
+                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                    TileEntity tile = getTileInDirection(dir);
+                    if (tile != null && getCore() != null && ((!(tile instanceof DummyTile) || (tile instanceof DummyIO)) && !(tile instanceof AbstractCore)) && tile instanceof IInventory && auto) {
+                        if (input) {
+                            for (int i = 0; i < ((IInventory) tile).getSizeInventory(); i++) {
+                                if (InventoryUtils.moveItemInto((IInventory) tile, i, getCore(), -1, 64, dir.getOpposite(), true, true) > 0) {
+                                    worldObj.markBlockForUpdate(getCore().xCoord, getCore().yCoord, getCore().zCoord);
+                                    return;
+                                }
                             }
                         }
-                    }
-                    if(output) {
-                        for(int i = 0; i < ((IInventory)tile).getSizeInventory(); i++) {
-                            if (InventoryUtils.moveItemInto(getCore(), 1, tile, i, 64, dir.getOpposite(), true, true) > 0) {
-                                worldObj.markBlockForUpdate(getCore().xCoord, getCore().yCoord, getCore().zCoord);
-                                return;
+                        if (output) {
+                            for (int i = 0; i < ((IInventory) tile).getSizeInventory(); i++) {
+                                if (InventoryUtils.moveItemInto(getCore(), 1, tile, i, 64, dir.getOpposite(), true, true) > 0) {
+                                    worldObj.markBlockForUpdate(getCore().xCoord, getCore().yCoord, getCore().zCoord);
+                                    return;
+                                }
                             }
                         }
                     }
