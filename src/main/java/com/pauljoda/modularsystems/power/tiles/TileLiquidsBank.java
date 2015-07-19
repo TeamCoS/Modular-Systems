@@ -241,7 +241,8 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
         if (getCore() != null) {
             if (FluidFuelValues.INSTANCE.getFluidFuelValue(resource.getFluid().getName()) > 0) {
                 int amount = tank.fill(resource, doFill);
-                energy.receiveEnergy(amount, false);
+                if (doFill)
+                    energy.receiveEnergy(amount, false);
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 return amount;
             }
