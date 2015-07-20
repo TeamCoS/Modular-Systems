@@ -19,11 +19,14 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+/**
+ * Holds all the block values we need
+ */
 public class BlockValueRegistry {
     public static BlockValueRegistry INSTANCE = new BlockValueRegistry();
 
-    public HashMap<String, BlockValues> values;
-    public HashMap<String, BlockValues> materialValues;
+    public HashMap<String, BlockValues> values; //The block values
+    public HashMap<String, BlockValues> materialValues; //The material values
 
     public BlockValueRegistry() {
         values = new LinkedHashMap<>();
@@ -200,6 +203,13 @@ public class BlockValueRegistry {
         return "NULL";
     }
 
+    /**
+     * Get the speed value for the block
+     * @param block The block
+     * @param meta The meta of the block
+     * @param x How many are in the function
+     * @return What value the equation returns
+     */
     public double getSpeedValue(Block block, int meta, int x) {
         if(isBlockRegistered(block, meta)) {
             BlockValues blockValues = values.get(BlockHelper.getBlockString(block)) != null ? values.get(BlockHelper.getBlockString(block)) : values.get(BlockHelper.getBlockString(block, meta));
@@ -208,6 +218,13 @@ public class BlockValueRegistry {
             return 0;
     }
 
+    /**
+     * Get the efficiency value for the block
+     * @param block The block
+     * @param meta The meta of the block
+     * @param x How many are in the function
+     * @return What value the equation returns
+     */
     public double getEfficiencyValue(Block block, int meta, int x) {
         if(isBlockRegistered(block, meta)) {
             BlockValues blockValues = values.get(BlockHelper.getBlockString(block)) != null ? values.get(BlockHelper.getBlockString(block)) : values.get(BlockHelper.getBlockString(block, meta));
@@ -216,6 +233,13 @@ public class BlockValueRegistry {
             return 0;
     }
 
+    /**
+     * Get the multiplicity value for the block
+     * @param block The block
+     * @param meta The meta of the block
+     * @param x How many are in the function
+     * @return What value the equation returns
+     */
     public double getMultiplicityValue(Block block, int meta, int x) {
         if(isBlockRegistered(block, meta)) {
             BlockValues blockValues = values.get(BlockHelper.getBlockString(block)) != null ? values.get(BlockHelper.getBlockString(block)) : values.get(BlockHelper.getBlockString(block, meta));
@@ -224,6 +248,12 @@ public class BlockValueRegistry {
             return 0;
     }
 
+    /**
+     * Get the speed value for the material
+     * @param mat The string value of the material
+     * @param x How many are in the function
+     * @return What value the equation returns
+     */
     public double getSpeedValueMaterial(String mat, int x) {
         if(isMaterialRegistered(mat)) {
             BlockValues blockValues = materialValues.get(mat);
@@ -232,6 +262,12 @@ public class BlockValueRegistry {
             return 0;
     }
 
+    /**
+     * Get the efficiency value for the material
+     * @param mat The string value of the material
+     * @param x How many are in the function
+     * @return What value the equation returns
+     */
     public double getEfficiencyValueMaterial(String mat, int x) {
         if(isMaterialRegistered(mat)) {
             BlockValues blockValues = materialValues.get(mat);
@@ -240,6 +276,12 @@ public class BlockValueRegistry {
             return 0;
     }
 
+    /**
+     * Get the multiplicity value for the material
+     * @param mat The string value of the material
+     * @param x How many are in the function
+     * @return What value the equation returns
+     */
     public double getMultiplicityValueMaterial(String mat, int x) {
         if(isMaterialRegistered(mat)) {
             BlockValues blockValues = materialValues.get(mat);
@@ -248,6 +290,12 @@ public class BlockValueRegistry {
             return 0;
     }
 
+    /**
+     * Get the values associated with a block
+     * @param block The block
+     * @param meta The metadata
+     * @return The {@link BlockValues} for this block
+     */
     public BlockValues getBlockValues(Block block, int meta) {
         if(isBlockRegistered(block, meta)) {
             return values.get(BlockHelper.getBlockString(block)) != null ? values.get(BlockHelper.getBlockString(block)) : values.get(BlockHelper.getBlockString(block, meta));
@@ -265,6 +313,9 @@ public class BlockValueRegistry {
             materialValues = new LinkedHashMap<>();
     }
 
+    /**
+     * Save stuff for later
+     */
     @SubscribeEvent
     public void onWorldSaveEvent(WorldEvent.Save event) {
         saveToFile();

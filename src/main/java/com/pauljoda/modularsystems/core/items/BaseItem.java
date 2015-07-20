@@ -7,6 +7,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 
+/**
+ * The base item class
+ */
 public class BaseItem extends Item {
 
     private String name;

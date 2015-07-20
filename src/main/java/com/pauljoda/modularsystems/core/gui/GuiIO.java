@@ -6,8 +6,20 @@ import com.teambr.bookshelf.client.gui.component.control.GuiComponentCheckBox;
 import com.teambr.bookshelf.inventory.ContainerGeneric;
 import com.teambr.bookshelf.manager.PacketManager;
 
+/**
+ * The GUI class for the I/O ports
+ */
 public class GuiIO extends GuiBase<ContainerGeneric> {
     protected DummyIO dummy;
+
+    /**
+     * Creates the GUI
+     * @param d The dummy tile
+     * @param container Some container, doesn't really need anything fancy
+     * @param width The width of the GUI
+     * @param height The height of the GUI
+     * @param name The title of the GUI
+     */
     public GuiIO(DummyIO d, ContainerGeneric container, int width, int height, String name) {
         super(container, width, height, name);
         dummy = d;

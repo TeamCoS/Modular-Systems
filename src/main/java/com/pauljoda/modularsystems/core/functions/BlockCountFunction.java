@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+/**
+ * Used to count the blocks in a structure
+ */
 public class BlockCountFunction {
     protected HashMap<String, Integer> blockCount;
     protected HashMap<String, Integer> materialCount;
@@ -53,9 +56,15 @@ public class BlockCountFunction {
         return materialCount.get(mat) != null ? materialCount.get(mat) : 0;
     }
 
+    /**
+     * Returns a list of strings that are the block ids
+     */
     public Set<String> getBlockIds() {
         return blockCount.keySet();
     }
 
+    /**
+     * Returns a list of material strings. Use the BlockValueRegistry to convert back to normal materials
+     */
     public Set<String> getMaterialStrings() { return materialCount.keySet(); }
 }

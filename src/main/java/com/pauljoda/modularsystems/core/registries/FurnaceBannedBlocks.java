@@ -1,10 +1,9 @@
 package com.pauljoda.modularsystems.core.registries;
 
-import com.pauljoda.modularsystems.power.blocks.BlockPower;
-import com.teambr.bookshelf.helpers.LogHelper;
-import com.teambr.bookshelf.util.JsonUtils;
 import com.google.gson.reflect.TypeToken;
 import com.pauljoda.modularsystems.core.ModularSystems;
+import com.teambr.bookshelf.helpers.LogHelper;
+import com.teambr.bookshelf.util.JsonUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -17,6 +16,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is the registry for the banned blocks. Keeps the structure from forming
+ */
 public class FurnaceBannedBlocks {
     public static FurnaceBannedBlocks INSTANCE = new FurnaceBannedBlocks();
 

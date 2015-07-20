@@ -62,6 +62,8 @@ commands.addFluidFuel.usage=Usage: /addFluidFuel <fuelname> <value>
 commands.addFluidFuel.failure=Failed to add Liquid Fuel
 commands.addFluidFuel.success=Liquid Fuel successfully added to registry
 
+commands.usage.configureBlockValues=Opens the GUI to change block values
+
 modularsystems.nei.crusherrecipes=Modular Crusher
 modularsystems.nei.furnacerecipes=Modular Furnace
 modularsystems.nei.blockValues=Modular Systems Values

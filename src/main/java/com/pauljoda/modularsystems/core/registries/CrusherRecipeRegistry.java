@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings({"unused", "unchecked"})
+/**
+ * The recipes for the crusher are stored here
+ */
 public class CrusherRecipeRegistry {
     public static CrusherRecipeRegistry INSTANCE = new CrusherRecipeRegistry();
 
@@ -90,6 +93,11 @@ public class CrusherRecipeRegistry {
         LogHelper.info("Finished adding " + crusherRecipes.size() + " Crusher Recipes");
     }
 
+    /**
+     * Get the oreDict tag for an item
+     * @param itemstack The stack to try
+     * @return The string for this stack
+     */
     private String getOreDict(ItemStack itemstack) {
         int[] registered = OreDictionary.getOreIDs(itemstack);
         if (registered.length > 0)
@@ -101,6 +109,9 @@ public class CrusherRecipeRegistry {
     }
 
     @SuppressWarnings("unchecked")
+    /**
+     * Get the output for an input
+     */
     public ItemStack getOutput(ItemStack itemStack) {
         for (ShapelessOreRecipe crusherRecipe : crusherRecipes) {
             List<Object> list = crusherRecipe.getInput();
@@ -120,10 +131,19 @@ public class CrusherRecipeRegistry {
         return null;
     }
 
+    /**
+     * Checks if the item is a valid item for this registry
+     * @param itemStack The stack to test
+     * @return True if an output exists
+     */
     public boolean isItemValid(ItemStack itemStack) {
         return getOutput(itemStack) != null;
     }
 
+    /**
+     * Get the inputs for crusher
+     * @return Pretty much the whole recipes
+     */
     public Map<ItemStack, ItemStack> getCrusherInputList() {
         HashMap<ItemStack, ItemStack> listRecipes = new HashMap<>();
 

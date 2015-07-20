@@ -24,14 +24,35 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
+/**
+ * This is the class to base all dummy blocks off of
+ *
+ * Dummy blocks are the converted blocks used in the structures. Allows us to open the Core GUI from here
+ */
 public class BlockDummy extends BaseBlock {
+
+    /**
+     * These are the overlays, this is the easiest way to do this just make sure to define each of them for new
+     * cores
+     */
     @SideOnly(Side.CLIENT)
     protected IIcon furnaceOverlay, crusherOverlay;
 
+    /**
+     * Creates the dummy block
+     * @param mat The material of the dummy
+     * @param name The unlocalized name of the dummy
+     * @param tile The tile entity associated with this block
+     */
     public BlockDummy(Material mat, String name, Class<? extends TileEntity> tile) {
         super(mat, name, tile);
     }
 
+    /**
+     * We are doing this ourselves, so for the base dummy don't drop anything
+     *
+     * It is vital you overwrite this in specific upgrades as it will allow you to actually get the block back
+     */
     @Override
     public Item getItemDropped(int i, Random r, int e) {
         return null;

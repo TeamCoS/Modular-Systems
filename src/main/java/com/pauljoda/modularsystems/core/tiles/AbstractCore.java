@@ -210,6 +210,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
                 worldObj.setBlockMetadataWithNotify(loc.x, loc.y, loc.z, meta, 2);
             }
         }
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         wellFormed = false;
     }
 
@@ -480,6 +481,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
         first.readFromNBT(tagCompound, "First");
         second.readFromNBT(tagCompound, "Second");
         corners = new Couplet<>(first, second);
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     @Override

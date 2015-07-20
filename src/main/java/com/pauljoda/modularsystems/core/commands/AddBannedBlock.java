@@ -7,7 +7,14 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 
+/**
+ * This is our command to add a banned block to the furnace. Or whatever structure calls this
+ */
 public class AddBannedBlock extends CommandBase {
+
+    /**
+     * The command Name
+     */
     @Override
     public String getCommandName() {
         return "addBannedFurnaceBlock";
@@ -21,6 +28,9 @@ public class AddBannedBlock extends CommandBase {
         return 3;
     }
 
+    /**
+     * Returns the usage, this will help those learn how to use it
+     */
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
         return "commands.addBannedFurnaceBlock.usage";

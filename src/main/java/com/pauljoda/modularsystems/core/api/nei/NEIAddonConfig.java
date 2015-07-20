@@ -10,6 +10,11 @@ import com.pauljoda.modularsystems.core.api.nei.machines.RecipeHandlerFurnace;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import net.minecraft.util.StatCollector;
 
+/**
+ * This will be called automatically when NEI is loaded. Must be called this exactly for NEI to find it
+ *
+ * Make sure if you create a handler to register it here
+ */
 public class NEIAddonConfig implements IConfigureNEI {
     @Override
     public void loadConfig() {
@@ -18,6 +23,7 @@ public class NEIAddonConfig implements IConfigureNEI {
         registerHandler(new RecipeHandlerFurnace());
         registerHandler(new RecipeHandlerBlockValues());
 
+        //By setting this here, we can let the rest of the mod know NEI is installed
         ModularSystems.nei = new NEICallback();
     }
 
@@ -31,6 +37,10 @@ public class NEIAddonConfig implements IConfigureNEI {
         return Reference.VERSION;
     }
 
+    /**
+     * Little helper method to register the handlers
+     * @param handler The handler to register
+     */
     private static void registerHandler(TemplateRecipeHandler handler) {
         API.registerRecipeHandler(handler);
         API.registerUsageHandler(handler);

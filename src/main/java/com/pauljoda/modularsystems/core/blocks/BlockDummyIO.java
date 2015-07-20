@@ -16,6 +16,9 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
+/**
+ * The IO, or what allows item movement for the cores
+ */
 public class BlockDummyIO extends BlockDummy {
 
     public BlockDummyIO(Material mat, String name, Class<? extends TileEntity> tile) {
@@ -47,7 +50,6 @@ public class BlockDummyIO extends BlockDummy {
     public void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
         DummyTile dummy = (DummyTile) world.getTileEntity(x, y, z);
         AbstractCore core = dummy.getCore();
-
         if (core != null) {
             core.setDirty();
         }

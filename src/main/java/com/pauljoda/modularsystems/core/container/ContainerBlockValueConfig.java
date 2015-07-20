@@ -8,6 +8,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
+/**
+ * Holds the information for the blockValues Config
+ */
 public class ContainerBlockValueConfig extends BaseContainer {
     public String itemName;
     public Block currentBlock;
@@ -34,5 +37,7 @@ public class ContainerBlockValueConfig extends BaseContainer {
     public void onContainerClosed(EntityPlayer player) {
         super.onContainerClosed(player);
         transferStackInSlot(player, 0);
+        if(inventory.getStackInSlot(0) != null)
+            player.dropPlayerItemWithRandomChoice(inventory.getStackInSlot(0), false);
     }
 }

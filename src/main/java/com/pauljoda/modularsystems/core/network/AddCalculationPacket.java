@@ -66,25 +66,25 @@ public class AddCalculationPacket implements IMessageHandler<AddCalculationPacke
 
             buf.writeDouble(speed.getScaleFactorNumerator());
             buf.writeDouble(speed.getScaleFactorDenominator());
-            buf.writeDouble(speed.getxOffset());
+            buf.writeDouble(speed.getXOffset());
             buf.writeDouble(speed.getPower());
-            buf.writeDouble(speed.getyOffset());
+            buf.writeDouble(speed.getYOffset());
             buf.writeDouble(speed.getFloor());
             buf.writeDouble(speed.getCeiling());
 
             buf.writeDouble(efficiency.getScaleFactorNumerator());
             buf.writeDouble(efficiency.getScaleFactorDenominator());
-            buf.writeDouble(efficiency.getxOffset());
+            buf.writeDouble(efficiency.getXOffset());
             buf.writeDouble(efficiency.getPower());
-            buf.writeDouble(efficiency.getyOffset());
+            buf.writeDouble(efficiency.getYOffset());
             buf.writeDouble(efficiency.getFloor());
             buf.writeDouble(efficiency.getCeiling());
 
             buf.writeDouble(multi.getScaleFactorNumerator());
             buf.writeDouble(multi.getScaleFactorDenominator());
-            buf.writeDouble(multi.getxOffset());
+            buf.writeDouble(multi.getXOffset());
             buf.writeDouble(multi.getPower());
-            buf.writeDouble(multi.getyOffset());
+            buf.writeDouble(multi.getYOffset());
             buf.writeDouble(multi.getFloor());
             buf.writeDouble(multi.getCeiling());
         }

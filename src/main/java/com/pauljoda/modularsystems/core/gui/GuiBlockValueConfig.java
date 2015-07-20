@@ -15,9 +15,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.StatCollector;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+/**
+ * This is the GUI that will allow the user to create functions for blocks. Neat
+ */
 public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
 
     protected GuiComponentSetNumber m1, m2, t, p, b, f, c;
@@ -28,6 +31,9 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
     protected boolean ignoreMeta = true;
     protected MODE currentMode = MODE.SPEED;
 
+    /**
+     * Used to hold what mode we are in as well as get their translated name for display
+     */
     private enum MODE {
         SPEED("inventory.blockValuesConfig.speed"),
         EFFICIENCY("inventory.blockValuesConfig.efficiency"),
@@ -92,11 +98,11 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                     PacketManager.net.sendToServer(new AddCalculationPacket.CalculationMessage(currentBlock, meta,
                             speed,
                             efficiency,
-                            multiplicity));
+                            multiplicity)); //We want the server to know what we've done
                     tryLoadFunctions();
                 }
         }
-        if(currentBlock != null)
+        if(currentBlock != null) //Set the title to what we are doing now
             this.title.setText(GuiHelper.GuiColor.YELLOW + currentMode.getName() + ": " + GuiHelper.GuiColor.GRAY + inventory.itemName);
     }
 
@@ -110,7 +116,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
             components.add(new GuiComponentText("inventory.blockValuesConfig.scaleFactorNumerator", 8, 30) {
                 @Override
                 public List<String> getDynamicToolTip(int x, int y) {
-                    return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.scaleFactorNumerator.toolTip"));
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.blockValuesConfig.scaleFactorNumerator.toolTip"));
                 }
             });
             components.add(m1 = new GuiComponentSetNumber(30, 27, 40, 0, -1000, 1000) {
@@ -124,7 +130,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
             components.add(new GuiComponentText("inventory.blockValuesConfig.scaleDenominator", 8, 50) {
                 @Override
                 public List<String> getDynamicToolTip(int x, int y) {
-                    return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.scaleDenominator.toolTip"));
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.blockValuesConfig.scaleDenominator.toolTip"));
                 }
             });
             components.add(m2 = new GuiComponentSetNumber(30, 47, 40, 1, -1000, 1000) {
@@ -138,7 +144,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
             components.add(new GuiComponentText("inventory.blockValuesConfig.xOffset", 8, 70) {
                 @Override
                 public List<String> getDynamicToolTip(int x, int y) {
-                    return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.xOffset.toolTip"));
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.blockValuesConfig.xOffset.toolTip"));
                 }
             });
             components.add(t = new GuiComponentSetNumber(30, 67, 40, 0, -1000, 1000) {
@@ -152,7 +158,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
             components.add(new GuiComponentText("inventory.blockValuesConfig.power", 8, 90) {
                 @Override
                 public List<String> getDynamicToolTip(int x, int y) {
-                    return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.power.toolTip"));
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.blockValuesConfig.power.toolTip"));
                 }
             });
             components.add(p = new GuiComponentSetNumber(30, 87, 40, 0, -1000, 1000) {
@@ -166,7 +172,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
             components.add(new GuiComponentText("inventory.blockValuesConfig.yOffset", 80, 30) {
                 @Override
                 public List<String> getDynamicToolTip(int x, int y) {
-                    return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.yOffset.toolTip"));
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.blockValuesConfig.yOffset.toolTip"));
                 }
             });
             components.add(b = new GuiComponentSetNumber(97, 27, 40, 0, -1000, 1000) {
@@ -180,7 +186,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
             components.add(new GuiComponentText("inventory.blockValuesConfig.floor", 80, 50) {
                 @Override
                 public List<String> getDynamicToolTip(int x, int y) {
-                    return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.floor.toolTip"));
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.blockValuesConfig.floor.toolTip"));
                 }
             });
             components.add(f = new GuiComponentSetNumber(97, 47, 40, 0, -1000, 1000) {
@@ -194,7 +200,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
             components.add(new GuiComponentText("inventory.blockValuesConfig.ceiling", 80, 70) {
                 @Override
                 public List<String> getDynamicToolTip(int x, int y) {
-                    return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.ceiling.toolTip"));
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.blockValuesConfig.ceiling.toolTip"));
                 }
             });
             components.add(c = new GuiComponentSetNumber(97, 67, 40, 0, -1000, 1000) {
@@ -207,7 +213,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
             components.add(new GuiComponentText("inventory.blockValuesConfig.ceiling", 80, 70) {
                 @Override
                 public List<String> getDynamicToolTip(int x, int y) {
-                    return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.ceiling.toolTip"));
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.blockValuesConfig.ceiling.toolTip"));
                 }
             });
             components.add(new GuiComponentSetNumber(-100000, 67, 40, 0, -1000, 1000) {
@@ -226,7 +232,7 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
 
                 @Override
                 public List<String> getDynamicToolTip(int x, int y) {
-                    return Arrays.asList(StatCollector.translateToLocal("inventory.blockValuesConfig.ignoreMeta.toolTip"));
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.blockValuesConfig.ignoreMeta.toolTip"));
                 }
             });
 
@@ -234,6 +240,9 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
         }
     }
 
+    /**
+     * Called when a number has been changed. We need to update things
+     */
     protected void numbersChanged() {
         Calculation current;
         switch (currentMode) {
@@ -251,14 +260,17 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
 
         current.setScaleFactorNumerator(m1.getValue());
         current.setScaleFactorDenominator(m2.getValue());
-        current.setxOffset(t.getValue());
+        current.setXOffset(t.getValue());
         current.setPower(p.getValue());
-        current.setyOffset(b.getValue());
+        current.setYOffset(b.getValue());
         current.setFloor(f.getValue());
         current.setCeiling(c.getValue());
         graph.setEquation(current);
     }
 
+    /**
+     * Tries to load the function for the current block
+     */
     protected void tryLoadFunctions() {
         Calculation current;
 
@@ -297,14 +309,17 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
         }
         m1.setCurrentValue((int) current.getScaleFactorNumerator());
         m2.setCurrentValue((int) current.getScaleFactorDenominator());
-        t.setCurrentValue((int) current.getxOffset());
+        t.setCurrentValue((int) current.getXOffset());
         p.setCurrentValue((int) current.getPower());
-        b.setCurrentValue((int) current.getyOffset());
+        b.setCurrentValue((int) current.getYOffset());
         f.setCurrentValue((int) current.getFloor());
         c.setCurrentValue((int) current.getCeiling());
         graph.setEquation(current);
     }
 
+    /**
+     * Creates new functions so we can edit them again and not touch the last
+     */
     protected void reloadNewFunctions() {
         speed = new Calculation(0, 0, 0, 0, 0, 0, 0);
         efficiency = new Calculation(0, 0, 0, 0, 0, 0, 0);

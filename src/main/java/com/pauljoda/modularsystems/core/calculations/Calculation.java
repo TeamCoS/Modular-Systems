@@ -1,6 +1,14 @@
 package com.pauljoda.modularsystems.core.calculations;
 
+import java.util.Arrays;
+
+/**
+ * This is the mathematical usage for equations
+ *
+ * This will allow us to create functions
+ */
 public class Calculation {
+
     protected double scaleFactorNumerator = 1;
     protected double scaleFactorDenominator = 1;
     protected double xOffset = 0;
@@ -21,7 +29,7 @@ public class Calculation {
      */
     public Calculation(double m, double m1, double t, double p, double b, double f, double c) {
         scaleFactorNumerator = m;
-        scaleFactorDenominator = m1;
+        scaleFactorDenominator = m1 != 0 ? m1 : 1; //Never divide by zero
         xOffset = t;
         power = p;
         yOffset = b;
@@ -55,61 +63,125 @@ public class Calculation {
         return ((scaleFactorNumerator / scaleFactorDenominator) * (Math.pow((x + xOffset), power))) + yOffset;
     }
 
-    public double getScaleFactorDenominator() {
-        return scaleFactorDenominator;
-    }
+    /*******************************************************************************************************************
+     **************************************** Accessors and Mutators ***************************************************
+     *******************************************************************************************************************/
 
-    public void setScaleFactorDenominator(double scaleFactorDenominator) {
-        this.scaleFactorDenominator = scaleFactorDenominator;
-    }
-
-    public double getCeiling() {
-        return ceiling;
-    }
-
-    public void setCeiling(double ceiling) {
-        this.ceiling = ceiling;
-    }
-
-    public double getFloor() {
-        return floor;
-    }
-
-    public void setFloor(double floor) {
-        this.floor = floor;
-    }
-
-    public double getyOffset() {
-        return yOffset;
-    }
-
-    public void setyOffset(double yOffset) {
-        this.yOffset = yOffset;
-    }
-
-    public double getPower() {
-        return power;
-    }
-
-    public void setPower(double power) {
-        this.power = power;
-    }
-
-    public double getxOffset() {
-        return xOffset;
-    }
-
-    public void setxOffset(double xOffset) {
-        this.xOffset = xOffset;
-    }
-
+    /**
+     * Accessor for the Scale Factor Numerator
+     * @return m1
+     */
     public double getScaleFactorNumerator() {
         return scaleFactorNumerator;
     }
 
+    /**
+     * Mutator for the Scale Factor Numerator
+     * @param scaleFactorNumerator The new value for m1
+     */
     public void setScaleFactorNumerator(double scaleFactorNumerator) {
         this.scaleFactorNumerator = scaleFactorNumerator;
     }
+
+    /**
+     * Accessor for the Scale Factor Denominator
+     * @return m2
+     */
+    public double getScaleFactorDenominator() {
+        return scaleFactorDenominator;
+    }
+
+    /**
+     * Mutator for the Scale Factor Denominator
+     * @param scaleFactorDenominator The new value of m2
+     */
+    public void setScaleFactorDenominator(double scaleFactorDenominator) {
+        this.scaleFactorDenominator = scaleFactorDenominator;
+    }
+
+    /**
+     * Accessor for the X Offset
+     * @return t
+     */
+    public double getXOffset() {
+        return xOffset;
+    }
+
+    /**
+     * Mutator for the X Offset
+     * @param xOffset The new value of t
+     */
+    public void setXOffset(double xOffset) {
+        this.xOffset = xOffset;
+    }
+
+    /**
+     * Accessor for Power
+     * @return p
+     */
+    public double getPower() {
+        return power;
+    }
+
+    /**
+     * Mutator for Power
+     * @param power The new value of p
+     */
+    public void setPower(double power) {
+        this.power = power;
+    }
+
+    /**
+     * Accessor for the Y Offset
+     * @return b
+     */
+    public double getYOffset() {
+        return yOffset;
+    }
+
+    /**
+     * Mutator for the Y Offset
+     * @param yOffset The new value of b
+     */
+    public void setYOffset(double yOffset) {
+        this.yOffset = yOffset;
+    }
+
+    /**
+     * The lower limit of the function
+     * @return The lowest possible value
+     */
+    public double getFloor() {
+        return floor;
+    }
+
+    /**
+     * Set the lower limit
+     * @param floor The new lowest value
+     */
+    public void setFloor(double floor) {
+        this.floor = floor;
+    }
+
+    /**
+     * The upper limit of the function
+     * @return The highest value
+     */
+    public double getCeiling() {
+        return ceiling;
+    }
+
+    /**
+     * Set the new highest value
+     * @param ceiling The new highest value
+     */
+    public void setCeiling(double ceiling) {
+        this.ceiling = ceiling;
+    }
+
+    /*******************************************************************************************************************
+     **************************************** Basic Java Things ********************************************************
+     *******************************************************************************************************************/
 
     @Override
     public boolean equals(Object o) {
@@ -118,35 +190,19 @@ public class Calculation {
 
         Calculation that = (Calculation) o;
 
-        if (Double.compare(that.scaleFactorNumerator, scaleFactorNumerator) != 0) return false;
-        if (Double.compare(that.scaleFactorDenominator, scaleFactorDenominator) != 0) return false;
-        if (Double.compare(that.xOffset, xOffset) != 0) return false;
-        if (Double.compare(that.power, power) != 0) return false;
-        if (Double.compare(that.yOffset, yOffset) != 0) return false;
-        if (Double.compare(that.floor, floor) != 0) return false;
-        return Double.compare(that.ceiling, ceiling) == 0;
-
+        return  Double.compare(that.scaleFactorNumerator, scaleFactorNumerator) == 0 &&
+                Double.compare(that.scaleFactorDenominator, scaleFactorDenominator) == 0 &&
+                Double.compare(that.xOffset, xOffset) == 0 &&
+                Double.compare(that.power, power) == 0 &&
+                Double.compare(that.yOffset, yOffset) == 0 &&
+                Double.compare(that.floor, floor) == 0 &&
+                Double.compare(that.ceiling, ceiling) == 0;
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(scaleFactorNumerator);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(scaleFactorDenominator);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(xOffset);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(power);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(yOffset);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(floor);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(ceiling);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
+        return Arrays.hashCode(new Object[] {scaleFactorNumerator, scaleFactorDenominator, xOffset,
+                power, yOffset, floor, ceiling});
     }
 
     @Override

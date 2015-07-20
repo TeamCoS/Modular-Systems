@@ -12,6 +12,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+/**
+ * The registry for all fluid burn times
+ */
 public class FluidFuelValues {
     public static FluidFuelValues INSTANCE = new FluidFuelValues();
 
@@ -78,11 +81,21 @@ public class FluidFuelValues {
             values = new LinkedHashMap<>();
     }
 
+    /**
+     * Add a value to a fluid
+     * @param name The name of the fluid
+     * @param value The new burn time
+     */
     public void addFluidFuel(String name, int value) {
         validateList();
         values.put(name, value);
     }
 
+    /**
+     * Get the fluid fuel value
+     * @param name The name of the fluid
+     * @return The burn time
+     */
     public int getFluidFuelValue(String name) {
         if (values.containsKey(name)) {
             return values.get(name);
@@ -90,6 +103,11 @@ public class FluidFuelValues {
         return 0;
     }
 
+    /**
+     * Checks if we have something for this fluid
+     * @param name The name of the fluid
+     * @return True if we have something for it
+     */
     public static boolean isFluidFuel(String name) {
         return values.containsKey(name);
     }
