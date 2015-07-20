@@ -1,14 +1,22 @@
 package com.pauljoda.modularsystems.core.registries;
 
+import appeng.api.AEApi;
+import appeng.api.definitions.IBlocks;
+import appeng.api.definitions.IItems;
+import appeng.api.definitions.IMaterials;
+import com.google.common.base.Optional;
 import com.teambr.bookshelf.helpers.LogHelper;
-import com.teambr.bookshelf.util.JsonUtils;
+import cpw.mods.fml.common.Loader;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings({"unused", "unchecked"})
 public class CrusherRecipeRegistry {
@@ -68,6 +76,18 @@ public class CrusherRecipeRegistry {
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.coal, 4), "oreCoal"));
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.string, 4), "blockCloth"));
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Blocks.sand), "blockGlass"));
+        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.flint), getOreDict(new ItemStack(Blocks.gravel))));
+        //Mod Specific
+        if (Loader.isModLoaded("appliedenergistics2")) {
+            IBlocks blocks = AEApi.instance().definitions().blocks();
+            IMaterials mats = AEApi.instance().definitions().materials();
+            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.certusQuartzCrystal().maybeItem().get(), 2),
+                    getOreDict(new ItemStack(blocks.quartzOre().maybeBlock().get()))));
+            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.certusQuartzCrystalCharged().maybeItem().get(), 2),
+                    getOreDict(new ItemStack(blocks.quartzOreCharged().maybeBlock().get()))));
+        }
+
+
 
         LogHelper.info("Finished adding " + crusherRecipes.size() + " Crusher Recipes");
     }

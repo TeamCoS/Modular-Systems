@@ -50,15 +50,15 @@ public class ModularSystems {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        configFolderLocation = event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Modular-Systems";
+        ConfigRegistry.init(configFolderLocation);
+
         BlockManager.init();
 
         MinecraftForge.EVENT_BUS.register(FurnaceBannedBlocks.INSTANCE);
         MinecraftForge.EVENT_BUS.register(BlockValueRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidFuelValues.INSTANCE);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiManager());
-
-        configFolderLocation = event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Modular-Systems";
-        ConfigRegistry.init(configFolderLocation);
 
         proxy.preInit();
     }
