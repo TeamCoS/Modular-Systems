@@ -9,7 +9,7 @@ public class FMLEventManager {
 
     @SubscribeEvent
     public void onClientConnectEvent(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        int hash = BlockValueRegistry.INSTANCE.materialValues.hashCode();
+        int hash = BlockValueRegistry.INSTANCE.values.hashCode();
         PacketManager.net.sendToServer(new GetHashPacket.HashMessage(hash));
     }
 }
