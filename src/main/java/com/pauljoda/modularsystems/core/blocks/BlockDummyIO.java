@@ -10,8 +10,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockDummyIO extends BlockDummy {
 
@@ -48,6 +51,11 @@ public class BlockDummyIO extends BlockDummy {
         if (core != null) {
             core.setDirty();
         }
+    }
+
+    @Override
+    public Item getItemDropped(int i, Random rand, int j) {
+        return Item.getItemFromBlock(this);
     }
 
     /**
