@@ -2,6 +2,7 @@ package com.pauljoda.modularsystems.core.managers;
 
 import com.pauljoda.modularsystems.core.blocks.BlockDummyIO;
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
 import com.pauljoda.modularsystems.core.tiles.DummyIO;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.crusher.blocks.BlockCrusherCore;
@@ -30,12 +31,20 @@ public class BlockManager {
     public static Block dummy, io, powerRF, powerSolids, powerLiquids, powerIC2;
 
     public static void init() {
-        registerBlock(furnaceCore = new BlockFurnaceCore(false), "furnaceCore", TileEntityFurnaceCore.class);
-        registerBlock(furnaceCoreActive = new BlockFurnaceCore(true), "furnaceCoreActive", TileEntityFurnaceCore.class);
-        registerBlock(crusherCore = new BlockCrusherCore(false), "crusherCore", TileCrusherCore.class);
-        registerBlock(crusherCoreActive = new BlockCrusherCore(true), "crusherCoreActive", TileCrusherCore.class);
-        registerBlock(generatorCore = new BlockGeneratorCore(false), "generatorCore", TileGeneratorCore.class);
-        registerBlock(generatorCoreActive = new BlockGeneratorCore(true), "generatorCoreActive", TileGeneratorCore.class);
+        //Cores
+        if (ConfigRegistry.furnaceCore) {
+            registerBlock(furnaceCore = new BlockFurnaceCore(false), "furnaceCore", TileEntityFurnaceCore.class);
+            registerBlock(furnaceCoreActive = new BlockFurnaceCore(true), "furnaceCoreActive", TileEntityFurnaceCore.class);
+        }
+        if (ConfigRegistry.crusherCore) {
+            registerBlock(crusherCore = new BlockCrusherCore(false), "crusherCore", TileCrusherCore.class);
+            registerBlock(crusherCoreActive = new BlockCrusherCore(true), "crusherCoreActive", TileCrusherCore.class);
+        }
+        if (ConfigRegistry.generatorCore) {
+            registerBlock(generatorCore = new BlockGeneratorCore(false), "generatorCore", TileGeneratorCore.class);
+            registerBlock(generatorCoreActive = new BlockGeneratorCore(true), "generatorCoreActive", TileGeneratorCore.class);
+        }
+
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);
         registerBlock(io = new BlockDummyIO(Material.rock, Reference.MOD_ID + ":dummyIO", DummyIO.class), "dummyIO", DummyIO.class);
         registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFBank.class), "powerRF", TileRFBank.class);

@@ -12,7 +12,7 @@ public class ConfigRegistry {
 
     public static int multiblockSize, versionNotify, versionRetry;
     public static double rfPower, EUPower;
-    public static boolean debug, updateTab;
+    public static boolean debug, updateTab, furnaceCore, crusherCore, generatorCore;
     public static String lastVersion, updateURL;
 
     public static void init(String configFolderLocation) {
@@ -33,6 +33,10 @@ public class ConfigRegistry {
 
         rfPower             = config.get(Reference.POWER, "RedstoneFlux (RF)", 10.0).getDouble();
         EUPower             = config.get(Reference.POWER, "IC2 EU", 1.0).getDouble();
+
+        furnaceCore         = config.get(Reference.CORES, "Enable Furnace Core?", true).getBoolean();
+        crusherCore         = config.get(Reference.CORES, "Enable Crusher Core?", true).getBoolean();
+        generatorCore       = config.get(Reference.CORES, "Enable Generator Core?", true).getBoolean();
 
         debug               = config.get(Reference.DEBUG, "Enable Debug Mode?", false).getBoolean();
 
