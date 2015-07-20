@@ -2,9 +2,7 @@ package com.pauljoda.modularsystems.core.registries;
 
 import appeng.api.AEApi;
 import appeng.api.definitions.IBlocks;
-import appeng.api.definitions.IItems;
 import appeng.api.definitions.IMaterials;
-import com.google.common.base.Optional;
 import com.teambr.bookshelf.helpers.LogHelper;
 import cpw.mods.fml.common.Loader;
 import net.minecraft.init.Blocks;
