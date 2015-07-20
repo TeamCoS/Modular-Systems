@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.core.managers;
 
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.core.network.AddCalculationPacket;
 import com.pauljoda.modularsystems.core.network.OpenContainerPacket;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -16,6 +17,7 @@ public class PacketManager {
         net = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID.toUpperCase());
 
         registerMessage(OpenContainerPacket.class, OpenContainerPacket.UpdateMessage.class);
+        registerMessage(AddCalculationPacket.class, AddCalculationPacket.CalculationMessage.class);
     }
 
     @SuppressWarnings("unchecked")

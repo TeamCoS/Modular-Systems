@@ -2,6 +2,8 @@ package com.pauljoda.modularsystems.core.gui;
 
 import com.pauljoda.modularsystems.core.calculations.Calculation;
 import com.pauljoda.modularsystems.core.container.ContainerBlockValueConfig;
+import com.pauljoda.modularsystems.core.managers.PacketManager;
+import com.pauljoda.modularsystems.core.network.AddCalculationPacket;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.teambr.bookshelf.client.gui.GuiBase;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentCheckBox;
@@ -87,10 +89,10 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                 break;
             case 3 :
                 if(currentBlock != null) {
-                    BlockValueRegistry.INSTANCE.addBlockValues(currentBlock, ignoreMeta ? -1 : meta,
+                    PacketManager.net.sendToServer(new AddCalculationPacket.CalculationMessage(currentBlock, meta,
                             speed,
                             efficiency,
-                            multiplicity);
+                            multiplicity));
                     tryLoadFunctions();
                 }
         }
