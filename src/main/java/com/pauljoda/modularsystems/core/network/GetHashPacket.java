@@ -18,7 +18,7 @@ public class GetHashPacket implements IMessageHandler<GetHashPacket.HashMessage,
     @Override
     public IMessage onMessage(HashMessage message, MessageContext ctx) {
         if (ctx.side.isServer()) {
-            if (BlockValueRegistry.INSTANCE.materialValues.hashCode() != message.hash) {
+            if (BlockValueRegistry.INSTANCE.values.hashCode() != message.hash) {
                 PacketManager.net.sendTo(new HashMessage(0), ctx.getServerHandler().playerEntity);
                 for (Map.Entry<String, BlockValues> entry : BlockValueRegistry.INSTANCE.values.entrySet()){
                     Couplet<Block, Integer> block = BlockHelper.getBlockFromString(entry.getKey());
@@ -29,7 +29,7 @@ public class GetHashPacket implements IMessageHandler<GetHashPacket.HashMessage,
                 }
             }
         } else if (ctx.side.isClient()) {
-            BlockValueRegistry.INSTANCE.materialValues.clear();
+            BlockValueRegistry.INSTANCE.values.clear();
         }
         return null;
     }
