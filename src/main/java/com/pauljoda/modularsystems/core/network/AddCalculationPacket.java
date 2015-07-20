@@ -1,10 +1,12 @@
 package com.pauljoda.modularsystems.core.network;
 
 import com.pauljoda.modularsystems.core.calculations.Calculation;
+import com.pauljoda.modularsystems.core.managers.PacketManager;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 
@@ -12,10 +14,18 @@ public class AddCalculationPacket implements IMessageHandler<AddCalculationPacke
 
     @Override
     public IMessage onMessage(AddCalculationPacket.CalculationMessage message, MessageContext ctx) {
-        BlockValueRegistry.INSTANCE.addBlockValues(Block.getBlockById(message.blockId), message.meta,
-                message.speed,
-                message.efficiency,
-                message.multi);
+        if(ctx.side == Side.SERVER) {
+            BlockValueRegistry.INSTANCE.addBlockValues(Block.getBlockById(message.blockId), message.meta,
+                    message.speed,
+                    message.efficiency,
+                    message.multi);
+            PacketManager.net.sendToAll(message);
+        } else {
+            BlockValueRegistry.INSTANCE.addBlockValues(Block.getBlockById(message.blockId), message.meta,
+                    message.speed,
+                    message.efficiency,
+                    message.multi);
+        }
         return null;
     }
 
