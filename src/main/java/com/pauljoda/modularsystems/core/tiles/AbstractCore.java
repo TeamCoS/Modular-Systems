@@ -440,7 +440,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
 
 
     public int getAdjustedBurnTime(double fuelValue) {
-        return (int) Math.max(fuelValue + values.getEfficiency(), 1);
+        return (int) Math.max(fuelValue + values.getEfficiency(), 5);
     }
 
     private double getAdjustedCookTime() {
