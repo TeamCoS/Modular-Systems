@@ -3,6 +3,7 @@ package com.pauljoda.modularsystems.core.managers;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.network.AddCalculationPacket;
 import com.pauljoda.modularsystems.core.network.OpenContainerPacket;
+import com.pauljoda.modularsystems.core.network.SyncBlockValues;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
@@ -18,6 +19,7 @@ public class PacketManager {
 
         registerMessage(OpenContainerPacket.class, OpenContainerPacket.UpdateMessage.class);
         registerMessage(AddCalculationPacket.class, AddCalculationPacket.CalculationMessage.class);
+        registerMessage(SyncBlockValues.class, SyncBlockValues.class);
     }
 
     @SuppressWarnings("unchecked")
