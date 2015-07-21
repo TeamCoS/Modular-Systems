@@ -8,8 +8,11 @@ import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.helpers.GuiHelper;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
@@ -124,5 +127,14 @@ public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProv
     @Override
     public ItemStack returnWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return null;
+    }
+
+    @Override
+    public NBTTagCompound returnNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
+        if (tag.hasKey("Energy")) {
+            tag.removeTag("Energy");
+            tag.removeTag("MaxStorage");
+        }
+        return tag;
     }
 }

@@ -19,6 +19,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -702,5 +703,10 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
     @Override
     public ItemStack returnWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return null;
+    }
+
+    @Override
+    public NBTTagCompound returnNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
+        return tag;
     }
 }
