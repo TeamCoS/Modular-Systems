@@ -465,14 +465,15 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
     @Override
     public void updateEntity() {
         if (!worldObj.isRemote) {
-            if(updateMultiblock())
-                doWork();
+            updateMultiblock();
+            doWork();
         }
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
+        values = new StandardValues();
         values.readFromNBT(tagCompound);
         this.isDirty = tagCompound.getBoolean("isDirty");
 
@@ -481,7 +482,6 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
         first.readFromNBT(tagCompound, "First");
         second.readFromNBT(tagCompound, "Second");
         corners = new Couplet<>(first, second);
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     @Override
