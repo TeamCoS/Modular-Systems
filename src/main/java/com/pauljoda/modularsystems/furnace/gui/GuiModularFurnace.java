@@ -80,7 +80,7 @@ public class GuiModularFurnace extends GuiCoreBase<ContainerModularFurnace> {
             furnaceInfoSpeed.add(new GuiComponentText("Efficiency: ", 5, 48, 0xFFFFFF));
             furnaceInfoSpeed.add(new GuiComponentText(String.format("%.2f", core.getValues().getEfficiency() != 0 ? core.getValues().getEfficiency() : 0.00)  + " ticks", 15, 58, core.getValues().getEfficiency() > 0 ? 0x5CE62E : core.getValues().getEfficiency() == 0 ? 0x000000 : 0xE62E00));
             furnaceInfoSpeed.add(new GuiComponentText("Multiplicity: ", 5, 73, 0xFFFFFF));
-            furnaceInfoSpeed.add(new GuiComponentText((core.getValues().getMultiplicity() + 1) + "x", 15, 83, core.getValues().getMultiplicity() > 0 ? 0x5CE62E : 0x000000));
+            furnaceInfoSpeed.add(new GuiComponentText((int)(core.getValues().getMultiplicity() + 1) + "x", 15, 83, core.getValues().getMultiplicity() > 0 ? 0x5CE62E : 0x000000));
             tabs.addTab(furnaceInfoSpeed, 95, 100, new Color(150, 112, 50), new ItemStack(Items.book));
         }
     }

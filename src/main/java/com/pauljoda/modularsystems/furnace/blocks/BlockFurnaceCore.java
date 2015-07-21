@@ -109,6 +109,9 @@ public class BlockFurnaceCore extends BaseBlock {
         }
     }
 
+    @Override
+    public void dropItems(World world, int x, int y, int z) {}
+
     public Item getItemDropped(int i, Random rand, int j) {
         return Item.getItemFromBlock(BlockManager.furnaceCore);
     }

@@ -142,13 +142,13 @@ public class DummyIO extends DummyTile implements IOpensGui {
     @Override
     public boolean canInsertItem(int i, ItemStack itemstack, int j) {
         AbstractCore core = getCore();
-        return input && core != null && core.canInsertItem(i, itemstack, j);
+        return input && !isPowered() && core != null && core.canInsertItem(i, itemstack, j);
     }
 
     @Override
     public boolean canExtractItem(int i, ItemStack itemstack, int j) {
         AbstractCore core = getCore();
-        return output && core != null && core.canExtractItem(i, itemstack, j);
+        return output && !isPowered() && core != null && core.canExtractItem(i, itemstack, j);
     }
 
     @Override

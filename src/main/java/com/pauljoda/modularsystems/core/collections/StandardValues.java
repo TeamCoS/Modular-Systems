@@ -21,6 +21,7 @@ public class StandardValues {
 
     public void resetStructureValues() {
         speed = efficiency = multiplicity = 0;
+        burnTime = 0;
     }
 
     /*******************************************************************************************************************

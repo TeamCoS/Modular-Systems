@@ -118,6 +118,23 @@ public class BlockValueRegistry {
     }
 
     /**
+     * Removes the values for a given block
+     * @param block The block to delete
+     * @param meta The meta to delete
+     */
+    public void deleteBlockValues(Block block, int meta) {
+        validateList();
+            if((values.get(BlockHelper.getBlockString(block)) != null ? values.get(BlockHelper.getBlockString(block)) : values.get(BlockHelper.getBlockString(block, meta))) != null) {
+                LogHelper.info("Deleting values...");
+                values.remove(values.get(BlockHelper.getBlockString(block)) != null ? BlockHelper.getBlockString(block) : BlockHelper.getBlockString(block, meta));
+                LogHelper.info("Values deleted");
+            }
+         else {
+            LogHelper.warning("You can't delete something that does not exist");
+        }
+    }
+
+    /**
      * Used to add a material value
      * @param material The material to map
      * @param speed Speed function

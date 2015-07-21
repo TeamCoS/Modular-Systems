@@ -108,6 +108,9 @@ public class BlockCrusherCore extends BaseBlock {
         }
     }
 
+    @Override
+    public void dropItems(World world, int x, int y, int z) {}
+
     /**
      * A randomly called display update to be able to add particles or other items for display
      */

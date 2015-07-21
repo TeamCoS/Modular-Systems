@@ -4,6 +4,7 @@ import com.pauljoda.modularsystems.core.calculations.Calculation;
 import com.pauljoda.modularsystems.core.container.ContainerBlockValueConfig;
 import com.pauljoda.modularsystems.core.managers.PacketManager;
 import com.pauljoda.modularsystems.core.network.AddCalculationPacket;
+import com.pauljoda.modularsystems.core.network.DeleteValuesPacket;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.teambr.bookshelf.client.gui.GuiBase;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentCheckBox;
@@ -14,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Keyboard;
 
 import java.util.Collections;
 import java.util.List;
@@ -95,10 +97,14 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
                 break;
             case 3 :
                 if(currentBlock != null) {
-                    PacketManager.net.sendToServer(new AddCalculationPacket.CalculationMessage(currentBlock, meta,
-                            speed,
-                            efficiency,
-                            multiplicity)); //We want the server to know what we've done
+                    if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                        PacketManager.net.sendToServer(new DeleteValuesPacket(Block.getIdFromBlock(currentBlock), ignoreMeta ? -1 : meta));
+                    } else {
+                        PacketManager.net.sendToServer(new AddCalculationPacket.CalculationMessage(currentBlock, ignoreMeta ? -1 : meta,
+                                speed,
+                                efficiency,
+                                multiplicity)); //We want the server to know what we've done
+                    }
                     tryLoadFunctions();
                 }
         }
@@ -337,6 +343,10 @@ public class GuiBlockValueConfig extends GuiBase<ContainerBlockValueConfig> {
             meta = ignoreMeta ? -1 : inventory.meta;
             reloadNewFunctions();
         }
+        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+            ((GuiButton)this.buttonList.get(3)).displayString = StatCollector.translateToLocal("inventory.blockValuesConfig.delete");
+        else
+            ((GuiButton)this.buttonList.get(3)).displayString = StatCollector.translateToLocal("inventory.blockValuesConfig.save");
         super.drawGuiContainerForegroundLayer(x, y);
     }
 }

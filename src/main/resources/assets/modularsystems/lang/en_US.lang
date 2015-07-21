@@ -36,6 +36,7 @@ inventory.blockValuesConfig.speed=Speed
 inventory.blockValuesConfig.efficiency=Efficiency
 inventory.blockValuesConfig.multiplicity=Multiplicity
 inventory.blockValuesConfig.save=Save
+inventory.blockValuesConfig.delete=Delete
 inventory.blockValuesConfig.scaleFactorNumerator=m1=
 inventory.blockValuesConfig.scaleDenominator=m2=
 inventory.blockValuesConfig.xOffset=t=

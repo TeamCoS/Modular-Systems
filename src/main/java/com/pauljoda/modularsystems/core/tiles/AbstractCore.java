@@ -37,7 +37,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
     protected Couplet<Location, Location> corners;
     private static final int cookSpeed = 200;
     private boolean isDirty = true;
-    public boolean wellFormed = false;
+    public boolean wellFormed;
 
     protected int[] sides = new int[] { 0, 1 };
 
@@ -121,7 +121,6 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
 
         corners = getCorners();
 
-
         List<Location> outside = corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true);
         List<Location> inside = corners.getFirst().getAllWithinBounds(corners.getSecond(), true, false);
 
@@ -143,7 +142,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
                 return false;
         }
         wellFormed = true;
-        return wellFormed;
+        return true;
     }
 
     protected void buildMultiblock() {
@@ -299,6 +298,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
             }
 
             if (canSmelt(values.getInput(), recipe(values.getInput()), values.getOutput())) {
+                values.checkInventorySlots();
 
                 //Check the structure to make sure we have the right stuff
                 if(corners == null)
@@ -313,7 +313,6 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
                 List<FuelProvider> providers = getFuelProviders(corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true));
                 if (this.values.getBurnTime() <= 0 && !providers.isEmpty()) {
                     int scaledBurnTime = getAdjustedBurnTime(providers.get(0).consume());
-                    values.checkInventorySlots();
                     this.values.currentItemBurnTime = this.values.burnTime = scaledBurnTime;
                     cook();
                     didWork = true;
@@ -325,7 +324,8 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
                     didWork = true;
                 }
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-            } else if(worldObj.getBlock(xCoord, yCoord, zCoord) == getOnBlock()) {
+            } else if(worldObj.getBlock(xCoord, yCoord, zCoord) == getOnBlock() && this.values.burnTime <= 0) {
+                this.values.cookTime = 0;
                 didWork = true;
             }
 
@@ -333,6 +333,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
                 updateBlockState(this.values.burnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
                 markDirty();
             }
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
     }
 
@@ -469,14 +470,15 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
             updateMultiblock();
             doWork();
         }
+        super.updateEntity();
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
-        values = new StandardValues();
         values.readFromNBT(tagCompound);
         this.isDirty = tagCompound.getBoolean("isDirty");
+        this.wellFormed = tagCompound.getBoolean("WellFormed");
 
         Location first = new Location();
         Location second = new Location();
@@ -490,6 +492,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
         super.writeToNBT(tagCompound);
         values.writeToNBT(tagCompound);
         tagCompound.setBoolean("isDirty", isDirty);
+        tagCompound.setBoolean("WellFormed", wellFormed);
 
         if(corners != null) {
             corners.getFirst().writeToNBT(tagCompound, "First");
