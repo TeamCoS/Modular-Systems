@@ -80,15 +80,17 @@ public class CrusherRecipeRegistry {
         crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.flint), getOreDict(new ItemStack(Blocks.gravel))));
         //Mod Specific
         if (Loader.isModLoaded("appliedenergistics2")) {
-            IBlocks blocks = AEApi.instance().definitions().blocks();
             IMaterials mats = AEApi.instance().definitions().materials();
-            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.certusQuartzCrystal().maybeItem().get(), 2),
-                    getOreDict(new ItemStack(blocks.quartzOre().maybeBlock().get()))));
-            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.certusQuartzCrystalCharged().maybeItem().get(), 2),
-                    getOreDict(new ItemStack(blocks.quartzOreCharged().maybeBlock().get()))));
+            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.certusQuartzDust().maybeItem().get(), 2),
+                    "oreCertusQuartz"));
+            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.certusQuartzDust().maybeItem().get(), 1),
+                    "crystalCertusQuartz"));
+            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.certusQuartzDust().maybeItem().get(), 1),
+                    "crystalChargedCertusQuartz"));
+            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.netherQuartzDust().maybeItem().get(), 1),
+                    "gemQuartz"));
+
         }
-
-
 
         LogHelper.info("Finished adding " + crusherRecipes.size() + " Crusher Recipes");
     }
