@@ -67,6 +67,8 @@ public class SpecialDummyRenderer implements ISimpleBlockRenderingHandler {
             return new Color(33, 80, 69);
         else if(tile.getUnlocalizedName().equalsIgnoreCase(BlockManager.powerIC2.getUnlocalizedName()))
             return new Color(255, 255, 255);
+        else if(tile.getUnlocalizedName().equalsIgnoreCase(BlockManager.powerMana.getUnlocalizedName()))
+            return new Color(58, 214, 214);
         return new Color(255, 255, 255, 0);
     }
 }

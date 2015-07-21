@@ -1,9 +1,6 @@
 package com.pauljoda.modularsystems.core.renderers;
 
-import com.pauljoda.modularsystems.power.tiles.TileLiquidsBank;
-import com.pauljoda.modularsystems.power.tiles.TilePowerBase;
-import com.pauljoda.modularsystems.power.tiles.TileRFBank;
-import com.pauljoda.modularsystems.power.tiles.TileSolidsBank;
+import com.pauljoda.modularsystems.power.tiles.*;
 import com.teambr.bookshelf.util.RenderUtils;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -134,6 +131,8 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
             return new Color(140, 0, 3, 160);
         else if(tile instanceof TileLiquidsBank)
             return new Color(33, 80, 69, 160);
+        else if (tile instanceof TileManaBank)
+            return new Color(58, 214, 214, 160);
         return new Color(255, 255, 255, 0);
     }
 }

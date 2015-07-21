@@ -12,7 +12,7 @@
   "logoFile": "/assets/modularsystems/textures/logo.png",
   "screenshots": [],
   "requiredMods": ["bookshelf", "NotEnoughItems"],
-  "dependencies": ["NotEnoughItems", "CodeChickenCore", "bookshelf"],
+  "dependencies": ["NotEnoughItems", "CodeChickenCore", "bookshelf", "Botania", "appeng"],
   "dependants": [],
   "useDependencyInformation": true
 }

@@ -12,6 +12,7 @@ tile.modularsystems:powerRF.name=RedstoneFlux Power Bank
 tile.modularsystems:powerSolids.name=Solid Fuel Power Bank
 tile.modularsystems:powerLiquids.name=Liquid Fuel Power Bank
 tile.modularsystems:powerIC2.name=IC2 LV Fuel Power Bank
+tile.modularsystems:powerMana.name=Mana Fuel Power Bank
 
 item.modularsystems:dustIron.name=Iron Dust
 item.modularsystems:dustGold.name=Gold Dust
@@ -29,6 +30,7 @@ inventory.rfpower.title=RedstoneFlux Power Bank
 inventory.liquidspower.title=Liquid Fuel Power Bank
 inventory.solidspower.title=Solid Fuel Power Bank
 inventory.eupower.title=EU LV Power Bank
+inventory.rfpower.title=Mana Fuel Power Bank
 
 inventory.blockValuesConfig.speed=Speed
 inventory.blockValuesConfig.efficiency=Efficiency
