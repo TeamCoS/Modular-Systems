@@ -138,7 +138,8 @@ public class RecipeHandlerBlockValues extends TemplateRecipeHandler {
         if (outputID.equals("blockValues") && this.getClass() == RecipeHandlerBlockValues.class) {
             Set<String> blocks = BlockValueRegistry.INSTANCE.values.keySet();
             for(String str : blocks) {
-                this.arecipes.add(new RecipeBlockValue(new ItemStack(BlockHelper.getBlockFromString(str).getFirst(), 1, BlockHelper.getBlockFromString(str).getSecond())));
+                if(BlockHelper.getBlockFromString(str).getFirst() != null)
+                    this.arecipes.add(new RecipeBlockValue(new ItemStack(BlockHelper.getBlockFromString(str).getFirst(), 1, BlockHelper.getBlockFromString(str).getSecond())));
             }
         } else
             super.loadCraftingRecipes(outputID, results);
