@@ -23,7 +23,7 @@ import java.util.Map;
 public class CrusherRecipeRegistry {
     public static CrusherRecipeRegistry INSTANCE = new CrusherRecipeRegistry();
 
-    protected ArrayList<ShapelessOreRecipe> crusherRecipes;
+    public ArrayList<ShapelessOreRecipe> crusherRecipes;
 
     public CrusherRecipeRegistry() {
         crusherRecipes = new ArrayList<>();
