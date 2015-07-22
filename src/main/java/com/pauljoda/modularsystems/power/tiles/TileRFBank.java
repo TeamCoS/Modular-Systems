@@ -5,6 +5,7 @@ import com.pauljoda.modularsystems.power.container.ContainerRFBank;
 import com.pauljoda.modularsystems.power.gui.GuiRFBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -63,5 +64,20 @@ public class TileRFBank extends TilePowerBase implements IOpensGui {
     @Override
     public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
         return new GuiRFBank(this);
+    }
+
+    /*
+     * Tile Entity Functions
+     */
+    @Override
+    public void readFromNBT (NBTTagCompound tags) {
+        super.readFromNBT(tags);
+        energy.readFromNBT(tags);
+    }
+
+    @Override
+    public void writeToNBT (NBTTagCompound tags) {
+        super.writeToNBT(tags);
+        energy.writeToNBT(tags);
     }
 }

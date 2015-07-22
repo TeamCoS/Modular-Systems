@@ -5,6 +5,7 @@ import com.pauljoda.modularsystems.power.container.ContainerManaBank;
 import com.pauljoda.modularsystems.power.gui.GuiManaBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import vazkii.botania.api.mana.IManaReceiver;
 
@@ -67,5 +68,22 @@ public class TileManaBank extends TilePowerBase implements IOpensGui, IManaRecei
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         return new GuiManaBank(this);
+    }
+
+    /*
+     * Tile Entity Functions
+     */
+
+    @Override
+    public void readFromNBT (NBTTagCompound tags) {
+        super.readFromNBT(tags);
+        energy.readFromNBT(tags);
+    }
+
+    @Override
+    public void writeToNBT (NBTTagCompound tags) {
+        super.writeToNBT(tags);
+        energy.writeToNBT(tags);
+
     }
 }

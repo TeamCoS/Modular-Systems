@@ -8,6 +8,7 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -111,7 +112,15 @@ public class TileIC2Bank extends TilePowerBase implements IOpensGui, IEnergySink
         super.invalidate();
     }
 
+    @Override
+    public void readFromNBT (NBTTagCompound tags) {
+        super.readFromNBT(tags);
+        energy.readFromNBT(tags);
+    }
 
-
-
+    @Override
+    public void writeToNBT (NBTTagCompound tags) {
+        super.writeToNBT(tags);
+        energy.writeToNBT(tags);
+    }
 }
