@@ -43,6 +43,11 @@ public class GuiModularFurnace extends GuiCoreBase<ContainerModularFurnace> {
             public int getCurrentBurn() {
                 return core.isBurning() ? core.getBurnTimeRemainingScaled(14) : 0;
             }
+
+            @Override
+            public List<String> getDynamicToolTip(int x, int y) {
+                return Collections.singletonList(core.getValues().burnTime + " ticks left");
+            }
         });
 
         components.add(new GuiComponentArrow(79, 34) {
