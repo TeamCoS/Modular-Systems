@@ -13,7 +13,7 @@ public class ContainerSolidsBank extends BaseContainer {
 
         for (int y = 0; y < 3; y++)
             for (int x = 0; x < 9; x++)
-                addSlotToContainer(new RestrictedSlot(tileEntity, x + y * 9, 30 + x * 18, 20 + y * 18));
+                addSlotToContainer(new RestrictedSlot(tileEntity, x + y * 9, 20 + x * 18, 20 + y * 18));
 
         bindPlayerInventory(playerInventory);
     }

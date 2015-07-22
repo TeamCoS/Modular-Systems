@@ -1,10 +1,10 @@
 package com.pauljoda.modularsystems.power.tiles;
 
-import cofh.api.energy.EnergyStorage;
 import com.pauljoda.modularsystems.power.container.ContainerSolidsBank;
 import com.pauljoda.modularsystems.power.gui.GuiSolidsBank;
 import com.teambr.bookshelf.collections.InventoryTile;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -12,20 +12,33 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 
-public class TileSolidsBank extends TilePowerBase implements IOpensGui, ISidedInventory {
+import java.util.List;
 
-    public static final int POWER_PROCESS = 200;
+public class TileSolidsBank extends TilePowerBase implements IOpensGui, ISidedInventory {
 
     private InventoryTile inventory;
     private int cooldown;
 
     public TileSolidsBank() {
-        energy = new EnergyStorage(20000);
         inventory = new InventoryTile(27);
         cooldown = 0;
     }
 
     @Override
+    public int getPowerLevelScaled(int scale) {
+        return getFuelCount() * scale / inventory.getSizeInventory();
+    }
+
+    private int getFuelCount() {
+        int count = 0;
+        for (int i = 0; i < inventory.getSizeInventory(); i++) {
+            if (inventory.getStackInSlot(i) != null && inventory.getStackInSlot(i).stackSize > 0)
+                count++;
+        }
+        return count;
+    }
+
+    /*@Override
     public void updateEntity()
     {
         if (worldObj.isRemote) return;
@@ -47,6 +60,21 @@ public class TileSolidsBank extends TilePowerBase implements IOpensGui, ISidedIn
                 }
             }
         }
+    }*/
+
+    private int consumeFuel(boolean simulate) {
+        for (int i = 0; i < inventory.getSizeInventory(); i++) {
+            if (inventory.getStackInSlot(i) != null && inventory.getStackInSlot(i).stackSize > 0 &&
+                    TileEntityFurnace.isItemFuel(inventory.getStackInSlot(i))) {
+                int burnValue = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(i));
+                if (!simulate) {
+                    decrStackSize(i, 1);
+                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                }
+                return burnValue;
+            }
+        }
+        return 0;
     }
 
     /*
@@ -54,15 +82,18 @@ public class TileSolidsBank extends TilePowerBase implements IOpensGui, ISidedIn
      */
 
     @Override
+    public boolean canProvide() {
+        return consumeFuel(true) > 0;
+    }
+
+    @Override
     public double fuelProvided() {
-        return energy.extractEnergy(POWER_PROCESS, true);
+        return consumeFuel(true);
     }
 
     @Override
     public double consume() {
-        int actual = energy.extractEnergy(POWER_PROCESS, false);
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        return actual;
+        return consumeFuel(false);
     }
 
     /*
@@ -166,5 +197,13 @@ public class TileSolidsBank extends TilePowerBase implements IOpensGui, ISidedIn
             sides[x] = x;
         }
         return sides;
+    }
+
+    /*
+     * Waila Functions
+     */
+    @Override
+    public void returnWailaHead(List<String> list) {
+        list.add(GuiHelper.GuiColor.YELLOW + "Available Fuel Slots: " + GuiHelper.GuiColor.WHITE + getFuelCount() + "/" + inventory.getSizeInventory());
     }
 }
