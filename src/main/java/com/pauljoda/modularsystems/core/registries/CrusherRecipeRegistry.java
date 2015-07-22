@@ -90,7 +90,7 @@ public class CrusherRecipeRegistry {
             crusherRecipes.add(new ShapelessOreRecipe(mats.netherQuartzDust().maybeStack(1).get(),
                     "gemQuartz"));
             crusherRecipes.add(new ShapelessOreRecipe(mats.fluixDust().maybeStack(1).get(),
-                    "crystalFluixQuartz"));
+                    "crystalFluix"));
         }
 
         LogHelper.info("Finished adding " + crusherRecipes.size() + " Crusher Recipes");
