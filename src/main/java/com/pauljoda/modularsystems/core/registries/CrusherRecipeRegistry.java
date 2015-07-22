@@ -81,15 +81,16 @@ public class CrusherRecipeRegistry {
         //Mod Specific
         if (Loader.isModLoaded("appliedenergistics2")) {
             IMaterials mats = AEApi.instance().definitions().materials();
-            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.certusQuartzDust().maybeItem().get(), 2),
+            crusherRecipes.add(new ShapelessOreRecipe(mats.certusQuartzDust().maybeStack(2).get(),
                     "oreCertusQuartz"));
-            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.certusQuartzDust().maybeItem().get(), 1),
+            crusherRecipes.add(new ShapelessOreRecipe(mats.certusQuartzDust().maybeStack(1).get(),
                     "crystalCertusQuartz"));
-            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.certusQuartzDust().maybeItem().get(), 1),
+            crusherRecipes.add(new ShapelessOreRecipe(mats.certusQuartzDust().maybeStack(1).get(),
                     "crystalChargedCertusQuartz"));
-            crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(mats.netherQuartzDust().maybeItem().get(), 1),
+            crusherRecipes.add(new ShapelessOreRecipe(mats.netherQuartzDust().maybeStack(1).get(),
                     "gemQuartz"));
-
+            crusherRecipes.add(new ShapelessOreRecipe(mats.fluixDust().maybeStack(1).get(),
+                    "crystalFluixQuartz"));
         }
 
         LogHelper.info("Finished adding " + crusherRecipes.size() + " Crusher Recipes");
