@@ -33,7 +33,7 @@ public class TilePowerBase extends DummyTile implements IEnergyHandler, FuelProv
     @Override
     public void readFromNBT (NBTTagCompound tags) {
         super.readFromNBT(tags);
-        if (tags.hasKey("Energy"))
+        if (tags.hasKey("Energy") && energy != null)
             energy.readFromNBT(tags);
         priority = tags.getInteger("priority");
     }
