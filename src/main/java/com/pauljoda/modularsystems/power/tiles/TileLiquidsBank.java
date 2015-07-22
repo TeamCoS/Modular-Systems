@@ -1,6 +1,5 @@
 package com.pauljoda.modularsystems.power.tiles;
 
-import cofh.api.energy.EnergyStorage;
 import com.pauljoda.modularsystems.core.registries.FluidFuelValues;
 import com.pauljoda.modularsystems.power.container.ContainerLiquidsBank;
 import com.pauljoda.modularsystems.power.gui.GuiLiquidsBank;
@@ -28,7 +27,6 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
     public TileLiquidsBank() {
         inventory = new InventoryTile(2);
         tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 20);
-        energy = new EnergyStorage(FluidContainerRegistry.BUCKET_VOLUME * 20);
         cooldown = 0;
     }
 
@@ -110,7 +108,6 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
             FluidStack fluid = tank.getFluid();
             int value = FluidFuelValues.INSTANCE.getFluidFuelValue(fluid.getFluid().getName());
             FluidStack actualFluid = tank.drain(FluidContainerRegistry.BUCKET_VOLUME, true);
-            energy.extractEnergy(actualFluid.amount, false);
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 
             return (actualFluid.amount / FluidContainerRegistry.BUCKET_VOLUME) * value;
@@ -121,6 +118,11 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
     @Override
     public boolean canProvide() {
         return tank.getFluid() != null && tank.getFluidAmount() > 0;
+    }
+
+    @Override
+    public int getPowerLevelScaled(int scale) {
+        return tank.getFluidAmount() * scale / tank.getCapacity();
     }
 
     /*
@@ -241,8 +243,6 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
         if (getCore() != null) {
             if (FluidFuelValues.INSTANCE.getFluidFuelValue(resource.getFluid().getName()) > 0) {
                 int amount = tank.fill(resource, doFill);
-                if (doFill)
-                    energy.receiveEnergy(amount, false);
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 return amount;
             }
@@ -255,16 +255,12 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
         if (resource == null || !resource.isFluidEqual(tank.getFluid())) {
             return null;
         }
-        FluidStack fluid = tank.drain(resource.amount, doDrain);
-        energy.extractEnergy(fluid.amount, false);
-        return fluid;
+        return tank.drain(resource.amount, doDrain);
     }
 
     @Override
     public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-        FluidStack fluid = tank.drain(maxDrain, doDrain);
-        energy.extractEnergy(fluid.amount, false);
-        return fluid;
+        return tank.drain(maxDrain, doDrain);
     }
 
     @Override

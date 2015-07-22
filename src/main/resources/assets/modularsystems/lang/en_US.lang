@@ -30,7 +30,7 @@ inventory.rfpower.title=RedstoneFlux Power Bank
 inventory.liquidspower.title=Liquid Fuel Power Bank
 inventory.solidspower.title=Solid Fuel Power Bank
 inventory.eupower.title=EU LV Power Bank
-inventory.rfpower.title=Mana Fuel Power Bank
+inventory.manapower.title=Mana Fuel Power Bank
 
 inventory.blockValuesConfig.speed=Speed
 inventory.blockValuesConfig.efficiency=Efficiency

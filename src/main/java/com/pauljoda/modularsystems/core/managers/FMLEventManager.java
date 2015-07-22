@@ -14,4 +14,11 @@ public class FMLEventManager {
             PacketManager.net.sendTo(new SyncBlockValues(BlockValueRegistry.INSTANCE.values), (EntityPlayerMP) event.player);
         }
     }
+
+    @SubscribeEvent
+    public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.player != null) {
+            //TODO restore client block values
+        }
+    }
 }
