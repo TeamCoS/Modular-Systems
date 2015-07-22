@@ -1,25 +1,40 @@
 package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyHandler;
 import com.pauljoda.modularsystems.power.container.ContainerRFBank;
 import com.pauljoda.modularsystems.power.gui.GuiRFBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileRFBank extends TilePowerBase implements IOpensGui {
+import java.util.List;
+
+public class TileRFBank extends TilePowerBase implements IOpensGui, IEnergyHandler {
 
     public static final int RF_PROCESS = 80;
+    private EnergyStorage energy;
 
     public TileRFBank() {
         energy = new EnergyStorage(10000);
     }
 
+    @Override
+    public int getPowerLevelScaled(int scale) {
+        return energy.getEnergyStored() * scale / energy.getMaxEnergyStored();
+    }
+
     /*
      * Fuel Provider Functions
      */
+
+    @Override
+    public boolean canProvide() {
+        return energy.getEnergyStored() > 0;
+    }
 
     @Override
     public double fuelProvided() {
@@ -45,6 +60,21 @@ public class TileRFBank extends TilePowerBase implements IOpensGui {
             return actual;
         }
         return 0;
+    }
+
+    @Override
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+        return 0;
+    }
+
+    @Override
+    public int getEnergyStored(ForgeDirection forgeDirection) {
+        return energy.getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored(ForgeDirection forgeDirection) {
+        return energy.getMaxEnergyStored();
     }
 
     @Override
@@ -79,5 +109,13 @@ public class TileRFBank extends TilePowerBase implements IOpensGui {
     public void writeToNBT (NBTTagCompound tags) {
         super.writeToNBT(tags);
         energy.writeToNBT(tags);
+    }
+
+    /*
+     * Waila Functions
+     */
+    @Override
+    public void returnWailaHead(List<String> list) {
+        list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored());
     }
 }

@@ -1,9 +1,11 @@
 package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyHandler;
 import com.pauljoda.modularsystems.power.container.ContainerEUBank;
 import com.pauljoda.modularsystems.power.gui.GuiEUBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
@@ -14,9 +16,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileIC2Bank extends TilePowerBase implements IOpensGui, IEnergySink {
+import java.util.List;
+
+public class TileIC2Bank extends TilePowerBase implements IOpensGui, IEnergySink, IEnergyHandler {
 
     public static final int EU_PROCESS = 8;
+    private EnergyStorage energy;
 
     private boolean firstRun;
 
@@ -34,9 +39,19 @@ public class TileIC2Bank extends TilePowerBase implements IOpensGui, IEnergySink
         }
     }
 
+    @Override
+    public int getPowerLevelScaled(int scale) {
+        return energy.getEnergyStored() * scale / energy.getMaxEnergyStored();
+    }
+
     /*
      * Fuel Provider Functions
      */
+
+    @Override
+    public boolean canProvide() {
+        return energy.getEnergyStored() > 0;
+    }
 
     @Override
     public double fuelProvided() {
@@ -94,6 +109,35 @@ public class TileIC2Bank extends TilePowerBase implements IOpensGui, IEnergySink
     }
 
     /*
+     * Energy Functions
+     */
+
+    @Override
+    public int receiveEnergy(ForgeDirection forgeDirection, int i, boolean b) {
+        return 0;
+    }
+
+    @Override
+    public int extractEnergy(ForgeDirection forgeDirection, int i, boolean b) {
+        return 0;
+    }
+
+    @Override
+    public int getEnergyStored(ForgeDirection forgeDirection) {
+        return energy.getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored(ForgeDirection forgeDirection) {
+        return energy.getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean canConnectEnergy(ForgeDirection forgeDirection) {
+        return false;
+    }
+
+    /*
      * Tile Entity Functions
      */
     @Override
@@ -122,5 +166,13 @@ public class TileIC2Bank extends TilePowerBase implements IOpensGui, IEnergySink
     public void writeToNBT (NBTTagCompound tags) {
         super.writeToNBT(tags);
         energy.writeToNBT(tags);
+    }
+
+    /*
+     * Waila Functions
+     */
+    @Override
+    public void returnWailaHead(List<String> list) {
+        list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored());
     }
 }
