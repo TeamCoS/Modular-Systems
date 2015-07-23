@@ -38,30 +38,6 @@ public class TileSolidsBank extends TilePowerBase implements IOpensGui, ISidedIn
         return count;
     }
 
-    /*@Override
-    public void updateEntity()
-    {
-        if (worldObj.isRemote) return;
-
-        if (cooldown >= 0)
-            cooldown++;
-
-        if (energy.getEnergyStored() < energy.getMaxEnergyStored() && cooldown >= 20) {
-            cooldown = 0;
-            for (int i = 0; i < 27; i++) {
-                if (inventory.getStackInSlot(i) != null) {
-                    int value = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(i));
-                    if (value <= 0) continue;
-                    if (value + energy.getEnergyStored() < energy.getMaxEnergyStored()) {
-                        energy.modifyEnergyStored(value);
-                        decrStackSize(i, 1);
-                        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-                    }
-                }
-            }
-        }
-    }*/
-
     private int consumeFuel(boolean simulate) {
         for (int i = 0; i < inventory.getSizeInventory(); i++) {
             if (inventory.getStackInSlot(i) != null && inventory.getStackInSlot(i).stackSize > 0 &&
