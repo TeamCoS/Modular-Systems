@@ -89,9 +89,10 @@ public class BlockFurnaceCore extends BaseBlock {
         }
         if (tileEntity != null) {
             tileEntity.setDirty();
-            if (tileEntity.updateMultiblock()) {
+            if (tileEntity.wellFormed) {
                 player.openGui(Bookshelf.instance, 0, world, x, y, z);
-            }
+            } else
+                tileEntity.markDirty();
         }
         return true;
     }

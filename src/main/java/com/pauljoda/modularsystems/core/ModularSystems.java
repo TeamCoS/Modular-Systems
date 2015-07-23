@@ -59,7 +59,7 @@ public class ModularSystems {
         MinecraftForge.EVENT_BUS.register(FurnaceBannedBlocks.INSTANCE);
         MinecraftForge.EVENT_BUS.register(BlockValueRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidFuelValues.INSTANCE);
-        FMLCommonHandler.instance().bus().register(new FMLEventManager());
+        FMLCommonHandler.instance().bus().register(new PlayerLogManager());
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiManager());
 
         proxy.preInit();
