@@ -6,10 +6,12 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 
+/**
+ * The manager to send packets to the client or server
+ */
 public class PacketManager {
 
     public static SimpleNetworkWrapper net;
-
     private static int nextPacketId = 0;
 
     public static void initPackets() {

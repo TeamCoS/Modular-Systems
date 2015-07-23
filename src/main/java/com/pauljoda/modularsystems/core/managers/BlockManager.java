@@ -21,6 +21,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.OreDictionary;
 
+/**
+ * Manager for the Blocks. Used to register and control what is added
+ */
 public class BlockManager {
 
     public static Block furnaceCore, furnaceCoreActive, crusherCore, crusherCoreActive;
@@ -28,7 +31,7 @@ public class BlockManager {
     public static Block dummy, io, powerRF, powerSolids, powerLiquids, powerIC2, powerMana;
 
     public static void init() {
-        //Cores
+        //Systems
         if (ConfigRegistry.furnaceCore) {
             registerBlock(furnaceCore = new BlockFurnaceCore(false), "furnaceCore", TileEntityFurnaceCore.class);
             registerBlock(furnaceCoreActive = new BlockFurnaceCore(true), "furnaceCoreActive", TileEntityFurnaceCore.class);
@@ -47,12 +50,20 @@ public class BlockManager {
         registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFBank.class), "powerRF", TileRFBank.class);
         registerBlock(powerSolids = new BlockPower(Reference.MOD_ID + ":powerSolids", TileSolidsBank.class), "powerSolids", TileSolidsBank.class);
         registerBlock(powerLiquids = new BlockPower(Reference.MOD_ID + ":powerLiquids", TileLiquidsBank.class), "powerLiquids", TileLiquidsBank.class);
+
         if (Loader.isModLoaded("IC2"))
             registerBlock(powerIC2 = new BlockPower(Reference.MOD_ID + ":powerIC2", TileIC2Bank.class), "powerIC2", TileIC2Bank.class);
         if (Loader.isModLoaded("Botania"))
             registerBlock(powerMana = new BlockPower(Reference.MOD_ID + ":powerMana", TileManaBank.class), "powerMana", TileManaBank.class);
     }
 
+    /**
+     * Helper method for registering block
+     * @param block The block to register
+     * @param name The name to register the block to
+     * @param tileEntity The tile entity, null if none
+     * @param oreDict The ore dict tag, should it be needed
+     */
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {
         GameRegistry.registerBlock(block, name);
         if(tileEntity != null)
@@ -61,7 +72,32 @@ public class BlockManager {
             OreDictionary.registerOre(oreDict, block);
     }
 
+    /**
+     * No ore dict helper method
+     * @param block The block to add
+     * @param name The name
+     * @param tileEntity The tile
+     */
     private static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {
         registerBlock(block, name, tileEntity, null);
+    }
+
+    /**
+     * Used for no tile blocks with ore dict
+     * @param block The block to register
+     * @param name The name of the block
+     * @param oreDict The ore dict tag
+     */
+    private static void registerBlock(Block block, String name, String oreDict) {
+        registerBlock(block, name, null, oreDict);
+    }
+
+    /**
+     * For those blocks with no tile/oredict
+     * @param block The block to add
+     * @param name The name of the block
+     */
+    private static void registerBlock(Block block, String name) {
+        registerBlock(block, name, null, null);
     }
 }

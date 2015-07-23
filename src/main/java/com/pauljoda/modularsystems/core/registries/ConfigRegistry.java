@@ -12,7 +12,7 @@ public class ConfigRegistry {
 
     public static int multiblockSize, versionNotify, versionRetry;
     public static double rfPower, EUPower;
-    public static boolean debug, updateTab, furnaceCore, crusherCore, generatorCore;
+    public static boolean debug, updateTab, furnaceCore, crusherCore, generatorCore, storageSystem;
     public static String lastVersion, updateURL;
 
     public static void init(String configFolderLocation) {
@@ -37,6 +37,7 @@ public class ConfigRegistry {
         furnaceCore         = config.get(Reference.CORES, "Enable Furnace Core?", true).getBoolean();
         crusherCore         = config.get(Reference.CORES, "Enable Crusher Core?", true).getBoolean();
         generatorCore       = config.get(Reference.CORES, "Enable Generator Core?", true).getBoolean();
+        storageSystem       = config.get(Reference.CORES, "Endable Storage System?", true).getBoolean();
 
         debug               = config.get(Reference.DEBUG, "Enable Debug Mode?", false).getBoolean();
 

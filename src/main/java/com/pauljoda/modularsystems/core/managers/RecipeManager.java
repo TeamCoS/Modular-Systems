@@ -4,9 +4,13 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+/**
+ * This is where we add all our recipes
+ */
 public class RecipeManager {
     public static void init() {
 
@@ -46,10 +50,18 @@ public class RecipeManager {
                 "IPI",
                 "RIR", 'R', Blocks.redstone_block, 'I', Items.iron_ingot, 'P', Blocks.piston);
 
+        //IC2 Fuel Bank
         if (Loader.isModLoaded("IC2"))
             GameRegistry.addRecipe(new ItemStack(BlockManager.powerIC2, 1),
                     "IiI",
                     "IPI",
                     "IiI", 'I', Blocks.iron_block, 'i', Items.iron_ingot, 'P', Blocks.piston);
+
+        //Botania Fuel Bank
+        if(Loader.isModLoaded("Botania"))
+            GameRegistry.addRecipe(new ItemStack(BlockManager.powerMana, 1),
+                    "SIS",
+                    "IFI",
+                    "SIS", 'S', Item.getItemFromBlock(Blocks.sapling), 'I', Items.iron_ingot, 'F', Items.flower_pot);
     }
 }
