@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class GuiPowerBase<C extends Container> extends GuiBase<C> {
@@ -37,9 +37,11 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
     public void drawGuiContainerForegroundLayer(int x, int y) {
         super.drawGuiContainerForegroundLayer(x, y);
 
-        core = (AbstractCore) core.getWorldObj().getTileEntity(core.xCoord, core.yCoord, core.zCoord);
-        rightTabs.getTabs().get(0).setIcon(new ItemStack(core.getWorldObj().getBlock(
-                core.xCoord, core.yCoord, core.zCoord)));
+        if (tileEntity.getCore() != null) {
+            core = (AbstractCore) core.getWorldObj().getTileEntity(core.xCoord, core.yCoord, core.zCoord);
+            rightTabs.getTabs().get(0).setIcon(new ItemStack(core.getWorldObj().getBlock(
+                    core.xCoord, core.yCoord, core.zCoord)));
+        }
     }
 
     @Override
@@ -52,7 +54,7 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
      */
     @Override
     public void addRightTabs(GuiTabCollection tabs) {
-        if (tileEntity != null) {
+        if (tileEntity != null && core != null) {
             //Core Gui Tab
             List<BaseComponent> coreTab = new ArrayList<>();
             tabs.addTab(coreTab, 95, 100, new Color(100, 150, 150), new ItemStack(Blocks.furnace));
@@ -69,8 +71,8 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
             });
             priorityTab.add(new GuiComponentText("Fuel Priority", 22, 7));
             tabs.addTab(priorityTab, 95, 55, new Color(255, 68, 51), new ItemStack(Blocks.anvil));
-            tabs.getTabs().get(0).setToolTip(Arrays.asList(new String[] {"Core Gui"}));
-            tabs.getTabs().get(1).setToolTip(Arrays.asList(new String[] {"Fuel Priority"}));
+            tabs.getTabs().get(0).setToolTip(Collections.singletonList("Core Gui"));
+            tabs.getTabs().get(1).setToolTip(Collections.singletonList("Fuel Priority"));
 
             //Link Core tab to core Gui
             tabs.getTabs().get(0).setMouseEventListener(new IMouseEventListener() {
@@ -78,8 +80,6 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
                 public void onMouseDown(BaseComponent baseComponent, int i, int i1, int i2) {
 
                     if (tileEntity.getCore() != null) {
-                        /*Minecraft.getMinecraft().thePlayer.openGui(Bookshelf.instance, 0, core.getWorldObj(),
-                                core.xCoord, core.yCoord, core.zCoord);*/
                         com.pauljoda.modularsystems.core.managers.PacketManager.net.sendToServer(
                                 new OpenContainerPacket.UpdateMessage(core.xCoord, core.yCoord, core.zCoord));
                     }

@@ -11,7 +11,7 @@ public class ConfigRegistry {
     private static String configLocation;
 
     public static int multiblockSize, versionNotify, versionRetry;
-    public static double rfPower, EUPower;
+    public static double rfPower, EUPower, manaPower;
     public static boolean debug, updateTab, furnaceCore, crusherCore, generatorCore, storageSystem;
     public static String lastVersion, updateURL;
 
@@ -31,8 +31,9 @@ public class ConfigRegistry {
 
         multiblockSize      = config.get(Reference.MULTIBLOCK_CONFIG, "Max Size (Blocks From Core)", 32).getInt();
 
-        rfPower             = config.get(Reference.POWER, "RedstoneFlux (RF)", 10.0).getDouble();
-        EUPower             = config.get(Reference.POWER, "IC2 EU", 1.0).getDouble();
+        rfPower             = config.get(Reference.POWER, "RedstoneFlux (RF) to 1 BurnTime", 8.0).getDouble();
+        EUPower             = config.get(Reference.POWER, "IC2 EU to 1 BurnTime", 1.6).getDouble();
+        manaPower           = config.get(Reference.POWER, "Mana to 1 BurnTime", 0.7).getDouble();
 
         furnaceCore         = config.get(Reference.CORES, "Enable Furnace Core?", true).getBoolean();
         crusherCore         = config.get(Reference.CORES, "Enable Crusher Core?", true).getBoolean();

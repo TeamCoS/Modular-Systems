@@ -6,6 +6,7 @@ import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.helpers.GuiHelper;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,6 +35,11 @@ public abstract class TilePowerBase extends DummyTile implements FuelProvider, I
     public void writeToNBT (NBTTagCompound tags) {
         super.writeToNBT(tags);
         tags.setInteger("priority", priority);
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+        return this != null;
     }
 
     /*

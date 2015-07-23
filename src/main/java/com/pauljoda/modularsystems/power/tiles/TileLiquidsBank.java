@@ -150,12 +150,12 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
      */
     @Override
     public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return getCore() != null ? new ContainerLiquidsBank(entityPlayer.inventory, this) : null;
+        return new ContainerLiquidsBank(entityPlayer.inventory, this);
     }
 
     @Override
     public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return getCore() != null ? new GuiLiquidsBank(entityPlayer.inventory, this) : null;
+        return new GuiLiquidsBank(entityPlayer.inventory, this);
     }
 
     /*

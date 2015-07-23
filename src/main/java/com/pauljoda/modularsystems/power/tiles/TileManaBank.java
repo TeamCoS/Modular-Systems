@@ -2,6 +2,11 @@ package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+<<<<<<< HEAD
+=======
+import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
+import com.pauljoda.modularsystems.power.container.ContainerManaBank;
+>>>>>>> origin/master
 import com.pauljoda.modularsystems.power.gui.GuiManaBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.GuiHelper;
@@ -16,7 +21,6 @@ import java.util.List;
 
 public class TileManaBank extends TilePowerBase implements IOpensGui, IManaReceiver, IEnergyHandler {
 
-    public static final int MANA_USAGE = 6000;
     private EnergyStorage energy;
 
     public TileManaBank() {
@@ -63,14 +67,15 @@ public class TileManaBank extends TilePowerBase implements IOpensGui, IManaRecei
 
     @Override
     public double fuelProvided() {
-        return energy.extractEnergy(MANA_USAGE, true) / 10;
+        int actual = energy.extractEnergy((int)Math.round(ConfigRegistry.manaPower * 200), true);
+        return (actual / (ConfigRegistry.manaPower * 200)) * 200;
     }
 
     @Override
     public double consume() {
-        int actual = energy.extractEnergy(MANA_USAGE, false) / 10;
+        int actual = energy.extractEnergy((int)Math.round(ConfigRegistry.manaPower * 200), false);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        return actual;
+        return (actual / (ConfigRegistry.manaPower * 200)) * 200;
     }
 
     /*

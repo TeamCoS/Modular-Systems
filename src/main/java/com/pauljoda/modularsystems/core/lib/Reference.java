@@ -18,6 +18,6 @@ public class Reference {
     public static final String REMOTE_VERSION = "Last Remote Version Found";
     public static final String UPDATE_TAB = "Hide Update Tab?";
     public static final String UPDATE_URL = "Update URL";
-    public static final String POWER = "Power Conversion to MSPower";
+    public static final String POWER = "Power Bank Settings";
     public static final String CORES = "Enable Multiblock Cores";
 }
