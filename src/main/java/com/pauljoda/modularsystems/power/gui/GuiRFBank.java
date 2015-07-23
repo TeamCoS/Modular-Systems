@@ -2,11 +2,7 @@ package com.pauljoda.modularsystems.power.gui;
 
 import com.pauljoda.modularsystems.power.tiles.TileRFBank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentPowerBar;
-<<<<<<< HEAD
 import com.teambr.bookshelf.inventory.ContainerGeneric;
-import net.minecraft.item.ItemStack;
-=======
->>>>>>> origin/master
 
 import java.awt.*;
 import java.util.ArrayList;

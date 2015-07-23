@@ -2,11 +2,7 @@ package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
-<<<<<<< HEAD
-=======
 import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
-import com.pauljoda.modularsystems.power.container.ContainerManaBank;
->>>>>>> origin/master
 import com.pauljoda.modularsystems.power.gui.GuiManaBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.GuiHelper;
