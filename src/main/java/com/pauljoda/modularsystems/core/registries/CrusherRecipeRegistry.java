@@ -175,9 +175,12 @@ public class CrusherRecipeRegistry {
     private boolean checkOreDict(String oreDict, ItemStack itemstack) {
         ArrayList<ItemStack> oreList = OreDictionary.getOres(oreDict);
         for (ItemStack list : oreList) {
-            if (list.getItemDamage() == OreDictionary.WILDCARD_VALUE)
+            if (list.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
                 if (list.getItem() == itemstack.getItem()) return true;
-            else if (list.isItemEqual(itemstack)) return true;
+            }
+            else if (list.isItemEqual(itemstack)) {
+                return true;
+            }
         }
         return false;
     }
