@@ -42,7 +42,7 @@ public class BlockPower extends BlockDummy {
             return true;
         } else if (player.isSneaking()) {
             TilePowerBase us = (TilePowerBase) world.getTileEntity(x, y, z);
-            if (us.getCore() != null) {
+            if (us != null) {
                 player.openGui(Bookshelf.instance, 0, world, x, y, z);
             }
         }

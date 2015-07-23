@@ -38,7 +38,8 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
         super.drawGuiContainerForegroundLayer(x, y);
 
         core = (AbstractCore) core.getWorldObj().getTileEntity(core.xCoord, core.yCoord, core.zCoord);
-        rightTabs.getTabs().get(0).setIcon(new ItemStack(core.getWorldObj().getBlock(
+        if (core != null)
+            rightTabs.getTabs().get(0).setIcon(new ItemStack(core.getWorldObj().getBlock(
                 core.xCoord, core.yCoord, core.zCoord)));
     }
 
@@ -52,7 +53,7 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
      */
     @Override
     public void addRightTabs(GuiTabCollection tabs) {
-        if (tileEntity != null) {
+        if (tileEntity != null && core != null) {
             //Core Gui Tab
             List<BaseComponent> coreTab = new ArrayList<>();
             tabs.addTab(coreTab, 95, 100, new Color(100, 150, 150), new ItemStack(Blocks.furnace));

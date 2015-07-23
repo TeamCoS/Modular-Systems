@@ -2,6 +2,7 @@ package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
 import com.pauljoda.modularsystems.power.container.ContainerEUBank;
 import com.pauljoda.modularsystems.power.gui.GuiEUBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
@@ -20,7 +21,6 @@ import java.util.List;
 
 public class TileIC2Bank extends TilePowerBase implements IOpensGui, IEnergySink, IEnergyHandler {
 
-    public static final int EU_PROCESS = 8;
     private EnergyStorage energy;
 
     private boolean firstRun;
@@ -55,14 +55,15 @@ public class TileIC2Bank extends TilePowerBase implements IOpensGui, IEnergySink
 
     @Override
     public double fuelProvided() {
-        return energy.extractEnergy(EU_PROCESS, true);
+        int actual = energy.extractEnergy((int)Math.round(ConfigRegistry.EUPower * 200), true);
+        return (actual / (ConfigRegistry.EUPower * 200)) * 200;
     }
 
     @Override
     public double consume() {
-        int actual = energy.extractEnergy(EU_PROCESS, false);
+        int actual = energy.extractEnergy((int)Math.round(ConfigRegistry.EUPower * 200), false);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        return actual;
+        return (actual / (ConfigRegistry.EUPower * 200)) * 200;
     }
 
     /*

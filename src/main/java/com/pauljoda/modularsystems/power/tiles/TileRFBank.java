@@ -2,6 +2,7 @@ package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
 import com.pauljoda.modularsystems.power.container.ContainerRFBank;
 import com.pauljoda.modularsystems.power.gui.GuiRFBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
@@ -15,7 +16,6 @@ import java.util.List;
 
 public class TileRFBank extends TilePowerBase implements IOpensGui, IEnergyHandler {
 
-    public static final int RF_PROCESS = 80;
     private EnergyStorage energy;
 
     public TileRFBank() {
@@ -30,7 +30,6 @@ public class TileRFBank extends TilePowerBase implements IOpensGui, IEnergyHandl
     /*
      * Fuel Provider Functions
      */
-
     @Override
     public boolean canProvide() {
         return energy.getEnergyStored() > 0;
@@ -38,14 +37,15 @@ public class TileRFBank extends TilePowerBase implements IOpensGui, IEnergyHandl
 
     @Override
     public double fuelProvided() {
-        return energy.extractEnergy(RF_PROCESS, true);
+        int actual = energy.extractEnergy((int)Math.round(ConfigRegistry.rfPower * 200), true);
+        return (actual / (ConfigRegistry.rfPower * 200)) * 200;
     }
 
     @Override
     public double consume() {
-        int actual = energy.extractEnergy(RF_PROCESS, false);
+        int actual = energy.extractEnergy((int)Math.round(ConfigRegistry.rfPower * 200), false);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        return actual;
+        return (actual / (ConfigRegistry.rfPower * 200)) * 200;
     }
 
     /*
