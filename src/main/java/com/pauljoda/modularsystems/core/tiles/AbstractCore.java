@@ -63,14 +63,6 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
     protected abstract ItemStack recipe(ItemStack is);
 
     /**
-     * Get how long the item will burn, 0 if it won't
-     * @param stack The stack to check
-     * @return How many ticks it burns
-     */
-    protected abstract int getItemBurnTime(ItemStack stack);
-
-
-    /**
      * Check if this blocks is not allowed in the structure
      * @param block The blocks to check
      * @param meta The meta data of said blocks
@@ -637,10 +629,6 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
             entityitem.motionZ = (double) ((float) this.worldObj.rand.nextGaussian() * f3);
             worldObj.spawnEntityInWorld(entityitem);
         }
-    }
-
-    protected boolean isItemFuel(ItemStack par0ItemStack) {
-        return getItemBurnTime(par0ItemStack) > 0;
     }
 
     public int getFurnaceBurnTime() {

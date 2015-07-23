@@ -1,19 +1,19 @@
 package com.pauljoda.modularsystems.power.gui;
 
-import com.pauljoda.modularsystems.power.container.ContainerManaBank;
 import com.pauljoda.modularsystems.power.tiles.TileManaBank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentPowerBar;
+import com.teambr.bookshelf.inventory.ContainerGeneric;
 import net.minecraft.item.ItemStack;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GuiManaBank extends GuiPowerBase<ContainerManaBank> {
+public class GuiManaBank extends GuiPowerBase<ContainerGeneric> {
 
     protected TileManaBank tileEntity;
 
     public GuiManaBank(TileManaBank tileEntity) {
-        super(new ContainerManaBank(), tileEntity, 140, 120, "inventory.manapower.title");
+        super(new ContainerGeneric(), tileEntity, 140, 120, "inventory.manapower.title");
 
         this.tileEntity = tileEntity;
     }

@@ -17,6 +17,5 @@ public class ContainerCrusher extends BaseContainer {
         addSlotToContainer(new SlotFurnace(playerInventory.player, tileEntity, 1, 116, 35));
 
         addPlayerInventorySlots(8, 84);
-
     }
 }

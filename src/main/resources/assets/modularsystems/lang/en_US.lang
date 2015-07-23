@@ -20,6 +20,7 @@ item.modularsystems:dustGold.name=Gold Dust
 inventory.furnace.title=Modular Furnace
 inventory.crusher.title=Modular Crusher
 inventory.generator.title=Modular Generator
+inventory.storage.title=Modular Storage
 
 inventory.io.title=I/O Configure
 inventory.io.import=Import

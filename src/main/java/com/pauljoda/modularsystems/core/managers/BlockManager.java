@@ -14,6 +14,8 @@ import com.pauljoda.modularsystems.generator.blocks.BlockGeneratorCore;
 import com.pauljoda.modularsystems.generator.tiles.TileGeneratorCore;
 import com.pauljoda.modularsystems.power.blocks.BlockPower;
 import com.pauljoda.modularsystems.power.tiles.*;
+import com.pauljoda.modularsystems.storage.blocks.BlockStorageCore;
+import com.pauljoda.modularsystems.storage.tiles.TileStorageCore;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -28,6 +30,7 @@ public class BlockManager {
 
     public static Block furnaceCore, furnaceCoreActive, crusherCore, crusherCoreActive;
     public static Block generatorCore, generatorCoreActive;
+    public static Block storageCore;
     public static Block dummy, io, powerRF, powerSolids, powerLiquids, powerIC2, powerMana;
 
     public static void init() {
@@ -43,6 +46,9 @@ public class BlockManager {
         if (ConfigRegistry.generatorCore) {
             registerBlock(generatorCore = new BlockGeneratorCore(false), "generatorCore", TileGeneratorCore.class);
             registerBlock(generatorCoreActive = new BlockGeneratorCore(true), "generatorCoreActive", TileGeneratorCore.class);
+        }
+        if(ConfigRegistry.storageSystem) {
+            registerBlock(storageCore = new BlockStorageCore(), "storageCore", TileStorageCore.class);
         }
 
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);

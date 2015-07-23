@@ -43,13 +43,8 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
     }
 
     @Override
-    protected int getItemBurnTime(ItemStack stack) {
-        return 0;
-    }
-
-    @Override
     protected boolean isBlockBanned(Block block, int meta) {
-        return block instanceof BlockDummy ? false : FurnaceBannedBlocks.INSTANCE.isBlockBanned(block, meta) || FurnaceBannedBlocks.isBadBlockFromBlock(block);
+        return !(block instanceof BlockDummy) && (FurnaceBannedBlocks.INSTANCE.isBlockBanned(block, meta) || FurnaceBannedBlocks.isBadBlockFromBlock(block));
     }
 
     @Override

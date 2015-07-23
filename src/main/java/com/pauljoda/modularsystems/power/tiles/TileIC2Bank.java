@@ -2,10 +2,10 @@ package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
-import com.pauljoda.modularsystems.power.container.ContainerEUBank;
 import com.pauljoda.modularsystems.power.gui.GuiEUBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.GuiHelper;
+import com.teambr.bookshelf.inventory.ContainerGeneric;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
@@ -70,7 +70,7 @@ public class TileIC2Bank extends TilePowerBase implements IOpensGui, IEnergySink
      */
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        return new ContainerEUBank();
+        return new ContainerGeneric();
     }
 
     @Override

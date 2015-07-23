@@ -10,17 +10,12 @@ import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.crusher.blocks.BlockCrusherCore;
 import com.pauljoda.modularsystems.crusher.container.ContainerCrusher;
 import com.pauljoda.modularsystems.crusher.gui.GuiCrusher;
-import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.BlockHelper;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class TileCrusherCore extends AbstractCore implements IOpensGui {
 
@@ -32,11 +27,6 @@ public class TileCrusherCore extends AbstractCore implements IOpensGui {
     @Override
     protected ItemStack recipe(ItemStack is) {
         return is == null ? null : CrusherRecipeRegistry.INSTANCE.getOutput(is);
-    }
-
-    @Override
-    protected int getItemBurnTime(ItemStack stack) {
-        return 0;
     }
 
     @Override

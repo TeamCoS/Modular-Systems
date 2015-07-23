@@ -1,30 +1,22 @@
 package com.pauljoda.modularsystems.furnace.tiles;
 
+import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.furnace.blocks.BlockFurnaceCore;
-import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.furnace.container.ContainerModularFurnace;
 import com.pauljoda.modularsystems.furnace.gui.GuiModularFurnace;
 import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.BlockHelper;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui, IWaila {
 
@@ -36,11 +28,6 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui, IW
     @Override
     protected ItemStack recipe(ItemStack is) {
         return is == null ? null : FurnaceRecipes.smelting().getSmeltingResult(is);
-    }
-
-    @Override
-    protected int getItemBurnTime(ItemStack is) {
-        return is == null ? 0 : TileEntityFurnace.getItemBurnTime(is);
     }
 
     @Override

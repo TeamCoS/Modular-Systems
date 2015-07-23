@@ -2,10 +2,10 @@ package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
-import com.pauljoda.modularsystems.power.container.ContainerManaBank;
 import com.pauljoda.modularsystems.power.gui.GuiManaBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.GuiHelper;
+import com.teambr.bookshelf.inventory.ContainerGeneric;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -107,7 +107,7 @@ public class TileManaBank extends TilePowerBase implements IOpensGui, IManaRecei
      */
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        return new ContainerManaBank();
+        return new ContainerGeneric();
     }
 
     @Override

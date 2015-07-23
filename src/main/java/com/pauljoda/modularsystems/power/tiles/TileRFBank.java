@@ -2,10 +2,10 @@ package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
-import com.pauljoda.modularsystems.power.container.ContainerRFBank;
 import com.pauljoda.modularsystems.power.gui.GuiRFBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.GuiHelper;
+import com.teambr.bookshelf.inventory.ContainerGeneric;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -88,7 +88,7 @@ public class TileRFBank extends TilePowerBase implements IOpensGui, IEnergyHandl
 
     @Override
     public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new ContainerRFBank();
+        return new ContainerGeneric();
     }
 
     @Override
