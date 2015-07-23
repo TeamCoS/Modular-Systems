@@ -3,14 +3,19 @@ package com.pauljoda.modularsystems.core.registries;
 import appeng.api.AEApi;
 import appeng.api.definitions.IBlocks;
 import appeng.api.definitions.IMaterials;
+import com.google.gson.reflect.TypeToken;
+import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.collections.CrusherRecipes;
 import com.teambr.bookshelf.helpers.LogHelper;
+import com.teambr.bookshelf.util.JsonUtils;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +28,7 @@ import java.util.Map;
 public class CrusherRecipeRegistry {
     public static CrusherRecipeRegistry INSTANCE = new CrusherRecipeRegistry();
 
-    public ArrayList<ShapelessOreRecipe> crusherRecipes;
+    public ArrayList<CrusherRecipes> crusherRecipes;
 
     public CrusherRecipeRegistry() {
         crusherRecipes = new ArrayList<>();
@@ -33,7 +38,38 @@ public class CrusherRecipeRegistry {
      * Add the values
      */
     public void init() {
-        LogHelper.info("Creating Dynamic Crusher Recipe List");
+        if(!loadFromFile())
+            generateDefaults();
+        else
+            LogHelper.info("Block Values loaded successfully");
+    }
+
+    /**
+     * Load the values from the file
+     * @return True if successful
+     */
+    public boolean loadFromFile() {
+        LogHelper.info("Loading Block Values...");
+        crusherRecipes = JsonUtils.readFromJson(new TypeToken<ArrayList<CrusherRecipes>>() { },
+                ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "crusherRecipes.json");
+        return crusherRecipes != null;
+    }
+
+    /**
+     * Save the current registry to a file
+     */
+    public void saveToFile() {
+        validateList();
+        if (!crusherRecipes.isEmpty())
+            JsonUtils.writeToJson(crusherRecipes, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "crusherRecipes.json");
+    }
+
+    /**
+     * Used to generate the default values
+     */
+    public void generateDefaults() {
+        LogHelper.info("Json not found. Creating Dynamic Crusher Recipe List...");
+        validateList();
 
         String[] oreDict = OreDictionary.getOreNames();
 
@@ -45,13 +81,17 @@ public class CrusherRecipeRegistry {
                     if(outputDust.size() > 0 && !outputDust.isEmpty()) {
                         switch ("ore" + ore) {
                             case "oreRedstone":
-                                crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.redstone, 8), "oreRedstone"));
+                                crusherRecipes.add(new CrusherRecipes("oreRedstone",
+                                        getItemStackString(new ItemStack(Items.redstone)), 8));
                                 break;
                             case "oreLapis":
-                                crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.dye, 8, 4), "oreLapis"));
+                                crusherRecipes.add(new CrusherRecipes("oreLapis",
+                                        getItemStackString(new ItemStack(Items.dye, 1, 4)), 8));
                                 break;
                             default:
-                                crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(outputDust.get(0).getItem(), 2, outputDust.get(0).getItemDamage()), "ore" + ore));
+                                crusherRecipes.add(new CrusherRecipes("ore" + ore,
+                                        getItemStackString(new ItemStack(outputDust.get(0).getItem(), 1,
+                                                outputDust.get(0).getItemDamage())), 2));
                         }
                     }
                 }
@@ -60,75 +100,107 @@ public class CrusherRecipeRegistry {
                 if (OreDictionary.doesOreNameExist("dust" + ingot)) {
                     List<ItemStack> outputDust = OreDictionary.getOres("dust" + ingot);
                     if(outputDust.size() > 0 && !outputDust.isEmpty())
-                        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(outputDust.get(0).getItem(), 1, outputDust.get(0).getItemDamage()), anOreDict1));
+                        crusherRecipes.add(new CrusherRecipes(anOreDict1, getItemStackString(
+                                new ItemStack(outputDust.get(0).getItem(), 1, outputDust.get(0).getItemDamage())), 1));
                 }
             }
         }
 
         //misc recipes
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.blaze_powder, 4), getOreDict(new ItemStack(Items.blaze_rod))));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Blocks.sand), "cobblestone"));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.dye, 6, 15), getOreDict(new ItemStack(Items.bone))));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.quartz, 4), "oreQuartz"));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.clay_ball, 4), getOreDict(new ItemStack(Blocks.clay))));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.diamond, 2), "oreDiamond"));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.emerald, 2), "oreEmerald"));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.glowstone_dust, 4), "glowstone"));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.coal, 4), "oreCoal"));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.string, 4), "blockCloth"));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Blocks.sand), "blockGlass"));
-        crusherRecipes.add(new ShapelessOreRecipe(new ItemStack(Items.flint), getOreDict(new ItemStack(Blocks.gravel))));
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Items.blaze_rod)),
+                getItemStackString(new ItemStack(Items.blaze_powder)), 4));
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.cobblestone)),
+                getItemStackString(new ItemStack(Blocks.sand)), 1));
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Items.bone)),
+                getItemStackString(new ItemStack(Items.dye, 1, 15)), 6));
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.quartz_ore)),
+                getItemStackString(new ItemStack(Items.quartz)), 4));
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.clay)),
+                getItemStackString(new ItemStack(Items.clay_ball)), 4));
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.diamond_ore)),
+                getItemStackString(new ItemStack(Items.diamond)), 2));
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.emerald_ore)),
+                getItemStackString(new ItemStack(Items.emerald)), 2));
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.glowstone)),
+                getItemStackString(new ItemStack(Items.glowstone_dust)), 4));
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.coal_ore)),
+                getItemStackString(new ItemStack(Items.coal, 1, 0)), 4));
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.wool)),
+                getItemStackString(new ItemStack(Items.string)), 4));
+        crusherRecipes.add(new CrusherRecipes("blockGlass",
+                getItemStackString(new ItemStack(Blocks.sand)), 1));
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.gravel)),
+                getItemStackString(new ItemStack(Items.flint)), 1));
+        
         //Mod Specific
         if (Loader.isModLoaded("appliedenergistics2")) {
             IMaterials mats = AEApi.instance().definitions().materials();
-            crusherRecipes.add(new ShapelessOreRecipe(mats.certusQuartzDust().maybeStack(2).get(),
-                    "oreCertusQuartz"));
-            crusherRecipes.add(new ShapelessOreRecipe(mats.certusQuartzDust().maybeStack(1).get(),
-                    "crystalCertusQuartz"));
-            crusherRecipes.add(new ShapelessOreRecipe(mats.certusQuartzDust().maybeStack(1).get(),
-                    "crystalChargedCertusQuartz"));
-            crusherRecipes.add(new ShapelessOreRecipe(mats.netherQuartzDust().maybeStack(1).get(),
-                    "gemQuartz"));
-            crusherRecipes.add(new ShapelessOreRecipe(mats.fluixDust().maybeStack(1).get(),
-                    "crystalFluix"));
-        }
+            IBlocks blocks = AEApi.instance().definitions().blocks();
 
+            crusherRecipes.add(new CrusherRecipes(getOreDict(blocks.quartzOre().maybeStack(1).get()),
+                    getItemStackString(mats.certusQuartzDust().maybeStack(1).get()), 2));
+            crusherRecipes.add(new CrusherRecipes(getOreDict(mats.certusQuartzCrystal().maybeStack(1).get()),
+                    getItemStackString(mats.certusQuartzDust().maybeStack(1).get()), 1));
+            crusherRecipes.add(new CrusherRecipes(getOreDict(mats.certusQuartzCrystalCharged().maybeStack(1).get()),
+                    getItemStackString(mats.certusQuartzDust().maybeStack(1).get()), 1));
+            crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Items.quartz)),
+                    getItemStackString(mats.netherQuartzDust().maybeStack(1).get()), 1));
+            crusherRecipes.add(new CrusherRecipes(getOreDict(mats.fluixCrystal().maybeStack(1).get()),
+                    getItemStackString(mats.fluixDust().maybeStack(1).get()), 1));
+        }
+        
+        saveToFile();
         LogHelper.info("Finished adding " + crusherRecipes.size() + " Crusher Recipes");
     }
 
     /**
      * Get the oreDict tag for an item
      * @param itemstack The stack to try
-     * @return The string for this stack
+     * @return The string for this stack or OreDict name
      */
     private String getOreDict(ItemStack itemstack) {
         int[] registered = OreDictionary.getOreIDs(itemstack);
         if (registered.length > 0)
             return OreDictionary.getOreName(registered[0]);
         else {
-            OreDictionary.registerOre(itemstack.getUnlocalizedName(), itemstack);
-            return itemstack.getUnlocalizedName();
+            return getItemStackString(itemstack);
         }
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * Get the oreDict tag for an item
+     * @param itemstack The stack to find
+     * @return The string for this stack or OreDict name
+     */
+    private boolean checkOreDict(String oreDict, ItemStack itemstack) {
+        ArrayList<ItemStack> oreList = OreDictionary.getOres(oreDict);
+        for (ItemStack list : oreList) {
+            if (list.getItemDamage() == OreDictionary.WILDCARD_VALUE)
+                if (list.getItem() == itemstack.getItem()) return true;
+            else if (list.isItemEqual(itemstack)) return true;
+        }
+        return false;
+    }
+
     /**
      * Get the output for an input
      */
     public ItemStack getOutput(ItemStack itemStack) {
-        for (ShapelessOreRecipe crusherRecipe : crusherRecipes) {
-            List<Object> list = crusherRecipe.getInput();
-            for (Object items : list) {
-                ArrayList<OreDictionary> o = (ArrayList<OreDictionary>) items;
-                for (Object item : o) {
-                    ItemStack itemIn = (ItemStack) item;
-                    if (itemIn.getItemDamage() == 32767) {
-                        if (itemIn.getItem() == itemStack.getItem())
-                            return crusherRecipe.getRecipeOutput();
-                    }
-                    else if (itemIn.isItemEqual(itemStack))
-                        return crusherRecipe.getRecipeOutput();
-                }
+
+        for (CrusherRecipes recipe : crusherRecipes) {
+            String[] name = recipe.getInput().split(":");
+            ItemStack outputStack = getItemStackFromString(recipe.getOutput());
+            if (outputStack == null) continue;
+
+            switch (name.length) {
+                case 3:
+                    ItemStack inputstack = getItemStackFromString(recipe.getInput());
+                    if (inputstack == null) break;
+                    if (itemStack.isItemEqual(inputstack))
+                        return new ItemStack(outputStack.getItem(), recipe.getQty(), outputStack.getItemDamage());
+                case 1:
+                    if (checkOreDict(recipe.getInput(), itemStack))
+                        return new ItemStack(outputStack.getItem(), recipe.getQty(), outputStack.getItemDamage());
             }
         }
         return null;
@@ -145,21 +217,50 @@ public class CrusherRecipeRegistry {
 
     /**
      * Get the inputs for crusher
-     * @return Pretty much the whole recipes
+     * @return Pretty much the whole recipes TODO check if NEI can handle oreDict
      */
     public Map<ItemStack, ItemStack> getCrusherInputList() {
         HashMap<ItemStack, ItemStack> listRecipes = new HashMap<>();
 
-        for (ShapelessOreRecipe crusherRecipe : crusherRecipes) {
-            List<Object> list = crusherRecipe.getInput();
-            for (Object items : list) {
-                ArrayList<OreDictionary> o = (ArrayList<OreDictionary>) items;
-                for (Object item : o) {
-                    ItemStack itemIn = (ItemStack) item;
-                    listRecipes.put(itemIn, crusherRecipe.getRecipeOutput());
-                }
+        for (CrusherRecipes recipe : crusherRecipes) {
+            String[] name = recipe.getInput().split(":");
+            ItemStack output = getItemStackFromString(recipe.getOutput());
+            if (output == null) continue;
+            switch (name.length) {
+                case 3:
+                    ItemStack inputStack = getItemStackFromString(recipe.getInput());
+                    listRecipes.put(inputStack, new ItemStack(output.getItem(), recipe.getQty(), output.getItemDamage()));
+                    break;
+                case 1:
+                    ArrayList<ItemStack> stacks = OreDictionary.getOres(recipe.getInput());
+                    for (ItemStack stack : stacks) {
+                        listRecipes.put(stack, new ItemStack(output.getItem(), recipe.getQty(), output.getItemDamage()));
+                    }
             }
         }
         return listRecipes;
+    }
+
+    /**
+     * Make sure the list exists
+     */
+    private void validateList() {
+        if(crusherRecipes == null)
+            crusherRecipes = new ArrayList<>();
+    }
+
+    private String getItemStackString(ItemStack itemStack) {
+        GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
+        return id.modId + ":" + id.name + ":" + itemStack.getItemDamage();
+    }
+
+    private ItemStack getItemStackFromString(String item) {
+        String[] name = item.split(":");
+        switch(name.length) {
+            case 3:
+                return new ItemStack(GameRegistry.findItem(name[0], name[1]), 1, Integer.valueOf(name[2]));
+            default:
+                return null;
+        }
     }
 }

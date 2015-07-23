@@ -3,13 +3,13 @@ package com.pauljoda.modularsystems.core.network;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pauljoda.modularsystems.core.collections.CrusherRecipes;
 import com.pauljoda.modularsystems.core.functions.CompressionFunctions;
 import com.pauljoda.modularsystems.core.registries.CrusherRecipeRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.ArrayList;
 
@@ -17,13 +17,14 @@ import java.util.ArrayList;
  * Modular-Systems
  * Created by Dyonovan on 22/07/15
  */
+@SuppressWarnings("unused")
 public class SyncCrusherRecipes implements IMessage, IMessageHandler<SyncCrusherRecipes, IMessage> {
 
     public String jsonCrusherRecipes;
 
     public SyncCrusherRecipes() {}
 
-    public SyncCrusherRecipes(ArrayList<ShapelessOreRecipe> values) {
+    public SyncCrusherRecipes(ArrayList<CrusherRecipes> values) {
         Gson gson = new GsonBuilder().create();
         jsonCrusherRecipes = gson.toJson(values);
     }
@@ -59,7 +60,7 @@ public class SyncCrusherRecipes implements IMessage, IMessageHandler<SyncCrusher
         if (message.jsonCrusherRecipes != null) {
             Gson gson = new Gson();
             CrusherRecipeRegistry.INSTANCE.crusherRecipes = gson.fromJson(message.jsonCrusherRecipes,
-                    new TypeToken<ArrayList<ShapelessOreRecipe>>() {}.getType());
+                    new TypeToken<ArrayList<CrusherRecipes>>() {}.getType());
         }
         return null;
     }

@@ -141,12 +141,11 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
         Map recipes = CrusherRecipeRegistry.INSTANCE.getCrusherInputList();
-        Iterator iterator = recipes.entrySet().iterator();
 
-        while (iterator.hasNext()) {
-            Entry recipe = (Entry) iterator.next();
+        for (Object o : recipes.entrySet()) {
+            Entry recipe = (Entry) o;
             if (NEIServerUtils.areStacksSameTypeCrafting((ItemStack) recipe.getKey(), ingredient)) {
-                RecipeHandlerCrusher.CrushingPair arecipe = new RecipeHandlerCrusher.CrushingPair((ItemStack) recipe.getKey(), (ItemStack) recipe.getValue());
+                CrushingPair arecipe = new CrushingPair((ItemStack) recipe.getKey(), (ItemStack) recipe.getValue());
                 arecipe.setIngredientPermutation(Collections.singletonList(arecipe.input), ingredient);
                 this.arecipes.add(arecipe);
                 return; //We should stop since we found our answer
