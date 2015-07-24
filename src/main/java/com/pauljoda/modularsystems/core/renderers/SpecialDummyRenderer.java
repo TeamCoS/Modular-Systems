@@ -60,11 +60,13 @@ public class SpecialDummyRenderer implements ISimpleBlockRenderingHandler {
     protected Color getBackground(Block tile) {
         if(tile.getUnlocalizedName().equalsIgnoreCase(BlockManager.powerSolids.getUnlocalizedName()))
             return new Color(74, 57, 14);
-        else if(tile.getUnlocalizedName().equalsIgnoreCase(BlockManager.powerRF.getUnlocalizedName()))
+        else if(tile.getUnlocalizedName().equalsIgnoreCase(BlockManager.powerRF.getUnlocalizedName()) ||
+                tile.getUnlocalizedName().equalsIgnoreCase(BlockManager.supplierRF.getUnlocalizedName()))
             return new Color(174, 0, 36);
         else if(tile.getUnlocalizedName().equalsIgnoreCase(BlockManager.powerLiquids.getUnlocalizedName()))
             return new Color(33, 80, 69);
-        else if(tile.getUnlocalizedName().equalsIgnoreCase(BlockManager.powerIC2.getUnlocalizedName()))
+        else if(tile.getUnlocalizedName().equalsIgnoreCase(BlockManager.powerIC2.getUnlocalizedName()) ||
+                tile.getUnlocalizedName().equalsIgnoreCase(BlockManager.powerIC2.getUnlocalizedName()))
             return new Color(255, 255, 255);
         else if(tile.getUnlocalizedName().equalsIgnoreCase(BlockManager.powerMana.getUnlocalizedName()))
             return new Color(58, 214, 214);

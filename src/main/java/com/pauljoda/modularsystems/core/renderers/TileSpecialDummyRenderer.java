@@ -127,7 +127,7 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
     protected Color getBackground(TileEntity tile) {
         if(tile instanceof TileSolidsBank)
             return new Color(74, 57, 14, 160);
-        else if(tile instanceof TileRFBank)
+        else if(tile instanceof TileRFBank || tile instanceof TileRFSupplier)
             return new Color(140, 0, 3, 160);
         else if(tile instanceof TileLiquidsBank)
             return new Color(33, 80, 69, 160);
