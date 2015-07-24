@@ -82,7 +82,7 @@ public class GuiGenerator extends GuiCoreBase<ContainerGenerator> {
             List<BaseComponent> gen = new ArrayList<>();
             gen.add(new GuiComponentText("Generation", 26, 6, 0xFFCC00));
             gen.add(new GuiComponentText("RF/t: ", 5, 25, 0xFFFFFF));
-            gen.add(new GuiComponentText(Long.toString(Math.round(ConfigRegistry.rfPower * core.getValues().getMultiplicity() *
+            gen.add(new GuiComponentText(Long.toString(Math.round(ConfigRegistry.rfPower * (core.getValues().getMultiplicity() + 1) *
                     (core.getValues().getSpeed() * -1))), 40, 25, 0x5CE62E));
             tabs.addTab(gen, 95, 100, new Color(70, 108, 150), new ItemStack(Items.blaze_powder));
 
