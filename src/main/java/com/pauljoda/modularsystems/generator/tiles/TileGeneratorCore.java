@@ -48,7 +48,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
             //Charge Bank
             if (this.values.getBurnTime() > 0) {
                 this.values.setBurnTime(values.getBurnTime() - 1);
-                energy.receiveEnergy((int) Math.round(ConfigRegistry.rfPower * values.getMultiplicity() *
+                energy.receiveEnergy((int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
                         (values.getSpeed() * -1)), false);
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
             }
