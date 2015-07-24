@@ -56,6 +56,11 @@ public class GuiGenerator extends GuiCoreBase<ContainerGenerator> {
             public int getEnergyPercent(int scale) {
                 return core.getEnergyStored(null) * scale / core.getMaxEnergyStored(null);
             }
+
+            @Override
+            public List<String> getDynamicToolTip(int x, int y) {
+                return Collections.singletonList(core.getEnergyStored(null) + " / " + core.getMaxEnergyStored(null));
+            }
         });
 
         components.add(new GuiComponentText("+", 55, 24));
