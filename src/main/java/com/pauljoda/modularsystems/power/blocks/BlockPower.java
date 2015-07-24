@@ -40,9 +40,9 @@ public class BlockPower extends BlockDummy {
             if(us.getCore() != null)
                 player.openGui(Bookshelf.instance, 0, world, us.getCore().xCoord, us.getCore().yCoord, us.getCore().zCoord);
             return true;
-        } else if (player.isSneaking()) {
-            TileBankBase us = (TileBankBase) world.getTileEntity(x, y, z);
-            if (us != null) {
+        } else {
+            TileEntity us = world.getTileEntity(x, y, z);
+            if (us != null && us instanceof TileBankBase) {
                 player.openGui(Bookshelf.instance, 0, world, x, y, z);
             }
         }
