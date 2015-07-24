@@ -19,7 +19,7 @@ public class TileSupplierBase extends DummyTile {
     protected TileGeneratorCore genCore;
 
     @Override
-    public void updateEntity() {
+    public void updateEntity() { //TODO make sure output isnt same as input
         if (validCore())
             genCore = (TileGeneratorCore) getCore();
         else
@@ -36,7 +36,7 @@ public class TileSupplierBase extends DummyTile {
     @Override
     public void returnWailaHead(List<String> list) {
         if (genCore != null)
-        list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + genCore.getEnergyStored(null) + "/" + genCore.getMaxEnergyStored(null));
+            list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + genCore.getEnergyStored(null) + "/" + genCore.getMaxEnergyStored(null));
     }
 
     @Override

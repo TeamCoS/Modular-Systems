@@ -32,7 +32,7 @@ public class BlockManager {
     public static Block generatorCore, generatorCoreActive;
     public static Block storageCore;
     public static Block dummy, io, powerRF, powerSolids, powerLiquids, powerIC2, powerMana;
-    public static Block supplierRF;
+    public static Block supplierRF, supplierIC2;
 
     public static void init() {
         //Systems
@@ -64,6 +64,8 @@ public class BlockManager {
             registerBlock(powerMana = new BlockPower(Reference.MOD_ID + ":powerMana", TileManaBank.class), "powerMana", TileManaBank.class);
 
         registerBlock(supplierRF = new BlockPower(Reference.MOD_ID + ":supplierRF", TileRFSupplier.class), "supplierRF", TileRFSupplier.class);
+        if (Loader.isModLoaded("IC2"))
+            registerBlock(supplierIC2 = new BlockPower(Reference.MOD_ID + ":supplierIC2", TileIC2LVProvider.class), "supplierIC2", TileIC2LVProvider.class);
     }
 
     /**

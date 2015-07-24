@@ -14,6 +14,7 @@ tile.modularsystems:powerLiquids.name=Liquid Fuel Power Bank
 tile.modularsystems:powerIC2.name=IC2 LV Fuel Power Bank
 tile.modularsystems:powerMana.name=Mana Fuel Power Bank
 tile.modularsystems:supplierRF.name=RF Power Supplier
+tile.modularsystems:supplierIC2.name=IC2 LV Power Supplier
 
 item.modularsystems:dustIron.name=Iron Dust
 item.modularsystems:dustGold.name=Gold Dust
