@@ -14,6 +14,8 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
     private boolean isInMainArea;
     private float currentScroll;
 
+    private GuiComponentTextBox textBox;
+
     /**
      * Constructor for All Guis
      *
@@ -24,10 +26,27 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
      */
     public GuiStorageCore(ContainerStorageCore container, int width, int height, String name) {
         super(container, width, height, name);
+        title.setXPos(8);
     }
 
     @Override
-    public void addComponents() {}
+    public void addComponents() {
+        components.add(textBox = new GuiComponentTextBox(95, 5, 150, 16) {
+            @Override
+            public void fieldUpdated(String value) {
+                inventory.keyTyped(value);
+            }
+        });
+    }
+
+    @Override
+    protected void keyTyped(char letter, int keyCode) {
+        if(!textBox.getTextField().textboxKeyTyped(letter, keyCode)) {
+            super.keyTyped(letter, keyCode);
+        } else {
+            this.inventory.keyTyped(textBox.getValue());
+        }
+    }
 
     @Override
     public void handleMouseInput() {
@@ -59,6 +78,6 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
     @Override
     public void drawScreen(int x, int y, float f) {
         super.drawScreen(x, y, f);
-        isInMainArea = GuiHelper.isInBounds(x, y, guiLeft + 25, guiTop + 17, guiLeft + 220, guiTop + 205);
+        isInMainArea = GuiHelper.isInBounds(x, y, guiLeft + 35, guiTop + 17, guiLeft + 220, guiTop + 215);
     }
 }
