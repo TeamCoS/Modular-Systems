@@ -1,6 +1,6 @@
 package com.pauljoda.modularsystems.power.gui;
 
-import com.pauljoda.modularsystems.power.tiles.TileRFBank;
+import com.pauljoda.modularsystems.power.tiles.TileRFBankBank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentPowerBar;
 import com.teambr.bookshelf.inventory.ContainerGeneric;
 
@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class GuiRFBank extends GuiPowerBase<ContainerGeneric> {
 
-    protected TileRFBank tileEntity;
+    protected TileRFBankBank tileEntity;
 
-    public GuiRFBank(TileRFBank tileEntity) {
+    public GuiRFBank(TileRFBankBank tileEntity) {
         super(new ContainerGeneric(), tileEntity, 140, 120, "inventory.rfpower.title");
 
         this.tileEntity = tileEntity;

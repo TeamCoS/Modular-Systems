@@ -3,7 +3,7 @@ package com.pauljoda.modularsystems.power.tiles;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
-import com.pauljoda.modularsystems.power.gui.GuiRFBank;
+import com.pauljoda.modularsystems.power.gui.GuiManaBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.GuiHelper;
 import com.teambr.bookshelf.inventory.ContainerGeneric;
@@ -12,15 +12,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import vazkii.botania.api.mana.IManaReceiver;
 
 import java.util.List;
 
-public class TileRFBank extends TilePowerBase implements IOpensGui, IEnergyHandler {
+public class TileManaBankBank extends TilePowerBankBase implements IOpensGui, IManaReceiver, IEnergyHandler {
 
     private EnergyStorage energy;
 
-    public TileRFBank() {
-        energy = new EnergyStorage(10000);
+    public TileManaBankBank() {
+        energy = new EnergyStorage(32000);
     }
 
     @Override
@@ -29,8 +30,33 @@ public class TileRFBank extends TilePowerBase implements IOpensGui, IEnergyHandl
     }
 
     /*
+     * Mana Reciever Methods
+     */
+    @Override
+    public boolean isFull() {
+        return energy.getEnergyStored() >= energy.getMaxEnergyStored();
+    }
+
+    @Override
+    public void recieveMana(int mana) {
+        energy.receiveEnergy(mana, false);
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+    @Override
+    public boolean canRecieveManaFromBursts() {
+        return !isFull();
+    }
+
+    @Override
+    public int getCurrentMana() {
+        return energy.getEnergyStored();
+    }
+
+    /*
      * Fuel Provider Functions
      */
+
     @Override
     public boolean canProvide() {
         return energy.getEnergyStored() > 0;
@@ -38,33 +64,28 @@ public class TileRFBank extends TilePowerBase implements IOpensGui, IEnergyHandl
 
     @Override
     public double fuelProvided() {
-        int actual = energy.extractEnergy((int)Math.round(ConfigRegistry.rfPower * 200), true);
-        return (actual / (ConfigRegistry.rfPower * 200)) * 200;
+        int actual = energy.extractEnergy((int)Math.round(ConfigRegistry.manaPower * 200), true);
+        return (actual / (ConfigRegistry.manaPower * 200)) * 200;
     }
 
     @Override
     public double consume() {
-        int actual = energy.extractEnergy((int)Math.round(ConfigRegistry.rfPower * 200), false);
+        int actual = energy.extractEnergy((int)Math.round(ConfigRegistry.manaPower * 200), false);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        return (actual / (ConfigRegistry.rfPower * 200)) * 200;
+        return (actual / (ConfigRegistry.manaPower * 200)) * 200;
     }
 
     /*
-     * RF Functions
+     * Energy Functions
      */
 
     @Override
-    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-        if (getCore() != null) {
-            int actual = energy.receiveEnergy(maxReceive, simulate);
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-            return actual;
-        }
+    public int receiveEnergy(ForgeDirection forgeDirection, int i, boolean b) {
         return 0;
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+    public int extractEnergy(ForgeDirection forgeDirection, int i, boolean b) {
         return 0;
     }
 
@@ -79,27 +100,27 @@ public class TileRFBank extends TilePowerBase implements IOpensGui, IEnergyHandl
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection from) {
-        return true;
+    public boolean canConnectEnergy(ForgeDirection forgeDirection) {
+        return false;
     }
 
     /*
-     * Gui Functions
+     * GUI Methods
      */
-
     @Override
-    public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
+    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         return new ContainerGeneric();
     }
 
     @Override
-    public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new GuiRFBank(this);
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        return new GuiManaBank(this);
     }
 
     /*
      * Tile Entity Functions
      */
+
     @Override
     public void readFromNBT (NBTTagCompound tags) {
         super.readFromNBT(tags);
@@ -110,6 +131,7 @@ public class TileRFBank extends TilePowerBase implements IOpensGui, IEnergyHandl
     public void writeToNBT (NBTTagCompound tags) {
         super.writeToNBT(tags);
         energy.writeToNBT(tags);
+
     }
 
     /*
@@ -126,6 +148,7 @@ public class TileRFBank extends TilePowerBase implements IOpensGui, IEnergyHandl
             list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Useable In:");
             list.add(GuiHelper.GuiColor.GREEN + "Modular Furnace");
             list.add(GuiHelper.GuiColor.GREEN + "Modular Crusher");
+            list.add(GuiHelper.GuiColor.GREEN + "Modular Generator");
         } else
             list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Press Shift for Usage Cores");
 

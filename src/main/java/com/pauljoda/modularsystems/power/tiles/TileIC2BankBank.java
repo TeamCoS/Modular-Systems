@@ -20,13 +20,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 
-public class TileIC2Bank extends TilePowerBase implements IOpensGui, IEnergySink, IEnergyHandler {
+public class TileIC2BankBank extends TilePowerBankBase implements IOpensGui, IEnergySink, IEnergyHandler {
 
     private EnergyStorage energy;
 
     private boolean firstRun;
 
-    public TileIC2Bank() {
+    public TileIC2BankBank() {
         energy = new EnergyStorage(32000);
         firstRun = true;
     }

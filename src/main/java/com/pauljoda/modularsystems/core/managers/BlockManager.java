@@ -53,14 +53,14 @@ public class BlockManager {
 
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);
         registerBlock(io = new BlockDummyIO(Material.rock, Reference.MOD_ID + ":dummyIO", DummyIO.class), "dummyIO", DummyIO.class);
-        registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFBank.class), "powerRF", TileRFBank.class);
-        registerBlock(powerSolids = new BlockPower(Reference.MOD_ID + ":powerSolids", TileSolidsBank.class), "powerSolids", TileSolidsBank.class);
-        registerBlock(powerLiquids = new BlockPower(Reference.MOD_ID + ":powerLiquids", TileLiquidsBank.class), "powerLiquids", TileLiquidsBank.class);
+        registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFBankBank.class), "powerRF", TileRFBankBank.class);
+        registerBlock(powerSolids = new BlockPower(Reference.MOD_ID + ":powerSolids", TileSolidsBankBank.class), "powerSolids", TileSolidsBankBank.class);
+        registerBlock(powerLiquids = new BlockPower(Reference.MOD_ID + ":powerLiquids", TileLiquidsBankBank.class), "powerLiquids", TileLiquidsBankBank.class);
 
         if (Loader.isModLoaded("IC2"))
-            registerBlock(powerIC2 = new BlockPower(Reference.MOD_ID + ":powerIC2", TileIC2Bank.class), "powerIC2", TileIC2Bank.class);
+            registerBlock(powerIC2 = new BlockPower(Reference.MOD_ID + ":powerIC2", TileIC2BankBank.class), "powerIC2", TileIC2BankBank.class);
         if (Loader.isModLoaded("Botania"))
-            registerBlock(powerMana = new BlockPower(Reference.MOD_ID + ":powerMana", TileManaBank.class), "powerMana", TileManaBank.class);
+            registerBlock(powerMana = new BlockPower(Reference.MOD_ID + ":powerMana", TileManaBankBank.class), "powerMana", TileManaBankBank.class);
     }
 
     /**

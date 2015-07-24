@@ -1,14 +1,13 @@
 package com.pauljoda.modularsystems.power.container;
 
-import com.pauljoda.modularsystems.power.tiles.TileSolidsBank;
+import com.pauljoda.modularsystems.power.tiles.TileSolidsBankBank;
 import com.teambr.bookshelf.inventory.BaseContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 public class ContainerSolidsBank extends BaseContainer {
 
-    public ContainerSolidsBank(InventoryPlayer playerInventory, TileSolidsBank tileEntity) {
+    public ContainerSolidsBank(InventoryPlayer playerInventory, TileSolidsBankBank tileEntity) {
         super(playerInventory, tileEntity);
 
         for (int y = 0; y < 3; y++)

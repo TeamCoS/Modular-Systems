@@ -2,7 +2,7 @@ package com.pauljoda.modularsystems.power.gui;
 
 import com.pauljoda.modularsystems.core.network.OpenContainerPacket;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
-import com.pauljoda.modularsystems.power.tiles.TilePowerBase;
+import com.pauljoda.modularsystems.power.tiles.TilePowerBankBase;
 import com.teambr.bookshelf.client.gui.GuiBase;
 import com.teambr.bookshelf.client.gui.component.BaseComponent;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentSetNumber;
@@ -21,11 +21,11 @@ import java.util.List;
 
 public class GuiPowerBase<C extends Container> extends GuiBase<C> {
 
-    protected TilePowerBase tileEntity;
+    protected TilePowerBankBase tileEntity;
     protected AbstractCore core;
 
 
-    public GuiPowerBase(C container, TilePowerBase tileEntity, int width, int height, String name) {
+    public GuiPowerBase(C container, TilePowerBankBase tileEntity, int width, int height, String name) {
         super(container, width, height, name);
 
         this.tileEntity = tileEntity;
