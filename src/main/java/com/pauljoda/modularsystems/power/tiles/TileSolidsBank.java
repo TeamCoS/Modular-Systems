@@ -5,6 +5,7 @@ import com.pauljoda.modularsystems.power.gui.GuiSolidsBank;
 import com.teambr.bookshelf.collections.InventoryTile;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.GuiHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -181,5 +182,18 @@ public class TileSolidsBank extends TilePowerBase implements IOpensGui, ISidedIn
     @Override
     public void returnWailaHead(List<String> list) {
         list.add(GuiHelper.GuiColor.YELLOW + "Available Fuel Slots: " + GuiHelper.GuiColor.WHITE + getFuelCount() + "/" + inventory.getSizeInventory());
+    }
+
+    @Override
+    public void returnWailaTail(List<String> list) {
+        if (Minecraft.getMinecraft().thePlayer.isSneaking()) {
+            list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Useable In:");
+            list.add(GuiHelper.GuiColor.GREEN + "Modular Furnace");
+            list.add(GuiHelper.GuiColor.GREEN + "Modular Crusher");
+            list.add(GuiHelper.GuiColor.GREEN + "Modular Generator");
+        } else
+            list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Press Shift for Usage Cores");
+
+        super.returnWailaTail(list);
     }
 }

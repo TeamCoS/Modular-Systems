@@ -6,6 +6,7 @@ import com.pauljoda.modularsystems.power.gui.GuiLiquidsBank;
 import com.teambr.bookshelf.collections.InventoryTile;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.GuiHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -287,5 +288,18 @@ public class TileLiquidsBank extends TilePowerBase implements IOpensGui, IFluidH
         list.add(tank.getFluid() != null ? GuiHelper.GuiColor.YELLOW + tank.getFluid().getLocalizedName() : "Empty");
         list.add((tank.getFluid() != null ? GuiHelper.GuiColor.WHITE + Integer.toString(tank.getFluidAmount()) : "0")
                 + " / " + tank.getCapacity() + GuiHelper.GuiColor.WHITE + " mB");
+    }
+
+    @Override
+    public void returnWailaTail(List<String> list) {
+        if (Minecraft.getMinecraft().thePlayer.isSneaking()) {
+            list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Useable In:");
+            list.add(GuiHelper.GuiColor.GREEN + "Modular Furnace");
+            list.add(GuiHelper.GuiColor.GREEN + "Modular Crusher");
+            list.add(GuiHelper.GuiColor.GREEN + "Modular Generator");
+        } else
+            list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Press Shift for Usage Cores");
+
+        super.returnWailaTail(list);
     }
 }

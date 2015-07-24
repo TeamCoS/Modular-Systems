@@ -13,15 +13,20 @@ import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.generator.blocks.BlockGeneratorCore;
 import com.pauljoda.modularsystems.generator.container.ContainerGenerator;
 import com.pauljoda.modularsystems.generator.gui.GuiGenerator;
+import com.pauljoda.modularsystems.power.tiles.TileRFBank;
+import com.teambr.bookshelf.collections.Location;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnergyHandler {
@@ -66,9 +71,27 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
         int scaledTicks = 0;
         List<FuelProvider> providers = getFuelProviders(corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true));
         if (!providers.isEmpty()) {
+
             scaledTicks = getAdjustedBurnTime(providers.get(0).consume());
         }
         return scaledTicks;
+    }
+
+    @Override
+    protected List<FuelProvider> getFuelProviders(List<Location> coords) {
+        List<FuelProvider> providers = new ArrayList<>();
+        FuelProvider provider;
+        for (Location coord : coords) {
+            TileEntity te = worldObj.getTileEntity(coord.x, coord.y, coord.z);
+            if (te != null && !(te instanceof TileRFBank)) {
+                if (te instanceof FuelProvider && (provider = (FuelProvider) te).canProvide()) {
+                    providers.add(provider);
+                }
+            }
+        }
+
+        Collections.sort(providers, new FuelProvider.FuelSorter());
+        return providers;
     }
 
     @Override
