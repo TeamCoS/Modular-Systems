@@ -2,8 +2,11 @@ package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.List;
 
 /**
  * Modular-Systems
@@ -69,6 +72,16 @@ public class TileRFSupplier extends TileSupplierBase implements IEnergyProvider 
 
     @Override
     public boolean canConnectEnergy(ForgeDirection from) {
-        return genCore != null;
+        return true;
+    }
+
+    /*
+     * Waila Functions
+     */
+    @Override
+    public void returnWailaHead(List<String> list) {
+        if (genCore != null)
+            list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + genCore.getEnergyStored(null)
+                    + "/" + genCore.getMaxEnergyStored(null) + " RF");
     }
 }

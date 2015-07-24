@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.power.tiles;
 
 import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
@@ -8,6 +9,8 @@ import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.List;
 
 /**
  * Modular-Systems
@@ -38,8 +41,8 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
     @Override
     public double getOfferedEnergy() {
         if (validCore()) {
-            double convertedPower = genCore.getEnergyStored(null) * ConfigRegistry.EUPower;
-            return Math.min(EnergyNet.instance.getPowerFromTier(getSourceTier()), convertedPower);
+            int[] convertedPower = convertToEU();
+            return Math.min(EnergyNet.instance.getPowerFromTier(getSourceTier()), convertedPower[0]);
         }
 
         return 0;
@@ -48,7 +51,7 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
     @Override
     public void drawEnergy(double v) {
         if (validCore()) {
-            double convertedPower = v * ConfigRegistry.EUPower;
+            double convertedPower = convertFromEU(v);
             genCore.extractEnergy(null, (int)Math.round(convertedPower), false);
             worldObj.markBlockForUpdate(coreLocation.x, coreLocation.y, coreLocation.z);
         }
@@ -81,5 +84,27 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
         if (!worldObj.isRemote)
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         super.invalidate();
+    }
+
+    private int[] convertToEU() {
+        int avail = (int) Math.round(genCore.getEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
+        int total = (int) Math.round(genCore.getMaxEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
+        return new int[]{avail, total};
+    }
+
+    private int convertFromEU(double euIN) {
+        return (int)Math.round(euIN / ConfigRegistry.EUPower * ConfigRegistry.rfPower);
+    }
+
+    /*
+     * Waila Functions
+     */
+    @Override
+    public void returnWailaHead(List<String> list) {
+        if (genCore != null) {
+            int[] power = convertToEU();
+            list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE +
+                    power[0] + " / " + power[1] + " EU");
+        }
     }
 }

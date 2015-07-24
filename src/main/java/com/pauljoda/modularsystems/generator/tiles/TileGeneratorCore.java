@@ -215,7 +215,8 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
      */
     @Override
     public void returnWailaHead(List<String> list) {
-        list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + getEnergyStored(null) + "/" + getMaxEnergyStored(null));
+        list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + getEnergyStored(null)
+                + "/" + getMaxEnergyStored(null) + " RF");
     }
 
     @Override
