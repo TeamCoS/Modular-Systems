@@ -5,7 +5,9 @@ import cofh.api.energy.IEnergyHandler;
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
+import com.pauljoda.modularsystems.core.providers.FuelProvider;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
+import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.generator.blocks.BlockGeneratorCore;
@@ -16,20 +18,57 @@ import com.teambr.bookshelf.helpers.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.List;
 
 public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnergyHandler {
 
     protected EnergyStorage energy;
 
     public TileGeneratorCore() {
-        energy = new EnergyStorage(32000);
+        energy = new EnergyStorage(1000000);
     }
 
     @Override
     public void doWork() {
+        if (!worldObj.isRemote) {
+            //Charge Bank
+            if (this.values.getBurnTime() > 0) {
+                this.values.setBurnTime(values.getBurnTime() - 1);
+                energy.receiveEnergy((int) Math.round(ConfigRegistry.rfPower * values.getMultiplicity() *
+                        (values.getSpeed() * -1)), false);
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            }
 
+            //Get Power
+            if (values.getBurnTime() == 0 && energy.getEnergyStored() < energy.getMaxEnergyStored()) {
+                //Check the structure to make sure we have the right stuff
+                if(corners == null)
+                    corners = getCorners();
+
+                //Still null?
+                if(corners == null) {
+                    markDirty();
+                    return;
+                }
+
+                this.values.currentItemBurnTime = this.values.burnTime = getBurnTime();
+            }
+
+            //TODO Charge Tools
+        }
+    }
+
+    private int getBurnTime() {
+        int scaledTicks = 0;
+        List<FuelProvider> providers = getFuelProviders(corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true));
+        if (!providers.isEmpty()) {
+            scaledTicks = getAdjustedBurnTime(providers.get(0).consume());
+        }
+        return scaledTicks;
     }
 
     @Override
@@ -81,7 +120,6 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
         return new GuiGenerator(player.inventory, this);
     }
 
-
     /*
      * Energy Functions
      */
@@ -109,5 +147,20 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
     @Override
     public boolean canConnectEnergy(ForgeDirection from) {
         return false;
+    }
+
+    /*
+     * Tile Entity Functions
+     */
+    @Override
+    public void readFromNBT (NBTTagCompound tags) {
+        super.readFromNBT(tags);
+        energy.readFromNBT(tags);
+    }
+
+    @Override
+    public void writeToNBT (NBTTagCompound tags) {
+        super.writeToNBT(tags);
+        energy.writeToNBT(tags);
     }
 }
