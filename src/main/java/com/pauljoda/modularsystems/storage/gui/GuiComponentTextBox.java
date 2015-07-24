@@ -69,7 +69,7 @@ public abstract class GuiComponentTextBox extends BaseComponent {
      */
     public void mouseDown(int mouseX, int y, int button) {
         textField.mouseClicked(mouseX, y, button);
-        if(button == 1) {
+        if(button == 1 && textField.isFocused()) {
             textField.setText("");
             fieldUpdated(textField.getText());
         }
@@ -81,8 +81,10 @@ public abstract class GuiComponentTextBox extends BaseComponent {
      * @param keyCode The code
      */
     public void keyTyped(char letter, int keyCode) {
-        textField.textboxKeyTyped(letter, keyCode);
-        fieldUpdated(textField.getText());
+        if(textField.isFocused()) {
+            textField.textboxKeyTyped(letter, keyCode);
+            fieldUpdated(textField.getText());
+        }
     }
 
     @Override
