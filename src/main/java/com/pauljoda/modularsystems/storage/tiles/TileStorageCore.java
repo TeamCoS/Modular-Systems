@@ -23,8 +23,16 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
     protected InventoryTile inventory;
 
     public TileStorageCore() {
-        inventory = new InventoryTile(66);
+        inventory = new InventoryTile(99);
         customName = StatCollector.translateToLocal("inventory.storage.title");
+    }
+
+    /**
+     * Used to get how many rows this has in the GUI
+     * @return The number of rows in the container
+     */
+    public int getInventoryRowCount() {
+        return inventory.getSizeInventory() / 11;
     }
 
     /*******************************************************************************************************************
@@ -129,11 +137,11 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        return new ContainerStorageCore(player.inventory, this);
+        return new ContainerStorageCore(player.inventory, this, this);
     }
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        return new GuiStorageCore(new ContainerStorageCore(player.inventory, this), 250, 210, getInventoryName());
+        return new GuiStorageCore(new ContainerStorageCore(player.inventory, this, this), 250, 210, getInventoryName());
     }
 }
