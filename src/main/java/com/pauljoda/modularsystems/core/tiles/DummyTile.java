@@ -28,7 +28,7 @@ public class DummyTile extends BaseTile implements ISidedInventory, IWaila {
     protected int metadata = 0;
 
     public DummyTile() {
-        coreLocation = new Location();
+        coreLocation = null; //new Location();
     }
 
     /**

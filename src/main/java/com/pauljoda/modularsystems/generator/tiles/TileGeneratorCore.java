@@ -6,6 +6,7 @@ import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.providers.FuelProvider;
+import com.pauljoda.modularsystems.core.providers.IPowerProvider;
 import com.pauljoda.modularsystems.core.registries.BlockValueRegistry;
 import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
 import com.pauljoda.modularsystems.core.registries.FurnaceBannedBlocks;
@@ -17,8 +18,10 @@ import com.pauljoda.modularsystems.power.tiles.TileRFBank;
 import com.teambr.bookshelf.collections.Location;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.BlockHelper;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -29,7 +32,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnergyHandler {
+public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnergyHandler, IPowerProvider {
+
+    public final int MAX_RFTICK_OUT = 1000;
 
     protected EnergyStorage energy;
 
@@ -185,5 +190,40 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
     public void writeToNBT (NBTTagCompound tags) {
         super.writeToNBT(tags);
         energy.writeToNBT(tags);
+    }
+
+    /*
+     * Power Supplier Functions
+     */
+    @Override
+    public boolean canSupply() {
+        return energy.getEnergyStored() > 0;
+    }
+
+    @Override
+    public double fuelSupplied(int maxAmount) {
+        return energy.extractEnergy(maxAmount, true);
+    }
+
+    @Override
+    public double supply(int maxAmount) {
+        return energy.extractEnergy(maxAmount, false);
+    }
+
+    /*
+     * Waila Functions
+     */
+    @Override
+    public void returnWailaHead(List<String> list) {
+        list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + getEnergyStored(null) + "/" + getMaxEnergyStored(null));
+    }
+
+    @Override
+    public NBTTagCompound returnNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
+        if (tag.hasKey("Energy")) {
+            tag.removeTag("Energy");
+            tag.removeTag("MaxStorage");
+        }
+        return tag;
     }
 }

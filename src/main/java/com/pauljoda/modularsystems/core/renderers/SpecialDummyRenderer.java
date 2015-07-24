@@ -1,7 +1,6 @@
 package com.pauljoda.modularsystems.core.renderers;
 
 import com.pauljoda.modularsystems.core.managers.BlockManager;
-import com.pauljoda.modularsystems.power.tiles.TileBankBase;
 import com.teambr.bookshelf.client.ClientProxy;
 import com.teambr.bookshelf.common.blocks.BaseBlock;
 import com.teambr.bookshelf.util.RenderUtils;
@@ -29,7 +28,7 @@ public class SpecialDummyRenderer implements ISimpleBlockRenderingHandler {
 
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-        TileBankBase dummy = (TileBankBase)world.getTileEntity(x, y, z);
+        //TileBankBase dummy = (TileBankBase)world.getTileEntity(x, y, z);
         if(ClientProxy.renderPass == 0) {
             renderer.renderBlockUsingTexture(Blocks.iron_block, x, y, z, Blocks.iron_block.getIcon(0, 0));
             return true;
