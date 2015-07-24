@@ -70,15 +70,15 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         drawLevel(7 / 16F, 4 / 16F,  1.0025F, 9 / 16F,  12 / 16F,   1.0025F, tess);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        float level = Math.max(3 / 16F, (((TilePowerBankBase)tile).getPowerLevelScaled(8) + 4) / 16F);
+        float level = Math.max(3 / 16F, (((TileBankBase)tile).getPowerLevelScaled(8) + 4) / 16F);
 
-        if(tile instanceof TileLiquidsBankBank) {
-            TileLiquidsBankBank fluidTile = (TileLiquidsBankBank)tile;
+        if(tile instanceof TileLiquidsBank) {
+            TileLiquidsBank fluidTile = (TileLiquidsBank)tile;
             FluidTankInfo info = fluidTile.getTankInfo(ForgeDirection.UNKNOWN)[0];
             if(info != null && info.fluid != null) {
                 IIcon fluidTexture = info.fluid.getFluid().getIcon();
                 RenderUtils.bindMinecraftBlockSheet();
-                float level2 = Math.max(3, (((TilePowerBankBase) tile).getPowerLevelScaled(12) + 4));
+                float level2 = Math.max(3, (((TileBankBase) tile).getPowerLevelScaled(12) + 4));
                 float difference = (fluidTexture.getMaxU() - fluidTexture.getMinU()) / 16;
                 float differenceV = (fluidTexture.getMaxV() - fluidTexture.getMinV()) / 16;
                 drawLevel(7 / 16F, 4 / 16F, -0.003F, 9 / 16F, level, -0.003F, fluidTexture.getMinU() + (4 * difference), fluidTexture.getMaxV() - (4 * differenceV), fluidTexture.getMinU() + (9 * difference), fluidTexture.getMaxV() - (level2 * differenceV), tess);
@@ -125,13 +125,13 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
     }
 
     protected Color getBackground(TileEntity tile) {
-        if(tile instanceof TileSolidsBankBank)
+        if(tile instanceof TileSolidsBank)
             return new Color(74, 57, 14, 160);
-        else if(tile instanceof TileRFBankBank)
+        else if(tile instanceof TileRFBank)
             return new Color(140, 0, 3, 160);
-        else if(tile instanceof TileLiquidsBankBank)
+        else if(tile instanceof TileLiquidsBank)
             return new Color(33, 80, 69, 160);
-        else if (tile instanceof TileManaBankBank)
+        else if (tile instanceof TileManaBank)
             return new Color(58, 214, 214, 160);
         return new Color(255, 255, 255, 0);
     }

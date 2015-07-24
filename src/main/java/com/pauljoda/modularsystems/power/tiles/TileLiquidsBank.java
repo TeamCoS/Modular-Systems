@@ -16,7 +16,7 @@ import net.minecraftforge.fluids.*;
 
 import java.util.List;
 
-public class TileLiquidsBankBank extends TilePowerBankBase implements IOpensGui, IFluidHandler {
+public class TileLiquidsBank extends TileBankBase implements IOpensGui, IFluidHandler {
 
     public static final int BUCKET_IN = 0;
     public static final int BUCKET_OUT = 1;
@@ -25,7 +25,7 @@ public class TileLiquidsBankBank extends TilePowerBankBase implements IOpensGui,
     public FluidTank tank;
     private int cooldown;
 
-    public TileLiquidsBankBank() {
+    public TileLiquidsBank() {
         inventory = new InventoryTile(2);
         tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 20);
         cooldown = 0;

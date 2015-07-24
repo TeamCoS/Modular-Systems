@@ -15,12 +15,12 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class TileSolidsBankBank extends TilePowerBankBase implements IOpensGui, ISidedInventory {
+public class TileSolidsBank extends TileBankBase implements IOpensGui, ISidedInventory {
 
     private InventoryTile inventory;
     private int cooldown;
 
-    public TileSolidsBankBank() {
+    public TileSolidsBank() {
         inventory = new InventoryTile(27);
         cooldown = 0;
     }

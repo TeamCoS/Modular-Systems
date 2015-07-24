@@ -5,7 +5,7 @@ import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.core.renderers.SpecialDummyRenderer;
 import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
-import com.pauljoda.modularsystems.power.tiles.TilePowerBankBase;
+import com.pauljoda.modularsystems.power.tiles.TileBankBase;
 import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.collections.BlockTextures;
 import net.minecraft.block.Block;
@@ -41,7 +41,7 @@ public class BlockPower extends BlockDummy {
                 player.openGui(Bookshelf.instance, 0, world, us.getCore().xCoord, us.getCore().yCoord, us.getCore().zCoord);
             return true;
         } else if (player.isSneaking()) {
-            TilePowerBankBase us = (TilePowerBankBase) world.getTileEntity(x, y, z);
+            TileBankBase us = (TileBankBase) world.getTileEntity(x, y, z);
             if (us != null) {
                 player.openGui(Bookshelf.instance, 0, world, x, y, z);
             }

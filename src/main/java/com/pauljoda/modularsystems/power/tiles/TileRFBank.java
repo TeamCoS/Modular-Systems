@@ -15,11 +15,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 
-public class TileRFBankBank extends TilePowerBankBase implements IOpensGui, IEnergyHandler {
+public class TileRFBank extends TileBankBase implements IOpensGui, IEnergyHandler {
 
     private EnergyStorage energy;
 
-    public TileRFBankBank() {
+    public TileRFBank() {
         energy = new EnergyStorage(10000);
     }
 

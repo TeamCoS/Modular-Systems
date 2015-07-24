@@ -1,6 +1,6 @@
 package com.pauljoda.modularsystems.power.gui;
 
-import com.pauljoda.modularsystems.power.tiles.TileIC2BankBank;
+import com.pauljoda.modularsystems.power.tiles.TileIC2Bank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentPowerBar;
 import com.teambr.bookshelf.inventory.ContainerGeneric;
 
@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class GuiEUBank extends GuiPowerBase<ContainerGeneric> {
 
-    protected TileIC2BankBank tileEntity;
+    protected TileIC2Bank tileEntity;
 
-    public GuiEUBank(TileIC2BankBank tileEntity) {
+    public GuiEUBank(TileIC2Bank tileEntity) {
         super(new ContainerGeneric(), tileEntity, 140, 120, "inventory.eupower.title");
         this.tileEntity = tileEntity;
     }

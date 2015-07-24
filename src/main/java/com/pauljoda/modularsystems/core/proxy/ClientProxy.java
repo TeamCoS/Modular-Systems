@@ -4,7 +4,7 @@ import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.renderers.BlockDummyRenderer;
 import com.pauljoda.modularsystems.core.renderers.SpecialDummyRenderer;
 import com.pauljoda.modularsystems.core.renderers.TileSpecialDummyRenderer;
-import com.pauljoda.modularsystems.power.tiles.TilePowerBankBase;
+import com.pauljoda.modularsystems.power.tiles.TileBankBase;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Loader;
@@ -19,7 +19,7 @@ public class ClientProxy extends CommonProxy {
         SpecialDummyRenderer.renderID = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new SpecialDummyRenderer());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TilePowerBankBase.class, new TileSpecialDummyRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileBankBase.class, new TileSpecialDummyRenderer());
     }
 
     public void init() {

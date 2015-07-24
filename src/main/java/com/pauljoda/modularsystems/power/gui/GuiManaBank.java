@@ -1,6 +1,6 @@
 package com.pauljoda.modularsystems.power.gui;
 
-import com.pauljoda.modularsystems.power.tiles.TileManaBankBank;
+import com.pauljoda.modularsystems.power.tiles.TileManaBank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentPowerBar;
 import com.teambr.bookshelf.inventory.ContainerGeneric;
 
@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class GuiManaBank extends GuiPowerBase<ContainerGeneric> {
 
-    protected TileManaBankBank tileEntity;
+    protected TileManaBank tileEntity;
 
-    public GuiManaBank(TileManaBankBank tileEntity) {
+    public GuiManaBank(TileManaBank tileEntity) {
         super(new ContainerGeneric(), tileEntity, 140, 120, "inventory.manapower.title");
 
         this.tileEntity = tileEntity;

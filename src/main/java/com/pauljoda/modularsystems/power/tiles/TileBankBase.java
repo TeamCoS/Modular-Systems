@@ -15,11 +15,11 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public abstract class TilePowerBankBase extends DummyTile implements FuelProvider, IWaila {
+public abstract class TileBankBase extends DummyTile implements FuelProvider, IWaila {
 
     protected int priority;
 
-    public TilePowerBankBase() {
+    public TileBankBase() {
         priority = 0;
     }
 

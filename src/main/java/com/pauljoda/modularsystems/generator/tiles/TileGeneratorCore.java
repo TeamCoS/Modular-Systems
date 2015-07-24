@@ -13,7 +13,7 @@ import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.generator.blocks.BlockGeneratorCore;
 import com.pauljoda.modularsystems.generator.container.ContainerGenerator;
 import com.pauljoda.modularsystems.generator.gui.GuiGenerator;
-import com.pauljoda.modularsystems.power.tiles.TileRFBankBank;
+import com.pauljoda.modularsystems.power.tiles.TileRFBank;
 import com.teambr.bookshelf.collections.Location;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.BlockHelper;
@@ -83,7 +83,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
         FuelProvider provider;
         for (Location coord : coords) {
             TileEntity te = worldObj.getTileEntity(coord.x, coord.y, coord.z);
-            if (te != null && !(te instanceof TileRFBankBank)) {
+            if (te != null && !(te instanceof TileRFBank)) {
                 if (te instanceof FuelProvider && (provider = (FuelProvider) te).canProvide()) {
                     providers.add(provider);
                 }
