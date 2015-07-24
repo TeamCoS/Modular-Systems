@@ -3,6 +3,7 @@ package com.pauljoda.modularsystems.storage.gui;
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.storage.container.ContainerStorageCore;
 import com.teambr.bookshelf.client.gui.GuiBase;
+import com.teambr.bookshelf.client.gui.component.control.GuiComponentTextBox;
 import com.teambr.bookshelf.helpers.GuiHelper;
 import org.lwjgl.input.Mouse;
 

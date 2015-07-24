@@ -2,17 +2,24 @@ itemGroup.tabModularSystems=Modular Systems
 
 tile.modularsystems:furnaceCore.name=Modular Furnace Core
 tile.modularsystems:furnaceCoreActive.name=Modular Furnace Core
+
 tile.modularsystems:crusherCore.name=Modular Crusher Core
 tile.modularsystems:crusherCoreActive.name=Modular Crusher Core
+
 tile.modularsystems:generatorCore.name=Modular Generator Core
 tile.modularsystems:generatorCoreActive.name=Modular Generator Core
+
+tile.modularsystems:storageCore.name=Modular Storage Core
+
 tile.modularsystems:dummy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O
+
 tile.modularsystems:powerRF.name=RedstoneFlux Power Bank
 tile.modularsystems:powerSolids.name=Solid Fuel Power Bank
 tile.modularsystems:powerLiquids.name=Liquid Fuel Power Bank
 tile.modularsystems:powerIC2.name=IC2 LV Fuel Power Bank
 tile.modularsystems:powerMana.name=Mana Fuel Power Bank
+
 tile.modularsystems:supplierRF.name=RF Power Output
 tile.modularsystems:supplierIC2.name=IC2 LV Power Output
 
