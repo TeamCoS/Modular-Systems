@@ -2,13 +2,11 @@ package com.pauljoda.modularsystems.storage.container;
 
 import com.pauljoda.modularsystems.storage.tiles.TileStorageCore;
 import com.teambr.bookshelf.inventory.BaseContainer;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Modular-Systems
@@ -82,11 +80,16 @@ public class ContainerStorageCore extends BaseContainer {
         }
 
         //Trim out what doesn't match the string
-        for(int i = 0; i < displaySlots.size(); i++) {
-            Slot slot = displaySlots.get(i);
+        for(Iterator<Slot> i = displaySlots.iterator(); i.hasNext();) {
+            Slot slot = i.next();
             if(slot.getHasStack()) {
-                if(!slot.getStack().getDisplayName().toLowerCase().contains(currentSearch))
-                    displaySlots.remove(i);
+                if(currentSearch.startsWith("@")) {
+                    GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(slot.getStack().getItem());
+                    if(currentSearch.length() > 1 && !id.modId.toLowerCase().contains(currentSearch.split("@")[1].toLowerCase()))
+                        i.remove();
+                }
+                 else if(!slot.getStack().getDisplayName().toLowerCase().contains(currentSearch.toLowerCase()))
+                    i.remove();
             }
         }
 

@@ -69,8 +69,10 @@ public abstract class GuiComponentTextBox extends BaseComponent {
      */
     public void mouseDown(int mouseX, int y, int button) {
         textField.mouseClicked(mouseX, y, button);
-        if(button == 1)
+        if(button == 1) {
             textField.setText("");
+            fieldUpdated(textField.getText());
+        }
     }
 
     /**
