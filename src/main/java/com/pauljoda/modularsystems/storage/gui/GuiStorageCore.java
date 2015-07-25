@@ -2,10 +2,21 @@ package com.pauljoda.modularsystems.storage.gui;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.storage.container.ContainerStorageCore;
+import com.pauljoda.modularsystems.storage.tiles.TileStorageCore;
 import com.teambr.bookshelf.client.gui.GuiBase;
+import com.teambr.bookshelf.client.gui.component.BaseComponent;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentTextBox;
+import com.teambr.bookshelf.client.gui.component.display.GuiComponentText;
+import com.teambr.bookshelf.client.gui.component.display.GuiTabCollection;
 import com.teambr.bookshelf.helpers.GuiHelper;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Modular-Systems
@@ -15,19 +26,21 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
     private boolean isInMainArea;
     private float currentScroll;
 
+    private TileStorageCore core;
+
     private GuiComponentTextBox textBox;
+    private GuiComponentScrollBar scrollBar;
 
     /**
      * Constructor for All Guis
      *
      * @param container Inventory Container
-     * @param width     XSize
-     * @param height    YSize
-     * @param name      The inventory title
      */
-    public GuiStorageCore(ContainerStorageCore container, int width, int height, String name) {
-        super(container, width, height, name);
+    public GuiStorageCore(ContainerStorageCore container, TileStorageCore tile) {
+        super(container, 250, 220, tile.getInventoryName());
         title.setXPos(8);
+        core = tile;
+        addRightTabs(rightTabs);
     }
 
     @Override
@@ -36,6 +49,14 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
             @Override
             public void fieldUpdated(String value) {
                 inventory.keyTyped(value);
+            }
+        });
+
+        components.add(scrollBar = new GuiComponentScrollBar(227, 26, 108) {
+            @Override
+            public void onScroll(float position) {
+                inventory.scrollTo(position);
+                currentScroll = position;
             }
         });
     }
@@ -72,13 +93,33 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
                 currentScroll = 1.0F;
 
             this.inventory.scrollTo(this.currentScroll);
+            this.scrollBar.setPosition(this.currentScroll);
             updateScreen();
         }
+        if(textBox.getTextField().isFocused())
+            Keyboard.enableRepeatEvents(true);
+        else
+            Keyboard.enableRepeatEvents(false);
     }
 
     @Override
     public void drawScreen(int x, int y, float f) {
         super.drawScreen(x, y, f);
         isInMainArea = GuiHelper.isInBounds(x, y, guiLeft + 35, guiTop + 17, guiLeft + 220, guiTop + 215);
+    }
+
+    /**
+     * Adds the tabs to the right. Overwrite this if you want tabs on your GUI
+     * @param tabs List of tabs, put GuiTabs in
+     */
+    @Override
+    public void addRightTabs(GuiTabCollection tabs) {
+        if(core != null) {
+            List<BaseComponent> children = new ArrayList<>();
+            children.add(new GuiComponentText("Information", 26, 6, 0xFFCC00));
+            children.add(new GuiComponentText("Size: ", 10, 23, 0xFFFFFF));
+            children.add(new GuiComponentText(String.valueOf(core.getSizeInventory()) + " Slots", 20, 33, 0x777777));
+            tabs.addTab(children, 100, 100, new Color(77, 75, 196), new ItemStack(Items.book, 1));
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.pauljoda.modularsystems.storage.tiles;
 
 import com.pauljoda.modularsystems.storage.container.ContainerStorageCore;
 import com.pauljoda.modularsystems.storage.gui.GuiStorageCore;
+import com.pauljoda.modularsystems.storage.network.StorageNetwork;
 import com.teambr.bookshelf.collections.InventoryTile;
 import com.teambr.bookshelf.common.tiles.BaseTile;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
@@ -12,6 +13,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+
 /**
  * Modular-Systems
  * Created by Paul Davis on 7/23/2015
@@ -21,10 +24,12 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
     private String customName;
 
     protected InventoryTile inventory;
+    protected StorageNetwork<TileStorageCore, TileEntityStorageExpansion> network;
 
     public TileStorageCore() {
-        inventory = new InventoryTile(94);
+        inventory = new InventoryTile(66);
         customName = StatCollector.translateToLocal("inventory.storage.title");
+        network = new StorageNetwork(this);
     }
 
     /**
@@ -33,6 +38,60 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
      */
     public int getInventoryRowCount() {
         return (inventory.getSizeInventory() / 11) + (inventory.getSizeInventory() % 11 > 0 ? 1 : 0);
+    }
+
+    /**
+     * Used to add a node to the network
+     * @param node The node to add
+     */
+    public void addToNetwork(TileEntityStorageExpansion node) {
+        network.addNode(node);
+    }
+
+    /**
+     * Used to remove a node from the network
+     * @param node The node to remove
+     * @return True if found and removed
+     */
+    public boolean deleteFromNetwork(TileEntityStorageExpansion node) {
+        return network.deleteNode(node);
+    }
+
+    /**
+     * Used to get the storage network
+     * @return The network of this tile
+     */
+    public StorageNetwork getNetwork() {
+        return network;
+    }
+
+    /**
+     * Used to destroy the network
+     */
+    public void destroyNetwork() {
+        network.destroyNetwork();
+        network = null;
+    }
+
+    /**
+     * Used to add inventory space
+     * @param count How many slots to add
+     */
+    public void pushNewInventory(int count) {
+        for(int i = 0; i < count; i++)
+            inventory.push(null);
+    }
+
+    /**
+     * Used to remove inventory space
+     * @param count How many slots to remove
+     * @return The stacks that were in those top slots
+     */
+    public ArrayList<ItemStack> popInventory(int count) {
+        ArrayList<ItemStack> stacks = new ArrayList<>();
+        for(int i = 0; i < count; i++)
+            stacks.add(inventory.pop());
+        return stacks;
     }
 
     /*******************************************************************************************************************
@@ -44,6 +103,7 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
         super.readFromNBT(tags);
         inventory.readFromNBT(tags);
         customName = tags.getString("CustomName");
+        network.readFromNBT(tags, worldObj);
     }
 
     @Override
@@ -51,6 +111,7 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
         super.writeToNBT(tags);
         inventory.writeToNBT(tags);
         tags.setString("CustomName", customName);
+        network.writeToNBT(tags);
     }
 
     /*******************************************************************************************************************
@@ -117,7 +178,7 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
      * Do not give this method the name canInteractWith because it clashes with Container
      */
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this && player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+        return true;
     }
 
     @Override
@@ -142,6 +203,6 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        return new GuiStorageCore(new ContainerStorageCore(player.inventory, this, this), 250, 220, getInventoryName());
+        return new GuiStorageCore(new ContainerStorageCore(player.inventory, this, this), this);
     }
 }

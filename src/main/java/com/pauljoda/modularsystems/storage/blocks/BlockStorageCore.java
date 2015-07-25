@@ -49,4 +49,17 @@ public class BlockStorageCore extends BaseBlock {
             tile.setCustomName(itemStack.getDisplayName());
         }
     }
+
+    /**
+     * Empty Contents of an Inventory into world on Block Break
+     * @param world
+     * @param x X-Coord in world
+     * @param y Y-Coord in world
+     * @param z Z-Coord in world
+     */
+    public void dropItems(World world, int x, int y, int z) {
+        TileStorageCore tile = (TileStorageCore)world.getTileEntity(x, y, z);
+        tile.destroyNetwork();
+        super.dropItems(world, x, y, z);
+    }
 }

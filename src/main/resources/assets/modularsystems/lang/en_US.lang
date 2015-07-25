@@ -10,6 +10,8 @@ tile.modularsystems:generatorCore.name=Modular Generator Core
 tile.modularsystems:generatorCoreActive.name=Modular Generator Core
 
 tile.modularsystems:storageCore.name=Modular Storage Core
+tile.modularsystems:storageBasic.name=Basic Storage Expansion
+tile.modularsystems:storageCapacity.name=Capacity Storage Expansion
 
 tile.modularsystems:dummy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O

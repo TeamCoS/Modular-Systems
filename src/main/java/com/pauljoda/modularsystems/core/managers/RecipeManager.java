@@ -63,5 +63,21 @@ public class RecipeManager {
                     "SIS",
                     "IFI",
                     "SIS", 'S', Item.getItemFromBlock(Blocks.sapling), 'I', Items.iron_ingot, 'F', Items.flower_pot);
+
+        //Storage Core
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageCore, 1),
+                "LWL",
+                "WCW",
+                "LWL", 'L', "treeWood", 'W', "plankWood", 'C', Blocks.chest));
+
+        //Basic Storage Expansion
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageBasic, 4),
+                "WWW",
+                "WSW",
+                "WWW", 'W', "plankWood", 'S', Items.string));
+
+        //Capacity Expansion
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageCapacity, 1),
+                BlockManager.storageBasic, Blocks.chest);
     }
 }
