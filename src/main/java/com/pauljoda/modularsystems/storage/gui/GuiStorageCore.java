@@ -41,33 +41,39 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
         title.setXPos(8);
         core = tile;
         addRightTabs(rightTabs);
+        addComponents();
     }
 
     @Override
     public void addComponents() {
-        components.add(textBox = new GuiComponentTextBox(95, 5, 150, 16) {
-            @Override
-            public void fieldUpdated(String value) {
-                inventory.keyTyped(value);
-            }
-        });
+        if(core != null) {
+            components.add(textBox = new GuiComponentTextBox(95, 5, 150, 16) {
+                @Override
+                public void fieldUpdated(String value) {
+                    inventory.keyTyped(value);
+                }
+            });
 
-        components.add(scrollBar = new GuiComponentScrollBar(227, 26, 108) {
-            @Override
-            public void onScroll(float position) {
-                inventory.scrollTo(position);
-                currentScroll = position;
-            }
-        });
+            textBox.getTextField().setVisible(core.hasSearchUpgrade);
+
+            components.add(scrollBar = new GuiComponentScrollBar(227, 26, 108) {
+                @Override
+                public void onScroll(float position) {
+                    inventory.scrollTo(position);
+                    currentScroll = position;
+                }
+            });
+        }
     }
 
     @Override
     protected void keyTyped(char letter, int keyCode) {
-        if(!textBox.getTextField().textboxKeyTyped(letter, keyCode)) {
+        if(textBox != null && textBox.getTextField() != null && !textBox.getTextField().textboxKeyTyped(letter, keyCode)) {
             super.keyTyped(letter, keyCode);
-        } else {
+        } else if(textBox != null && textBox.getTextField() != null){
             this.inventory.keyTyped(textBox.getValue());
-        }
+        } else
+            super.keyTyped(letter, keyCode);
     }
 
     @Override
@@ -96,7 +102,7 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
             this.scrollBar.setPosition(this.currentScroll);
             updateScreen();
         }
-        if(textBox.getTextField().isFocused())
+        if(textBox != null && textBox.getTextField() != null && textBox.getTextField().isFocused())
             Keyboard.enableRepeatEvents(true);
         else
             Keyboard.enableRepeatEvents(false);

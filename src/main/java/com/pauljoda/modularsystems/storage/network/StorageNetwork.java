@@ -92,8 +92,10 @@ public class StorageNetwork<T extends TileStorageCore, N extends TileEntityStora
     public void readFromNBT(NBTTagCompound tag, World world) {
         Location rootLoc = new Location();
         rootLoc.readFromNBT(tag, "Root");
+
         if(world.getTileEntity(rootLoc.x, rootLoc.y, rootLoc.z) instanceof TileStorageCore)
             root = (T) world.getTileEntity(rootLoc.x, rootLoc.y, rootLoc.z);
+
         if(tag.hasKey("ChildSize")) {
             children = new ArrayList<>();
             for(int i = 0; i < tag.getInteger("ChildSize"); i++) {

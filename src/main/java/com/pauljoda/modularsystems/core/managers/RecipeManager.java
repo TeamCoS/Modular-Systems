@@ -79,5 +79,8 @@ public class RecipeManager {
         //Capacity Expansion
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageCapacity, 1),
                 BlockManager.storageBasic, Blocks.chest);
+
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSearch, 1),
+                BlockManager.storageBasic, Items.writable_book);
     }
 }

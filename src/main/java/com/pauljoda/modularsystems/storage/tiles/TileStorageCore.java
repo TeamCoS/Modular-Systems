@@ -26,6 +26,8 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
     protected InventoryTile inventory;
     protected StorageNetwork<TileStorageCore, TileEntityStorageExpansion> network;
 
+    public boolean hasSearchUpgrade;
+
     public TileStorageCore() {
         inventory = new InventoryTile(66);
         customName = StatCollector.translateToLocal("inventory.storage.title");
@@ -103,7 +105,7 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
         super.readFromNBT(tags);
         inventory.readFromNBT(tags);
         customName = tags.getString("CustomName");
-        network.readFromNBT(tags, worldObj);
+        hasSearchUpgrade = tags.getBoolean("Search");
     }
 
     @Override
@@ -111,7 +113,7 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
         super.writeToNBT(tags);
         inventory.writeToNBT(tags);
         tags.setString("CustomName", customName);
-        network.writeToNBT(tags);
+        tags.setBoolean("Search", hasSearchUpgrade);
     }
 
     /*******************************************************************************************************************
