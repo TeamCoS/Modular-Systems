@@ -16,10 +16,7 @@ import com.pauljoda.modularsystems.power.blocks.BlockPower;
 import com.pauljoda.modularsystems.power.tiles.*;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageCore;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageExpansion;
-import com.pauljoda.modularsystems.storage.tiles.TileStorageBasic;
-import com.pauljoda.modularsystems.storage.tiles.TileStorageCapacity;
-import com.pauljoda.modularsystems.storage.tiles.TileStorageCore;
-import com.pauljoda.modularsystems.storage.tiles.TileStorageSearch;
+import com.pauljoda.modularsystems.storage.tiles.*;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -34,7 +31,7 @@ public class BlockManager {
 
     public static Block furnaceCore, furnaceCoreActive, crusherCore, crusherCoreActive;
     public static Block generatorCore, generatorCoreActive;
-    public static Block storageCore, storageBasic, storageCapacity, storageSearch;
+    public static Block storageCore, storageBasic, storageCapacity, storageSearch, storageSort, storageSecurity;
     public static Block dummy, io, powerRF, powerSolids, powerLiquids, powerIC2, powerMana;
     public static Block supplierRF, supplierIC2;
 
@@ -58,7 +55,8 @@ public class BlockManager {
             registerBlock(storageBasic = new BlockStorageExpansion(Material.wood, Reference.MOD_ID + ":storageBasic", TileStorageBasic.class), "storageBasic", TileStorageBasic.class);
             registerBlock(storageCapacity = new BlockStorageExpansion(Material.wood, Reference.MOD_ID + ":storageCapacity", TileStorageCapacity.class), "storageCapacity", TileStorageCapacity.class);
             registerBlock(storageSearch = new BlockStorageExpansion(Material.wood, Reference.MOD_ID + ":storageSearch", TileStorageSearch.class), "storageSearch", TileStorageSearch.class);
-
+            registerBlock(storageSort = new BlockStorageExpansion(Material.wood, Reference.MOD_ID + ":storageSort", TileStorageSorting.class), "storageSort", TileStorageSorting.class);
+            registerBlock(storageSecurity = new BlockStorageExpansion(Material.wood, Reference.MOD_ID + ":storageSecurity", TileStorageSecurity.class), "storageSecurity", TileStorageSecurity.class);
         }
 
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);

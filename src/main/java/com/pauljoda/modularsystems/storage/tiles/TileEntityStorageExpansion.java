@@ -91,7 +91,7 @@ public abstract class TileEntityStorageExpansion extends BaseTile implements IIn
             if(getTileInDirection(dir) != null) { //Found a tile entity
                 if(getTileInDirection(dir) instanceof TileStorageCore) { //Is it the core?
                     core = ((TileStorageCore)getTileInDirection(dir)).getLocation(); //Set the core location to the core
-                    ((TileStorageCore)getTileInDirection(dir)).getNetwork().addNode(this); //Let the network know we are here
+                    ((TileStorageCore)getTileInDirection(dir)).getNetwork().addNode(this.getLocation()); //Let the network know we are here
                     addedToNetwork(); //Do extras
                     return; //No need to continue
                 } else if(getTileInDirection(dir) instanceof TileEntityStorageExpansion) { //Is it another expansion?

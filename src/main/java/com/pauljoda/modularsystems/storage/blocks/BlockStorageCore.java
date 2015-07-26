@@ -11,6 +11,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -44,10 +45,13 @@ public class BlockStorageCore extends BaseBlock {
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase livingBase, ItemStack itemStack) {
         super.onBlockPlacedBy(world, x, y, z, livingBase, itemStack);
+        TileStorageCore tile = (TileStorageCore)world.getTileEntity(x, y, z);
+
         if(itemStack.hasDisplayName()) {
-            TileStorageCore tile = (TileStorageCore)world.getTileEntity(x, y, z);
             tile.setCustomName(itemStack.getDisplayName());
         }
+        if(livingBase instanceof EntityPlayer)
+            tile.setOwner((EntityPlayer)livingBase);
     }
 
     /**

@@ -2,16 +2,15 @@ package com.pauljoda.modularsystems.storage.tiles;
 
 /**
  * Modular-Systems
- * Created by Paul Davis on 7/24/2015
+ * Created by Paul Davis on 7/25/2015
  */
-public class TileStorageSearch extends TileStorageBasic {
+public class TileStorageSorting extends TileStorageBasic {
     @Override
     public void addedToNetwork() {
         super.addedToNetwork();
         if(getCore() != null) {
-            getCore().setHasSearchUpgrade(true);
+            getCore().setHasSortingUpgrade(true);
             worldObj.markBlockForUpdate(core.x, core.y, core.z);
-
         }
     }
 
@@ -19,7 +18,7 @@ public class TileStorageSearch extends TileStorageBasic {
     public void removedFromNetwork() {
         super.removedFromNetwork();
         if(getCore() != null) {
-            getCore().setHasSearchUpgrade(false);
+            getCore().setHasSortingUpgrade(false);
             worldObj.markBlockForUpdate(core.x, core.y, core.z);
         }
     }

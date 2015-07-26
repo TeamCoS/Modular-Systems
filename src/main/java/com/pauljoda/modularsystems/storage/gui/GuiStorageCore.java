@@ -1,21 +1,27 @@
 package com.pauljoda.modularsystems.storage.gui;
 
 import com.pauljoda.modularsystems.core.ModularSystems;
+import com.pauljoda.modularsystems.core.collections.ItemSorter;
 import com.pauljoda.modularsystems.storage.container.ContainerStorageCore;
 import com.pauljoda.modularsystems.storage.tiles.TileStorageCore;
 import com.teambr.bookshelf.client.gui.GuiBase;
 import com.teambr.bookshelf.client.gui.component.BaseComponent;
+import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton;
+import com.teambr.bookshelf.client.gui.component.control.GuiComponentScrollBar;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentTextBox;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentText;
 import com.teambr.bookshelf.client.gui.component.display.GuiTabCollection;
 import com.teambr.bookshelf.helpers.GuiHelper;
+import com.teambr.bookshelf.manager.PacketManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -54,7 +60,7 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
                 }
             });
 
-            textBox.getTextField().setVisible(core.hasSearchUpgrade);
+            textBox.getTextField().setVisible(core.hasSearchUpgrade());
 
             components.add(scrollBar = new GuiComponentScrollBar(227, 26, 108) {
                 @Override
@@ -63,6 +69,22 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
                     currentScroll = position;
                 }
             });
+
+            if(core.hasSortingUpgrade()) {
+                components.add(new GuiComponentButton(3, 26, 20, 20, "S") {
+                    @Override
+                    public void doAction() {
+                        Collections.sort(core.getInventory(), new ItemSorter());
+                        PacketManager.updateTileWithClientInfo(core);
+                    }
+
+                    @Override
+                    public List<String> getDynamicToolTip(int mouseX, int mouseY) {
+                        return Collections.singletonList(StatCollector.translateToLocal("inventory.storageCore.sort"));
+                    }
+
+                });
+            }
         }
     }
 
@@ -74,6 +96,15 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
             this.inventory.keyTyped(textBox.getValue());
         } else
             super.keyTyped(letter, keyCode);
+    }
+
+    protected void mouseClicked(int par1, int par2, int par3) {
+        super.mouseClicked(par1, par2, par3);
+        if(par3 == 2 && core != null && core.hasSortingUpgrade()) {
+            Collections.sort(core.getInventory(), new ItemSorter());
+            PacketManager.updateTileWithClientInfo(core);
+            GuiHelper.playButtonSound();
+        }
     }
 
     @Override

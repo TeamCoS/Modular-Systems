@@ -8,6 +8,7 @@ import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.*;
 import com.pauljoda.modularsystems.core.proxy.CommonProxy;
 import com.pauljoda.modularsystems.core.registries.*;
+import com.pauljoda.modularsystems.storage.events.BlockBreakEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -58,7 +59,10 @@ public class ModularSystems {
         MinecraftForge.EVENT_BUS.register(FurnaceBannedBlocks.INSTANCE);
         MinecraftForge.EVENT_BUS.register(BlockValueRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidFuelValues.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new BlockBreakEvent());
+
         FMLCommonHandler.instance().bus().register(new PlayerLogManager());
+
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiManager());
 
         proxy.preInit();

@@ -13,6 +13,8 @@ tile.modularsystems:storageCore.name=Modular Storage Core
 tile.modularsystems:storageBasic.name=Basic Storage Expansion
 tile.modularsystems:storageCapacity.name=Capacity Storage Expansion
 tile.modularsystems:storageSearch.name=Search Storage Expansion
+tile.modularsystems:storageSort.name=Sorting Storage Expansion
+tile.modularsystems:storageSecurity.name=Security Storage Expansion
 
 tile.modularsystems:dummy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O
@@ -30,9 +32,15 @@ item.modularsystems:dustIron.name=Iron Dust
 item.modularsystems:dustGold.name=Gold Dust
 
 inventory.furnace.title=Modular Furnace
+
 inventory.crusher.title=Modular Crusher
+
 inventory.generator.title=Modular Generator
-inventory.storage.title=Modular Storage
+
+inventory.storageCore.title=Modular Storage
+inventory.storageCore.sort=Sort
+
+inventory.storageSecurity.lock=Secure?
 
 inventory.io.title=I/O Configure
 inventory.io.import=Import
@@ -74,11 +82,13 @@ commands.addBannedFurnaceBlock.usage=Usage: <TileName> or "this" to add what is 
 commands.addBannedFurnaceBlock.failure=Failed to add value, must pass a block name
 commands.addBannedFurnaceBlock.success=Block successfully added to registry
 
-commands.addFluidFuel.usage=Usage: /addFluidFuel <fuelname> <value>
+commands.addFluidFuel.usage=Usage: <fuelname> <value>
 commands.addFluidFuel.failure=Failed to add Liquid Fuel
 commands.addFluidFuel.success=Liquid Fuel successfully added to registry
 
 commands.usage.configureBlockValues=Opens the GUI to change block values
+
+event.breakBlock.permission=You do not have permission to break this
 
 modularsystems.nei.crusherrecipes=Modular Crusher
 modularsystems.nei.furnacerecipes=Modular Furnace

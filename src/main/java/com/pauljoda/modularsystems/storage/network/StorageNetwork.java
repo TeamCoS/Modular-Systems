@@ -1,7 +1,6 @@
 package com.pauljoda.modularsystems.storage.network;
 
 import com.pauljoda.modularsystems.storage.tiles.TileEntityStorageExpansion;
-import com.pauljoda.modularsystems.storage.tiles.TileStorageCore;
 import com.teambr.bookshelf.collections.Location;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -14,16 +13,13 @@ import java.util.List;
  * Modular-Systems
  * Created by Paul Davis on 7/24/2015
  */
-public class StorageNetwork<T extends TileStorageCore, N extends TileEntityStorageExpansion> {
-    protected T root;
-    protected List<N> children;
+public class StorageNetwork {
+    protected List<Location> children;
 
     /**
      * Used to create a new network for storage
-     * @param topNode The core, or the root node
      */
-    public StorageNetwork(T topNode) {
-        root = topNode;
+    public StorageNetwork() {
         children = new ArrayList<>();
     }
 
@@ -31,7 +27,7 @@ public class StorageNetwork<T extends TileStorageCore, N extends TileEntityStora
      * Used to add a new node into the network
      * @param node The node to add
      */
-    public void addNode(N node) {
+    public void addNode(Location node) {
         children.add(node);
     }
 
@@ -40,31 +36,24 @@ public class StorageNetwork<T extends TileStorageCore, N extends TileEntityStora
      * @param loc The location of the node
      * @return The node that is at that location
      */
-    public N getNode(Location loc) {
-        for(N node : children) {
-            if(node.getLocation().equals(loc))
+    public Location getNode(Location loc) {
+        for(Location node : children) {
+            if(node.equals(loc))
                 return node;
         }
         return null;
     }
 
-    /**
-     * Used to get the root of network, or the core
-     * @return The core
-     */
-    public T getRoot() {
-        return root;
-    }
 
     /**
      * Deletes the node in the network
      * @param node The node to add
      * @return True if found and deleted
      */
-    public boolean deleteNode(N node) {
-        for(Iterator<N> iterator = children.iterator(); iterator.hasNext(); ) {
-            N child = iterator.next();
-            if(child.getLocation().equals(node.getLocation())) {
+    public boolean deleteNode(TileEntityStorageExpansion node) {
+        for(Iterator<Location> iterator = children.iterator(); iterator.hasNext(); ) {
+            Location child = iterator.next();
+            if(child.equals(node.getLocation())) {
                 iterator.remove();
                 return true;
             }
@@ -72,37 +61,32 @@ public class StorageNetwork<T extends TileStorageCore, N extends TileEntityStora
         return false;
     }
 
-    public void destroyNetwork() {
-        for(Iterator<N> iterator = children.iterator(); iterator.hasNext(); ) {
-            N child = iterator.next();
-            child.removeFromNetwork(false);
+    /**
+     * Used to let the children know to remove from the network
+     * @param world The world
+     */
+    public void destroyNetwork(World world) {
+        for(Location loc : children) {
+            if(!world.isRemote && world.getTileEntity(loc.x, loc.y, loc.z) != null && world.getTileEntity(loc.x, loc.y, loc.z) instanceof TileEntityStorageExpansion)
+                ((TileEntityStorageExpansion)world.getTileEntity(loc.x, loc.y, loc.z)).removeFromNetwork(false);
         }
     }
 
     public void writeToNBT(NBTTagCompound tag) {
-        root.getLocation().writeToNBT(tag, "Root");
         if(children != null && !children.isEmpty()) {
             tag.setInteger("ChildSize", children.size());
             for(int i = 0; i < children.size(); i++)
-                children.get(i).getLocation().writeToNBT(tag, "child" + i);
+                children.get(i).writeToNBT(tag, "child" + i);
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public void readFromNBT(NBTTagCompound tag, World world) {
-        Location rootLoc = new Location();
-        rootLoc.readFromNBT(tag, "Root");
-
-        if(world.getTileEntity(rootLoc.x, rootLoc.y, rootLoc.z) instanceof TileStorageCore)
-            root = (T) world.getTileEntity(rootLoc.x, rootLoc.y, rootLoc.z);
-
+    public void readFromNBT(NBTTagCompound tag) {
         if(tag.hasKey("ChildSize")) {
             children = new ArrayList<>();
             for(int i = 0; i < tag.getInteger("ChildSize"); i++) {
                 Location childLoc = new Location();
                 childLoc.readFromNBT(tag, "child" + i);
-                if(world.getTileEntity(childLoc.x, childLoc.y, childLoc.z) instanceof TileEntityStorageExpansion)
-                    children.add((N) world.getTileEntity(childLoc.x, childLoc.y, childLoc.z));
+                children.add(childLoc);
             }
         }
     }
