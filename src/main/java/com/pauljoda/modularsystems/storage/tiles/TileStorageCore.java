@@ -155,6 +155,14 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
     }
 
     /**
+     * Used to get the list of allowed players
+     * @return The list of allowed players
+     */
+    public List<String> getAllowedPlayers() {
+        return allowedPlayers;
+    }
+
+    /**
      * Used to add a player to the list of allowed player
      * @param player The player to add
      */

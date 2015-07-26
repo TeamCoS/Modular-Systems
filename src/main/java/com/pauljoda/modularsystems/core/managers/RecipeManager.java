@@ -86,7 +86,7 @@ public class RecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageCore, 1),
                 "LWL",
                 "WCW",
-                "LWL", 'L', "treeWood", 'W', "plankWood", 'C', Blocks.chest));
+                "LWL", 'L', "logWood", 'W', "plankWood", 'C', Blocks.chest));
 
         //Basic Storage Expansion
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageBasic, 4),
