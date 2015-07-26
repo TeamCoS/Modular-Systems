@@ -48,8 +48,8 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
             //Charge Bank
             if (this.values.getBurnTime() > 0) {
                 this.values.setBurnTime(values.getBurnTime() - 1);
-                energy.receiveEnergy((int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
-                        (values.getSpeed() * -1)), false);
+                energy.receiveEnergy(Math.max((int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
+                        (values.getSpeed() * -1)), 1), false);
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
             }
 
@@ -73,8 +73,8 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
     }
 
     private int checkRFCreation() {
-        return getBurnTime() * (int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
-                (values.getSpeed() * -1));
+        return Math.max(getBurnTime() * (int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
+                (values.getSpeed() * -1)), 1);
     }
 
     private int getBurnTime() {
@@ -84,7 +84,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
 
             scaledTicks = getAdjustedBurnTime(providers.get(0).consume());
         }
-        return scaledTicks;
+        return Math.max(scaledTicks, 1);
     }
 
     @Override
