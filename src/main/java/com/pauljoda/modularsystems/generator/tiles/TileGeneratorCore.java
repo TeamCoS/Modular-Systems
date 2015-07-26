@@ -54,7 +54,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
             }
 
             //Get Power
-            if (values.getBurnTime() == 0 && energy.getEnergyStored() < energy.getMaxEnergyStored()) {
+            if (values.getBurnTime() == 0 && (energy.getEnergyStored() + checkRFCreation()) < energy.getMaxEnergyStored()) {
                 //Check the structure to make sure we have the right stuff
                 if(corners == null)
                     corners = getCorners();
@@ -70,6 +70,11 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
 
             //TODO Charge Tools
         }
+    }
+
+    private int checkRFCreation() {
+        return getBurnTime() * (int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
+                (values.getSpeed() * -1));
     }
 
     private int getBurnTime() {
