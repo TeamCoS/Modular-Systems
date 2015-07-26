@@ -64,6 +64,24 @@ public class RecipeManager {
                     "IFI",
                     "SIS", 'S', Item.getItemFromBlock(Blocks.sapling), 'I', Items.iron_ingot, 'F', Items.flower_pot);
 
+        //Generator Core
+        GameRegistry.addRecipe(new ItemStack(BlockManager.generatorCore, 1),
+                "IPI",
+                "PBP",
+                "IPI", 'I', Items.iron_ingot, 'P', Blocks.piston, 'B', Blocks.iron_block);
+
+        //RF Output
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.supplierRF, 1),
+                BlockManager.powerRF);
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.powerRF, 1),
+                BlockManager.supplierRF);
+
+        //IC2 Output
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.supplierIC2, 1),
+                BlockManager.powerIC2);
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.powerIC2, 1),
+                BlockManager.supplierRF);
+
         //Storage Core
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageCore, 1),
                 "LWL",
@@ -80,7 +98,16 @@ public class RecipeManager {
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageCapacity, 1),
                 BlockManager.storageBasic, Blocks.chest);
 
+        //Search Expansion
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSearch, 1),
                 BlockManager.storageBasic, Items.writable_book);
+
+        //Sort Expansion
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSort, 1),
+                BlockManager.storageBasic, Items.book);
+
+        //Security Expansion
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSecurity, 1),
+                BlockManager.storageBasic, Blocks.iron_bars);
     }
 }
