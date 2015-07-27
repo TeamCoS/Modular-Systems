@@ -76,8 +76,10 @@ public class GuiGenerator extends GuiCoreBase<ContainerGenerator> {
             gen.add(new GuiComponentText(Long.toString(Math.round(ConfigRegistry.rfPower * (core.getValues().getMultiplicity() + 1) *
                     (core.getValues().getSpeed() * -1))), 60, 25, 0x5CE62E));
             gen.add(new GuiComponentText("Efficiency: ", 5, 35, 0xFFFFFF));
-            gen.add(new GuiComponentText(Long.toString(Math.round((core.BASE + core.getValues().getEfficiency()) / core.BASE) * 100),
-                    60, 35, 0x5CE62E));
+            gen.add(new GuiComponentText(String.format("%.2f", -1 * (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100)
+                    != 0 ? -1 * (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100) : 0.00)  + "%", 60, 35, -1 *
+                    (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100) > 0 ? 0x5CE62E : -1 *
+                    (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100) == 0 ? 0x000000 : 0xE62E00));
             tabs.addTab(gen, 95, 100, new Color(150, 112, 50), new ItemStack(Items.blaze_powder));
 
         }

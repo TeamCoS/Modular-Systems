@@ -78,11 +78,10 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
     }
 
     private int getActBurnTime() {
-        int scaledTicks = 0;
         List<FuelProvider> providers = getFuelProviders(corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true));
         if (!providers.isEmpty()) {
 
-            scaledTicks = (int) Math.round(((BASE + values.getEfficiency()) / BASE) * providers.get(0).consume());
+            int scaledTicks = (int) Math.round(((BASE + values.getEfficiency()) / BASE) * providers.get(0).consume());
             return Math.max(scaledTicks, 1);
         }
         return 0;
