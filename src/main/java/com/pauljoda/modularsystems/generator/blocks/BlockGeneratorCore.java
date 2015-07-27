@@ -3,7 +3,6 @@ package com.pauljoda.modularsystems.generator.blocks;
 import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
-import com.pauljoda.modularsystems.crusher.tiles.TileCrusherCore;
 import com.pauljoda.modularsystems.generator.tiles.TileGeneratorCore;
 import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.collections.BlockTextures;
@@ -86,9 +85,10 @@ public class BlockGeneratorCore extends BaseBlock {
         }
         if (tileEntity != null) {
             tileEntity.setDirty();
-            if (tileEntity.updateMultiblock()) {
+            if (tileEntity.wellFormed) {
                 player.openGui(Bookshelf.instance, 0, world, x, y, z);
-            }
+            } else
+                tileEntity.markDirty();
         }
         return true;
     }

@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.power.tiles;
 
 import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
+import com.pauljoda.modularsystems.generator.tiles.TileGeneratorCore;
 import com.teambr.bookshelf.helpers.GuiHelper;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
@@ -40,9 +41,10 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
      */
     @Override
     public double getOfferedEnergy() {
-        if (validCore()) {
+        if (getCore() != null) {
             int[] convertedPower = convertToEU();
-            return Math.min(EnergyNet.instance.getPowerFromTier(getSourceTier()), convertedPower[0]);
+            if (convertedPower != null)
+                return Math.min(EnergyNet.instance.getPowerFromTier(getSourceTier()), convertedPower[0]);
         }
 
         return 0;
@@ -50,10 +52,13 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
 
     @Override
     public void drawEnergy(double v) {
-        if (validCore()) {
+        if (getCore() != null) {
             double convertedPower = convertFromEU(v);
-            genCore.extractEnergy(null, (int)Math.round(convertedPower), false);
-            worldObj.markBlockForUpdate(coreLocation.x, coreLocation.y, coreLocation.z);
+            if(getCore() instanceof TileGeneratorCore) {
+                TileGeneratorCore tileCore = (TileGeneratorCore) getCore();
+                tileCore.extractEnergy(null, (int) Math.round(convertedPower), false);
+                worldObj.markBlockForUpdate(coreLocation.x, coreLocation.y, coreLocation.z);
+            }
         }
     }
 
@@ -87,9 +92,13 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
     }
 
     private int[] convertToEU() {
-        int avail = (int) Math.round(genCore.getEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
-        int total = (int) Math.round(genCore.getMaxEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
-        return new int[]{avail, total};
+        if(getCore() instanceof TileGeneratorCore) {
+            TileGeneratorCore tileCore = (TileGeneratorCore) getCore();
+            int avail = (int) Math.round(tileCore.getEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
+            int total = (int) Math.round(tileCore.getMaxEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
+            return new int[]{avail, total};
+        }
+        return null;
     }
 
     private int convertFromEU(double euIN) {
@@ -101,9 +110,10 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
      */
     @Override
     public void returnWailaHead(List<String> list) {
-        if (genCore != null) {
+        if (getCore() != null) {
             int[] power = convertToEU();
-            list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE +
+            if (power != null)
+                list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE +
                     power[0] + " / " + power[1] + " EU");
         }
     }

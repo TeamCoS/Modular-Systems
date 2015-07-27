@@ -2,6 +2,7 @@ package com.pauljoda.modularsystems.power.tiles;
 
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
+import com.pauljoda.modularsystems.generator.tiles.TileGeneratorCore;
 import com.teambr.bookshelf.helpers.GuiHelper;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -14,10 +15,15 @@ import java.util.List;
  */
 public class TileRFSupplier extends TileSupplierBase implements IEnergyProvider {
 
+    private TileGeneratorCore genCore;
+
     @Override
     public void updateEntity() {
         super.updateEntity();
-        if (worldObj.isRemote || !validCore()) return;
+        if (worldObj.isRemote || getCore() == null) return;
+
+        if (genCore == null && getCore() instanceof TileGeneratorCore)
+            genCore = (TileGeneratorCore) getCore();
 
         if (genCore.getEnergyStored(null) > 0) {
             Vec3 current = Vec3.createVectorHelper(xCoord, yCoord, zCoord);
@@ -42,6 +48,7 @@ public class TileRFSupplier extends TileSupplierBase implements IEnergyProvider 
                 }
             }
         }
+
     }
 
     /*
