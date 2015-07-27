@@ -84,7 +84,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
 
             scaledTicks = getAdjustedBurnTime(providers.get(0).consume());
         }
-        return Math.max(scaledTicks, 1);
+        return Math.max(scaledTicks / 3, 1);
     }
 
     @Override
