@@ -44,7 +44,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
 
     @Override
     public void doWork() {
-        if (!worldObj.isRemote && isWellFormed()) {
+        if (!worldObj.isRemote) {
             //Charge Bank
             if (this.values.getBurnTime() > 0) {
                 this.values.setBurnTime(values.getBurnTime() - 1);

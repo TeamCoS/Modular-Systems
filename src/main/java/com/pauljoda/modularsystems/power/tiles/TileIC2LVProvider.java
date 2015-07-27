@@ -1,7 +1,6 @@
 package com.pauljoda.modularsystems.power.tiles;
 
 import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
-import com.pauljoda.modularsystems.generator.tiles.TileGeneratorCore;
 import com.teambr.bookshelf.helpers.GuiHelper;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
@@ -41,7 +40,7 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
      */
     @Override
     public double getOfferedEnergy() {
-        if (getCore() != null) {
+        if (genCore != null) {
             int[] convertedPower = convertToEU();
             if (convertedPower != null)
                 return Math.min(EnergyNet.instance.getPowerFromTier(getSourceTier()), convertedPower[0]);
@@ -52,13 +51,10 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
 
     @Override
     public void drawEnergy(double v) {
-        if (getCore() != null) {
+        if (genCore != null) {
             double convertedPower = convertFromEU(v);
-            if(getCore() instanceof TileGeneratorCore) {
-                TileGeneratorCore tileCore = (TileGeneratorCore) getCore();
-                tileCore.extractEnergy(null, (int) Math.round(convertedPower), false);
-                worldObj.markBlockForUpdate(coreLocation.x, coreLocation.y, coreLocation.z);
-            }
+            genCore.extractEnergy(null, (int) Math.round(convertedPower), false);
+            worldObj.markBlockForUpdate(coreLocation.x, coreLocation.y, coreLocation.z);
         }
     }
 
@@ -76,33 +72,30 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
      * Tile Entity Functions
      */
     @Override
-    public void onChunkUnload()
-    {
+    public void onChunkUnload() {
         if (!worldObj.isRemote)
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         super.onChunkUnload();
     }
 
     @Override
-    public void invalidate()
-    {
+    public void invalidate() {
         if (!worldObj.isRemote)
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         super.invalidate();
     }
 
     private int[] convertToEU() {
-        if(getCore() instanceof TileGeneratorCore) {
-            TileGeneratorCore tileCore = (TileGeneratorCore) getCore();
-            int avail = (int) Math.round(tileCore.getEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
-            int total = (int) Math.round(tileCore.getMaxEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
+        if (genCore != null) {
+            int avail = (int) Math.round(genCore.getEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
+            int total = (int) Math.round(genCore.getMaxEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
             return new int[]{avail, total};
         }
         return null;
     }
 
     private int convertFromEU(double euIN) {
-        return (int)Math.round(euIN / ConfigRegistry.EUPower * ConfigRegistry.rfPower);
+        return (int) Math.round(euIN / ConfigRegistry.EUPower * ConfigRegistry.rfPower);
     }
 
     /*
@@ -110,11 +103,11 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
      */
     @Override
     public void returnWailaHead(List<String> list) {
-        if (getCore() != null) {
+        if (genCore != null) {
             int[] power = convertToEU();
             if (power != null)
                 list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE +
-                    power[0] + " / " + power[1] + " EU");
+                        power[0] + " / " + power[1] + " EU");
         }
     }
 }
