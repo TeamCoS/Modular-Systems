@@ -80,7 +80,7 @@ public abstract class TileEntityStorageExpansion extends BaseTile implements IIn
     @Override
     @SuppressWarnings("unchecked")
     public void updateEntity() {
-        if(!worldObj.isRemote && !core.isValid() && new Random().nextInt(80) == 0) { //We don't have a network, lets look for one
+        if(!worldObj.isRemote && !core.isValid() && worldObj.rand.nextInt(80) == 0) { //We don't have a network, lets look for one
            searchAndConnect();
         } else if(!worldObj.isRemote && getCore() == null && new Random().nextInt(20) == 0)
             removeFromNetwork(true);
