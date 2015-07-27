@@ -3,6 +3,7 @@ package com.pauljoda.modularsystems.storage.gui;
 import com.pauljoda.modularsystems.storage.tiles.TileStorageSecurity;
 import com.teambr.bookshelf.client.gui.GuiBase;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentCheckBox;
+import com.teambr.bookshelf.client.gui.component.control.GuiComponentEditableList;
 import com.teambr.bookshelf.inventory.ContainerGeneric;
 import com.teambr.bookshelf.manager.PacketManager;
 import net.minecraft.client.gui.GuiPlayerInfo;
@@ -90,7 +91,7 @@ public class GuiStorageSecurity extends GuiBase<ContainerGeneric> {
             else if (currentScroll > 1.0F)
                 currentScroll = 1.0F;
 
-            this.editField.scrollBar.onScroll(this.currentScroll);
+            this.editField.getScrollBar().onScroll(this.currentScroll);
             updateScreen();
         }
         if(this.editField.getInputBox() != null && this.editField.getInputBox().getTextField() != null && this.editField.getInputBox().getTextField().isFocused())

@@ -181,7 +181,7 @@ public class TileSolidsBank extends TileBankBase implements IOpensGui, ISidedInv
      */
     @Override
     public void returnWailaHead(List<String> list) {
-        list.add(GuiHelper.GuiColor.YELLOW + "Available Fuel Slots: " + GuiHelper.GuiColor.WHITE + getFuelCount() + "/" + inventory.getSizeInventory());
+        list.add(GuiHelper.GuiColor.YELLOW + "Filled Fuel Slots: " + GuiHelper.GuiColor.WHITE + getFuelCount() + "/" + inventory.getSizeInventory());
     }
 
     @Override
