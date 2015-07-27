@@ -65,8 +65,11 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
                     markDirty();
                     return;
                 }
-
-                this.values.currentItemBurnTime = this.values.burnTime = getBurnTime();
+                int burn = getActBurnTime();
+                values.burnTime = burn;
+                values.currentItemBurnTime = burn;
+                String test = null;
+                //this.values.currentItemBurnTime = this.values.burnTime = getActBurnTime();
             }
 
             //TODO Charge Tools
@@ -74,16 +77,16 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
     }
 
     private int checkRFCreation() {
-        return Math.max(getBurnTime() * (int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
+        return Math.max(getActBurnTime() * (int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
                 (values.getSpeed() * -1)), 1);
     }
 
-    private int getBurnTime() {
+    private int getActBurnTime() {
         int scaledTicks = 0;
         List<FuelProvider> providers = getFuelProviders(corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true));
         if (!providers.isEmpty()) {
 
-            scaledTicks = (int) Math.round(((BASE + values.getEfficiency()) / BASE) * providers.get(0).consume());  //getAdjustedBurnTime(providers.get(0).consume());
+            scaledTicks = (int) Math.round(((BASE + values.getEfficiency()) / BASE) * providers.get(0).consume());
             return Math.max(scaledTicks, 1);
         }
         return 0;
