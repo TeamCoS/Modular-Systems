@@ -35,6 +35,7 @@ import java.util.List;
 public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnergyHandler, IPowerProvider {
 
     public final int MAX_RFTICK_OUT = 1000;
+    public final int BASE = 1600;
 
     protected EnergyStorage energy;
 
@@ -82,9 +83,10 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
         List<FuelProvider> providers = getFuelProviders(corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true));
         if (!providers.isEmpty()) {
 
-            scaledTicks = getAdjustedBurnTime(providers.get(0).consume());
+            scaledTicks = (int) Math.round(((BASE + values.getEfficiency()) / BASE) * providers.get(0).consume());  //getAdjustedBurnTime(providers.get(0).consume());
+            return Math.max(scaledTicks, 1);
         }
-        return Math.max(scaledTicks / 3, 1);
+        return 0;
     }
 
     @Override

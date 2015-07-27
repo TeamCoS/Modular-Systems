@@ -74,7 +74,10 @@ public class GuiGenerator extends GuiCoreBase<ContainerGenerator> {
             gen.add(new GuiComponentText("Generation", 26, 6, 0xFFCC00));
             gen.add(new GuiComponentText("RF/t: ", 5, 25, 0xFFFFFF));
             gen.add(new GuiComponentText(Long.toString(Math.round(ConfigRegistry.rfPower * (core.getValues().getMultiplicity() + 1) *
-                    (core.getValues().getSpeed() * -1))), 40, 25, 0x5CE62E));
+                    (core.getValues().getSpeed() * -1))), 60, 25, 0x5CE62E));
+            gen.add(new GuiComponentText("Efficiency: ", 5, 35, 0xFFFFFF));
+            gen.add(new GuiComponentText(Long.toString(Math.round((core.BASE + core.getValues().getEfficiency()) / core.BASE) * 100),
+                    60, 35, 0x5CE62E));
             tabs.addTab(gen, 95, 100, new Color(150, 112, 50), new ItemStack(Items.blaze_powder));
 
         }
