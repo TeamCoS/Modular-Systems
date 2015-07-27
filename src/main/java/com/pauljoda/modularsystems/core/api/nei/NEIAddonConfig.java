@@ -7,7 +7,9 @@ import com.pauljoda.modularsystems.core.ModularSystems;
 import com.pauljoda.modularsystems.core.api.nei.machines.RecipeHandlerBlockValues;
 import com.pauljoda.modularsystems.core.api.nei.machines.RecipeHandlerCrusher;
 import com.pauljoda.modularsystems.core.api.nei.machines.RecipeHandlerFurnace;
+import com.pauljoda.modularsystems.core.api.nei.storage.GuiStorageCraftingHandler;
 import com.pauljoda.modularsystems.core.lib.Reference;
+import com.pauljoda.modularsystems.storage.gui.GuiStorageCore;
 import net.minecraft.util.StatCollector;
 
 /**
@@ -22,6 +24,9 @@ public class NEIAddonConfig implements IConfigureNEI {
         registerHandler(new RecipeHandlerCrusher());
         registerHandler(new RecipeHandlerFurnace());
         registerHandler(new RecipeHandlerBlockValues());
+
+        API.registerGuiOverlay(GuiStorageCore.class, "crafting");
+        API.registerGuiOverlayHandler(GuiStorageCore.class, new GuiStorageCraftingHandler(180, 162), "crafting");
 
         //By setting this here, we can let the rest of the mod know NEI is installed
         ModularSystems.nei = new NEICallback();

@@ -15,6 +15,7 @@ tile.modularsystems:storageCapacity.name=Capacity Storage Expansion
 tile.modularsystems:storageSearch.name=Search Storage Expansion
 tile.modularsystems:storageSort.name=Sorting Storage Expansion
 tile.modularsystems:storageSecurity.name=Security Storage Expansion
+tile.modularsystems:storageCrafting.name=Crafting Storage Expansion
 
 tile.modularsystems:dummy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O

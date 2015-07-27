@@ -11,9 +11,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 /**
  * Modular-Systems
@@ -64,6 +68,32 @@ public class BlockStorageCore extends BaseBlock {
     public void dropItems(World world, int x, int y, int z) {
         TileStorageCore tile = (TileStorageCore)world.getTileEntity(x, y, z);
         tile.destroyNetwork();
+        Random rand = new Random();
+
+        for (int i = 0; i < tile.getCraftingGrid().getSizeInventory(); i++) {
+            ItemStack itemStack = tile.getCraftingGrid().getStackInSlot(i);
+
+            if (itemStack != null && itemStack.stackSize > 0) {
+                float rx = rand.nextFloat() * 0.8F + 0.1F;
+                float ry = rand.nextFloat() * 0.8F + 0.1F;
+                float rz = rand.nextFloat() * 0.8F + 0.1F;
+
+                EntityItem entityItem = new EntityItem(world,
+                        x + rx, y + ry, z + rz,
+                        new ItemStack(itemStack.getItem(), itemStack.stackSize, itemStack.getItemDamage()));
+
+                if (itemStack.hasTagCompound())
+                    entityItem.getEntityItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
+
+                float factor = 0.05F;
+                entityItem.motionX = rand.nextGaussian() * factor;
+                entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
+                entityItem.motionZ = rand.nextGaussian() * factor;
+                world.spawnEntityInWorld(entityItem);
+
+                itemStack.stackSize = 0;
+            }
+        }
         super.dropItems(world, x, y, z);
     }
 }

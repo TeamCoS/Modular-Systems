@@ -23,6 +23,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Modular-Systems
@@ -32,7 +33,7 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
     private boolean isInMainArea;
     private float currentScroll;
 
-    private TileStorageCore core;
+    public TileStorageCore core;
 
     private GuiComponentTextBox textBox;
     private GuiComponentScrollBar scrollBar;
@@ -74,7 +75,24 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
                 components.add(new GuiComponentButton(3, 26, 20, 20, "S") {
                     @Override
                     public void doAction() {
+                        Stack<ItemStack> oldInv = new Stack<>();
+
+                        for(ItemStack stack : core.getInventory()) {
+                            if(stack != null)
+                                oldInv.push(stack.copy());
+                            oldInv.push(null);
+                        }
+
                         Collections.sort(core.getInventory(), new ItemSorter());
+                        core.checkInventory();
+
+                        int timeOut = 100;
+                        while(!compareInventories(oldInv, core.getInventory()) && timeOut > 0) {
+                            Collections.sort(core.getInventory(), new ItemSorter());
+                            core.checkInventory();
+                            timeOut--;
+                        }
+
                         PacketManager.updateTileWithClientInfo(core);
                     }
 
@@ -101,7 +119,24 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
     protected void mouseClicked(int par1, int par2, int par3) {
         super.mouseClicked(par1, par2, par3);
         if(par3 == 2 && core != null && core.hasSortingUpgrade()) {
+            Stack<ItemStack> oldInv = new Stack<>();
+
+            for(ItemStack stack : core.getInventory()) {
+                if(stack != null)
+                    oldInv.push(stack.copy());
+                oldInv.push(null);
+            }
+
             Collections.sort(core.getInventory(), new ItemSorter());
+            core.checkInventory();
+
+            int timeOut = 100;
+            while(!compareInventories(oldInv, core.getInventory()) && timeOut > 0) {
+                Collections.sort(core.getInventory(), new ItemSorter());
+                core.checkInventory();
+                timeOut--;
+            }
+
             PacketManager.updateTileWithClientInfo(core);
             GuiHelper.playButtonSound();
         }
@@ -158,5 +193,26 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
             children.add(new GuiComponentText(String.valueOf(core.getSizeInventory()) + " Slots", 20, 33, 0x777777));
             tabs.addTab(children, 100, 100, new Color(77, 75, 196), new ItemStack(Items.book, 1));
         }
+    }
+
+    private boolean compareInventories(Stack<ItemStack> stack1, Stack<ItemStack> stack2) {
+        for(int i = 0; i < stack1.size(); i++) {
+            if(stack1.size() <= i || stack2.size() <= i)
+                return false;
+            if(stack1.get(i) == null && stack2.get(i) == null)
+                continue;
+            else if(stack1.get(i) != null && stack2.get(i) == null)
+                return false;
+            else if(stack1.get(i) == null && stack2.get(i) != null)
+                return false;
+            else {
+                if(ItemStack.areItemStacksEqual(stack1.get(i), stack2.get(i)) && ItemStack.areItemStackTagsEqual(stack1.get(i), stack2.get(i))) {
+                    continue;
+                }
+                else
+                    return false;
+            }
+        }
+        return true;
     }
 }

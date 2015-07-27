@@ -11,6 +11,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -44,12 +45,27 @@ public class GuiStorageSecurity extends GuiBase<ContainerGeneric> {
             components.add(editField = new GuiComponentEditableList<String>(20, 40, securityTile.getCore().getAllowedPlayers()) {
                 @Override
                 public void valueSaved(List<String> listToSaveTo, String valuePassed) {
+                    if(securityTile.getCore() != null) {
+                        securityTile.getCore().addPlayerToAllowedPlayers(valuePassed);
+                        PacketManager.updateTileWithClientInfo(securityTile.getCore());
+                    }
+                }
 
+                @Override
+                public void valueDeleted(List<String> listFrom, String valueDeleted) {
+                    if(securityTile.getCore() != null) {
+                        for(Iterator<String> iterator = securityTile.getCore().getAllowedPlayers().iterator(); iterator.hasNext(); ) {
+                            String name = iterator.next();
+                            if(name.equals(valueDeleted))
+                                iterator.remove();
+                        }
+                        PacketManager.updateTileWithClientInfo(securityTile.getCore());
+                    }
                 }
 
                 @Override
                 public String convertObjectToString(String object) {
-                    return null;
+                    return object;
                 }
             });
         }
@@ -74,7 +90,7 @@ public class GuiStorageSecurity extends GuiBase<ContainerGeneric> {
             else if (currentScroll > 1.0F)
                 currentScroll = 1.0F;
 
-            this.editField.scrollBar.setPosition(this.currentScroll);
+            this.editField.scrollBar.onScroll(this.currentScroll);
             updateScreen();
         }
         if(this.editField.getInputBox() != null && this.editField.getInputBox().getTextField() != null && this.editField.getInputBox().getTextField().isFocused())
@@ -102,8 +118,8 @@ public class GuiStorageSecurity extends GuiBase<ContainerGeneric> {
             starting = this.editField.getInputBox().getValue();
             if ((!this.mc.isIntegratedServerRunning() || this.mc.thePlayer.sendQueue.playerInfoList.size() > 1)) {
                 this.mc.mcProfiler.startSection("playerList");
-                NetHandlerPlayClient netclienthandler = this.mc.thePlayer.sendQueue;
-                List list = netclienthandler.playerInfoList;
+                NetHandlerPlayClient netClientHandler = this.mc.thePlayer.sendQueue;
+                List list = netClientHandler.playerInfoList;
 
                 for (Object aList : list) {
                     GuiPlayerInfo guiplayerinfo = (GuiPlayerInfo) aList;
@@ -113,6 +129,7 @@ public class GuiStorageSecurity extends GuiBase<ContainerGeneric> {
                 }
             }
         }
+
 
         if(matchingPlayers.size() > 0) {
             ++position;

@@ -3,8 +3,11 @@ package com.pauljoda.modularsystems.storage.container;
 import com.pauljoda.modularsystems.storage.tiles.TileStorageCore;
 import com.teambr.bookshelf.inventory.BaseContainer;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 
 import java.util.*;
 
@@ -18,7 +21,10 @@ public class ContainerStorageCore extends BaseContainer {
     protected List<Slot> allSlots;
     protected String currentSearch = "";
 
-    public ContainerStorageCore(IInventory playerInventory, IInventory ownerInventory, TileStorageCore tile) {
+    protected InventoryCrafting craftingGrid;
+    protected IInventory craftResult = new InventoryCraftResult();
+
+    public ContainerStorageCore(InventoryPlayer playerInventory, IInventory ownerInventory, TileStorageCore tile) {
         super(playerInventory, ownerInventory);
         storage = tile;
         addInventoryGrid(25, 27, 11, 6);
@@ -33,7 +39,14 @@ public class ContainerStorageCore extends BaseContainer {
         allSlots = new ArrayList<>();
         allSlots.addAll(displaySlots);
 
-        addPlayerInventorySlots(44, 140);
+        addPlayerInventorySlots(storage.hasCraftingUpgrade() ? 8 : 44, 140);
+
+        if(storage.hasCraftingUpgrade()) {
+            craftingGrid = new DummyCraftingInventory(storage, this);
+            addCraftingGrid(craftingGrid, 0, 180, 162, 3, 3);
+            this.addSlotToContainer(new SlotCrafting(playerInventory.player, craftingGrid, craftResult, inventorySize + 1, 198, 140));
+            onCraftMatrixChanged(craftingGrid);
+        }
     }
 
     protected void addInventoryGrid(int xOffset, int yOffset, int width, int rows) {
@@ -88,7 +101,7 @@ public class ContainerStorageCore extends BaseContainer {
                     if(currentSearch.length() > 1 && !id.modId.toLowerCase().contains(currentSearch.split("@")[1].toLowerCase()))
                         i.remove();
                 }
-                 else if(!slot.getStack().getDisplayName().toLowerCase().contains(currentSearch.toLowerCase()))
+                else if(!slot.getStack().getDisplayName().toLowerCase().contains(currentSearch.toLowerCase()))
                     i.remove();
             }
         }
@@ -104,6 +117,127 @@ public class ContainerStorageCore extends BaseContainer {
                 slot.xDisplayPosition = 25 + x * 18;
                 slot.yDisplayPosition = 27 + y * 18;
             }
+        }
+    }
+
+    public void detectAndSendChanges() {
+        onCraftMatrixChanged(craftingGrid);
+        super.detectAndSendChanges();
+    }
+
+    public void onCraftMatrixChanged(IInventory inv) {
+        if(craftingGrid != null && inv == craftingGrid)
+            craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftingGrid, storage.getWorldObj()));
+    }
+
+    public void addCraftingGrid(IInventory inventory, int startSlot, int x, int y, int width, int height) {
+        int i = 0;
+        for(int h = 0; h < height; h++) {
+            for(int w = 0; w < width; w++) {
+                this.addSlotToContainer(new Slot(inventory, startSlot + i++, x + (w * 18), y + (h * 18)));
+            }
+        }
+    }
+
+    public boolean func_94530_a(ItemStack stack, Slot slot) {
+        return slot.inventory != this.craftResult && super.func_94530_a(stack, slot);
+    }
+
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int slotId) {
+        Slot slot = (Slot)inventorySlots.get(slotId);
+
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemToTransfer = slot.getStack();
+            ItemStack copy = itemToTransfer.copy();
+            if (slotId < inventorySize) {
+                if (!mergeItemStackSafe(itemToTransfer, inventorySize, storage.hasCraftingUpgrade() ? inventorySlots.size() - 10 : inventorySlots.size(), true)) return null;
+            }
+            else if(slotId >= inventorySlots.size() - 10) {
+                if(slotId == inventorySlots.size() - 1) {
+                    if(!mergeItemStackSafe(itemToTransfer, 0, storage.hasCraftingUpgrade() ? inventorySlots.size() - 10 : inventorySlots.size(), true)) return null;
+                } else {
+                    if(!mergeItemStackSafe(itemToTransfer, 0, storage.hasCraftingUpgrade() ? inventorySlots.size() - 10 : inventorySlots.size(), false)) return null;
+                }
+            }else if (!mergeItemStackSafe(itemToTransfer, 0, inventorySize, false)) return null;
+
+            slot.onSlotChange(itemToTransfer, copy);
+            slot.onPickupFromSlot(player, itemToTransfer);
+
+            if (itemToTransfer.stackSize == 0) slot.putStack(null);
+            else slot.onSlotChanged();
+            onCraftMatrixChanged(craftingGrid);
+            if (itemToTransfer.stackSize != copy.stackSize) return copy;
+        }
+        return null;
+
+    }
+
+    public static class DummyCraftingInventory extends InventoryCrafting {
+
+        protected final TileStorageCore tile;
+        protected final ContainerStorageCore container;
+        protected ItemStack[] stacks;
+
+        public DummyCraftingInventory(TileStorageCore tile, ContainerStorageCore container) {
+            super(null, 3, 3);
+            stacks = new ItemStack[9];
+            this.tile = tile;
+            this.container = container;
+        }
+
+        private void onCraftingChanged() {
+            container.onCraftMatrixChanged(this);
+        }
+
+        @Override
+        public int getSizeInventory() {
+            return 9;
+        }
+
+        @Override
+        public ItemStack getStackInSlot(int slot) {
+            return slot >= getSizeInventory() ? null : tile.getCraftingGrid().getStackInSlot(slot);
+        }
+
+        @Override
+        public ItemStack getStackInRowAndColumn(int row, int column) {
+            if (row >= 0 && row < 3) {
+                int k = row + column * 3;
+                return getStackInSlot(k);
+            } else
+                return null;
+        }
+
+        @Override
+        public ItemStack getStackInSlotOnClosing(int slot) {
+            return tile.getCraftingGrid().getStackInSlot(slot);
+        }
+
+        @Override
+        public ItemStack decrStackSize(int slot, int amount) {
+            if(tile.getCraftingGrid().getStackInSlot(slot) != null) {
+                ItemStack returnStack;
+                if(tile.getCraftingGrid().getStackInSlot(slot).stackSize <= amount) {
+                    returnStack = tile.getCraftingGrid().getStackInSlot(slot);
+                    tile.getCraftingGrid().setStackInSlot(null, slot);
+                    onCraftingChanged();
+                    return returnStack;
+                } else {
+                    returnStack = tile.getCraftingGrid().getStackInSlot(slot).splitStack(amount);
+                    if(tile.getCraftingGrid().getStackInSlot(slot).stackSize <= 0)
+                        tile.getCraftingGrid().setStackInSlot(null, slot);
+                    onCraftingChanged();
+                    return returnStack;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public void setInventorySlotContents(int slot, ItemStack stack) {
+            tile.getCraftingGrid().setStackInSlot(stack, slot);
+            onCraftingChanged();
         }
     }
 

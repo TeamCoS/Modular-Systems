@@ -39,6 +39,18 @@ public class ItemSorter implements Comparator<ItemStack> {
                 else
                     return 1;
             }
+
+            //Try and merge
+            if(o1.stackSize < o1.getMaxStackSize()) {
+                int maxMerge = o1.getMaxStackSize() - o1.stackSize;
+                int actualMerge = o2.stackSize >= maxMerge ? maxMerge : o2.stackSize;
+                o1.stackSize += actualMerge;
+                o2.stackSize -= actualMerge;
+                if(o1.stackSize <= 0)
+                    return 1;
+            }
+            if(o1.stackSize == o2.stackSize)
+                return 0;
             return o1.stackSize > o2.stackSize ? -1 : 1;
         }
 

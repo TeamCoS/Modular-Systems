@@ -434,7 +434,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
 
 
     public int getAdjustedBurnTime(double fuelValue) {
-        return (int) Math.max(fuelValue + values.getEfficiency(), 5);
+        return (int) Math.max((((1600 + values.getEfficiency()) / 1600) * fuelValue), 5);
     }
 
     private double getAdjustedCookTime() {
@@ -678,7 +678,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
             if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
                 double speed = (-1 * (((getValues().getSpeed() + 200) / 200) - 1)) != 0 ? ((-1 * (((getValues().getSpeed() + 200) / 200) - 1)) * 100) : 0.00;
                 tip.add(GuiHelper.GuiColor.ORANGE + "Speed: " + (speed >= 0 ? GuiHelper.GuiColor.GREEN : GuiHelper.GuiColor.RED) + String.format("%.2f", speed) + "%");
-                double efficiency = (((getValues().getEfficiency() + 200) / 200) - 1) != 0 ? ((((getValues().getEfficiency() + 200) / 200) - 1) * 100) : 0.00;
+                double efficiency = -1 * (100 - ((1600 + getValues().getEfficiency()) / 1600) * 100) != 0 ? -1 * (100 - ((1600 + getValues().getEfficiency()) / 1600) * 100) : 0.00;
                 tip.add(GuiHelper.GuiColor.ORANGE + "Efficiency: " + (efficiency >= 0 ? GuiHelper.GuiColor.GREEN : GuiHelper.GuiColor.RED) + String.format("%.2f", efficiency) + "%");
                 double multiplicity = getValues().getMultiplicity() + 1;
                 tip.add(GuiHelper.GuiColor.ORANGE + "Multiplicity: " + (multiplicity > 1.0D ? GuiHelper.GuiColor.GREEN : GuiHelper.GuiColor.WHITE) + multiplicity + "x");

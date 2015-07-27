@@ -109,5 +109,9 @@ public class RecipeManager {
         //Security Expansion
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSecurity, 1),
                 BlockManager.storageBasic, Blocks.iron_bars);
+
+        //Crafting Expansion
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageCrafting, 1),
+                BlockManager.storageBasic, Blocks.crafting_table);
     }
 }

@@ -9,9 +9,13 @@ import com.teambr.bookshelf.common.tiles.IOpensGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,16 +31,20 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
     private String customName;
 
     protected InventoryTile inventory;
+    protected InventoryTile craftingGrid;
     protected StorageNetwork network;
 
-    protected String ownerUUID;
+    protected String ownerName;
     protected boolean isSecured;
     protected List<String> allowedPlayers;
+
     protected boolean hasSearchUpgrade;
     protected boolean hasSortingUpgrade;
+    protected boolean hasCraftingUpgrade;
 
     public TileStorageCore() {
         inventory = new InventoryTile(66);
+        craftingGrid = new InventoryTile(9);
         customName = StatCollector.translateToLocal("inventory.storageCore.title");
         allowedPlayers = new ArrayList<>();
         network = new StorageNetwork();
@@ -112,16 +120,16 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
      * Get the owners string
      * @return The owner's UUID
      */
-    public String getOwnerUUID() {
-        return ownerUUID;
+    public String getOwnerName() {
+        return ownerName;
     }
 
     /**
      * Set the owner UUID by string
-     * @param ownerUUID The new string UUID
+     * @param name The new string UUID
      */
-    public void setOwnerUUID(String ownerUUID) {
-        this.ownerUUID = ownerUUID;
+    public void setOwnerName(String name) {
+        this.ownerName = name;
     }
 
     /**
@@ -130,7 +138,7 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
      * @return True if you can open this
      */
     public boolean canOpen(EntityPlayer player) {
-        return (ownerUUID == null || ownerUUID.equalsIgnoreCase("") || !isSecured) || (((player.getUniqueID().toString().equals(this.ownerUUID) || isInAllowPlayers(player.getUniqueID().toString()))) || player.capabilities.isCreativeMode);
+        return (ownerName == null || ownerName.equalsIgnoreCase("") || !isSecured) || (((player.getDisplayName().equals(this.ownerName) || isInAllowPlayers(player.getDisplayName()))) || player.capabilities.isCreativeMode);
     }
 
     /**
@@ -138,17 +146,17 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
      * @param player The new owner
      */
     public void setOwner(EntityPlayer player) {
-        this.ownerUUID = player.getUniqueID().toString();
+        this.ownerName = player.getDisplayName();
     }
 
     /**
      * Checks if this player is allowed to open it, though he is not the owner
-     * @param UUID The UUID of the player
+     * @param name The name of the player
      * @return True if allowed
      */
-    public boolean isInAllowPlayers(String UUID) {
+    public boolean isInAllowPlayers(String name) {
         for(String playerID : allowedPlayers) {
-            if(playerID.equals(UUID))
+            if(playerID.equals(name))
                 return true;
         }
         return false;
@@ -167,7 +175,15 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
      * @param player The player to add
      */
     public void addPlayerToAllowedPlayers(EntityPlayer player) {
-        allowedPlayers.add(player.getUniqueID().toString());
+        allowedPlayers.add(player.getDisplayName());
+    }
+
+    /**
+     * Used to add a player to the list of allowed player, by name
+     * @param player The player to add
+     */
+    public void addPlayerToAllowedPlayers(String player) {
+        allowedPlayers.add(player);
     }
 
     /**
@@ -178,7 +194,7 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
     public boolean removePlayerFromAllowdPlayers(EntityPlayer player) {
         for(Iterator<String> iterator = allowedPlayers.iterator(); iterator.hasNext(); ) {
             String uuid = iterator.next();
-            if(uuid.equals(player.getUniqueID().toString())) {
+            if(uuid.equals(player.getDisplayName())) {
                 iterator.remove();
                 return true;
             }
@@ -234,6 +250,38 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
         this.hasSortingUpgrade = hasSortingUpgrade;
     }
 
+    /**
+     * Used to tell if this has the crafting upgrade
+     * @return True if available
+     */
+    public boolean hasCraftingUpgrade() {
+        return hasCraftingUpgrade;
+    }
+
+    /**
+     * Used to set if it can craft
+     * @param hasCraftingUpgrade True if can craft
+     */
+    public void setHasCraftingUpgrade(boolean hasCraftingUpgrade) {
+        this.hasCraftingUpgrade = hasCraftingUpgrade;
+    }
+
+    /**
+     * Used to get the crafting inventory
+     * @return The crafting inventory
+     */
+    public InventoryTile getCraftingGrid() {
+        return craftingGrid;
+    }
+
+    /**
+     * Used to set the crafting grid
+     * @param craftingGrid
+     */
+    public void setCraftingGrid(InventoryTile craftingGrid) {
+        this.craftingGrid = craftingGrid;
+    }
+
     /*******************************************************************************************************************
      *********************************************** Tile Methods ******************************************************
      *******************************************************************************************************************/
@@ -245,15 +293,37 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
         network.readFromNBT(tags);
         customName = tags.getString("CustomName");
 
-        ownerUUID = tags.getString("Owner");
+        ownerName = tags.getString("Owner");
 
         hasSearchUpgrade = tags.getBoolean("Search");
         hasSortingUpgrade = tags.getBoolean("Sorting");
+        hasCraftingUpgrade = tags.getBoolean("Crafting");
+
         isSecured = tags.getBoolean("Secured");
 
-        allowedPlayers = new ArrayList<>(tags.getInteger("AllowedListSize"));
-        for(int i = 0; i < allowedPlayers.size(); i++)
-            allowedPlayers.set(i, tags.getString("AllowedPlayer" + i));
+        allowedPlayers = new ArrayList<>();
+        NBTTagList securityList = tags.getTagList("SecurityList", Constants.NBT.TAG_COMPOUND);
+        for(int i = 0; i < securityList.tagCount(); i++) {
+            NBTTagCompound tag = securityList.getCompoundTagAt(i);
+            String player = tag.getString("AllowedPlayer" + i);
+            allowedPlayers.add(player);
+        }
+
+        NBTTagList itemsTag = tags.getTagList("ItemsCrafting", 10);
+        this.craftingGrid = new InventoryTile(9);
+        for (int i = 0; i < itemsTag.tagCount(); i++) {
+            NBTTagCompound nbtTagCompound1 = itemsTag.getCompoundTagAt(i);
+            NBTBase nbt = nbtTagCompound1.getTag("Slot");
+            int j = -1;
+            if ((nbt instanceof NBTTagByte)) {
+                j = nbtTagCompound1.getByte("Slot") & 0xFF;
+            } else {
+                j = nbtTagCompound1.getShort("Slot");
+            }
+            if ((j >= 0)) {
+                this.craftingGrid.setStackInSlot(ItemStack.loadItemStackFromNBT(nbtTagCompound1), j);
+            }
+        }
     }
 
     @Override
@@ -263,15 +333,35 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
         network.writeToNBT(tags);
         tags.setString("CustomName", customName);
 
-        tags.setString("Owner", ownerUUID);
+        tags.setString("Owner", ownerName != null && ownerName.length() > 1 ? ownerName : "NULL");
 
         tags.setBoolean("Search", hasSearchUpgrade);
         tags.setBoolean("Sorting", hasSortingUpgrade);
+        tags.setBoolean("Crafting", hasCraftingUpgrade);
+
         tags.setBoolean("Secured", isSecured);
 
-        tags.setInteger("AllowedListSize", allowedPlayers.size());
-        for(int i = 0; i < allowedPlayers.size(); i++)
-            tags.setString("AllowedPlayer" + i, allowedPlayers.get(i));
+        NBTTagList securityList = new NBTTagList();
+        for(int i = 0; i < allowedPlayers.size(); i++) {
+            String player = allowedPlayers.get(i);
+            if(player != null) {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setString("AllowedPlayer" + i, player);
+                securityList.appendTag(tag);
+            }
+        }
+        tags.setTag("SecurityList", securityList);
+
+        NBTTagList nbtTagList = new NBTTagList();
+        for (int i = 0; i < this.craftingGrid.getSizeInventory(); i++) {
+            if (this.craftingGrid.getStackInSlot(i) != null) {
+                NBTTagCompound nbtTagCompound1 = new NBTTagCompound();
+                nbtTagCompound1.setShort("Slot", (short)i);
+                this.craftingGrid.getStackInSlot(i).writeToNBT(nbtTagCompound1);
+                nbtTagList.appendTag(nbtTagCompound1);
+            }
+        }
+        tags.setTag("ItemsCrafting", nbtTagList);
     }
 
     /*******************************************************************************************************************
@@ -361,6 +451,15 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         return true;
+    }
+
+    public void checkInventory() {
+        for(int i = 0; i < inventory.getSizeInventory(); i++) {
+            if(inventory.getStackInSlot(i) != null) {
+                if(inventory.getStackInSlot(i).stackSize <= 0)
+                    inventory.setStackInSlot(null, i);
+            }
+        }
     }
 
     /*******************************************************************************************************************
