@@ -65,11 +65,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
                     markDirty();
                     return;
                 }
-                int burn = getActBurnTime();
-                values.burnTime = burn;
-                values.currentItemBurnTime = burn;
-                String test = null;
-                //this.values.currentItemBurnTime = this.values.burnTime = getActBurnTime();
+                this.values.currentItemBurnTime = this.values.burnTime = getActBurnTime();
             }
 
             //TODO Charge Tools
@@ -77,7 +73,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
     }
 
     private int checkRFCreation() {
-        return Math.max(getActBurnTime() * (int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
+        return Math.max(values.getBurnTime() * (int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
                 (values.getSpeed() * -1)), 1);
     }
 
