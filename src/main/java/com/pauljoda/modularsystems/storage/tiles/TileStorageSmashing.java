@@ -79,19 +79,26 @@ public class TileStorageSmashing extends TileEntityStorageExpansion implements I
                 if(toBreak.getHarvestLevel(worldObj.getBlockMetadata(blockBreakLocation.x, blockBreakLocation.y, blockBreakLocation.z)) <= harvestLevel) {
 
                     int fortune = 0;
-
+                    boolean silkTouch = toBreak.canSilkHarvest(worldObj, null, blockBreakLocation.x, blockBreakLocation.y, blockBreakLocation.x,
+                            worldObj.getBlockMetadata(blockBreakLocation.x, blockBreakLocation.y, blockBreakLocation.z));
+                    boolean hasSilkTouch = false;
                     NBTTagList enchantList = pickSlot.getStackInSlot(0).getEnchantmentTagList();
                     if(enchantList != null) {
                         for (int i = 0; i < enchantList.tagCount(); i++) {
-                            NBTTagCompound tag = enchantList.getCompoundTagAt(0);
+                            NBTTagCompound tag = enchantList.getCompoundTagAt(i);
                             if (tag.hasKey("id") && tag.getInteger("id") == 35)
                                 fortune = tag.getInteger("lvl");
+                            else if(tag.hasKey("id") && tag.getInteger("id") == 33)
+                                hasSilkTouch = true;
                         }
                     }
-
-                    ArrayList<ItemStack> itemStacks = toBreak.getDrops(worldObj, blockBreakLocation.x, blockBreakLocation.y, blockBreakLocation.z,
-                            worldObj.getBlockMetadata(blockBreakLocation.x, blockBreakLocation.y, blockBreakLocation.z), fortune);
-
+                    ArrayList<ItemStack> itemStacks = new ArrayList<>();
+                    if(silkTouch && hasSilkTouch) {
+                        itemStacks.add(new ItemStack(toBreak, 1, worldObj.getBlockMetadata(blockBreakLocation.x, blockBreakLocation.y, blockBreakLocation.z)));
+                    } else {
+                        itemStacks = toBreak.getDrops(worldObj, blockBreakLocation.x, blockBreakLocation.y, blockBreakLocation.z,
+                                worldObj.getBlockMetadata(blockBreakLocation.x, blockBreakLocation.y, blockBreakLocation.z), fortune);
+                    }
                     for(ItemStack itemStack : itemStacks) {
                         if (itemStack != null && itemStack.stackSize > 0) {
                             float rx = worldObj.rand.nextFloat() * 0.8F + 0.1F;

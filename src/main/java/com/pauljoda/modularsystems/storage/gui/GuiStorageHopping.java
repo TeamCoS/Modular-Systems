@@ -24,7 +24,7 @@ public class GuiStorageHopping extends GuiBase<ContainerGeneric> {
     @Override
     public void addComponents() {
         if(hopper != null) {
-            components.add(new GuiComponentSlider<Integer>(10, 25, 80, GuiComponentSlider.generateNumberList(0, 16), hopper.range) {
+            components.add(new GuiComponentSlider<Integer>(10, 25, 80, GuiComponentSlider.generateNumberList(0, 10), hopper.range) {
                 @Override
                 public void onValueChanged(Integer value) {
                     hopper.range = value;
