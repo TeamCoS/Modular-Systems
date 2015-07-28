@@ -153,7 +153,7 @@ public class ContainerStorageCore extends BaseContainer {
             if (slotId < inventorySize) {
                 if (!mergeItemStackSafe(itemToTransfer, inventorySize, storage.hasCraftingUpgrade() ? inventorySlots.size() - 10 : inventorySlots.size(), true)) return null;
             }
-            else if(slotId >= inventorySlots.size() - 10) {
+            else if(slotId >= inventorySlots.size() - 10 && storage.hasCraftingUpgrade()) {
                 if(slotId == inventorySlots.size() - 1) {
                     if(!mergeItemStackSafe(itemToTransfer, 0, storage.hasCraftingUpgrade() ? inventorySlots.size() - 10 : inventorySlots.size(), true)) return null;
                 } else {
