@@ -6,6 +6,7 @@ import com.teambr.bookshelf.collections.InventoryTile;
 import com.teambr.bookshelf.collections.Location;
 import com.teambr.bookshelf.common.blocks.rotation.SixWayRotation;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -75,6 +76,8 @@ public class TileStorageSmashing extends TileEntityStorageExpansion implements I
             blockBreakLocation.travel(dir);
             if(!worldObj.isAirBlock(blockBreakLocation.x, blockBreakLocation.y, blockBreakLocation.z)) {
                 Block toBreak = worldObj.getBlock(blockBreakLocation.x, blockBreakLocation.y, blockBreakLocation.z);
+                if(toBreak.getMaterial() == Material.water || toBreak.getMaterial() == Material.lava)
+                    return;
                 int harvestLevel = pickSlot.getStackInSlot(0).getItem().getHarvestLevel(pickSlot.getStackInSlot(0), "pickaxe");
                 if(toBreak.getHarvestLevel(worldObj.getBlockMetadata(blockBreakLocation.x, blockBreakLocation.y, blockBreakLocation.z)) <= harvestLevel) {
 
