@@ -113,5 +113,13 @@ public class RecipeManager {
         //Crafting Expansion
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageCrafting, 1),
                 BlockManager.storageBasic, Blocks.crafting_table);
+
+        //Hopping Expansion
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageHopping, 1),
+                BlockManager.storageBasic, Blocks.hopper, Items.ender_pearl);
+
+        //Smashing Expansion
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSmashing, 1),
+                BlockManager.storageBasic, Items.iron_pickaxe);
     }
 }

@@ -16,6 +16,8 @@ tile.modularsystems:storageSearch.name=Search Storage Expansion
 tile.modularsystems:storageSort.name=Sorting Storage Expansion
 tile.modularsystems:storageSecurity.name=Security Storage Expansion
 tile.modularsystems:storageCrafting.name=Crafting Storage Expansion
+tile.modularsystems:storageHopping.name=Hopping Storage Expansion
+tile.modularsystems:storageSmashing.name=Smashing Storage Expansion
 
 tile.modularsystems:dummy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O
@@ -42,6 +44,10 @@ inventory.storageCore.title=Modular Storage
 inventory.storageCore.sort=Sort
 
 inventory.storageSecurity.lock=Secure?
+
+inventory.storageHopping.title=Range Config
+
+inventory.storageSmashing.title=Internal Pick
 
 inventory.io.title=I/O Configure
 inventory.io.import=Import
