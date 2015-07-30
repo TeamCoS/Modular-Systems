@@ -93,32 +93,32 @@ public class TileLiquidsBank extends TileBankBase implements IOpensGui, IFluidHa
 
     @Override
     public double fuelProvided() {
-        if (tank.getFluid() != null && tank.getFluidAmount() > 0) {
+        if (tank.getFluid() != null && tank.getFluidAmount() > 100) {
             FluidStack fluid = tank.getFluid();
             int value = FluidFuelValues.INSTANCE.getFluidFuelValue(fluid.getFluid().getName());
-            FluidStack actualFluid = tank.drain(FluidContainerRegistry.BUCKET_VOLUME, false);
+            FluidStack actualFluid = tank.drain(100, false);
 
-            return (actualFluid.amount / FluidContainerRegistry.BUCKET_VOLUME) * value;
+            return Math.round(((float)actualFluid.amount / FluidContainerRegistry.BUCKET_VOLUME) * value);
         }
         return 0;
     }
 
     @Override
     public double consume() {
-        if (tank.getFluid() != null && tank.getFluidAmount() > 0) {
+        if (tank.getFluid() != null && tank.getFluidAmount() > 100) {
             FluidStack fluid = tank.getFluid();
             int value = FluidFuelValues.INSTANCE.getFluidFuelValue(fluid.getFluid().getName());
-            FluidStack actualFluid = tank.drain(FluidContainerRegistry.BUCKET_VOLUME, true);
+            FluidStack actualFluid = tank.drain(100, true);
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 
-            return (actualFluid.amount / FluidContainerRegistry.BUCKET_VOLUME) * value;
+            return Math.round(((float)actualFluid.amount / FluidContainerRegistry.BUCKET_VOLUME) * value);
         }
         return 0;
     }
 
     @Override
     public boolean canProvide() {
-        return tank.getFluid() != null && tank.getFluidAmount() > 0;
+        return tank.getFluid() != null && tank.getFluidAmount() > 100;
     }
 
     @Override
