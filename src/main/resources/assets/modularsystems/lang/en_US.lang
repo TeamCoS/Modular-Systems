@@ -18,6 +18,7 @@ tile.modularsystems:storageSecurity.name=Security Storage Expansion
 tile.modularsystems:storageCrafting.name=Crafting Storage Expansion
 tile.modularsystems:storageHopping.name=Hopping Storage Expansion
 tile.modularsystems:storageSmashing.name=Smashing Storage Expansion
+tile.modularsystems:storageIO.name=I/O Storage Expansion
 
 tile.modularsystems:dummy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O
@@ -48,6 +49,20 @@ inventory.storageSecurity.lock=Secure?
 inventory.storageHopping.title=Range Config
 
 inventory.storageSmashing.title=Internal Pick
+
+inventory.storageIO.title=Storage I/O
+inventory.storageIO.canImport=Import
+inventory.storageIO.importDamage=Damage
+inventory.storageIO.importOre=OreDict
+inventory.storageIO.canExport=Export
+inventory.storageIO.exportDamage=Damage
+inventory.storageIO.exportOre=OreDict
+inventory.storageIO.canImport.tip=Allow this block to import
+inventory.storageIO.importDamage.tip=Match Item Damage
+inventory.storageIO.importOre.tip=Use Ore Dict Tag when matching
+inventory.storageIO.canExport.tip=Allow this block to export
+inventory.storageIO.exportDamage.tip=Match Item Damage
+inventory.storageIO.exportOre.tip=Use Ore Dict Tag when matching
 
 inventory.io.title=I/O Configure
 inventory.io.import=Import

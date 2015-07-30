@@ -16,6 +16,7 @@ import com.pauljoda.modularsystems.power.blocks.BlockPower;
 import com.pauljoda.modularsystems.power.tiles.*;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageCore;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageExpansion;
+import com.pauljoda.modularsystems.storage.blocks.BlockStorageIO;
 import com.pauljoda.modularsystems.storage.blocks.BlockStorageSmashing;
 import com.pauljoda.modularsystems.storage.tiles.*;
 import cpw.mods.fml.common.Loader;
@@ -32,7 +33,7 @@ public class BlockManager {
 
     public static Block furnaceCore, furnaceCoreActive, crusherCore, crusherCoreActive;
     public static Block generatorCore, generatorCoreActive;
-    public static Block storageCore, storageBasic, storageCapacity, storageSearch, storageSort, storageSecurity, storageCrafting, storageHopping, storageSmashing;
+    public static Block storageCore, storageBasic, storageCapacity, storageSearch, storageSort, storageSecurity, storageCrafting, storageHopping, storageSmashing, storageIO;
     public static Block dummy, io, powerRF, powerSolids, powerLiquids, powerIC2, powerMana;
     public static Block supplierRF, supplierIC2;
 
@@ -61,6 +62,7 @@ public class BlockManager {
             registerBlock(storageCrafting = new BlockStorageExpansion(Material.wood, Reference.MOD_ID + ":storageCrafting", TileStorageCrafting.class), "storageCrafting", TileStorageCrafting.class);
             registerBlock(storageHopping = new BlockStorageExpansion(Material.wood, Reference.MOD_ID + ":storageHopping", TileStorageHopping.class), "storageHopping", TileStorageHopping.class);
             registerBlock(storageSmashing = new BlockStorageSmashing(Material.wood, Reference.MOD_ID + ":storageSmashing", TileStorageSmashing.class), "storageSmashing", TileStorageSmashing.class);
+            registerBlock(storageIO = new BlockStorageIO(Material.wood, Reference.MOD_ID + ":storageIO", TileStorageIO.class), "storageIO", TileStorageIO.class);
         }
 
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);
