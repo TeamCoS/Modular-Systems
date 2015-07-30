@@ -55,7 +55,8 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
             }
 
             //Get Power
-            if (values.getBurnTime() == 0 && (energy.getEnergyStored() + checkRFCreation()) < energy.getMaxEnergyStored()) {
+            if (values.getBurnTime() == 0 && ((energy.getEnergyStored() + checkRFCreation()) < energy.getMaxEnergyStored() ||
+                    (double) energy.getEnergyStored() / energy.getMaxEnergyStored() < 0.5 )) {
                 //Check the structure to make sure we have the right stuff
                 if(corners == null)
                     corners = getCorners();
