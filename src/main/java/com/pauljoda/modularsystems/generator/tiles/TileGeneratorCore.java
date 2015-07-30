@@ -88,6 +88,9 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
             else
                 scaledTicks = (int) Math.round(((BASE + values.getEfficiency()) / BASE) * providers.get(0).consume());
 
+            //Take into account Multiplicity
+            scaledTicks = (int)Math.round(scaledTicks / getValues().getMultiplicity());
+
             return Math.max(scaledTicks, 1);
         }
         return 0;
