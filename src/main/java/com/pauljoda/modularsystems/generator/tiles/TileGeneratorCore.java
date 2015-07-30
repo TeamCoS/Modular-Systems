@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.generator.tiles;
 
 import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import com.pauljoda.modularsystems.core.blocks.BlockDummy;
 import com.pauljoda.modularsystems.core.functions.BlockCountFunction;
@@ -46,38 +47,46 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
     @Override
     public void doWork() {
         if (!worldObj.isRemote) {
-            boolean isGenerating = false;
+            boolean didWork = false;
             //Charge Bank
             if (this.values.getBurnTime() > 0) {
                 this.values.setBurnTime(values.getBurnTime() - 1);
                 energy.receiveEnergy(Math.max((int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
                         (values.getSpeed() * -1)), 1), false);
-                if (this.values.burnTime <= 0)
-                    isGenerating = false;
-                else
-                    isGenerating = true;
+                didWork = true;
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
             }
 
             //Get Power
             if (values.getBurnTime() == 0 && ((energy.getEnergyStored() + checkRFCreation()) < energy.getMaxEnergyStored() ||
-                    (double) energy.getEnergyStored() / energy.getMaxEnergyStored() < 0.5 )) {
+                    (double) energy.getEnergyStored() / energy.getMaxEnergyStored() < 0.5)) {
                 //Check the structure to make sure we have the right stuff
-                if(corners == null)
+                if (corners == null)
                     corners = getCorners();
 
                 //Still null?
-                if(corners == null) {
+                if (corners == null) {
                     markDirty();
                     return;
                 }
                 this.values.currentItemBurnTime = this.values.burnTime = getActBurnTime(false);
-                isGenerating = true;
+                didWork = true;
             }
 
             //TODO Charge Tools
+            if (values.getInput() != null && values.getInput().getItem() instanceof IEnergyContainerItem) {
+                if (energy.getEnergyStored() > 0) {
+                    IEnergyContainerItem item = (IEnergyContainerItem) values.getInput().getItem();
+                    int actual = item.receiveEnergy(values.getInput(), MAX_RFTICK_OUT, true);
+                    int taken = energy.extractEnergy(actual, false);
+                    item.receiveEnergy(values.getInput(), taken, false);
+                }
+            }
+            if (values.getOutput() != null && values.getOutput().getItem() instanceof IEnergyContainerItem) {
 
-            if(isGenerating) {
+            }
+
+            if (didWork) {
                 updateBlockState(this.values.burnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
                 markDirty();
             }
@@ -100,7 +109,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
                 scaledTicks = (int) Math.round(((BASE + values.getEfficiency()) / BASE) * providers.get(0).consume());
 
             //Take into account Multiplicity
-            scaledTicks = (int)Math.round(scaledTicks / (values.getMultiplicity() + 1));
+            scaledTicks = (int) Math.round(scaledTicks / (values.getMultiplicity() + 1));
 
             return Math.max(scaledTicks, 1);
         }
@@ -141,7 +150,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
 
     @Override
     protected void generateValues(BlockCountFunction function) {
-        for(String i : function.getBlockIds()) {
+        for (String i : function.getBlockIds()) {
             if (BlockValueRegistry.INSTANCE.isBlockRegistered(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond())) {
                 values.addToSpeed(BlockValueRegistry.INSTANCE.getSpeedValue(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond(), function.getBlockCount(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond())));
                 values.addToEfficiency(BlockValueRegistry.INSTANCE.getEfficiencyValue(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond(), function.getBlockCount(BlockHelper.getBlockFromString(i).getFirst(), BlockHelper.getBlockFromString(i).getSecond())));
@@ -149,8 +158,8 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
             }
         }
 
-        for(String i : function.getMaterialStrings()) {
-            if(BlockValueRegistry.INSTANCE.isMaterialRegistered(i)) {
+        for (String i : function.getMaterialStrings()) {
+            if (BlockValueRegistry.INSTANCE.isMaterialRegistered(i)) {
                 values.addToSpeed(BlockValueRegistry.INSTANCE.getSpeedValueMaterial(i, function.getMaterialCount(i)));
                 values.addToEfficiency(BlockValueRegistry.INSTANCE.getEfficiencyValueMaterial(i, function.getMaterialCount(i)));
                 values.addToMultiplicity(BlockValueRegistry.INSTANCE.getMultiplicityValueMaterial(i, function.getMaterialCount(i)));
@@ -206,13 +215,13 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
      * Tile Entity Functions
      */
     @Override
-    public void readFromNBT (NBTTagCompound tags) {
+    public void readFromNBT(NBTTagCompound tags) {
         super.readFromNBT(tags);
         energy.readFromNBT(tags);
     }
 
     @Override
-    public void writeToNBT (NBTTagCompound tags) {
+    public void writeToNBT(NBTTagCompound tags) {
         super.writeToNBT(tags);
         energy.writeToNBT(tags);
     }
