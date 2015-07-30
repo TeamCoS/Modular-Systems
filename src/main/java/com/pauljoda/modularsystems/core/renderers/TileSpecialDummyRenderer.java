@@ -80,6 +80,7 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_CULL_FACE);
         RenderUtils.restoreRenderState();
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glPopMatrix();
     }
 

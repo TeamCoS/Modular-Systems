@@ -43,6 +43,7 @@ inventory.generator.title=Modular Generator
 
 inventory.storageCore.title=Modular Storage
 inventory.storageCore.sort=Sort
+inventory.storageCore.clear=Clear Crafting Grid
 
 inventory.storageSecurity.lock=Secure?
 

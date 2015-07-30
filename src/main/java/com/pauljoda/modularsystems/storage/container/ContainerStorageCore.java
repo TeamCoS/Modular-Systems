@@ -139,6 +139,12 @@ public class ContainerStorageCore extends BaseContainer {
         }
     }
 
+    public void clearCraftingGrid() {
+        for(int i = inventorySlots.size() - 10; i < inventorySlots.size(); i++) {
+            slotClick(i, 0, 1, ((InventoryPlayer)playerInventory).player);
+        }
+    }
+
     public boolean func_94530_a(ItemStack stack, Slot slot) {
         return slot.inventory != this.craftResult && super.func_94530_a(stack, slot);
     }

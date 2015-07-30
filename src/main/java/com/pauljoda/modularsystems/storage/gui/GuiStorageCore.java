@@ -9,6 +9,7 @@ import com.teambr.bookshelf.client.gui.component.BaseComponent;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentScrollBar;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentTextBox;
+import com.teambr.bookshelf.client.gui.component.control.GuiComponentTexturedButton;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentText;
 import com.teambr.bookshelf.client.gui.component.display.GuiTabCollection;
 import com.teambr.bookshelf.helpers.GuiHelper;
@@ -103,6 +104,28 @@ public class GuiStorageCore extends GuiBase<ContainerStorageCore> {
 
                 });
             }
+
+            if(core.hasCraftingUpgrade()) {
+                components.add(new GuiComponentTexturedButton(228, 147, 76, 247, 9, 9, 11, 11) {
+                    @Override
+                    public void doAction() {
+                        clearCraftingGrid();
+                    }
+
+                    @Override
+                    public List<String> getDynamicToolTip(int mouseX, int mouseY) {
+                        return Collections.singletonList(StatCollector.translateToLocal("inventory.storageCore.clear"));
+                    }
+                });
+            }
+        }
+    }
+
+    public void clearCraftingGrid() {
+        inventory.clearCraftingGrid();
+        PacketManager.updateTileWithClientInfo(core);
+        for(int i = 0; i < this.mc.thePlayer.inventory.getSizeInventory(); i++) {
+            this.mc.playerController.sendSlotPacket(this.mc.thePlayer.inventory.getStackInSlot(i), i);
         }
     }
 

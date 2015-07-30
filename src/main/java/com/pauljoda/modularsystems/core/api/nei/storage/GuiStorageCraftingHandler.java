@@ -5,6 +5,7 @@ import codechicken.nei.FastTransferManager;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IOverlayHandler;
 import codechicken.nei.recipe.IRecipeHandler;
+import com.pauljoda.modularsystems.storage.gui.GuiStorageCore;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -82,6 +83,7 @@ public class GuiStorageCraftingHandler implements IOverlayHandler {
 
     @SuppressWarnings("unchecked")
     private boolean clearIngredients(GuiContainer gui, List<PositionedStack> ingreds) {
+        ((GuiStorageCore)gui).clearCraftingGrid();
         for(PositionedStack pstack : ingreds)
             for(Slot slot : (List<Slot>)gui.inventorySlots.inventorySlots)
                 if(slot.xDisplayPosition == pstack.relx + offsetX && slot.yDisplayPosition == pstack.rely + offsetY) {
