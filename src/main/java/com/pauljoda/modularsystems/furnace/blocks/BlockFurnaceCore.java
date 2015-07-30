@@ -121,6 +121,7 @@ public class BlockFurnaceCore extends BaseBlock {
      * A randomly called display update to be able to add particles or other items for display
      */
     @SideOnly(Side.CLIENT)
+    @Override
     public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
         if (this.active) {
             ForgeDirection l = getDefaultRotation().convertMetaToDirection(world.getBlockMetadata(x, y, z));

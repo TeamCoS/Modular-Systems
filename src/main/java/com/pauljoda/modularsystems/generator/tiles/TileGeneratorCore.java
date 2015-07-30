@@ -46,11 +46,16 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
     @Override
     public void doWork() {
         if (!worldObj.isRemote) {
+            boolean isGenerating = false;
             //Charge Bank
             if (this.values.getBurnTime() > 0) {
                 this.values.setBurnTime(values.getBurnTime() - 1);
                 energy.receiveEnergy(Math.max((int) Math.round(ConfigRegistry.rfPower * (values.getMultiplicity() + 1) *
                         (values.getSpeed() * -1)), 1), false);
+                if (this.values.burnTime <= 0)
+                    isGenerating = false;
+                else
+                    isGenerating = true;
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
             }
 
@@ -67,9 +72,15 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
                     return;
                 }
                 this.values.currentItemBurnTime = this.values.burnTime = getActBurnTime(false);
+                isGenerating = true;
             }
 
             //TODO Charge Tools
+
+            if(isGenerating) {
+                updateBlockState(this.values.burnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                markDirty();
+            }
         }
     }
 
