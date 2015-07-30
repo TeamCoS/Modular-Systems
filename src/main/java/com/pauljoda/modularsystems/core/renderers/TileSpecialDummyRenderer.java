@@ -31,29 +31,6 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        //Color Background
-        RenderUtils.setColor(getBackground(tile));
-        float min = 2 / 16F - 0.002F;
-        float max = 14 / 16F + 0.002F;
-        drawLevel(min,  min, -0.0005F, max, max, -0.0005F, tess);
-        drawLevel(-0.0005F, min, min, -0.0005F, max, max, tess);
-        drawLevel(1.0005F, min, min, 1.0005F, max, max, tess);
-        drawLevel(min, min, 1.0005F, max, max, 1.0005F, tess);
-        tess.startDrawingQuads();
-        tess.addVertexWithUV(min, 1.0005, min, 2 / 255F, 2 / 255F);
-        tess.addVertexWithUV(min, 1.0005, max, 2 / 255F, 4 / 255F);
-        tess.addVertexWithUV(max, 1.0005, max, 3 / 255F, 4 / 255F);
-        tess.addVertexWithUV(max, 1.0005, min, 3 / 255F, 2 / 255F);
-        tess.draw();
-        tess.startDrawingQuads();
-        tess.addVertexWithUV(min, -0.0005, min, 2 / 255F, 2 / 255F);
-        tess.addVertexWithUV(min, -0.0005, max, 2 / 255F, 4 / 255F);
-        tess.addVertexWithUV(max, -0.0005, max, 3 / 255F, 4 / 255F);
-        tess.addVertexWithUV(max, -0.0005, min, 3 / 255F, 2 / 255F);
-        tess.draw();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glDisable(GL11.GL_BLEND);
-
         //Outer bar background
         RenderUtils.setColor(new Color(57, 57, 57));
         drawLevel(6 / 16F, 3 / 16F, -0.002F, 10 / 16F, 13 / 16F, -0.002F, tess);
@@ -122,17 +99,5 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         tess.addVertexWithUV(x2, y2, z2, u2, v2);
         tess.addVertexWithUV(x2, y1, z2, u2, v1);
         tess.draw();
-    }
-
-    protected Color getBackground(TileEntity tile) {
-        if(tile instanceof TileSolidsBank)
-            return new Color(74, 57, 14, 160);
-        else if(tile instanceof TileRFBank || tile instanceof TileRFProvider)
-            return new Color(140, 0, 3, 160);
-        else if(tile instanceof TileLiquidsBank)
-            return new Color(33, 80, 69, 160);
-        else if (tile instanceof TileManaBank)
-            return new Color(58, 214, 214, 160);
-        return new Color(255, 255, 255, 0);
     }
 }
