@@ -72,14 +72,16 @@ public class GuiGenerator extends GuiCoreBase<ContainerGenerator> {
         if (core != null) {
             List<BaseComponent> gen = new ArrayList<>();
             gen.add(new GuiComponentText("Generation", 26, 6, 0xFFCC00));
-            gen.add(new GuiComponentText("RF/t: ", 5, 25, 0xFFFFFF));
+            gen.add(new GuiComponentText("RF/t: ", 5, 23, 0xFFFFFF));
             gen.add(new GuiComponentText(Long.toString(Math.round(ConfigRegistry.rfPower * (core.getValues().getMultiplicity() + 1) *
-                    (core.getValues().getSpeed() * -1))), 60, 25, 0x5CE62E));
-            gen.add(new GuiComponentText("Efficiency: ", 5, 35, 0xFFFFFF));
+                    (core.getValues().getSpeed() * -1))), 15, 33, 0x5CE62E));
+            gen.add(new GuiComponentText("Efficiency: ", 5, 48, 0xFFFFFF));
             gen.add(new GuiComponentText(String.format("%.2f", -1 * (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100)
-                    != 0 ? -1 * (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100) : 0.00)  + "%", 60, 35, -1 *
+                    != 0 ? -1 * (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100) : 0.00)  + "%", 15, 58, -1 *
                     (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100) > 0 ? 0x5CE62E : -1 *
                     (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100) == 0 ? 0x000000 : 0xE62E00));
+            gen.add(new GuiComponentText("RF/T Out:", 5, 73, 0xFFFFFF));
+            gen.add(new GuiComponentText(Integer.toString(core.MAX_RFTICK_OUT), 15, 83, 0x00FF00));
             tabs.addTab(gen, 95, 100, new Color(150, 112, 50), new ItemStack(Items.blaze_powder));
 
         }
