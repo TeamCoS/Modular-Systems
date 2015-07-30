@@ -5,7 +5,7 @@ import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.providers.FuelProvider;
 import com.pauljoda.modularsystems.core.collections.StandardValues;
 import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
-import com.pauljoda.modularsystems.power.tiles.TileSupplierBase;
+import com.pauljoda.modularsystems.power.tiles.TileProviderBase;
 import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.collections.Couplet;
 import com.teambr.bookshelf.collections.Location;
@@ -195,7 +195,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
 
             DummyTile dummy = (DummyTile)worldObj.getTileEntity(loc.x, loc.y, loc.z);
             int meta = dummy.getMetadata();
-            if(dummy instanceof FuelProvider || dummy instanceof DummyIO || dummy instanceof TileSupplierBase) {
+            if(dummy instanceof FuelProvider || dummy instanceof DummyIO || dummy instanceof TileProviderBase) {
                 dummy.unsetCore();
                 worldObj.markBlockForUpdate(loc.x, loc.y, loc.z);
             } else {

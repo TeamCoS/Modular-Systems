@@ -74,7 +74,7 @@ public class BlockManager {
         if (Loader.isModLoaded("Botania"))
             registerBlock(powerMana = new BlockPower(Reference.MOD_ID + ":powerMana", TileManaBank.class), "powerMana", TileManaBank.class);
 
-        registerBlock(supplierRF = new BlockPower(Reference.MOD_ID + ":supplierRF", TileRFSupplier.class), "supplierRF", TileRFSupplier.class);
+        registerBlock(supplierRF = new BlockPower(Reference.MOD_ID + ":supplierRF", TileRFProvider.class), "supplierRF", TileRFProvider.class);
         if (Loader.isModLoaded("IC2"))
             registerBlock(supplierIC2 = new BlockPower(Reference.MOD_ID + ":supplierIC2", TileIC2LVProvider.class), "supplierIC2", TileIC2LVProvider.class);
     }

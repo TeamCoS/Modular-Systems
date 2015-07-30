@@ -1,6 +1,7 @@
 package com.pauljoda.modularsystems.power.tiles;
 
 import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
+import com.pauljoda.modularsystems.generator.tiles.TileGeneratorCore;
 import com.teambr.bookshelf.helpers.GuiHelper;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
@@ -16,7 +17,7 @@ import java.util.List;
  * Modular-Systems
  * Created by Dyonovan on 24/07/15
  */
-public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource {
+public class TileIC2LVProvider extends TileProviderBase implements IEnergySource {
 
     private boolean firstRun;
 
@@ -40,7 +41,7 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
      */
     @Override
     public double getOfferedEnergy() {
-        if (genCore != null) {
+        if (getCore() != null) {
             int[] convertedPower = convertToEU();
             if (convertedPower != null)
                 return Math.min(EnergyNet.instance.getPowerFromTier(getSourceTier()), convertedPower[0]);
@@ -51,9 +52,10 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
 
     @Override
     public void drawEnergy(double v) {
-        if (genCore != null) {
+        if (getCore() != null) {
+            TileGeneratorCore core = (TileGeneratorCore) getCore();
             double convertedPower = convertFromEU(v);
-            genCore.extractEnergy(null, (int) Math.round(convertedPower), false);
+            core.extractEnergy(null, (int) Math.round(convertedPower), false);
             worldObj.markBlockForUpdate(coreLocation.x, coreLocation.y, coreLocation.z);
         }
     }
@@ -86,9 +88,10 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
     }
 
     private int[] convertToEU() {
-        if (genCore != null) {
-            int avail = (int) Math.round(genCore.getEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
-            int total = (int) Math.round(genCore.getMaxEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
+        if (getCore() != null) {
+            TileGeneratorCore core = (TileGeneratorCore) getCore();
+            int avail = (int) Math.round(core.getEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
+            int total = (int) Math.round(core.getMaxEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
             return new int[]{avail, total};
         }
         return null;
@@ -103,7 +106,7 @@ public class TileIC2LVProvider extends TileSupplierBase implements IEnergySource
      */
     @Override
     public void returnWailaHead(List<String> list) {
-        if (genCore != null) {
+        if (getCore() != null) {
             int[] power = convertToEU();
             if (power != null)
                 list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE +
