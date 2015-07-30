@@ -73,8 +73,8 @@ public class GuiGenerator extends GuiCoreBase<ContainerGenerator> {
             List<BaseComponent> gen = new ArrayList<>();
             gen.add(new GuiComponentText("Generation", 26, 6, 0xFFCC00));
             gen.add(new GuiComponentText("RF/t: ", 5, 23, 0xFFFFFF));
-            gen.add(new GuiComponentText(Long.toString(Math.round(ConfigRegistry.rfPower * (core.getValues().getMultiplicity() + 1) *
-                    (core.getValues().getSpeed() * -1))), 15, 33, 0x5CE62E));
+            gen.add(new GuiComponentText(Integer.toString(Math.max((int)Math.round(ConfigRegistry.rfPower * (core.getValues().getMultiplicity() + 1) *
+                    (core.getValues().getSpeed() * -1)), 1)), 15, 33, 0x5CE62E));
             gen.add(new GuiComponentText("Efficiency: ", 5, 48, 0xFFFFFF));
             gen.add(new GuiComponentText(String.format("%.2f", -1 * (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100)
                     != 0 ? -1 * (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100) : 0.00)  + "%", 15, 58, -1 *
