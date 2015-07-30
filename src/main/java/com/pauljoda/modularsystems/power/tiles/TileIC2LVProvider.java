@@ -41,7 +41,7 @@ public class TileIC2LVProvider extends TileProviderBase implements IEnergySource
      */
     @Override
     public double getOfferedEnergy() {
-        if (getCore() != null) {
+        if (getCore() instanceof TileGeneratorCore) {
             int[] convertedPower = convertToEU();
             if (convertedPower != null)
                 return Math.min(EnergyNet.instance.getPowerFromTier(getSourceTier()), convertedPower[0]);
@@ -52,7 +52,7 @@ public class TileIC2LVProvider extends TileProviderBase implements IEnergySource
 
     @Override
     public void drawEnergy(double v) {
-        if (getCore() != null) {
+        if (getCore() instanceof TileGeneratorCore) {
             TileGeneratorCore core = (TileGeneratorCore) getCore();
             double convertedPower = convertFromEU(v);
             core.extractEnergy(null, (int) Math.round(convertedPower), false);
@@ -88,7 +88,7 @@ public class TileIC2LVProvider extends TileProviderBase implements IEnergySource
     }
 
     private int[] convertToEU() {
-        if (getCore() != null) {
+        if (getCore() instanceof TileGeneratorCore) {
             TileGeneratorCore core = (TileGeneratorCore) getCore();
             int avail = (int) Math.round(core.getEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
             int total = (int) Math.round(core.getMaxEnergyStored(null) / ConfigRegistry.rfPower * ConfigRegistry.EUPower);
@@ -106,7 +106,7 @@ public class TileIC2LVProvider extends TileProviderBase implements IEnergySource
      */
     @Override
     public void returnWailaHead(List<String> list) {
-        if (getCore() != null) {
+        if (getCore() instanceof TileGeneratorCore) {
             int[] power = convertToEU();
             if (power != null)
                 list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE +

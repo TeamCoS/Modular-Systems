@@ -18,7 +18,7 @@ public class TileRFProvider extends TileProviderBase implements IEnergyProvider 
     @Override
     public void updateEntity() {
         super.updateEntity();
-        if (worldObj.isRemote || getCore() == null) return;
+        if (worldObj.isRemote || !(getCore() instanceof TileGeneratorCore)) return;
 
         TileGeneratorCore core = (TileGeneratorCore) getCore();
         
@@ -53,7 +53,7 @@ public class TileRFProvider extends TileProviderBase implements IEnergyProvider 
      */
     @Override
     public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-        if (getCore() != null) {
+        if (getCore() instanceof TileGeneratorCore) {
             TileGeneratorCore core = (TileGeneratorCore) getCore();
             return core.extractEnergy(from, maxExtract, simulate);
         }
@@ -63,7 +63,7 @@ public class TileRFProvider extends TileProviderBase implements IEnergyProvider 
 
     @Override
     public int getEnergyStored(ForgeDirection from) {
-        if (getCore() != null) {
+        if (getCore() instanceof TileGeneratorCore) {
             TileGeneratorCore core = (TileGeneratorCore) getCore();
             return core.getEnergyStored(from);
         }
@@ -73,7 +73,7 @@ public class TileRFProvider extends TileProviderBase implements IEnergyProvider 
 
     @Override
     public int getMaxEnergyStored(ForgeDirection from) {
-        if (getCore() != null) {
+        if (getCore() instanceof TileGeneratorCore) {
             TileGeneratorCore core = (TileGeneratorCore) getCore();
             return core.getMaxEnergyStored(from);
         }
@@ -90,7 +90,7 @@ public class TileRFProvider extends TileProviderBase implements IEnergyProvider 
      */
     @Override
     public void returnWailaHead(List<String> list) {
-        if (getCore() != null) {
+        if (getCore() instanceof TileGeneratorCore) {
             TileGeneratorCore core = (TileGeneratorCore) getCore();
             list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + core.getEnergyStored(null)
                     + "/" + core.getMaxEnergyStored(null) + " RF");
@@ -99,7 +99,7 @@ public class TileRFProvider extends TileProviderBase implements IEnergyProvider 
 
     @Override
     public void returnWailaBody(List<String> list) {
-        if (getCore() != null) {
+        if (getCore() instanceof TileGeneratorCore) {
             TileGeneratorCore core = (TileGeneratorCore) getCore();
             list.add(GuiHelper.GuiColor.YELLOW + "Max RF/t Out: " + GuiHelper.GuiColor.RED + core.MAX_RFTICK_OUT);
         }
