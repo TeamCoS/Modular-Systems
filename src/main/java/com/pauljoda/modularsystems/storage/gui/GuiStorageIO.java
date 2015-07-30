@@ -1,12 +1,21 @@
 package com.pauljoda.modularsystems.storage.gui;
 
+import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.storage.container.ContainerStorageIO;
 import com.pauljoda.modularsystems.storage.tiles.TileStorageIO;
 import com.teambr.bookshelf.client.gui.GuiBase;
+import com.teambr.bookshelf.client.gui.component.BaseComponent;
+import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentCheckBox;
+import com.teambr.bookshelf.client.gui.component.display.GuiComponentText;
+import com.teambr.bookshelf.client.gui.component.display.GuiTabCollection;
 import com.teambr.bookshelf.manager.PacketManager;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,13 +33,21 @@ public class GuiStorageIO extends GuiBase<ContainerStorageIO> {
     public GuiStorageIO(ContainerStorageIO container, TileStorageIO tile) {
         super(container, 175, 180, "inventory.storageIO.title");
         io = tile;
-        addComponents();
+        addRightTabs(rightTabs);
     }
 
     @Override
     public void addComponents() {
-        if(io != null) {
-            components.add(new GuiComponentCheckBox(8, 15, "inventory.storageIO.canImport", io.isCanImport()) {
+        components.add(new GuiComponentText("inventory.storageIO.import", 8, 25));
+        components.add(new GuiComponentText("inventory.storageIO.export", 8, 68));
+    }
+
+    @Override
+    public void addRightTabs(GuiTabCollection tabs) {
+        if(this.io != null) {
+            List<BaseComponent> component = new ArrayList<>();
+            component.add(new GuiComponentText("inventory.storageIO.importControls", 26, 6, 0xFFCC00));
+            component.add(new GuiComponentCheckBox(6, 30, "inventory.storageIO.canImport", io.isCanImport()) {
                 @Override
                 public void setValue(boolean bool) {
                     io.setCanImport(bool);
@@ -42,10 +59,10 @@ public class GuiStorageIO extends GuiBase<ContainerStorageIO> {
                     return Collections.singletonList(StatCollector.translateToLocal("inventory.storageIO.canImport.tip"));
                 }
             });
-            components.add(new GuiComponentCheckBox(8, 25, "inventory.storageIO.importDamage", io.isImportDamage()) {
+            component.add(new GuiComponentCheckBox(6, 40, "inventory.storageIO.importDamage", io.isImportDamage()) {
                 @Override
                 public void setValue(boolean bool) {
-                    io.setImportDamage(true);
+                    io.setImportDamage(bool);
                     PacketManager.updateTileWithClientInfo(io);
                 }
 
@@ -54,7 +71,19 @@ public class GuiStorageIO extends GuiBase<ContainerStorageIO> {
                     return Collections.singletonList(StatCollector.translateToLocal("inventory.storageIO.importDamage.tip"));
                 }
             });
-            components.add(new GuiComponentCheckBox(75, 15, "inventory.storageIO.importOre", io.isImportOreDict()) {
+            component.add(new GuiComponentCheckBox(6, 50, "inventory.storageIO.importNBT", io.isImportNBT()) {
+                @Override
+                public void setValue(boolean bool) {
+                    io.setImportNBT(bool);
+                    PacketManager.updateTileWithClientInfo(io);
+                }
+
+                @Override
+                public List<String> getDynamicToolTip(int x, int y) {
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.storageIO.importNBT.tip"));
+                }
+            });
+            component.add(new GuiComponentCheckBox(6, 60, "inventory.storageIO.importOre", io.isImportOreDict()) {
                 @Override
                 public void setValue(boolean bool) {
                     io.setImportOreDict(bool);
@@ -66,8 +95,20 @@ public class GuiStorageIO extends GuiBase<ContainerStorageIO> {
                     return Collections.singletonList(StatCollector.translateToLocal("inventory.storageIO.importOre.tip"));
                 }
             });
+            component.add(new GuiComponentText("inventory.storageIO.listMode", 68, 30, 0x000000));
+            component.add(new GuiComponentButton(71, 40, 40, 20, io.whiteListImport() ? "inventory.storageIO.white" : "inventory.storageIO.black") {
+                @Override
+                public void doAction() {
+                    io.setWhiteListImport(!io.whiteListImport());
+                    this.setText(io.whiteListImport() ? StatCollector.translateToLocal("inventory.storageIO.white") : StatCollector.translateToLocal("inventory.storageIO.black"));
+                    PacketManager.updateTileWithClientInfo(io);
+                }
+            });
+            tabs.addTab(component, 120, 85, new Color(61, 55, 255), new ItemStack(BlockManager.storageCore));
+            component = new ArrayList<>();
 
-            components.add(new GuiComponentCheckBox(8, 58, "inventory.storageIO.canExport", io.isCanExport()) {
+            component.add(new GuiComponentText("inventory.storageIO.exportControls", 26, 6, 0xFFCC00));
+            component.add(new GuiComponentCheckBox(6, 30, "inventory.storageIO.canExport", io.isCanExport()) {
                 @Override
                 public void setValue(boolean bool) {
                     io.setCanExport(bool);
@@ -79,7 +120,7 @@ public class GuiStorageIO extends GuiBase<ContainerStorageIO> {
                     return Collections.singletonList(StatCollector.translateToLocal("inventory.storageIO.canExport.tip"));
                 }
             });
-            components.add(new GuiComponentCheckBox(8, 68, "inventory.storageIO.exportDamage", io.isExportDamage()) {
+            component.add(new GuiComponentCheckBox(6, 40, "inventory.storageIO.exportDamage", io.isExportDamage()) {
                 @Override
                 public void setValue(boolean bool) {
                     io.setExportDamage(bool);
@@ -91,7 +132,19 @@ public class GuiStorageIO extends GuiBase<ContainerStorageIO> {
                     return Collections.singletonList(StatCollector.translateToLocal("inventory.storageIO.exportDamage.tip"));
                 }
             });
-            components.add(new GuiComponentCheckBox(75, 58, "inventory.storageIO.exportOre", io.isExportOreDict()) {
+            component.add(new GuiComponentCheckBox(6, 50, "inventory.storageIO.exportNBT", io.isExportNBT()) {
+                @Override
+                public void setValue(boolean bool) {
+                    io.setExportNBT(bool);
+                    PacketManager.updateTileWithClientInfo(io);
+                }
+
+                @Override
+                public List<String> getDynamicToolTip(int x, int y) {
+                    return Collections.singletonList(StatCollector.translateToLocal("inventory.storageIO.exportNBT.tip"));
+                }
+            });
+            component.add(new GuiComponentCheckBox(6, 60, "inventory.storageIO.exportOre", io.isExportOreDict()) {
                 @Override
                 public void setValue(boolean bool) {
                     io.setExportOreDict(bool);
@@ -103,6 +156,16 @@ public class GuiStorageIO extends GuiBase<ContainerStorageIO> {
                     return Collections.singletonList(StatCollector.translateToLocal("inventory.storageIO.exportOre.tip"));
                 }
             });
+            component.add(new GuiComponentText("inventory.storageIO.listMode", 68, 30, 0x000000));
+            component.add(new GuiComponentButton(71, 40, 40, 20, io.whiteListExport() ? "inventory.storageIO.white" : "inventory.storageIO.black") {
+                @Override
+                public void doAction() {
+                    io.setWhiteListExport(!io.whiteListExport());
+                    this.setText(io.whiteListExport() ? StatCollector.translateToLocal("inventory.storageIO.white") : StatCollector.translateToLocal("inventory.storageIO.black"));
+                    PacketManager.updateTileWithClientInfo(io);
+                }
+            });
+            tabs.addTab(component, 120, 80, new Color(255, 86, 49), new ItemStack(Blocks.piston));
         }
     }
 }

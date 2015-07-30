@@ -121,5 +121,9 @@ public class RecipeManager {
         //Smashing Expansion
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSmashing, 1),
                 BlockManager.storageBasic, Items.iron_pickaxe);
+
+        //IO Expansion
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageIO, 1),
+                BlockManager.storageBasic, Blocks.hopper, Blocks.piston, Items.book);
     }
 }
