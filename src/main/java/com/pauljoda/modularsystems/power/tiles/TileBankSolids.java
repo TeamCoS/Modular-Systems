@@ -15,21 +15,25 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class TileSolidsBank extends TileBankBase implements IOpensGui, ISidedInventory {
+public class TileBankSolids extends TileBankBase implements IOpensGui, ISidedInventory {
 
     private InventoryTile inventory;
     private int cooldown;
 
-    public TileSolidsBank() {
+    public TileBankSolids() {
         inventory = new InventoryTile(27);
         cooldown = 0;
     }
 
     @Override
-    public int getPowerLevelScaled(int scale) {
+    public double getPowerLevelScaled(int scale) {
         return getFuelCount() * scale / inventory.getSizeInventory();
     }
 
+    /**
+     * Used to count how many slots have things in them
+     * @return How many slots have an item
+     */
     private int getFuelCount() {
         int count = 0;
         for (int i = 0; i < inventory.getSizeInventory(); i++) {
@@ -39,6 +43,9 @@ public class TileSolidsBank extends TileBankBase implements IOpensGui, ISidedInv
         return count;
     }
 
+    /**
+     * Helper Method to consume solid fuels
+     */
     private int consumeFuel(boolean simulate) {
         for (int i = 0; i < inventory.getSizeInventory(); i++) {
             if (inventory.getStackInSlot(i) != null && inventory.getStackInSlot(i).stackSize > 0 &&
@@ -54,9 +61,10 @@ public class TileSolidsBank extends TileBankBase implements IOpensGui, ISidedInv
         return 0;
     }
 
-    /*
-     * Fuel Provider Functions
-     */
+    /*******************************************************************************************************************
+     ***************************************** Fuel Provider Functions *************************************************
+     *******************************************************************************************************************/
+
 
     @Override
     public boolean canProvide() {
@@ -73,43 +81,15 @@ public class TileSolidsBank extends TileBankBase implements IOpensGui, ISidedInv
         return consumeFuel(false);
     }
 
-    /*
-     * Tile Entity Functions
-     */
-
     @Override
-    public void readFromNBT (NBTTagCompound tags)
-    {
-        super.readFromNBT(tags);
-        inventory.readFromNBT(tags);
-        cooldown = tags.getInteger("cooldown");
+    public FuelProviderType type() {
+        return FuelProviderType.ITEM;
     }
 
-    @Override
-    public void writeToNBT (NBTTagCompound tags)
-    {
-        super.writeToNBT(tags);
-        inventory.writeToNBT(tags);
-        tags.setInteger("cooldown", cooldown);
-    }
+    /*******************************************************************************************************************
+     *************************************** Inventory Methods *********************************************************
+     *******************************************************************************************************************/
 
-    /*
-     * Gui Functions
-     */
-
-    @Override
-    public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new ContainerSolidsBank(entityPlayer.inventory, this);
-    }
-
-    @Override
-    public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new GuiSolidsBank(entityPlayer.inventory, this);
-    }
-
-    /*
-     * Inventory Functions
-     */
     @Override
     public int getSizeInventory() {
         return inventory.getSizeInventory();
@@ -176,9 +156,44 @@ public class TileSolidsBank extends TileBankBase implements IOpensGui, ISidedInv
         return sides;
     }
 
-    /*
-     * Waila Functions
-     */
+    /*******************************************************************************************************************
+     ******************************************** Tile Methods *********************************************************
+     *******************************************************************************************************************/
+
+    @Override
+    public void readFromNBT (NBTTagCompound tags)
+    {
+        super.readFromNBT(tags);
+        inventory.readFromNBT(tags);
+        cooldown = tags.getInteger("cooldown");
+    }
+
+    @Override
+    public void writeToNBT (NBTTagCompound tags)
+    {
+        super.writeToNBT(tags);
+        inventory.writeToNBT(tags);
+        tags.setInteger("cooldown", cooldown);
+    }
+
+    /*******************************************************************************************************************
+     ****************************************** IOpensGui Methods ******************************************************
+     *******************************************************************************************************************/
+
+    @Override
+    public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
+        return new ContainerSolidsBank(entityPlayer.inventory, this);
+    }
+
+    @Override
+    public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
+        return new GuiSolidsBank(entityPlayer.inventory, this);
+    }
+
+    /*******************************************************************************************************************
+     ************************************************ Waila ************************************************************
+     *******************************************************************************************************************/
+
     @Override
     public void returnWailaHead(List<String> list) {
         list.add(GuiHelper.GuiColor.YELLOW + "Filled Fuel Slots: " + GuiHelper.GuiColor.WHITE + getFuelCount() + "/" + inventory.getSizeInventory());

@@ -6,7 +6,6 @@ import com.teambr.bookshelf.api.waila.IWaila;
 import com.teambr.bookshelf.helpers.GuiHelper;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,16 +14,28 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+/**
+ * The base tile for all fuel banks
+ */
 public abstract class TileBankBase extends DummyTile implements FuelProvider, IWaila {
 
+    //Current Priority
     protected int priority;
 
     public TileBankBase() {
         priority = 0;
     }
 
-    public abstract int getPowerLevelScaled(int scale);
+    /**
+     * Used to scale the current power level
+     * @param scale The scale to move to
+     * @return A number from 0 - {@param scale} for current level
+     */
+    public abstract double getPowerLevelScaled(int scale);
 
+    /*******************************************************************************************************************
+     ******************************************* Tile Methods **********************************************************
+     *******************************************************************************************************************/
     @Override
     public void readFromNBT (NBTTagCompound tags) {
         super.readFromNBT(tags);
@@ -37,66 +48,22 @@ public abstract class TileBankBase extends DummyTile implements FuelProvider, IW
         tags.setInteger("priority", priority);
     }
 
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        return this != null;
-    }
-
-    /*
-     * Fuel Provider Functions
-     */
-    @Override
-    public boolean canProvide() {
-        return false;
-    }
-
-    @Override
-    public double fuelProvided() {
-        return 0;
-    }
-
-    @Override
-    public double consume() {
-        return 0;
-    }
+    /*******************************************************************************************************************
+     ***************************************** Fuel Provider Functions *************************************************
+     *******************************************************************************************************************/
 
     @Override
     public int getPriority() {
         return priority;
     }
 
-    @Override
-    public FuelProviderType type() {
-        return FuelProviderType.POWER;
-    }
-
     public void setPriority(int value) {
         priority = value;
     }
 
-    /*
-     * Waila Info
-     */
-
-    @Override
-    public void returnWailaHead(List<String> list) {
-
-    }
-
-    @Override
-    public void returnWailaBody(List<String> list) {
-
-    }
-
-    @Override
-    public void returnWailaTail(List<String> list) {
-        list.add(GuiHelper.GuiColor.ORANGE + GuiHelper.GuiTextFormat.ITALICS.toString() + "Shift+Click to access GUI");
-    }
-
-    @Override
-    public ItemStack returnWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return null;
-    }
+    /*******************************************************************************************************************
+     ************************************************ Waila ************************************************************
+     *******************************************************************************************************************/
 
     @Override
     public NBTTagCompound returnNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
@@ -106,4 +73,18 @@ public abstract class TileBankBase extends DummyTile implements FuelProvider, IW
         }
         return tag;
     }
+
+    @Override
+    public void returnWailaTail(List<String> list) {
+        list.add(GuiHelper.GuiColor.ORANGE + GuiHelper.GuiTextFormat.ITALICS.toString() + "Shift+Click to access GUI");
+    }
+
+    @Override
+    public void returnWailaHead(List<String> list) {}
+
+    @Override
+    public void returnWailaBody(List<String> list) {}
+
+    @Override
+    public ItemStack returnWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) { return null; }
 }

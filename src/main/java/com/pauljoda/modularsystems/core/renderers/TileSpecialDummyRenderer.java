@@ -31,31 +31,15 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        //Outer bar background
-        RenderUtils.setColor(new Color(57, 57, 57));
-        drawLevel(6 / 16F, 3 / 16F, -0.002F, 10 / 16F, 13 / 16F, -0.002F, tess);
-        drawLevel(-0.002F, 3 / 16F, 6 / 16F, -0.002F, 13 / 16F, 10 / 16F, tess);
-        drawLevel(1.002F, 3 / 16F, 6 / 16F, 1.002F, 13 / 16F, 10 / 16F, tess);
-        drawLevel(6 / 16F, 3 / 16F, 1.002F, 10 / 16F, 13 / 16F, 1.002F, tess);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        float level = (float) Math.max(3 / 16F, (((TileBankBase)tile).getPowerLevelScaled(8) + 4) / 16F);
 
-        //Inner Background
-        RenderUtils.setColor(new Color(12, 12, 12));
-        drawLevel(7 / 16F, 4 / 16F, -0.0025F, 9 / 16F,  12 / 16F,  -0.0025F, tess);
-        drawLevel(-0.0025F, 4 / 16F, 7 / 16F,  -0.0025F,  12 / 16F, 9 / 16F, tess);
-        drawLevel( 1.0025F, 4 / 16F, 7 / 16F,   1.0025F,  12 / 16F, 9 / 16F, tess);
-        drawLevel(7 / 16F, 4 / 16F,  1.0025F, 9 / 16F,  12 / 16F,   1.0025F, tess);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-        float level = Math.max(3 / 16F, (((TileBankBase)tile).getPowerLevelScaled(8) + 4) / 16F);
-
-        if(tile instanceof TileLiquidsBank) {
-            TileLiquidsBank fluidTile = (TileLiquidsBank)tile;
+        if(tile instanceof TileBankLiquid) {
+            TileBankLiquid fluidTile = (TileBankLiquid)tile;
             FluidTankInfo info = fluidTile.getTankInfo(ForgeDirection.UNKNOWN)[0];
             if(info != null && info.fluid != null) {
                 IIcon fluidTexture = info.fluid.getFluid().getIcon();
                 RenderUtils.bindMinecraftBlockSheet();
-                float level2 = Math.max(3, (((TileBankBase) tile).getPowerLevelScaled(12) + 4));
+                float level2 = (float) Math.max(3, (((TileBankBase) tile).getPowerLevelScaled(12) + 4));
                 float difference = (fluidTexture.getMaxU() - fluidTexture.getMinU()) / 16;
                 float differenceV = (fluidTexture.getMaxV() - fluidTexture.getMinV()) / 16;
                 drawLevel(7 / 16F, 4 / 16F, -0.003F, 9 / 16F, level, -0.003F, fluidTexture.getMinU() + (4 * difference), fluidTexture.getMaxV() - (4 * differenceV), fluidTexture.getMinU() + (9 * difference), fluidTexture.getMaxV() - (level2 * differenceV), tess);

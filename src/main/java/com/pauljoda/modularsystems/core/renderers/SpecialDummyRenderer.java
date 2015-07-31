@@ -8,7 +8,9 @@ import com.teambr.bookshelf.util.RenderUtils;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
@@ -24,7 +26,37 @@ public class SpecialDummyRenderer implements ISimpleBlockRenderingHandler {
         if (block .getUnlocalizedName().equalsIgnoreCase(BlockManager.supplierRF.getUnlocalizedName()) ||
                 block .getUnlocalizedName().equalsIgnoreCase(BlockManager.supplierIC2.getUnlocalizedName()))
             RenderUtils.render3DInventory((BaseBlock) block, ((BlockPower) block).providerIcon, renderer);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        else {
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+            Tessellator tessellator = Tessellator.instance;
+            IIcon icon = ((BlockPower) block).bankIcon;
+            block.setBlockBoundsForItemRender();
+            GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(0.0F, 0.0F, -1F);
+            renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, icon);
+            tessellator.draw();
+
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(0.0F, 0.0F, 1.0F);
+            renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, icon);
+            tessellator.draw();
+
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(-1F, 0.0F, 0.0F);
+            renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, icon);
+            tessellator.draw();
+
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(1.0F, 0.0F, 0.0F);
+            renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, icon);
+            tessellator.draw();
+
+            GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+        }
+
         if(((BaseBlock)block).getBlockTextures().getOverlay() != null)
             RenderUtils.render3DInventory((BaseBlock) block, ((BaseBlock)block).getBlockTextures().getOverlay(), renderer);
     }
@@ -39,6 +71,13 @@ public class SpecialDummyRenderer implements ISimpleBlockRenderingHandler {
             if (block .getUnlocalizedName().equalsIgnoreCase(BlockManager.supplierRF.getUnlocalizedName()) ||
                     block .getUnlocalizedName().equalsIgnoreCase(BlockManager.supplierIC2.getUnlocalizedName()))
                 renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BlockPower) block).providerIcon);
+            else {
+                Tessellator.instance.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+                renderer.renderFaceXNeg(block, x, y, z, ((BlockPower) block).bankIcon);
+                renderer.renderFaceXPos(block, x, y, z, ((BlockPower) block).bankIcon);
+                renderer.renderFaceZNeg(block, x, y, z, ((BlockPower) block).bankIcon);
+                renderer.renderFaceZPos(block, x, y, z, ((BlockPower) block).bankIcon);
+            }
             return true;
         } else if (ClientProxy.renderPass == 1) {
             renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));

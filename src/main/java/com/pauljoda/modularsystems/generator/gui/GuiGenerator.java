@@ -81,9 +81,29 @@ public class GuiGenerator extends GuiCoreBase<ContainerGenerator> {
                     (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100) > 0 ? 0x5CE62E : -1 *
                     (100 - ((1600 + core.getValues().getEfficiency()) / 1600) * 100) == 0 ? 0x000000 : 0xE62E00));
             gen.add(new GuiComponentText("RF/T Out:", 5, 73, 0xFFFFFF));
-            gen.add(new GuiComponentText(Integer.toString(core.MAX_RFTICK_OUT), 15, 83, 0x00FF00));
-            tabs.addTab(gen, 95, 100, new Color(150, 112, 50), new ItemStack(Items.blaze_powder));
+            gen.add(new GuiComponentText(Integer.toString(core.getCurrentOutputFromTiles()) + " RF", 15, 83, 0x00FF00) {
+                        protected long time = System.nanoTime();
 
+                        @Override
+                        public void render(int guiLeft, int guiTop) {
+                            if (Math.abs(System.nanoTime() - time) > 1000000000) {
+                                this.text = Integer.toString(core.getCurrentOutputFromTiles()) + " RF";
+                                time = System.nanoTime();
+                            }
+                            super.render(guiLeft, guiTop);
+                        }
+                    }
+
+            );
+            tabs.addTab(gen, 95, 100, new
+
+                            Color(150, 112, 50),
+
+                    new
+
+                            ItemStack(Items.blaze_powder)
+
+            );
         }
     }
 }

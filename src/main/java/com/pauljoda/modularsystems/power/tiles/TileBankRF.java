@@ -15,22 +15,23 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 
-public class TileRFBank extends TileBankBase implements IOpensGui, IEnergyHandler {
+public class TileBankRF extends TileBankBase implements IOpensGui, IEnergyHandler {
 
     private EnergyStorage energy;
 
-    public TileRFBank() {
+    public TileBankRF() {
         energy = new EnergyStorage(10000);
     }
 
     @Override
-    public int getPowerLevelScaled(int scale) {
+    public double getPowerLevelScaled(int scale) {
         return energy.getEnergyStored() * scale / energy.getMaxEnergyStored();
     }
 
-    /*
-     * Fuel Provider Functions
-     */
+    /*******************************************************************************************************************
+     ***************************************** Fuel Provider Functions *************************************************
+     *******************************************************************************************************************/
+
     @Override
     public boolean canProvide() {
         return energy.getEnergyStored() > 0;
@@ -49,9 +50,14 @@ public class TileRFBank extends TileBankBase implements IOpensGui, IEnergyHandle
         return (actual / (ConfigRegistry.rfPower * 200)) * 200;
     }
 
-    /*
-     * RF Functions
-     */
+    @Override
+    public FuelProviderType type() {
+        return FuelProviderType.POWER;
+    }
+
+    /*******************************************************************************************************************
+     ****************************************** Energy Methods *********************************************************
+     *******************************************************************************************************************/
 
     @Override
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
@@ -83,23 +89,10 @@ public class TileRFBank extends TileBankBase implements IOpensGui, IEnergyHandle
         return true;
     }
 
-    /*
-     * Gui Functions
-     */
+    /*******************************************************************************************************************
+     ******************************************** Tile Methods *********************************************************
+     *******************************************************************************************************************/
 
-    @Override
-    public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new ContainerGeneric();
-    }
-
-    @Override
-    public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return new GuiRFBank(this);
-    }
-
-    /*
-     * Tile Entity Functions
-     */
     @Override
     public void readFromNBT (NBTTagCompound tags) {
         super.readFromNBT(tags);
@@ -112,9 +105,24 @@ public class TileRFBank extends TileBankBase implements IOpensGui, IEnergyHandle
         energy.writeToNBT(tags);
     }
 
-    /*
-     * Waila Functions
-     */
+    /*******************************************************************************************************************
+     ****************************************** IOpensGui Methods ******************************************************
+     *******************************************************************************************************************/
+
+    @Override
+    public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
+        return new ContainerGeneric();
+    }
+
+    @Override
+    public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
+        return new GuiRFBank(this);
+    }
+
+    /*******************************************************************************************************************
+     ************************************************ Waila ************************************************************
+     *******************************************************************************************************************/
+
     @Override
     public void returnWailaHead(List<String> list) {
         list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored());

@@ -15,7 +15,8 @@ import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.generator.blocks.BlockGeneratorCore;
 import com.pauljoda.modularsystems.generator.container.ContainerGenerator;
 import com.pauljoda.modularsystems.generator.gui.GuiGenerator;
-import com.pauljoda.modularsystems.power.tiles.TileRFBank;
+import com.pauljoda.modularsystems.power.tiles.TileBankRF;
+import com.pauljoda.modularsystems.power.tiles.TileProviderBase;
 import com.teambr.bookshelf.collections.Location;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.BlockHelper;
@@ -42,6 +43,24 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
 
     public TileGeneratorCore() {
         energy = new EnergyStorage(1000000);
+    }
+
+    /**
+     * Used to get how much all providers are outputting
+     * @return How many things are being output
+     */
+    public int getCurrentOutputFromTiles() {
+        if(corners != null) {
+            int currentRF = 0;
+            for(Location loc : corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true)) {
+                if(worldObj.getTileEntity(loc.x, loc.y, loc.z) instanceof TileProviderBase) {
+                    TileProviderBase tile = (TileProviderBase) worldObj.getTileEntity(loc.x, loc.y, loc.z);
+                    currentRF += tile.getCurrentOutput();
+                }
+            }
+            return currentRF;
+        }
+        return 0;
     }
 
     @Override
@@ -80,10 +99,15 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
                     int actual = item.receiveEnergy(values.getInput(), MAX_RFTICK_OUT, true);
                     int taken = energy.extractEnergy(actual, false);
                     item.receiveEnergy(values.getInput(), taken, false);
+                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 }
             }
             if (values.getOutput() != null && values.getOutput().getItem() instanceof IEnergyContainerItem) {
-
+                IEnergyContainerItem item = (IEnergyContainerItem) values.getOutput().getItem();
+                if(item.getEnergyStored(values.getOutput()) > 0 && energy.getEnergyStored() < energy.getMaxEnergyStored()) {
+                    this.energy.receiveEnergy(item.extractEnergy(values.getOutput(), MAX_RFTICK_OUT, false), false);
+                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                }
             }
 
             if (didWork) {
@@ -122,7 +146,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
         FuelProvider provider;
         for (Location coord : coords) {
             TileEntity te = worldObj.getTileEntity(coord.x, coord.y, coord.z);
-            if (te != null && !(te instanceof TileRFBank)) {
+            if (te != null && !(te instanceof TileBankRF)) {
                 if (te instanceof FuelProvider && (provider = (FuelProvider) te).canProvide()) {
                     providers.add(provider);
                 }
@@ -188,12 +212,16 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
 
     @Override
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-        return energy.receiveEnergy(maxReceive, simulate);
+        int i = energy.receiveEnergy(maxReceive, simulate);
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        return i;
     }
 
     @Override
     public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-        return energy.extractEnergy(maxExtract, simulate);
+        int i = energy.extractEnergy(maxExtract, simulate);
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        return i;
     }
 
     @Override

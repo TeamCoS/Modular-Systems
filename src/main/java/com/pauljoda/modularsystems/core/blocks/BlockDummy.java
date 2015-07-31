@@ -36,7 +36,7 @@ public class BlockDummy extends BaseBlock {
      * cores
      */
     @SideOnly(Side.CLIENT)
-    protected IIcon furnaceOverlay, crusherOverlay;
+    public IIcon furnaceOverlay, crusherOverlay;
 
     /**
      * Creates the dummy block

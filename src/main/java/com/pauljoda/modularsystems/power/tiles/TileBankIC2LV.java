@@ -20,34 +20,24 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 
-public class TileIC2Bank extends TileBankBase implements IOpensGui, IEnergySink, IEnergyHandler {
+public class TileBankIC2LV extends TileBankBase implements IOpensGui, IEnergySink, IEnergyHandler {
 
     private EnergyStorage energy;
-
     private boolean firstRun;
 
-    public TileIC2Bank() {
+    public TileBankIC2LV() {
         energy = new EnergyStorage(32000);
         firstRun = true;
     }
 
     @Override
-    public void updateEntity() {
-        if (worldObj.isRemote) return;
-        if (firstRun) {
-            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-            firstRun = false;
-        }
-    }
-
-    @Override
-    public int getPowerLevelScaled(int scale) {
+    public double getPowerLevelScaled(int scale) {
         return energy.getEnergyStored() * scale / energy.getMaxEnergyStored();
     }
 
-    /*
-     * Fuel Provider Functions
-     */
+    /*******************************************************************************************************************
+     ***************************************** Fuel Provider Functions *************************************************
+     *******************************************************************************************************************/
 
     @Override
     public boolean canProvide() {
@@ -67,27 +57,19 @@ public class TileIC2Bank extends TileBankBase implements IOpensGui, IEnergySink,
         return (actual / (ConfigRegistry.EUPower * 200)) * 200;
     }
 
-    /*
-     * GUI Functions
-     */
     @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        return new ContainerGeneric();
+    public FuelProviderType type() {
+        return FuelProviderType.POWER;
     }
 
-    @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        return new GuiEUBank(this);
-    }
+    /*******************************************************************************************************************
+     *************************************** IC2 EnergyNet Methods *****************************************************
+     *******************************************************************************************************************/
 
-    /*
-     * IC2 EnergyNet
-     */
     @Override
     public double getDemandedEnergy() {
         if (getCore() != null)
             return (double) energy.getMaxEnergyStored() - energy.getEnergyStored();
-
         return 0;
     }
 
@@ -110,9 +92,9 @@ public class TileIC2Bank extends TileBankBase implements IOpensGui, IEnergySink,
         return true;
     }
 
-    /*
-     * Energy Functions
-     */
+    /*******************************************************************************************************************
+     ****************************************** Energy Methods *********************************************************
+     *******************************************************************************************************************/
 
     @Override
     public int receiveEnergy(ForgeDirection forgeDirection, int i, boolean b) {
@@ -139,23 +121,31 @@ public class TileIC2Bank extends TileBankBase implements IOpensGui, IEnergySink,
         return false;
     }
 
-    /*
-     * Tile Entity Functions
-     */
+    /*******************************************************************************************************************
+     ******************************************** Tile Methods *********************************************************
+     *******************************************************************************************************************/
+
     @Override
-    public void onChunkUnload()
-    {
+    public void onChunkUnload() {
         if (!worldObj.isRemote)
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         super.onChunkUnload();
     }
 
     @Override
-    public void invalidate()
-    {
+    public void invalidate() {
         if (!worldObj.isRemote)
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         super.invalidate();
+    }
+
+    @Override
+    public void updateEntity() {
+        if (worldObj.isRemote) return;
+        if (firstRun) {
+            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+            firstRun = false;
+        }
     }
 
     @Override
@@ -170,9 +160,24 @@ public class TileIC2Bank extends TileBankBase implements IOpensGui, IEnergySink,
         energy.writeToNBT(tags);
     }
 
-    /*
-     * Waila Functions
-     */
+    /*******************************************************************************************************************
+     ****************************************** IOpensGui Methods ******************************************************
+     *******************************************************************************************************************/
+
+    @Override
+    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        return new ContainerGeneric();
+    }
+
+    @Override
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        return new GuiEUBank(this);
+    }
+
+    /*******************************************************************************************************************
+     ************************************************ Waila ************************************************************
+     *******************************************************************************************************************/
+
     @Override
     public void returnWailaHead(List<String> list) {
         list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored());

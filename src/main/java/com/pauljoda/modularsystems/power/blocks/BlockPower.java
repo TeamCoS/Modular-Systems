@@ -9,6 +9,8 @@ import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.power.tiles.TileBankBase;
 import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.collections.BlockTextures;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -26,7 +28,8 @@ import java.util.Random;
 
 public class BlockPower extends BlockDummy {
     String name;
-    public IIcon providerIcon;
+    @SideOnly(Side.CLIENT)
+    public IIcon providerIcon, bankIcon;
 
     public BlockPower(String name, Class<? extends TileEntity> tile) {
         super(Material.rock, name, tile);
@@ -118,6 +121,7 @@ public class BlockPower extends BlockDummy {
         textures = new BlockTextures(iconRegister, "minecraft:iron_block");
         textures.setOverlay(iconRegister.registerIcon("minecraft:hopper_top"));
         this.providerIcon = iconRegister.registerIcon(Reference.MOD_ID + ":supplierCenter");
+        this.bankIcon = iconRegister.registerIcon(Reference.MOD_ID + ":bankCenter");
     }
 
     @Override

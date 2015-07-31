@@ -67,18 +67,18 @@ public class BlockManager {
 
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);
         registerBlock(io = new BlockDummyIO(Material.rock, Reference.MOD_ID + ":dummyIO", DummyIO.class), "dummyIO", DummyIO.class);
-        registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileRFBank.class), "powerRF", TileRFBank.class);
-        registerBlock(powerSolids = new BlockPower(Reference.MOD_ID + ":powerSolids", TileSolidsBank.class), "powerSolids", TileSolidsBank.class);
-        registerBlock(powerLiquids = new BlockPower(Reference.MOD_ID + ":powerLiquids", TileLiquidsBank.class), "powerLiquids", TileLiquidsBank.class);
+        registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileBankRF.class), "powerRF", TileBankRF.class);
+        registerBlock(powerSolids = new BlockPower(Reference.MOD_ID + ":powerSolids", TileBankSolids.class), "powerSolids", TileBankSolids.class);
+        registerBlock(powerLiquids = new BlockPower(Reference.MOD_ID + ":powerLiquids", TileBankLiquid.class), "powerLiquids", TileBankLiquid.class);
 
         if (Loader.isModLoaded("IC2"))
-            registerBlock(powerIC2 = new BlockPower(Reference.MOD_ID + ":powerIC2", TileIC2Bank.class), "powerIC2", TileIC2Bank.class);
+            registerBlock(powerIC2 = new BlockPower(Reference.MOD_ID + ":powerIC2", TileBankIC2LV.class), "powerIC2", TileBankIC2LV.class);
         if (Loader.isModLoaded("Botania"))
-            registerBlock(powerMana = new BlockPower(Reference.MOD_ID + ":powerMana", TileManaBank.class), "powerMana", TileManaBank.class);
+            registerBlock(powerMana = new BlockPower(Reference.MOD_ID + ":powerMana", TileBankMana.class), "powerMana", TileBankMana.class);
 
-        registerBlock(supplierRF = new BlockPower(Reference.MOD_ID + ":supplierRF", TileRFProvider.class), "supplierRF", TileRFProvider.class);
+        registerBlock(supplierRF = new BlockPower(Reference.MOD_ID + ":supplierRF", TileProviderRF.class), "supplierRF", TileProviderRF.class);
         if (Loader.isModLoaded("IC2"))
-            registerBlock(supplierIC2 = new BlockPower(Reference.MOD_ID + ":supplierIC2", TileIC2LVProvider.class), "supplierIC2", TileIC2LVProvider.class);
+            registerBlock(supplierIC2 = new BlockPower(Reference.MOD_ID + ":supplierIC2", TileProviderIC2LV.class), "supplierIC2", TileProviderIC2LV.class);
     }
 
     /**

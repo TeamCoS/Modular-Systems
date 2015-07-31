@@ -205,6 +205,10 @@ public class DummyTile extends BaseTile implements ISidedInventory, IWaila {
         worldObj.func_147453_f(xCoord, yCoord, zCoord, this.blockType);
     }
 
+    /*******************************************************************************************************************
+     ************************************************ Waila ************************************************************
+     *******************************************************************************************************************/
+
     @Override
     public void returnWailaHead(List<String> tip) {
         if(getStoredBlock() != Blocks.air) {
