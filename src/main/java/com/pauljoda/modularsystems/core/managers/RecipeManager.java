@@ -32,6 +32,18 @@ public class RecipeManager {
                 "HDH",
                 " P ", 'P', Blocks.piston, 'H', Blocks.hopper, 'D', Blocks.dispenser);
 
+        //Redstone In
+        GameRegistry.addRecipe(new ItemStack(BlockManager.redstoneControlIn, 1),
+                " C ",
+                "RSR",
+                "   ", 'C', Items.comparator, 'R', Items.redstone, 'S', Blocks.redstone_torch);
+
+        //Redstone Out
+        GameRegistry.addRecipe(new ItemStack(BlockManager.redstoneControlOut, 1),
+                " C ",
+                "RSR",
+                " B ", 'C', Items.comparator, 'R', Items.redstone, 'S', Blocks.redstone_torch, 'B', Blocks.redstone_block);
+
         //Solid Fuel Bank
         GameRegistry.addRecipe(new ItemStack(BlockManager.powerSolids, 1),
                 "CIC",
