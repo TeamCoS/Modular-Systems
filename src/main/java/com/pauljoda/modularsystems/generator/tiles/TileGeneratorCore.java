@@ -65,7 +65,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
 
     @Override
     public void doWork() {
-        if (!worldObj.isRemote) {
+        if (!worldObj.isRemote && wellFormed) {
             boolean didWork = false;
             //Charge Bank
             if (this.values.getBurnTime() > 0) {
@@ -77,8 +77,8 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
             }
 
             //Get Power
-            if (values.getBurnTime() == 0 && ((energy.getEnergyStored() + checkRFCreation()) < energy.getMaxEnergyStored() ||
-                    (double) energy.getEnergyStored() / energy.getMaxEnergyStored() < 0.5)) {
+            if (values.getBurnTime() == 0 && ((energy.getEnergyStored() + checkRFCreation()) < energy.getMaxEnergyStored()||
+                    (double) energy.getEnergyStored() / energy.getMaxEnergyStored() < 0.5)  && !values.isPowered) {
                 //Check the structure to make sure we have the right stuff
                 if (corners == null)
                     corners = getCorners();
@@ -194,6 +194,11 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
     @Override
     protected Block getOnBlock() {
         return BlockManager.crusherCoreActive;
+    }
+
+    @Override
+    public int getRedstoneOutput() {
+        return (energy.getEnergyStored() * 16) / energy.getMaxEnergyStored();
     }
 
     @Override

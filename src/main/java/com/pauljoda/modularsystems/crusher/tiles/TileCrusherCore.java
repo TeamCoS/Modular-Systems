@@ -14,6 +14,7 @@ import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -57,6 +58,11 @@ public class TileCrusherCore extends AbstractCore implements IOpensGui {
     @Override
     protected Block getOnBlock() {
         return BlockManager.crusherCoreActive;
+    }
+
+    @Override
+    public int getRedstoneOutput() {
+        return Container.calcRedstoneFromInventory(this);
     }
 
     @Override

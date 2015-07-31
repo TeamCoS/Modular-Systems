@@ -14,6 +14,7 @@ import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.world.World;
@@ -58,6 +59,11 @@ public class TileEntityFurnaceCore extends AbstractCore implements IOpensGui, IW
     @Override
     protected Block getOnBlock() {
         return BlockManager.furnaceCoreActive;
+    }
+
+    @Override
+    public int getRedstoneOutput() {
+        return Container.calcRedstoneFromInventory(this);
     }
 
     @Override

@@ -13,6 +13,8 @@ public class StandardValues {
     public double efficiency = 0;
     public double multiplicity = 0;
 
+    public boolean isPowered = false;
+
     InventoryTile inventory;
 
     public StandardValues() {
@@ -243,6 +245,8 @@ public class StandardValues {
         setEfficiency(tagCompound.getDouble("Efficiency"));
         setMultiplicity(tagCompound.getDouble("Multiplicity"));
 
+        isPowered = tagCompound.getBoolean("IsPowered");
+
         inventory.readFromNBT(tagCompound);
     }
 
@@ -254,6 +258,8 @@ public class StandardValues {
         tagCompound.setDouble("Speed", getSpeed());
         tagCompound.setDouble("Efficiency", getEfficiency());
         tagCompound.setDouble("Multiplicity", getMultiplicity());
+
+        tagCompound.setBoolean("IsPowered", isPowered);
 
         inventory.writeToNBT(tagCompound);
     }

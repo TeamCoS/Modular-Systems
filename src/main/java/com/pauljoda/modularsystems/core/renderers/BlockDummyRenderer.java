@@ -19,6 +19,7 @@ public class BlockDummyRenderer implements ISimpleBlockRenderingHandler {
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
         RenderUtils.render3DInventory((BaseBlock) block, renderer);
+        RenderUtils.render3DInventory((BaseBlock)block, Blocks.hopper.getIcon(1, 0), renderer);
         if(((BaseBlock)block).getBlockTextures().getOverlay() != null)
             RenderUtils.render3DInventory((BaseBlock) block, ((BaseBlock)block).getBlockTextures().getOverlay(), renderer);
     }

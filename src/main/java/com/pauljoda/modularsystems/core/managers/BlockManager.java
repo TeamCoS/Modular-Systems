@@ -6,6 +6,7 @@ import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
 import com.pauljoda.modularsystems.core.tiles.DummyIO;
 import com.pauljoda.modularsystems.core.tiles.DummyRedstoneInput;
+import com.pauljoda.modularsystems.core.tiles.DummyRedstoneOutput;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.crusher.blocks.BlockCrusherCore;
 import com.pauljoda.modularsystems.crusher.tiles.TileCrusherCore;
@@ -70,7 +71,7 @@ public class BlockManager {
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);
         registerBlock(io = new BlockDummyIO(Material.rock, Reference.MOD_ID + ":dummyIO", DummyIO.class), "dummyIO", DummyIO.class);
         registerBlock(redstoneControlIn = new BlockRedstoneControl(Material.rock, Reference.MOD_ID + ":redstoneIn", DummyRedstoneInput.class), "redstoneIn", DummyRedstoneInput.class);
-        registerBlock(redstoneControlOut = new BlockRedstoneControl(Material.rock, Reference.MOD_ID + ":redstoneOut", DummyRedstoneInput.class), "redstoneOut", DummyRedstoneInput.class);
+        registerBlock(redstoneControlOut = new BlockRedstoneControl(Material.rock, Reference.MOD_ID + ":redstoneOut", DummyRedstoneOutput.class), "redstoneOut", DummyRedstoneOutput.class);
         registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileBankRF.class), "powerRF", TileBankRF.class);
         registerBlock(powerSolids = new BlockPower(Reference.MOD_ID + ":powerSolids", TileBankSolids.class), "powerSolids", TileBankSolids.class);
         registerBlock(powerLiquids = new BlockPower(Reference.MOD_ID + ":powerLiquids", TileBankLiquid.class), "powerLiquids", TileBankLiquid.class);

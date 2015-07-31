@@ -83,6 +83,18 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
      */
     protected abstract Block getOnBlock();
 
+    /**
+     * Used to output the redstone single from this structure
+     *
+     * Use a range from 0 - 16.
+     *
+     * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
+     * 16 is usually the flip side of that. Output 16 when it is totally full and not less
+     *
+     * @return int range 0 - 16
+     */
+    public abstract int getRedstoneOutput();
+
 
     /*******************************************************************************************************************
      *******************************************  Multiblock Methods  **************************************************
@@ -195,7 +207,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
 
             DummyTile dummy = (DummyTile)worldObj.getTileEntity(loc.x, loc.y, loc.z);
             int meta = dummy.getMetadata();
-            if(dummy instanceof FuelProvider || dummy instanceof DummyIO || dummy instanceof TileProviderBase) {
+            if(dummy instanceof FuelProvider || dummy instanceof DummyIO || dummy instanceof TileProviderBase || dummy instanceof DummyRedstoneOutput) { //Since most dummies just store the block, there are cases where we don't want to replace what was there
                 dummy.unsetCore();
                 worldObj.markBlockForUpdate(loc.x, loc.y, loc.z);
             } else {
@@ -290,7 +302,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
                 this.values.setBurnTime(values.getBurnTime() - 1);
             }
 
-            if (canSmelt(values.getInput(), recipe(values.getInput()), values.getOutput())) {
+            if (canSmelt(values.getInput(), recipe(values.getInput()), values.getOutput()) && !values.isPowered) {
                 values.checkInventorySlots();
 
                 //Check the structure to make sure we have the right stuff
@@ -670,6 +682,7 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
     /*******************************************************************************************************************
      *************************************************** Waila *********************************************************
      *******************************************************************************************************************/
+
     @Override
     public void returnWailaHead(List<String> tip) {
 
