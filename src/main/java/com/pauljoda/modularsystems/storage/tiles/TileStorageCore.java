@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.storage.tiles;
 
+import com.pauljoda.modularsystems.core.collections.ItemSorter;
 import com.pauljoda.modularsystems.storage.container.ContainerStorageCore;
 import com.pauljoda.modularsystems.storage.gui.GuiStorageCore;
 import com.pauljoda.modularsystems.storage.network.StorageNetwork;
@@ -17,10 +18,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Modular-Systems
@@ -110,6 +108,51 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
         for(int i = 0; i < count; i++)
             stacks.add(inventory.pop());
         return stacks;
+    }
+
+    public boolean sortInventory() {
+        boolean madeChange = false;
+
+        Stack<ItemStack> oldInv = new Stack<>();
+        for(ItemStack stack : inventory.getValues()) {
+            if (stack != null)
+                oldInv.push(stack);
+            else
+                oldInv.push(null);
+        }
+
+        Collections.sort(inventory.getValues(), new ItemSorter());
+        checkAndMerge();
+
+        int timeOut = 100;
+        while(!compareInventories(oldInv, getInventory()) && timeOut > 0) {
+            madeChange = true;
+            Collections.sort(getInventory(), new ItemSorter());
+            checkAndMerge();
+            timeOut--;
+        }
+        return madeChange;
+    }
+
+    private boolean compareInventories(Stack<ItemStack> stack1, Stack<ItemStack> stack2) {
+        for(int i = 0; i < stack1.size(); i++) {
+            if(stack1.size() <= i || stack2.size() <= i)
+                return false;
+            if(stack1.get(i) == null && stack2.get(i) == null)
+                continue;
+            else if(stack1.get(i) != null && stack2.get(i) == null)
+                return false;
+            else if(stack1.get(i) == null && stack2.get(i) != null)
+                return false;
+            else {
+                if(ItemStack.areItemStacksEqual(stack1.get(i), stack2.get(i)) && ItemStack.areItemStackTagsEqual(stack1.get(i), stack2.get(i))) {
+                    continue;
+                }
+                else
+                    return false;
+            }
+        }
+        return true;
     }
 
     /*******************************************************************************************************************
@@ -453,11 +496,29 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
         return true;
     }
 
-    public void checkInventory() {
+    public void checkAndMerge() {
         for(int i = 0; i < inventory.getSizeInventory(); i++) {
             if(inventory.getStackInSlot(i) != null) {
                 if(inventory.getStackInSlot(i).stackSize <= 0)
                     inventory.setStackInSlot(null, i);
+            }
+        }
+
+        for(int i = 0; i < inventory.getSizeInventory() - 1; i++) {
+            ItemStack stack1 = inventory.getStackInSlot(i);
+            ItemStack stack2 = inventory.getStackInSlot(i + 1);
+            if(stack1 != null && stack2 != null &&
+                    stack1.getItem() == stack2.getItem() &&
+                    stack1.getItemDamage() == stack2.getItemDamage() &&
+                    stack1.getTagCompound() == stack2.getTagCompound()) {
+                if(stack1.stackSize < stack1.getMaxStackSize()) {
+                    int maxMerge = stack1.getMaxStackSize() - stack1.stackSize;
+                    int actualMerge = stack2.stackSize >= maxMerge ? maxMerge : stack2.stackSize;
+                    stack1.stackSize += actualMerge;
+                    stack2.stackSize -= actualMerge;
+                    if(stack2.stackSize <= 0)
+                        inventory.setStackInSlot(null, i + 1);
+                }
             }
         }
     }
