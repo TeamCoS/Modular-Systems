@@ -9,13 +9,11 @@ public class GuiSolidsBank extends GuiPowerBase<ContainerSolidsBank> {
    protected TileBankSolids tileEntity;
 
     public GuiSolidsBank(InventoryPlayer player, TileBankSolids tileEntity) {
-        super(new ContainerSolidsBank(player, tileEntity), tileEntity, 200, 165, "inventory.solidspower.title");
+        super(new ContainerSolidsBank(player, tileEntity), tileEntity, 175, 165, "inventory.solidspower.title");
 
         this.tileEntity = tileEntity;
     }
 
     @Override
-    public void addComponents() {
-
-    }
+    public void addComponents() {}
 }

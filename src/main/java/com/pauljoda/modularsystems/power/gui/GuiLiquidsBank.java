@@ -16,7 +16,6 @@ public class GuiLiquidsBank extends GuiPowerBase<ContainerLiquidsBank> {
 
     public GuiLiquidsBank(InventoryPlayer inventory, TileBankLiquid tileEntity) {
         super(new ContainerLiquidsBank(inventory, tileEntity), tileEntity, 175, 165, "inventory.liquidspower.title");
-
         this.tileEntity = tileEntity;
         addComponents();
     }

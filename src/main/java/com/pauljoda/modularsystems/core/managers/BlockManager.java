@@ -1,9 +1,11 @@
 package com.pauljoda.modularsystems.core.managers;
 
 import com.pauljoda.modularsystems.core.blocks.BlockDummyIO;
+import com.pauljoda.modularsystems.core.blocks.BlockRedstoneControl;
 import com.pauljoda.modularsystems.core.lib.Reference;
 import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
 import com.pauljoda.modularsystems.core.tiles.DummyIO;
+import com.pauljoda.modularsystems.core.tiles.DummyRedstoneInput;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.crusher.blocks.BlockCrusherCore;
 import com.pauljoda.modularsystems.crusher.tiles.TileCrusherCore;
@@ -34,7 +36,7 @@ public class BlockManager {
     public static Block furnaceCore, furnaceCoreActive, crusherCore, crusherCoreActive;
     public static Block generatorCore, generatorCoreActive;
     public static Block storageCore, storageBasic, storageCapacity, storageSearch, storageSort, storageSecurity, storageCrafting, storageHopping, storageSmashing, storageIO;
-    public static Block dummy, io, powerRF, powerSolids, powerLiquids, powerIC2, powerMana;
+    public static Block dummy, io, redstoneControlIn, redstoneControlOut, powerRF, powerSolids, powerLiquids, powerIC2, powerMana;
     public static Block supplierRF, supplierIC2;
 
     public static void init() {
@@ -67,6 +69,8 @@ public class BlockManager {
 
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);
         registerBlock(io = new BlockDummyIO(Material.rock, Reference.MOD_ID + ":dummyIO", DummyIO.class), "dummyIO", DummyIO.class);
+        registerBlock(redstoneControlIn = new BlockRedstoneControl(Material.rock, Reference.MOD_ID + ":redstoneIn", DummyRedstoneInput.class), "redstoneIn", DummyRedstoneInput.class);
+        registerBlock(redstoneControlOut = new BlockRedstoneControl(Material.rock, Reference.MOD_ID + ":redstoneOut", DummyRedstoneInput.class), "redstoneOut", DummyRedstoneInput.class);
         registerBlock(powerRF = new BlockPower(Reference.MOD_ID + ":powerRF", TileBankRF.class), "powerRF", TileBankRF.class);
         registerBlock(powerSolids = new BlockPower(Reference.MOD_ID + ":powerSolids", TileBankSolids.class), "powerSolids", TileBankSolids.class);
         registerBlock(powerLiquids = new BlockPower(Reference.MOD_ID + ":powerLiquids", TileBankLiquid.class), "powerLiquids", TileBankLiquid.class);

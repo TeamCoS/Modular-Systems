@@ -24,7 +24,6 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
     protected TileBankBase tileEntity;
     protected AbstractCore core;
 
-
     public GuiPowerBase(C container, TileBankBase tileEntity, int width, int height, String name) {
         super(container, width, height, name);
 
@@ -45,13 +44,12 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
     }
 
     @Override
-    public void addComponents() {
+    public void addComponents() {}
 
-    }
+    /*******************************************************************************************************************
+     *********************************************** Right Tabs ********************************************************
+     *******************************************************************************************************************/
 
-    /*
-     * Side Tabs
-     */
     @Override
     public void addRightTabs(GuiTabCollection tabs) {
         if (tileEntity != null && core != null) {
@@ -78,7 +76,6 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
             tabs.getTabs().get(0).setMouseEventListener(new IMouseEventListener() {
                 @Override
                 public void onMouseDown(BaseComponent baseComponent, int i, int i1, int i2) {
-
                     if (tileEntity.getCore() != null) {
                         com.pauljoda.modularsystems.core.managers.PacketManager.net.sendToServer(
                                 new OpenContainerPacket.UpdateMessage(core.xCoord, core.yCoord, core.zCoord));
@@ -86,14 +83,10 @@ public class GuiPowerBase<C extends Container> extends GuiBase<C> {
                 }
 
                 @Override
-                public void onMouseUp(BaseComponent baseComponent, int i, int i1, int i2) {
-
-                }
+                public void onMouseUp(BaseComponent baseComponent, int i, int i1, int i2) {}
 
                 @Override
-                public void onMouseDrag(BaseComponent baseComponent, int i, int i1, int i2, long l) {
-
-                }
+                public void onMouseDrag(BaseComponent baseComponent, int i, int i1, int i2, long l) {}
             });
         }
     }

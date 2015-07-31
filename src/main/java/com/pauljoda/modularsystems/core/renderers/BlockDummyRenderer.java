@@ -33,6 +33,8 @@ public class BlockDummyRenderer implements ISimpleBlockRenderingHandler {
             if(dummy.getCore() != null)
                 renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BlockDummy) block).getOverlayIcon(dummy.getCore()));
             renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, Blocks.hopper.getIcon(1, 0));
+            if(((BaseBlock)block).getBlockTextures().getOverlay() != null)
+                renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BaseBlock)block).getBlockTextures().getOverlay());
         }
         return true;
     }
