@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.core.proxy;
 
+import com.pauljoda.modularsystems.core.achievement.ModAchievement;
 import com.pauljoda.modularsystems.core.managers.BlockManager;
 import com.pauljoda.modularsystems.core.renderers.BlockDummyRenderer;
 import com.pauljoda.modularsystems.core.renderers.SpecialDummyRenderer;
@@ -23,6 +24,9 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void init() {
+        //Build achievements
+        ModAchievement.INSTANCE.start();
+
         //Hide Blocks from NEI
         if (Loader.isModLoaded("NotEnoughItems")) {
             codechicken.nei.api.API.hideItem(new ItemStack(BlockManager.furnaceCoreActive));

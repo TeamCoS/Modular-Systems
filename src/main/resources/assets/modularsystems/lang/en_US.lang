@@ -116,6 +116,10 @@ inventory.blockValuesConfig.ignoreMeta.toolTip=Disable to ignore metadata
 
 inventory.nei.recipes=Recipes
 
+modularsystems.nei.crusherrecipes=Modular Crusher
+modularsystems.nei.furnacerecipes=Modular Furnace
+modularsystems.nei.blockValues=Modular Systems Values
+
 commands.addBannedFurnaceBlock.usage=Usage: <TileName> or "this" to add what is in your hand
 commands.addBannedFurnaceBlock.failure=Failed to add value, must pass a block name
 commands.addBannedFurnaceBlock.success=Block successfully added to registry
@@ -128,9 +132,20 @@ commands.usage.configureBlockValues=Opens the GUI to change block values
 
 event.breakBlock.permission=You do not have permission to break this
 
-modularsystems.nei.crusherrecipes=Modular Crusher
-modularsystems.nei.furnacerecipes=Modular Furnace
-modularsystems.nei.blockValues=Modular Systems Values
+achievement.modularsystems.title=Modular Systems
+achievement.craftFurnace=Even Hotter Topic
+achievement.craftFurnace.desc=Craft a Modular Furnace Core
+achievement.craftCrusher=Grinding Gears
+achievement.craftCrusher.desc=Craft a Modular Crusher Core
+achievement.craftGenerator=We need more power
+achievement.craftGenerator.desc=Craft a Modular Generator Core
+achievement.craftStorage=Bigger Storage
+achievement.craftStorage.desc=Craft a Modular Storage Core
+achievement.craftIO=Let's automate
+achievement.craftIO.desc=Craft a Modular Systems IO
+achievement.craftRedstone=Technical Builder
+achievement.craftRedstone.desc=Craft a Modular Systems Redstone Input
+
 
 modularsystems.versioncheck.start=Starting version check...
 modularsystems.versioncheck.current=Modular Systems is up to date...

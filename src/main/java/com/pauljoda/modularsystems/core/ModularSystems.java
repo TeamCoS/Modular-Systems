@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.core;
 
+import com.pauljoda.modularsystems.core.achievement.ModAchievement;
 import com.pauljoda.modularsystems.core.api.nei.INEICallback;
 import com.pauljoda.modularsystems.core.commands.AddBannedBlock;
 import com.pauljoda.modularsystems.core.commands.AddFluidFuel;
@@ -82,6 +83,8 @@ public class ModularSystems {
         PacketManager.initPackets();
 
         proxy.init();
+        FMLCommonHandler.instance().bus().register(ModAchievement.INSTANCE);
+
         VersionManager.init();
     }
 
