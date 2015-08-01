@@ -15,7 +15,6 @@ import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.generator.blocks.BlockGeneratorCore;
 import com.pauljoda.modularsystems.generator.container.ContainerGenerator;
 import com.pauljoda.modularsystems.generator.gui.GuiGenerator;
-import com.pauljoda.modularsystems.power.tiles.TileBankRF;
 import com.pauljoda.modularsystems.power.tiles.TileProviderBase;
 import com.teambr.bookshelf.collections.Location;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
@@ -30,8 +29,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnergyHandler, IPowerProvider {
@@ -65,8 +62,9 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
 
     @Override
     public void doWork() {
-        if (!worldObj.isRemote && wellFormed) {
-            boolean didWork = false;
+        boolean didWork = false;
+        /*if (!worldObj.isRemote && wellFormed) {*/
+        if (!worldObj.isRemote) {
             //Charge Bank
             if (this.values.getBurnTime() > 0) {
                 this.values.setBurnTime(values.getBurnTime() - 1);
@@ -141,7 +139,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
         return 0;
     }
 
-    @Override
+    /*@Override
     protected List<FuelProvider> getFuelProviders(List<Location> coords) {
         List<FuelProvider> providers = new ArrayList<>();
         FuelProvider provider;
@@ -156,7 +154,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
 
         Collections.sort(providers, new FuelProvider.FuelSorter());
         return providers;
-    }
+    }*/
 
     public boolean hasFuelProviderType(String energyType) {
         List<FuelProvider> providers = getFuelProviders(corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true));

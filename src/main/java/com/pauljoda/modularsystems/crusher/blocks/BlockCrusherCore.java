@@ -87,11 +87,11 @@ public class BlockCrusherCore extends BaseBlock {
             return false;
         }
         if (tileEntity != null) {
-            tileEntity.setDirty();
+
             if (tileEntity.wellFormed) {
                 player.openGui(Bookshelf.instance, 0, world, x, y, z);
             } else
-                tileEntity.markDirty();
+                tileEntity.setDirty();
         }
         return true;
     }

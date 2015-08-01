@@ -475,8 +475,8 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
     @Override
     public void updateEntity() {
         if (!worldObj.isRemote) {
-            updateMultiblock();
-            doWork();
+            if(updateMultiblock())
+                doWork();
         }
         super.updateEntity();
     }
