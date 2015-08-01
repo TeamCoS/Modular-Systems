@@ -7,7 +7,6 @@ import com.pauljoda.modularsystems.power.gui.GuiManaBank;
 import com.teambr.bookshelf.common.tiles.IOpensGui;
 import com.teambr.bookshelf.helpers.GuiHelper;
 import com.teambr.bookshelf.inventory.ContainerGeneric;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -148,18 +147,5 @@ public class TileBankMana extends TileBankBase implements IOpensGui, IManaReceiv
     @Override
     public void returnWailaHead(List<String> list) {
         list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored());
-    }
-
-    @Override
-    public void returnWailaTail(List<String> list) {
-        if (Minecraft.getMinecraft().thePlayer.isSneaking()) {
-            list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Useable In:");
-            list.add(GuiHelper.GuiColor.GREEN + "Modular Furnace");
-            list.add(GuiHelper.GuiColor.GREEN + "Modular Crusher");
-            list.add(GuiHelper.GuiColor.GREEN + "Modular Generator");
-        } else
-            list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Press Shift for Usage Cores");
-
-        super.returnWailaTail(list);
     }
 }

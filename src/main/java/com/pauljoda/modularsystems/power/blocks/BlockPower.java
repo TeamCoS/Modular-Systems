@@ -8,7 +8,9 @@ import com.pauljoda.modularsystems.core.tiles.AbstractCore;
 import com.pauljoda.modularsystems.core.tiles.DummyTile;
 import com.pauljoda.modularsystems.power.tiles.TileBankBase;
 import com.teambr.bookshelf.Bookshelf;
+import com.teambr.bookshelf.client.itemtooltip.IItemTooltip;
 import com.teambr.bookshelf.collections.BlockTextures;
+import com.teambr.bookshelf.helpers.GuiHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -23,10 +25,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import org.lwjgl.input.Keyboard;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
-public class BlockPower extends BlockDummy {
+public class BlockPower extends BlockDummy implements IItemTooltip {
     String name;
     @SideOnly(Side.CLIENT)
     public IIcon providerIcon, bankIcon;
@@ -126,6 +132,31 @@ public class BlockPower extends BlockDummy {
 
     @Override
     public int getRenderType() {
-            return SpecialDummyRenderer.renderID;
+        return SpecialDummyRenderer.renderID;
+    }
+
+    /*
+     * Item Tooltips
+     */
+    @Override
+    public List<String> returnTooltip() {
+        List<String> list = new ArrayList<>();
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Useable In:");
+            String type = Objects.equals(name.substring(15, 20), "power") ? "power" : Objects.equals(name.substring(15, 23), "supplier") ? "supplier" : "none";
+            switch (type) {
+                case "power":
+                    list.add(GuiHelper.GuiColor.GREEN + "Modular Furnace");
+                    list.add(GuiHelper.GuiColor.GREEN + "Modular Crusher");
+                    list.add(GuiHelper.GuiColor.GREEN + "Modular Generator");
+                    break;
+                case "supplier":
+                    list.add(GuiHelper.GuiColor.GREEN + "Modular Generator");
+                    break;
+                default:
+            }
+        } else
+            list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Press Shift for Usage Cores");
+        return list;
     }
 }

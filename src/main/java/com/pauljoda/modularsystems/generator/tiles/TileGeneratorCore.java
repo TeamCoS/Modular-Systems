@@ -92,7 +92,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
                 didWork = true;
             }
 
-            //TODO Charge Tools
+            //Charge RF items
             if (values.getInput() != null && values.getInput().getItem() instanceof IEnergyContainerItem) {
                 if (energy.getEnergyStored() > 0) {
                     IEnergyContainerItem item = (IEnergyContainerItem) values.getInput().getItem();
@@ -102,6 +102,7 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
                     worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 }
             }
+            //Discharge RF Items
             if (values.getOutput() != null && values.getOutput().getItem() instanceof IEnergyContainerItem) {
                 IEnergyContainerItem item = (IEnergyContainerItem) values.getOutput().getItem();
                 if(item.getEnergyStored(values.getOutput()) > 0 && energy.getEnergyStored() < energy.getMaxEnergyStored()) {

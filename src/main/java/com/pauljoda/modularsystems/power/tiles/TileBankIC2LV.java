@@ -10,7 +10,6 @@ import com.teambr.bookshelf.inventory.ContainerGeneric;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -181,18 +180,5 @@ public class TileBankIC2LV extends TileBankBase implements IOpensGui, IEnergySin
     @Override
     public void returnWailaHead(List<String> list) {
         list.add(GuiHelper.GuiColor.YELLOW + "Available Power: " + GuiHelper.GuiColor.WHITE + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored());
-    }
-
-    @Override
-    public void returnWailaTail(List<String> list) {
-        if (Minecraft.getMinecraft().thePlayer.isSneaking()) {
-            list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Useable In:");
-            list.add(GuiHelper.GuiColor.GREEN + "Modular Furnace");
-            list.add(GuiHelper.GuiColor.GREEN + "Modular Crusher");
-            list.add(GuiHelper.GuiColor.GREEN + "Modular Generator");
-        } else
-            list.add(GuiHelper.GuiColor.CYAN + GuiHelper.GuiTextFormat.ITALICS.toString() + "Press Shift for Usage Cores");
-
-        super.returnWailaTail(list);
     }
 }
