@@ -71,6 +71,7 @@ public class BlockPower extends BlockDummy implements IItemTooltip {
         }
 
         dropItems(world, x, y, z);
+        world.removeTileEntity(x, y, z);
     }
 
     @Override
