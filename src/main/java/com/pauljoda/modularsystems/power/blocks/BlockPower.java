@@ -148,7 +148,8 @@ public class BlockPower extends BlockDummy implements IItemTooltip {
                 case "power":
                     list.add(GuiHelper.GuiColor.GREEN + "Modular Furnace");
                     list.add(GuiHelper.GuiColor.GREEN + "Modular Crusher");
-                    list.add(GuiHelper.GuiColor.GREEN + "Modular Generator");
+                    if (!name.equalsIgnoreCase("modularsystems:powerRF"))
+                        list.add(GuiHelper.GuiColor.GREEN + "Modular Generator");
                     break;
                 case "supplier":
                     list.add(GuiHelper.GuiColor.GREEN + "Modular Generator");
