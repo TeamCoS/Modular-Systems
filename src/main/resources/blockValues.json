@@ -11,11 +11,11 @@
     },
     "efficiencyFunction": {
       "scaleFactorNumerator": -1.0,
-      "scaleFactorDenominator": 50.0,
+      "scaleFactorDenominator": 10.0,
       "xOffset": 0.0,
       "power": 3.0,
       "yOffset": 0.0,
-      "floor": -100.0,
+      "floor": -500.0,
       "ceiling": 1.0
     },
     "multiplicityFunction": {
@@ -40,11 +40,11 @@
     },
     "efficiencyFunction": {
       "scaleFactorNumerator": -1.0,
-      "scaleFactorDenominator": 1.0,
-      "xOffset": 0.0,
+      "scaleFactorDenominator": 5.0,
+      "xOffset": 7.0,
       "power": 3.0,
       "yOffset": 0.0,
-      "floor": -100.0,
+      "floor": -500.0,
       "ceiling": 0.0
     },
     "multiplicityFunction": {
@@ -74,7 +74,7 @@
       "power": 2.0,
       "yOffset": 0.0,
       "floor": 0.0,
-      "ceiling": 250.0
+      "ceiling": 500.0
     },
     "multiplicityFunction": {
       "scaleFactorNumerator": 1.0,
@@ -132,7 +132,7 @@
       "power": 1.0,
       "yOffset": 0.0,
       "floor": 0.0,
-      "ceiling": 25.0
+      "ceiling": 100.0
     },
     "multiplicityFunction": {
       "scaleFactorNumerator": 1.0,
@@ -158,9 +158,9 @@
       "scaleFactorNumerator": -10.0,
       "scaleFactorDenominator": 1.0,
       "xOffset": 0.0,
-      "power": 1.0,
+      "power": 2.0,
       "yOffset": 0.0,
-      "floor": -100.0,
+      "floor": -500.0,
       "ceiling": 0.0
     },
     "multiplicityFunction": {
@@ -361,9 +361,9 @@
       "scaleFactorNumerator": -1.0,
       "scaleFactorDenominator": 1.0,
       "xOffset": 0.0,
-      "power": 2.0,
+      "power": 3.0,
       "yOffset": 0.0,
-      "floor": -200.0,
+      "floor": -700.0,
       "ceiling": 0.0
     },
     "multiplicityFunction": {

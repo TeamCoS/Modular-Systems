@@ -1,5 +1,6 @@
 package com.pauljoda.modularsystems.core.managers;
 
+import com.pauljoda.modularsystems.core.registries.ConfigRegistry;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
@@ -15,16 +16,18 @@ public class RecipeManager {
     public static void init() {
 
         //Furnace
-        GameRegistry.addRecipe(new ItemStack(BlockManager.furnaceCore, 1),
-                "III",
-                "IFI",
-                "III", 'I', Items.iron_ingot, 'F', Blocks.furnace);
+        if (ConfigRegistry.furnaceCore)
+            GameRegistry.addRecipe(new ItemStack(BlockManager.furnaceCore, 1),
+                    "III",
+                    "IFI",
+                    "III", 'I', Items.iron_ingot, 'F', Blocks.furnace);
 
         //Crusher
-        GameRegistry.addRecipe(new ItemStack(BlockManager.crusherCore, 1),
-                "FFF",
-                "FOF",
-                "FFF", 'F', Items.flint, 'O', Blocks.furnace);
+        if (ConfigRegistry.crusherCore)
+            GameRegistry.addRecipe(new ItemStack(BlockManager.crusherCore, 1),
+                    "FFF",
+                    "FOF",
+                    "FFF", 'F', Items.flint, 'O', Blocks.piston);
 
         //I/O
         GameRegistry.addRecipe(new ItemStack(BlockManager.io, 1),
@@ -70,17 +73,18 @@ public class RecipeManager {
                     "IiI", 'I', Blocks.iron_block, 'i', Items.iron_ingot, 'P', Blocks.piston);
 
         //Botania Fuel Bank
-        if(Loader.isModLoaded("Botania"))
+        if (Loader.isModLoaded("Botania"))
             GameRegistry.addRecipe(new ItemStack(BlockManager.powerMana, 1),
                     "SIS",
                     "IFI",
                     "SIS", 'S', Item.getItemFromBlock(Blocks.sapling), 'I', Items.iron_ingot, 'F', Items.flower_pot);
 
         //Generator Core
-        GameRegistry.addRecipe(new ItemStack(BlockManager.generatorCore, 1),
-                "IPI",
-                "PBP",
-                "IPI", 'I', Items.iron_ingot, 'P', Blocks.piston, 'B', Blocks.iron_block);
+        if (ConfigRegistry.generatorCore)
+            GameRegistry.addRecipe(new ItemStack(BlockManager.generatorCore, 1),
+                    "IPI",
+                    "PBP",
+                    "IPI", 'I', Items.iron_ingot, 'P', Blocks.piston, 'B', Blocks.iron_block);
 
         //RF Output
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.supplierRF, 1),
@@ -95,47 +99,49 @@ public class RecipeManager {
                 BlockManager.supplierRF);
 
         //Storage Core
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageCore, 1),
-                "LWL",
-                "WCW",
-                "LWL", 'L', "logWood", 'W', "plankWood", 'C', Blocks.chest));
+        if (ConfigRegistry.storageSystem) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageCore, 1),
+                    "LWL",
+                    "WCW",
+                    "LWL", 'L', "logWood", 'W', "plankWood", 'C', Blocks.chest));
 
-        //Basic Storage Expansion
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageBasic, 4),
-                "WWW",
-                "WSW",
-                "WWW", 'W', "plankWood", 'S', Items.string));
+            //Basic Storage Expansion
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageBasic, 4),
+                    "WWW",
+                    "WSW",
+                    "WWW", 'W', "plankWood", 'S', Items.string));
 
-        //Capacity Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageCapacity, 1),
-                BlockManager.storageBasic, Blocks.chest);
+            //Capacity Expansion
+            GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageCapacity, 1),
+                    BlockManager.storageBasic, Blocks.chest);
 
-        //Search Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSearch, 1),
-                BlockManager.storageBasic, Items.writable_book);
+            //Search Expansion
+            GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSearch, 1),
+                    BlockManager.storageBasic, Items.writable_book);
 
-        //Sort Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSort, 1),
-                BlockManager.storageBasic, Items.book);
+            //Sort Expansion
+            GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSort, 1),
+                    BlockManager.storageBasic, Items.book);
 
-        //Security Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSecurity, 1),
-                BlockManager.storageBasic, Blocks.iron_bars);
+            //Security Expansion
+            GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSecurity, 1),
+                    BlockManager.storageBasic, Blocks.iron_bars);
 
-        //Crafting Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageCrafting, 1),
-                BlockManager.storageBasic, Blocks.crafting_table);
+            //Crafting Expansion
+            GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageCrafting, 1),
+                    BlockManager.storageBasic, Blocks.crafting_table);
 
-        //Hopping Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageHopping, 1),
-                BlockManager.storageBasic, Blocks.hopper, Items.ender_pearl);
+            //Hopping Expansion
+            GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageHopping, 1),
+                    BlockManager.storageBasic, Blocks.hopper, Items.ender_pearl);
 
-        //Smashing Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSmashing, 1),
-                BlockManager.storageBasic, Items.iron_pickaxe);
+            //Smashing Expansion
+            GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSmashing, 1),
+                    BlockManager.storageBasic, Items.iron_pickaxe);
 
-        //IO Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageIO, 1),
-                BlockManager.storageBasic, Blocks.hopper, Blocks.piston, Items.book);
+            //IO Expansion
+            GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageIO, 1),
+                    BlockManager.storageBasic, Blocks.hopper, Blocks.piston, Items.book);
+        }
     }
 }
