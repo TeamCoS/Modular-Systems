@@ -24,12 +24,11 @@ public class SpecialDummyRenderer implements ISimpleBlockRenderingHandler {
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
         RenderUtils.setColor(getBackground(block));
         RenderUtils.render3DInventory((BaseBlock) block, Blocks.iron_block.getIcon(0, 0), renderer);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         if (block .getUnlocalizedName().equalsIgnoreCase(BlockManager.supplierRF.getUnlocalizedName()) ||
                 (Loader.isModLoaded("IC2") && block.getUnlocalizedName().equalsIgnoreCase(BlockManager.supplierIC2.getUnlocalizedName())))
             RenderUtils.render3DInventory((BaseBlock) block, ((BlockPower) block).providerIcon, renderer);
         else {
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
             Tessellator tessellator = Tessellator.instance;
             IIcon icon = ((BlockPower) block).bankIcon;
             block.setBlockBoundsForItemRender();
@@ -69,11 +68,11 @@ public class SpecialDummyRenderer implements ISimpleBlockRenderingHandler {
             Color color = getBackground(block);
             renderer.renderStandardBlockWithColorMultiplier(Blocks.iron_block, x, y, z, color.getRed() / 255F,
                     color.getGreen() / 255F, color.getBlue() / 255F);
+            Tessellator.instance.setColorOpaque_F(1.0F, 1.0F, 1.0F);
             if (block .getUnlocalizedName().equalsIgnoreCase(BlockManager.supplierRF.getUnlocalizedName()) ||
                     (Loader.isModLoaded("IC2") && block.getUnlocalizedName().equalsIgnoreCase(BlockManager.supplierIC2.getUnlocalizedName())))
                 renderer.renderBlockUsingTexture(Blocks.cobblestone, x, y, z, ((BlockPower) block).providerIcon);
             else {
-                Tessellator.instance.setColorOpaque_F(1.0F, 1.0F, 1.0F);
                 renderer.renderFaceXNeg(block, x, y, z, ((BlockPower) block).bankIcon);
                 renderer.renderFaceXPos(block, x, y, z, ((BlockPower) block).bankIcon);
                 renderer.renderFaceZNeg(block, x, y, z, ((BlockPower) block).bankIcon);
