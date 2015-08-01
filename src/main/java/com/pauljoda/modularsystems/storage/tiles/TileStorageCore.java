@@ -332,7 +332,6 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
     @Override
     public void readFromNBT (NBTTagCompound tags) {
         super.readFromNBT(tags);
-        inventory.readFromNBT(tags);
         network.readFromNBT(tags);
         customName = tags.getString("CustomName");
 
@@ -367,12 +366,12 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
                 this.craftingGrid.setStackInSlot(ItemStack.loadItemStackFromNBT(nbtTagCompound1), j);
             }
         }
+        inventory.readFromNBT(tags);
     }
 
     @Override
     public void writeToNBT (NBTTagCompound tags) {
         super.writeToNBT(tags);
-        inventory.writeToNBT(tags);
         network.writeToNBT(tags);
         tags.setString("CustomName", customName);
 
@@ -405,6 +404,7 @@ public class TileStorageCore extends BaseTile implements IInventory, IOpensGui {
             }
         }
         tags.setTag("ItemsCrafting", nbtTagList);
+        inventory.writeToNBT(tags);
     }
 
     /*******************************************************************************************************************
