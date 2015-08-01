@@ -215,8 +215,9 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
                 worldObj.setBlockMetadataWithNotify(loc.x, loc.y, loc.z, meta, 2);
             }
         }
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         wellFormed = false;
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+
     }
 
     protected Couplet<Location, Location> getCorners() {
