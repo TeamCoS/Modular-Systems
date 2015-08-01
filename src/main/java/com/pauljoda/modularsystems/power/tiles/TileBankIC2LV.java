@@ -59,7 +59,7 @@ public class TileBankIC2LV extends TileBankBase implements IOpensGui, IEnergySin
 
     @Override
     public FuelProviderType type() {
-        return FuelProviderType.POWER;
+        return FuelProviderType.EU;
     }
 
     /*******************************************************************************************************************

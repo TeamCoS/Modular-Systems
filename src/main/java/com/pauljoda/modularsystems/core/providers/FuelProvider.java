@@ -38,6 +38,8 @@ public interface FuelProvider {
         LIQUID,
         POWER,
         ITEM,
+        RF,
+        EU,
         OTHER
     }
 

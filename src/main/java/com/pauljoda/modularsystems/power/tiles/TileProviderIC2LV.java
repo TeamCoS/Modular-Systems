@@ -61,7 +61,7 @@ public class TileProviderIC2LV extends TileProviderBase implements IEnergySource
 
     @Override
     public double getOfferedEnergy() {
-        if (getCore() instanceof TileGeneratorCore) {
+        if (getCore() instanceof TileGeneratorCore && !((TileGeneratorCore) getCore()).hasFuelProviderType(getEnergyTag())) {
             int[] convertedPower = convertToEU();
             if (convertedPower != null) {
                 return Math.min(EnergyNet.instance.getPowerFromTier(getSourceTier()), convertedPower[0]);
@@ -72,7 +72,7 @@ public class TileProviderIC2LV extends TileProviderBase implements IEnergySource
 
     @Override
     public void drawEnergy(double v) {
-        if (getCore() instanceof TileGeneratorCore) {
+        if (getCore() instanceof TileGeneratorCore && !((TileGeneratorCore) getCore()).hasFuelProviderType(getEnergyTag())) {
             TileGeneratorCore core = (TileGeneratorCore) getCore();
             double convertedPower = convertFromEU(v);
             updateOutput(core.extractEnergy(null, (int) Math.round(convertedPower), false));

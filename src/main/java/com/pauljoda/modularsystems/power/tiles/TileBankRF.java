@@ -52,7 +52,7 @@ public class TileBankRF extends TileBankBase implements IOpensGui, IEnergyHandle
 
     @Override
     public FuelProviderType type() {
-        return FuelProviderType.POWER;
+        return FuelProviderType.RF;
     }
 
     /*******************************************************************************************************************

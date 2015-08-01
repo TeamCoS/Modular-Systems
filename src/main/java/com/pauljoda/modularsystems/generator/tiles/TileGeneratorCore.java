@@ -157,6 +157,15 @@ public class TileGeneratorCore extends AbstractCore implements IOpensGui, IEnerg
         return providers;
     }
 
+    public boolean hasFuelProviderType(String energyType) {
+        List<FuelProvider> providers = getFuelProviders(corners.getFirst().getAllWithinBounds(corners.getSecond(), false, true));
+        for (FuelProvider provider : providers) {
+            if (provider.type() == FuelProvider.FuelProviderType.valueOf(energyType))
+                return true;
+        }
+        return false;
+    }
+
     @Override
     protected void updateBlockState(boolean positiveBurnTime, World world, int x, int y, int z) {
         BlockGeneratorCore.updateGeneratorBlockState(positiveBurnTime, world, x, y, z);
