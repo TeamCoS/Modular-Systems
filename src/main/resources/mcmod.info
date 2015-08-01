@@ -11,8 +11,8 @@
   "credits": "Everyone who supported me over my time modding",
   "logoFile": "/assets/modularsystems/textures/logo.png",
   "screenshots": [],
-  "requiredMods": ["bookshelf", "NotEnoughItems"],
-  "dependencies": ["NotEnoughItems", "CodeChickenCore", "bookshelf", "Botania", "appeng"],
+  "requiredMods": ["bookshelf@[1.2.0]", "NotEnoughItems"],
+  "dependencies": ["NotEnoughItems", "CodeChickenCore", "bookshelf@[1.2.0]", "Botania", "appeng"],
   "dependants": [],
   "useDependencyInformation": true
 }

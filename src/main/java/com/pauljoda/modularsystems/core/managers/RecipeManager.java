@@ -93,10 +93,12 @@ public class RecipeManager {
                 BlockManager.supplierRF);
 
         //IC2 Output
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.supplierIC2, 1),
-                BlockManager.powerIC2);
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.powerIC2, 1),
-                BlockManager.supplierRF);
+        if (Loader.isModLoaded("IC2")) {
+            GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.supplierIC2, 1),
+                    BlockManager.powerIC2);
+            GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.powerIC2, 1),
+                    BlockManager.supplierIC2);
+        }
 
         //Storage Core
         if (ConfigRegistry.storageSystem) {
