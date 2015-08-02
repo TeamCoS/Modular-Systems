@@ -2,6 +2,7 @@ package com.pauljoda.modularsystems.storage.gui;
 
 import com.pauljoda.modularsystems.storage.container.ContainerStorageRemote;
 import com.teambr.bookshelf.client.gui.GuiBase;
+import com.teambr.bookshelf.client.gui.component.display.GuiComponentArrow;
 
 /**
  * Modular-Systems
@@ -15,6 +16,11 @@ public class GuiStorageRemote extends GuiBase<ContainerStorageRemote> {
 
     @Override
     public void addComponents() {
-
+        components.add(new GuiComponentArrow(79, 34) {
+            @Override
+            public int getCurrentProgress() {
+                return 0;
+            }
+        });
     }
 }

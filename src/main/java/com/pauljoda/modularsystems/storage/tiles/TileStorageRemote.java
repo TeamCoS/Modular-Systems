@@ -121,9 +121,9 @@ public class TileStorageRemote extends TileStorageBasic {
                 inventory.getStackInSlot(0).getItem() instanceof ItemStorageRemote) {
             if (inventory.getStackInSlot(0).stackTagCompound == null)
                 inventory.getStackInSlot(0).stackTagCompound = new NBTTagCompound();
-            inventory.getStackInSlot(0).stackTagCompound.setInteger("coreX", getCore().xCoord);
-            inventory.getStackInSlot(0).stackTagCompound.setInteger("coreY", getCore().yCoord);
-            inventory.getStackInSlot(0).stackTagCompound.setInteger("coreZ", getCore().zCoord);
+            inventory.getStackInSlot(0).stackTagCompound.setInteger("coreX", this.xCoord);
+            inventory.getStackInSlot(0).stackTagCompound.setInteger("coreY", this.yCoord);
+            inventory.getStackInSlot(0).stackTagCompound.setInteger("coreZ", this.zCoord);
 
             inventory.setStackInSlot(inventory.getStackInSlot(0).copy(), 1);
             inventory.setStackInSlot(null, 0);
