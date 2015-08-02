@@ -88,7 +88,6 @@ public class BlockFurnaceCore extends BaseBlock {
             return false;
         }
         if (tileEntity != null) {
-
             if (tileEntity.wellFormed) {
                 player.openGui(Bookshelf.instance, 0, world, x, y, z);
             } else

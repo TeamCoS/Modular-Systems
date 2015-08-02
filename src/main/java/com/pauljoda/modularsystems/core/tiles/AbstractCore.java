@@ -95,7 +95,6 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
      */
     public abstract int getRedstoneOutput();
 
-
     /*******************************************************************************************************************
      *******************************************  Multiblock Methods  **************************************************
      *******************************************************************************************************************/
@@ -180,8 +179,8 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
             dummy.setMetadata(meta);
         }
         generateValues(blockCount);
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         wellFormed = true;
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     public void breakMultiBlock() {
@@ -215,8 +214,8 @@ public abstract class AbstractCore extends BaseTile implements ISidedInventory, 
                 worldObj.setBlockMetadataWithNotify(loc.x, loc.y, loc.z, meta, 2);
             }
         }
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         wellFormed = false;
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     protected Couplet<Location, Location> getCorners() {
