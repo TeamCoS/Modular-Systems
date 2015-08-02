@@ -88,7 +88,7 @@ public class BlockCrusherCore extends BaseBlock {
         }
         if (tileEntity != null) {
 
-            if (tileEntity.wellFormed) {
+            if (tileEntity.wellFormed && !world.isRemote) {
                 player.openGui(Bookshelf.instance, 0, world, x, y, z);
             } else
                 tileEntity.setDirty();

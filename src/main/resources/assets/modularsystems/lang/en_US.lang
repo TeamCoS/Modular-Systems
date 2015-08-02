@@ -19,6 +19,8 @@ tile.modularsystems:storageCrafting.name=Crafting Storage Expansion
 tile.modularsystems:storageHopping.name=Hopping Storage Expansion
 tile.modularsystems:storageSmashing.name=Smashing Storage Expansion
 tile.modularsystems:storageIO.name=I/O Storage Expansion
+tile.modularsystems:storageRemote.name=Remote Storage Terminal Receiver
+item.modularsystems:itemStorageRemote.name=Remote Storage Terminal
 
 tile.modularsystems:dummy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O
@@ -52,6 +54,8 @@ inventory.storageSecurity.lock=Secure?
 inventory.storageHopping.title=Range Config
 
 inventory.storageSmashing.title=Internal Pick
+
+inventory.storageRemote.title=Remote Storage Terminal Linker
 
 inventory.storageIO.title=Storage I/O
 inventory.storageIO.import=Import Filter:

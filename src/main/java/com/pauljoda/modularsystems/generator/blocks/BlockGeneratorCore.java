@@ -86,8 +86,8 @@ public class BlockGeneratorCore extends BaseBlock {
         if (player.isSneaking()) {
             return false;
         }
-        if (tileEntity != null) {
-            if (tileEntity. wellFormed) {
+        if (tileEntity != null ) {
+                if (tileEntity.wellFormed && !world.isRemote) {
                 player.openGui(Bookshelf.instance, 0, world, x, y, z);
             } else
                 tileEntity.setDirty();

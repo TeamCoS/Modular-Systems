@@ -35,7 +35,7 @@ public class BlockManager {
 
     public static Block furnaceCore, furnaceCoreActive, crusherCore, crusherCoreActive;
     public static Block generatorCore, generatorCoreActive;
-    public static Block storageCore, storageBasic, storageCapacity, storageSearch, storageSort, storageSecurity, storageCrafting, storageHopping, storageSmashing, storageIO;
+    public static Block storageCore, storageBasic, storageCapacity, storageSearch, storageSort, storageSecurity, storageCrafting, storageHopping, storageSmashing, storageIO, storageRemote;
     public static Block dummy, io, redstoneControlIn, redstoneControlOut, powerRF, powerSolids, powerLiquids, powerIC2, powerMana;
     public static Block supplierRF, supplierIC2;
 
@@ -58,6 +58,7 @@ public class BlockManager {
         registerBlock(storageHopping = new BlockStorageExpansion(Material.wood, Reference.MOD_ID + ":storageHopping", TileStorageHopping.class), "storageHopping", TileStorageHopping.class);
         registerBlock(storageSmashing = new BlockStorageSmashing(Material.wood, Reference.MOD_ID + ":storageSmashing", TileStorageSmashing.class), "storageSmashing", TileStorageSmashing.class);
         registerBlock(storageIO = new BlockStorageIO(Material.wood, Reference.MOD_ID + ":storageIO", TileStorageIO.class), "storageIO", TileStorageIO.class);
+        registerBlock(storageRemote = new BlockStorageExpansion(Material.wood, Reference.MOD_ID + ":storageRemote", TileStorageRemote.class), "storageRemote", TileStorageRemote.class);
 
 
         registerBlock(dummy = new BlockDummy(Material.rock, Reference.MOD_ID + ":dummy", DummyTile.class), "dummy", DummyTile.class);
