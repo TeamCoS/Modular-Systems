@@ -1,7 +1,7 @@
 package com.pauljoda.modularsystems.core.managers;
 
 import com.pauljoda.modularsystems.core.items.BaseItem;
-import com.pauljoda.modularsystems.storage.items.ItemStorageRemote;
+import com.pauljoda.modularsystems.storage.items.ItemStorageRemoteTest;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
@@ -19,7 +19,7 @@ public class ItemManager {
             registerItem(dustIron = new BaseItem("dustIron", 64), "dustIron", "dustIron");
             registerItem(dustGold = new BaseItem("dustGold", 64), "dustGold", "dustGold");
         }
-        registerItem(itemStorageRemote = new ItemStorageRemote("itemStorageRemote", 1), "itemStorageRemote");
+        registerItem(itemStorageRemote = new ItemStorageRemoteTest(), "itemStorageRemote");
     }
 
     /**
