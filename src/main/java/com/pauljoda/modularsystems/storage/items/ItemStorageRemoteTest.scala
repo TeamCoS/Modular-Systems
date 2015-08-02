@@ -24,9 +24,9 @@ object ItemStorageRemoteTest {
     val MAX_IN_OUT: Int = 100
     val MAX_DISTANCE: Int = 30
 
-    def getTile(world: IBlockAccess, x: Int, y: Int, z: Int) = world.getTileEntity(x, y, z) match {
-        case t: TileStorageRemote => t
-        case _ => null
+    def getTile(world: IBlockAccess, x: Int, y: Int, z: Int): Option[TileStorageRemote] = world.getTileEntity(x, y, z) match {
+        case tile: TileStorageRemote => Some(tile)
+        case _ => None
     }
 
     def getCoords(tag: NBTTagCompound): Option[Array[Int]] = {
@@ -38,6 +38,20 @@ object ItemStorageRemoteTest {
                     tag.getInteger("coreZ")
                 ))
             case _ => None
+        }
+    }
+
+    def canOpen(tile: TileStorageRemote, player: EntityPlayer): Boolean = {
+        tile.getCore match {
+            case null => false
+            case _ => tile.getCore.canOpen(player) match {
+                case false => false
+                case _ => MAX_DISTANCE >= Vec3.createVectorHelper(player.posX, player.posY, player.posZ).
+                        distanceTo(Vec3.createVectorHelper(tile.xCoord, tile.xCoord, tile.xCoord)) match {
+                    case false => false
+                    case _ => true
+                }
+            }
         }
     }
 }
@@ -58,18 +72,13 @@ class ItemStorageRemoteTest extends BaseItem("itemStorageRemote", 1) with IEnerg
     override def onItemRightClick(itemStack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
         getCoords(itemStack.stackTagCompound) match {
             case Some(coords) =>
-                if (coords != null) {
-                    val tile = getTile(world, coords(0), coords(1), coords(2))
-                    if (tile != null) {
-                        if (tile.getCore != null && tile.getCore.canOpen(player) &&
-                                extractEnergy(itemStack, MAX_IN_OUT, simulate = true)
-                                >= MAX_IN_OUT &&
-                                MAX_DISTANCE >= Vec3.createVectorHelper(player.posX, player.posY, player.posZ).
-                                        distanceTo(Vec3.createVectorHelper(coords(0), coords(1), coords(2)))) {
-                            extractEnergy(itemStack, MAX_IN_OUT, simulate = false)
-                            player.openGui(Bookshelf.instance, 0, world, tile.getCore.xCoord, tile.getCore.yCoord, tile.getCore.zCoord)
+                getTile(world, coords(0), coords(1), coords(2)) match {
+                    case Some(tile) =>
+                        if (canOpen(tile, player)) {
+                            if (extractEnergy(itemStack, MAX_IN_OUT, simulate = false) == 100)
+                                player.openGui(Bookshelf.instance, 0, world, tile.getCore.xCoord, tile.getCore.yCoord, tile.getCore.zCoord)
                         }
-                    }
+                    case _ =>
                 }
             case _ =>
         }
@@ -168,3 +177,4 @@ class ItemStorageRemoteTest extends BaseItem("itemStorageRemote", 1) with IEnerg
         setEnergy(container, CAPACITY)
     }
 }
+
