@@ -2,7 +2,7 @@ package com.pauljoda.modularsystems.storage.tiles;
 
 import com.pauljoda.modularsystems.storage.container.ContainerStorageRemote;
 import com.pauljoda.modularsystems.storage.gui.GuiStorageRemote;
-import com.pauljoda.modularsystems.storage.items.ItemStorageRemote;
+import com.pauljoda.modularsystems.storage.items.ItemStorageRemoteTest;
 import com.teambr.bookshelf.collections.InventoryTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -106,7 +106,7 @@ public class TileStorageRemote extends TileStorageBasic {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return slot == 0 && stack.getItem() instanceof ItemStorageRemote;
+        return slot == 0 && stack.getItem() instanceof ItemStorageRemoteTest;
     }
 
     /*******************************************************************************************************************
@@ -118,7 +118,7 @@ public class TileStorageRemote extends TileStorageBasic {
         super.updateEntity();
 
         if (getCore() != null && inventory.getStackInSlot(0) != null && inventory.getStackInSlot(1) == null &&
-                inventory.getStackInSlot(0).getItem() instanceof ItemStorageRemote) {
+                inventory.getStackInSlot(0).getItem() instanceof ItemStorageRemoteTest) {
             if (inventory.getStackInSlot(0).stackTagCompound == null)
                 inventory.getStackInSlot(0).stackTagCompound = new NBTTagCompound();
             inventory.getStackInSlot(0).stackTagCompound.setInteger("coreX", this.xCoord);

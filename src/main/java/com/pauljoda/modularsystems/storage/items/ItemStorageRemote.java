@@ -42,7 +42,6 @@ public class ItemStorageRemote extends BaseItem implements IEnergyContainerItem 
         if (!world.isRemote) {
             if (itemStack.stackTagCompound != null) {
                 if (itemStack.stackTagCompound.hasKey("coreX")) {
-                    //todo check for distance
                     int x = itemStack.stackTagCompound.getInteger("coreX");
                     int y = itemStack.stackTagCompound.getInteger("coreY");
                     int z = itemStack.stackTagCompound.getInteger("coreZ");
