@@ -127,6 +127,7 @@ public class TileStorageRemote extends TileStorageBasic {
 
             inventory.setStackInSlot(inventory.getStackInSlot(0).copy(), 1);
             inventory.setStackInSlot(null, 0);
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
     }
 

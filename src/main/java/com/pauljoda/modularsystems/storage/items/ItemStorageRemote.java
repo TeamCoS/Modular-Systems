@@ -55,7 +55,12 @@ public class ItemStorageRemote extends BaseItem implements IEnergyContainerItem 
                             extractEnergy(itemStack, MAX_IN_OUT, false);
                             player.openGui(Bookshelf.instance, 0, world, tile.getCore().xCoord, tile.getCore().yCoord, tile.getCore().zCoord);
                         }
+                    } else {
+                        itemStack.stackTagCompound.removeTag("coreX");
+                        itemStack.stackTagCompound.removeTag("coreY");
+                        itemStack.stackTagCompound.removeTag("coreZ");
                     }
+
                 }
             }
         }
