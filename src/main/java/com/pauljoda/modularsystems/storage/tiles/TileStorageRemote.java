@@ -2,7 +2,7 @@ package com.pauljoda.modularsystems.storage.tiles;
 
 import com.pauljoda.modularsystems.storage.container.ContainerStorageRemote;
 import com.pauljoda.modularsystems.storage.gui.GuiStorageRemote;
-import com.pauljoda.modularsystems.storage.items.ItemStorageRemoteTest;
+import com.pauljoda.modularsystems.storage.items.ItemStorageRemote;
 import com.teambr.bookshelf.collections.InventoryTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,9 +15,11 @@ import net.minecraft.world.World;
  */
 public class TileStorageRemote extends TileStorageBasic {
     protected InventoryTile inventory;
+    public int max_distance;
 
     public TileStorageRemote() {
         inventory = new InventoryTile(2);
+        max_distance = 15;
     }
 
     @Override
@@ -106,7 +108,7 @@ public class TileStorageRemote extends TileStorageBasic {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return slot == 0 && stack.getItem() instanceof ItemStorageRemoteTest;
+        return slot == 0 && stack.getItem() instanceof ItemStorageRemote;
     }
 
     /*******************************************************************************************************************
@@ -118,7 +120,7 @@ public class TileStorageRemote extends TileStorageBasic {
         super.updateEntity();
 
         if (getCore() != null && inventory.getStackInSlot(0) != null && inventory.getStackInSlot(1) == null &&
-                inventory.getStackInSlot(0).getItem() instanceof ItemStorageRemoteTest) {
+                inventory.getStackInSlot(0).getItem() instanceof ItemStorageRemote) {
             if (inventory.getStackInSlot(0).stackTagCompound == null)
                 inventory.getStackInSlot(0).stackTagCompound = new NBTTagCompound();
             inventory.getStackInSlot(0).stackTagCompound.setInteger("coreX", this.xCoord);
@@ -126,6 +128,7 @@ public class TileStorageRemote extends TileStorageBasic {
             inventory.getStackInSlot(0).stackTagCompound.setInteger("coreZ", this.zCoord);
 
             inventory.setStackInSlot(inventory.getStackInSlot(0).copy(), 1);
+            inventory.getStackInSlot(1).setItemDamage(inventory.getStackInSlot(0).getItemDamage());
             inventory.setStackInSlot(null, 0);
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }

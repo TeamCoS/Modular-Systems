@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,10 +25,9 @@ public class ItemStorageRemote extends BaseItem implements IEnergyContainerItem 
 
     public final int CAPACITY = 10000;
     public final int MAX_IN_OUT = 100;
-    public final int MAX_DISTANCE = 30;
 
-    public ItemStorageRemote(String name, int maxStackSize) {
-        super(name, maxStackSize);
+    public ItemStorageRemote() {
+        super("itemStorageRemote", 1);
         setMaxDamage(16);
         setHasSubtypes(true);
     }
@@ -39,31 +39,44 @@ public class ItemStorageRemote extends BaseItem implements IEnergyContainerItem 
 
     @Override
     public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-        if (!world.isRemote) {
-            if (itemStack.stackTagCompound != null) {
-                if (itemStack.stackTagCompound.hasKey("coreX")) {
-                    int x = itemStack.stackTagCompound.getInteger("coreX");
-                    int y = itemStack.stackTagCompound.getInteger("coreY");
-                    int z = itemStack.stackTagCompound.getInteger("coreZ");
-                    if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileStorageRemote) {
-                        TileStorageRemote tile = (TileStorageRemote) world.getTileEntity(x, y, z);
-                        if (tile.getCore() != null && tile.getCore().canOpen(player) &&
-                                extractEnergy(itemStack, MAX_IN_OUT, true) >= MAX_IN_OUT &&
-                                (Vec3.createVectorHelper(player.posX, player.posY, player.posZ).
-                                        distanceTo(Vec3.createVectorHelper(x, y, z)) <= MAX_DISTANCE)) {
-                            extractEnergy(itemStack, MAX_IN_OUT, false);
-                            player.openGui(Bookshelf.instance, 0, world, tile.getCore().xCoord, tile.getCore().yCoord, tile.getCore().zCoord);
-                        }
-                    } else {
-                        itemStack.stackTagCompound.removeTag("coreX");
-                        itemStack.stackTagCompound.removeTag("coreY");
-                        itemStack.stackTagCompound.removeTag("coreZ");
-                    }
-
+        ArrayList<Integer> coords = getCoords(itemStack.getTagCompound());
+        if (coords != null) {
+            if (world.getTileEntity(coords.get(0), coords.get(1), coords.get(2)) instanceof TileStorageRemote) {
+                TileStorageRemote tile = (TileStorageRemote) world.getTileEntity(coords.get(0), coords.get(1), coords.get(2));
+                if (isValid(tile, player)) {
+                    extractEnergy(itemStack, MAX_IN_OUT, false);
+                    player.openGui(Bookshelf.instance, 0, world, tile.getCore().xCoord, tile.getCore().yCoord, tile.getCore().zCoord);
                 }
             }
         }
+
         return itemStack;
+    }
+
+    private ArrayList<Integer> getCoords(NBTTagCompound tag) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if (tag.hasKey("coreX")) {
+            list.add(tag.getInteger("coreX"));
+            list.add(tag.getInteger("coreY"));
+            list.add(tag.getInteger("coreZ"));
+            return list;
+        }
+        return null;
+    }
+
+    private boolean isValid(TileStorageRemote tile, EntityPlayer player) {
+        if (tile.getCore() != null) {
+            if (tile.getWorldObj().provider.dimensionId == player.dimension) {
+                if (tile.getCore().canOpen(player)) {
+                    int distance = (int)Math.round(Vec3.createVectorHelper(player.posX, player.posY, player.posZ).
+                            distanceTo(Vec3.createVectorHelper(tile.xCoord, tile.yCoord, tile.zCoord)));
+                    if (distance <= tile.max_distance) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override

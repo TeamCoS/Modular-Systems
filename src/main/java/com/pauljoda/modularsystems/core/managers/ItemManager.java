@@ -1,7 +1,7 @@
 package com.pauljoda.modularsystems.core.managers;
 
 import com.pauljoda.modularsystems.core.items.BaseItem;
-import com.pauljoda.modularsystems.storage.items.ItemStorageRemoteTest;
+import com.pauljoda.modularsystems.storage.items.ItemStorageRemote;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
@@ -11,7 +11,7 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class ItemManager {
 
-    public static Item dustIron, dustGold, itemStorageRemote;
+    public static Item dustIron, dustGold, itemStorageRemote, itemDistanceUpgrade;
 
     public static void init() {
         //We need to register the iron and gold dust
@@ -19,7 +19,8 @@ public class ItemManager {
             registerItem(dustIron = new BaseItem("dustIron", 64), "dustIron", "dustIron");
             registerItem(dustGold = new BaseItem("dustGold", 64), "dustGold", "dustGold");
         }
-        registerItem(itemStorageRemote = new ItemStorageRemoteTest(), "itemStorageRemote");
+        registerItem(itemStorageRemote = new ItemStorageRemote(), "itemStorageRemote");
+        registerItem(itemDistanceUpgrade = new BaseItem("itemDistanceUpgrade", 16), "itemDistanceUpgrade");
     }
 
     /**
