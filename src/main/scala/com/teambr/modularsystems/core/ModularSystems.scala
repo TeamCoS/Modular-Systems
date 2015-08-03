@@ -3,10 +3,14 @@ package com.teambr.modularsystems.core
 import com.teambr.modularsystems.core.client.itemtooltip.ToolTipEvent
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.lib.Reference
+import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.init.Blocks
+import net.minecraft.item.Item
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event.{FMLPostInitializationEvent, FMLInitializationEvent, FMLPreInitializationEvent}
 import net.minecraftforge.fml.common.{SidedProxy, Mod}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.apache.logging.log4j.LogManager
 
 /**
@@ -29,6 +33,11 @@ object ModularSystems {
     @SidedProxy(clientSide = "com.teambr.modularsystems.core.client.ClientProxy",
                 serverSide = "com.teambr.modularsystems.core.common.CommonProxy")
     var proxy : CommonProxy = null
+
+    var tabModularSystems : CreativeTabs = new CreativeTabs("tabModularSystems") {
+        @SideOnly(Side.CLIENT)
+        override def getTabIconItem: Item = Item.getItemFromBlock(Blocks.furnace)
+    }
 
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {
         proxy.preInit()
