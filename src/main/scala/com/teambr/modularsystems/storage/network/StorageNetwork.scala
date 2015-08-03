@@ -1,7 +1,7 @@
 package com.teambr.modularsystems.storage.network
 
 import com.teambr.modularsystems.temp.tiles.TileEntityStorageExpansion
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
 import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 
@@ -61,19 +61,22 @@ class StorageNetwork {
 
     def writeToNBT(tag: NBTTagCompound) {
         if (children != null && children.nonEmpty) {
-            tag.setInteger("ChildSize", children.size)
+            val nbtTagList = new NBTTagList
             for (i <- children.indices) {
-                children(i).writeToNBT(tag, "child" + i)
+                val nbtTagCompound1 = new NBTTagCompound
+                nbtTagCompound1.setLong("child" + i, children(i).toLong)
+                nbtTagList.appendTag(nbtTagCompound1)
             }
+            tag.setTag("StorageNetwork", nbtTagList)
         }
     }
 
     def readFromNBT(tag: NBTTagCompound) {
-        if (tag.hasKey("ChildSize")) {
-            for (i <- 0 to tag.getInteger("ChildSize")) {
-                val childLoc: BlockPos = BlockPos.ORIGIN
-                childLoc.readFromNBT(tag, "child" + i)
-                children :+ childLoc
+        if (tag.hasKey("StorageNetwork")) {
+            val childTag = tag.getTagList("StorageNetwork", 10)
+            for (i <- 0 to (childTag.tagCount() - 1)) {
+                val nbtTagCompound1 = childTag.getCompoundTagAt(i)
+                children :+ new BlockPos(BlockPos.fromLong(nbtTagCompound1.getLong("child" + i)))
             }
         }
     }

@@ -97,9 +97,17 @@ class TileStorageCore extends BaseTile with IInventory {
         var madeChange = false
 
         var oldInv = new mutable.Stack[ItemStack]()
-        for x.foreach {
-
+        for (stack <- inventory.getValues) {
+            stack != null match {
+                case true => oldInv.push(stack)
+                case _ => oldInv.push(null)
+            }
         }
+        inventory.getValues.sortBy(r => ItemStack)
+
+        //check & Merge
+
+
     }
 
     /********************************************************************************************************************
