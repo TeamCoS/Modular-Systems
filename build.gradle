@@ -82,7 +82,7 @@ dependencies {
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}_${config.minecraft_version}:dev"
     compile "net.industrial-craft:industrialcraft-2:${config.IC2_version}-experimental:dev"
     //compile "appeng:appliedenergistics2:rv2-stable-10:api"
-    compile group: "com.teambr.bookshelf", name: "Bookshelf", version: "+", classifier: "dev", changing: true
+    compile group: "com.teambr.bookshelf", name: "Bookshelf", version: "[1.7.10,1.8[", classifier: "dev", changing: true
 
 }
 
