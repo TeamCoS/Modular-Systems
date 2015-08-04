@@ -1,8 +1,8 @@
 package com.teambr.modularsystems.storage.network
 
+import com.teambr.bookshelf.collections.Location
 import com.teambr.modularsystems.temp.tiles.TileEntityStorageExpansion
-import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
-import net.minecraft.util.BlockPos
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 
 import scala.collection.mutable.ListBuffer
@@ -13,13 +13,13 @@ import scala.collection.mutable.ListBuffer
  */
 class StorageNetwork {
 
-    protected[storage] var children = new ListBuffer[BlockPos]
+    protected[storage] var children = new ListBuffer[Location]
 
     /**
      * Used to add a new node into the network
      * @param node The node to add
      */
-    def addNode(node: BlockPos) {
+    def addNode(node: Location) {
         children :+ node
     }
 
@@ -28,7 +28,7 @@ class StorageNetwork {
      * @param pos The location of the node
      * @return The node that is at that location
      */
-    def getNode(pos: BlockPos): Option[BlockPos] = {
+    def getNode(pos: Location): Option[Location] = {
         for (child <- children if child == pos) Some(child)
         None
     }
@@ -39,7 +39,7 @@ class StorageNetwork {
      * @return True if found and deleted
      */
     def deleteNode(node: TileEntityStorageExpansion): Boolean = {
-        if (children.contains(node.getPos)) {
+        if (children.contains(node.getLocation)) {
             children = children.diff(List(node.getPos))
             return true
         }
@@ -52,33 +52,28 @@ class StorageNetwork {
      */
     def destroyNetwork(world: World) {
         for (child <- children) {
-            if (!world.isRemote && world.getTileEntity(child) != null &&
-                    world.getTileEntity(child).isInstanceOf[TileEntityStorageExpansion]) {
-                world.getTileEntity(child).asInstanceOf[TileEntityStorageExpansion].removeFromNetwork(false)
+            if (!world.isRemote && world.getTileEntity(child.asBlockPos) != null &&
+                    world.getTileEntity(child.asBlockPos).isInstanceOf[TileEntityStorageExpansion]) {
+                world.getTileEntity(child.asBlockPos).asInstanceOf[TileEntityStorageExpansion].removeFromNetwork(false)
             }
         }
     }
 
     def writeToNBT(tag: NBTTagCompound) {
         if (children != null && children.nonEmpty) {
-            val nbtTagList = new NBTTagList
-            for (i <- children.indices) {
-                val nbtTagCompound1 = new NBTTagCompound
-                nbtTagCompound1.setLong("child" + i, children(i).toLong)
-                nbtTagList.appendTag(nbtTagCompound1)
-            }
-            tag.setTag("StorageNetwork", nbtTagList)
+            tag.setInteger("ChildSize", children.size)
+            for (i <- children.indices)
+                children(i).writeToNBT(tag, "child" + i)
         }
     }
 
     def readFromNBT(tag: NBTTagCompound) {
-        if (tag.hasKey("StorageNetwork")) {
-            val childTag = tag.getTagList("StorageNetwork", 10)
-            for (i <- 0 to (childTag.tagCount() - 1)) {
-                val nbtTagCompound1 = childTag.getCompoundTagAt(i)
-                children :+ new BlockPos(BlockPos.fromLong(nbtTagCompound1.getLong("child" + i)))
+        if (tag.hasKey("ChildSize")) {
+            children = new ListBuffer[Location]
+            for (i <- 0 until tag.getInteger("ChildSize")) {
+                var childLoc = new Location()
+                children :+ childLoc
             }
         }
     }
-
 }

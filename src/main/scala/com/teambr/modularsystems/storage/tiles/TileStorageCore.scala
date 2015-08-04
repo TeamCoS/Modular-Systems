@@ -105,7 +105,14 @@ class TileStorageCore extends BaseTile with IInventory {
         }
         inventory.getValues.sortBy(r => ItemStack)
 
-        //check & Merge
+        checkAndMerge()
+
+        var timeOut = 100
+        while (!compareInventories(oldInv, getInventory) && timeOut > 0) {
+            madeChange = true
+
+        }
+
 
 
     }
