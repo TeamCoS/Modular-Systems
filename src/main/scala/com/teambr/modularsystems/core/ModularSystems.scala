@@ -2,7 +2,7 @@ package com.teambr.modularsystems.core
 
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.lib.Reference
-import com.teambr.modularsystems.core.managers.BlockManager
+import com.teambr.modularsystems.core.managers.{ItemManager, BlockManager}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Blocks
 import net.minecraft.item.Item
@@ -24,7 +24,8 @@ import org.apache.logging.log4j.LogManager
  * @author Paul Davis <pauljoda>
  * @since August 02, 2015
  */
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, modLanguage = "scala")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION,
+        dependencies = Reference.DEPENDENCIES, modLanguage = "scala")
 object ModularSystems {
     //The logger. For logging
     final val logger = LogManager.getLogger(Reference.MOD_NAME)
@@ -41,10 +42,13 @@ object ModularSystems {
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {
         proxy.preInit()
         BlockManager.preInit()
+        ItemManager.preInit()
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
+        ItemManager.init() // Must be before proxy registration
         proxy.init()
+
     }
 
     @EventHandler def postInit(event : FMLPostInitializationEvent) = {

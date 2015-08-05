@@ -1,6 +1,7 @@
 package com.teambr.modularsystems.core.client
 
 import com.teambr.modularsystems.core.common.CommonProxy
+import com.teambr.modularsystems.core.managers.ItemRenderManager
 
 /**
  * This file was created for the Modular-Systems
@@ -13,5 +14,12 @@ import com.teambr.modularsystems.core.common.CommonProxy
  * @since August 02, 2015
  */
 class ClientProxy extends CommonProxy {
-    
+
+    override def init() = {
+
+        //Register Inventory Renderer for Items
+        ItemRenderManager.registerItemRenderer()
+    }
+
+
 }
