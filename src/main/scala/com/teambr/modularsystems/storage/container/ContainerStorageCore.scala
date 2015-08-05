@@ -20,10 +20,6 @@ import scala.collection.mutable.ArrayBuffer
 class ContainerStorageCore(playerInventory: IInventory, val storageCore: TileStorageCore)
         extends BaseContainer(playerInventory, storageCore) {
 
-    var displaySlots = new util.ArrayList[Slot]
-    displaySlots.addAll(inventorySlots.asInstanceOf)
-    var allSlots = new util.ArrayList[Slot]
-    allSlots.addAll(displaySlots)
     var currentSearch = ""
 
     var craftingGrid : InventoryCrafting = null
@@ -39,6 +35,11 @@ class ContainerStorageCore(playerInventory: IInventory, val storageCore: TileSto
         }
     }
 
+    var displaySlots = new util.ArrayList[Slot]
+    displaySlots.addAll(inventorySlots.asInstanceOf[util.ArrayList[Slot]])
+    var allSlots = new util.ArrayList[Slot]
+    allSlots.addAll(displaySlots)
+    
     addPlayerInventorySlots(if(storageCore.hasCraftingUpgrade) 8 else 44, 140)
 
     if(storageCore.hasCraftingUpgrade) {
