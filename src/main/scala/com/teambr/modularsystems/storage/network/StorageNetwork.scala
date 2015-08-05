@@ -1,7 +1,7 @@
 package com.teambr.modularsystems.storage.network
 
 import com.teambr.bookshelf.collections.Location
-import com.teambr.modularsystems.temp.tiles.TileEntityStorageExpansion
+import com.teambr.modularsystems.storage.tiles.TileEntityStorageExpansion
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 
@@ -39,10 +39,10 @@ class StorageNetwork {
      * @return True if found and deleted
      */
     def deleteNode(node: TileEntityStorageExpansion): Boolean = {
-        if (children.contains(node.getLocation)) {
-            children = children.diff(List(node.getPos))
+        /*if (children.contains(node.getLocation)) {
+            children = children.diff(List(node.getpos))
             return true
-        }
+        }*/
         false
     }
 
@@ -51,12 +51,12 @@ class StorageNetwork {
      * @param world The world
      */
     def destroyNetwork(world: World) {
-        for (child <- children) {
+        /*for (child <- children) {
             if (!world.isRemote && world.getTileEntity(child.asBlockPos) != null &&
                     world.getTileEntity(child.asBlockPos).isInstanceOf[TileEntityStorageExpansion]) {
                 world.getTileEntity(child.asBlockPos).asInstanceOf[TileEntityStorageExpansion].removeFromNetwork(false)
             }
-        }
+        }*/
     }
 
     def writeToNBT(tag: NBTTagCompound) {

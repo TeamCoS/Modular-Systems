@@ -16,21 +16,22 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
  */
 class ToolTipEvent {
     @SubscribeEvent def onToolTip(event: ItemTooltipEvent) {
-        var item: IItemTooltip = null
+        var item: ItemTooltip = null
 
         //Extract the item/block
         Block.getBlockFromItem(event.itemStack.getItem) match {
-            case isABlock: IItemTooltip => item = isABlock
+            case isABlock: ItemTooltip => item = isABlock
             case _ => event.itemStack.getItem match {
-                case theItem: IItemTooltip => item = theItem
+                case theItem: ItemTooltip => item = theItem
                 case _ =>
             }
         }
 
         //Add the tip should it need
         if (item != null) {
-            val tips: java.util.List[String] = item.returnTooltip
-            if (tips != null) for (tip <- tips) event.toolTip.add(tip)
+            val tips: List[String] = item.returnTooltip
+            if (tips != null)
+                for (tip <- tips) event.toolTip.add(tip)
         }
     }
 }
