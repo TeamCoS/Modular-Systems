@@ -1,7 +1,7 @@
 package com.teambr.modularsystems.storage.blocks
 
 import com.teambr.bookshelf.collections.CubeTextures
-import com.teambr.bookshelf.common.blocks.traits.{BlockBakeable, FourWayRotation}
+import com.teambr.bookshelf.common.blocks.traits.{DropsItems, BlockBakeable, FourWayRotation}
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
 import com.teambr.modularsystems.core.lib.Reference
@@ -16,7 +16,8 @@ import net.minecraft.world.World
  * Modular-Systems
  * Created by Dyonovan on 04/08/15
  */
-class BlockStorageCore extends BaseBlock(Material.wood, "storageCore", classOf[TileStorageCore]) with OpensGui with FourWayRotation with BlockBakeable {
+class BlockStorageCore extends BaseBlock(Material.wood, "storageCore", classOf[TileStorageCore])
+    with OpensGui with FourWayRotation with BlockBakeable with DropsItems {
 
     override def MODID: String = Reference.MOD_ID
     override def blockName: String = "storageCore"
@@ -39,9 +40,7 @@ class BlockStorageCore extends BaseBlock(Material.wood, "storageCore", classOf[T
             new ResourceLocation(MODID + ":blocks/" + blockName + "Front"))
     }
 
-    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
+    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = null
 
-    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
-
-
+    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = null
 }

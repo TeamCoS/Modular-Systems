@@ -1,0 +1,159 @@
+itemGroup.tabModularSystems=Modular Systems
+
+tile.modularsystems:furnaceCore.name=Modular Furnace Core
+tile.modularsystems:furnaceCoreActive.name=Modular Furnace Core
+
+tile.modularsystems:crusherCore.name=Modular Crusher Core
+tile.modularsystems:crusherCoreActive.name=Modular Crusher Core
+
+tile.modularsystems:generatorCore.name=Modular Generator Core
+tile.modularsystems:generatorCoreActive.name=Modular Generator Core
+
+tile.modularsystems:storageCore.name=Modular Storage Core
+tile.modularsystems:storageBasic.name=Basic Storage Expansion
+tile.modularsystems:storageCapacity.name=Capacity Storage Expansion
+tile.modularsystems:storageSearch.name=Search Storage Expansion
+tile.modularsystems:storageSort.name=Sorting Storage Expansion
+tile.modularsystems:storageSecurity.name=Security Storage Expansion
+tile.modularsystems:storageCrafting.name=Crafting Storage Expansion
+tile.modularsystems:storageHopping.name=Hopping Storage Expansion
+tile.modularsystems:storageSmashing.name=Smashing Storage Expansion
+tile.modularsystems:storageIO.name=I/O Storage Expansion
+tile.modularsystems:storageRemote.name=Remote Storage Terminal Receiver
+item.modularsystems:itemStorageRemote.name=Remote Storage Terminal
+
+tile.modularsystems:dummy.name=Modular Furnace Dummy
+tile.modularsystems:dummyIO.name=Modular Systems I/O
+tile.modularsystems:redstoneIn.name=Modular Systems Redstone Input
+tile.modularsystems:redstoneOut.name=Modular Systems Redstone Output
+
+tile.modularsystems:powerRF.name=RedstoneFlux Power Bank
+tile.modularsystems:powerSolids.name=Solid Fuel Power Bank
+tile.modularsystems:powerLiquids.name=Liquid Fuel Power Bank
+tile.modularsystems:powerIC2.name=IC2 LV Fuel Power Bank
+tile.modularsystems:powerMana.name=Mana Fuel Power Bank
+
+tile.modularsystems:supplierRF.name=RF Power Output
+tile.modularsystems:supplierIC2.name=IC2 LV Power Output
+
+item.modularsystems:dustIron.name=Iron Dust
+item.modularsystems:dustGold.name=Gold Dust
+
+inventory.furnace.title=Modular Furnace
+
+inventory.crusher.title=Modular Crusher
+
+inventory.generator.title=Modular Generator
+
+inventory.storageCore.title=Modular Storage
+inventory.storageCore.crafting=Modular Storage Crafting Inventory
+inventory.storageCore.sort=Sort
+inventory.storageCore.clear=Clear Crafting Grid
+
+inventory.storageSecurity.lock=Secure?
+
+inventory.storageHopping.title=Range Config
+
+inventory.storageSmashing.title=Internal Pick
+
+inventory.storageRemote.title=Remote Storage Terminal Linker
+
+inventory.storageIO.title=Storage I/O
+inventory.storageIO.import=Import Filter:
+inventory.storageIO.export=Export Filter:
+inventory.storageIO.importControls=Import Controls
+inventory.storageIO.exportControls=Export Controls
+inventory.storageIO.canImport=Import
+inventory.storageIO.importDamage=Damage
+inventory.storageIO.importNBT=NBT
+inventory.storageIO.importOre=OreDict
+inventory.storageIO.canExport=Export
+inventory.storageIO.exportDamage=Damage
+inventory.storageIO.exportNBT=NBT
+inventory.storageIO.exportOre=OreDict
+inventory.storageIO.listMode=List Mode:
+inventory.storageIO.white=White
+inventory.storageIO.black=Black
+inventory.storageIO.canImport.tip=Allow this block to import
+inventory.storageIO.importDamage.tip=Match Item Damage
+inventory.storageIO.importNBT.tip=Match NBT Tag
+inventory.storageIO.importOre.tip=Use Ore Dict Tag when matching
+inventory.storageIO.canExport.tip=Allow this block to export
+inventory.storageIO.exportDamage.tip=Match Item Damage
+inventory.storageIO.exportNBT.tip=Match NBT Tag
+inventory.storageIO.exportOre.tip=Use Ore Dict Tag when matching
+
+inventory.io.title=I/O Configure
+inventory.io.import=Import
+inventory.io.export=Export
+inventory.io.auto=Auto
+
+inventory.dummyRedstoneIn.title=Trigger Level
+
+inventory.rfpower.title=RedstoneFlux Power Bank
+inventory.liquidspower.title=Liquid Fuel Power Bank
+inventory.solidspower.title=Solid Fuel Power Bank
+inventory.eupower.title=EU LV Power Bank
+inventory.manapower.title=Mana Fuel Power Bank
+
+inventory.blockValuesConfig.speed=Speed
+inventory.blockValuesConfig.efficiency=Efficiency
+inventory.blockValuesConfig.multiplicity=Multiplicity
+inventory.blockValuesConfig.save=Save
+inventory.blockValuesConfig.delete=Delete
+inventory.blockValuesConfig.scaleFactorNumerator=m1=
+inventory.blockValuesConfig.scaleDenominator=m2=
+inventory.blockValuesConfig.xOffset=t=
+inventory.blockValuesConfig.power=p=
+inventory.blockValuesConfig.yOffset=b=
+inventory.blockValuesConfig.floor=f=
+inventory.blockValuesConfig.ceiling=c=
+inventory.blockValuesConfig.formula=(m1 / m2)(x + t)^p + b
+inventory.blockValuesConfig.scaleFactorNumerator.toolTip=This is the numerator of the scale factor
+inventory.blockValuesConfig.scaleDenominator.toolTip=This is the denominator of the scale factor
+inventory.blockValuesConfig.xOffset.toolTip=This will offset on the x axis
+inventory.blockValuesConfig.power.toolTip=This is the power of the function
+inventory.blockValuesConfig.yOffset.toolTip=This will offset on the y axis
+inventory.blockValuesConfig.floor.toolTip=This is the lower limit of the function
+inventory.blockValuesConfig.ceiling.toolTip=This is the upper limit of the function
+inventory.blockValuesConfig.ignoreMeta=Meta?
+inventory.blockValuesConfig.ignoreMeta.toolTip=Disable to ignore metadata
+
+inventory.nei.recipes=Recipes
+
+modularsystems.nei.crusherrecipes=Modular Crusher
+modularsystems.nei.furnacerecipes=Modular Furnace
+modularsystems.nei.blockValues=Modular Systems Values
+
+commands.addBannedFurnaceBlock.usage=Usage: <TileName> or "this" to add what is in your hand
+commands.addBannedFurnaceBlock.failure=Failed to add value, must pass a block name
+commands.addBannedFurnaceBlock.success=Block successfully added to registry
+
+commands.addFluidFuel.usage=Usage: <fuelname> <value>
+commands.addFluidFuel.failure=Failed to add Liquid Fuel
+commands.addFluidFuel.success=Liquid Fuel successfully added to registry
+
+commands.usage.configureBlockValues=Opens the GUI to change block values
+
+event.breakBlock.permission=You do not have permission to break this
+
+achievement.modularsystems.title=Modular Systems
+achievement.craftFurnace=Even Hotter Topic
+achievement.craftFurnace.desc=Craft a Modular Furnace Core
+achievement.craftCrusher=Grinding Gears
+achievement.craftCrusher.desc=Craft a Modular Crusher Core
+achievement.craftGenerator=We need more power
+achievement.craftGenerator.desc=Craft a Modular Generator Core
+achievement.craftStorage=Bigger Storage
+achievement.craftStorage.desc=Craft a Modular Storage Core
+achievement.craftIO=Let's automate
+achievement.craftIO.desc=Craft a Modular Systems IO
+achievement.craftRedstone=Technical Builder
+achievement.craftRedstone.desc=Craft a Modular Systems Redstone Input
+
+
+modularsystems.versioncheck.start=Starting version check...
+modularsystems.versioncheck.current=Modular Systems is up to date...
+modularsystems.versioncheck.outdated=Modular Systems Outdated...
+modularsystems.versioncheck.mcversion=How the HELL did you get Modular Systems to work on this version of Minecraft...
+modularsystems.versioncheck.error=Could not get Current Version...

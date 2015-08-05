@@ -16,7 +16,9 @@ object BlockManager {
 
     val storageCore = new BlockStorageCore
 
-    def preInit() {
+    def preInit() : Unit = {
+
+        //Storage
         registerBlock(storageCore,"storageCore", classOf[TileStorageCore])
     }
     /**
@@ -27,7 +29,7 @@ object BlockManager {
      * @param tileEntity The tile entity, null if none
      * @param oreDict    The ore dict tag, should it be needed
      */
-    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], oreDict: String) {
+    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], oreDict: String) : Unit = {
         GameRegistry.registerBlock(block, name)
         if (tileEntity != null)
             GameRegistry.registerTileEntity(tileEntity, name)
@@ -42,7 +44,7 @@ object BlockManager {
      * @param name       The name
      * @param tileEntity The tile
      */
-    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity]) {
+    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity]) : Unit = {
         registerBlock(block, name, tileEntity, null)
     }
 }

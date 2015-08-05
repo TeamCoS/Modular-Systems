@@ -1,0 +1,611 @@
+{
+  "minecraft:redstone_block:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 50.0,
+      "xOffset": 0.0,
+      "power": 3.0,
+      "yOffset": 0.0,
+      "floor": -50.0,
+      "ceiling": 1.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 10.0,
+      "xOffset": 0.0,
+      "power": 3.0,
+      "yOffset": 0.0,
+      "floor": -500.0,
+      "ceiling": 1.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:quartz_block:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 5.0,
+      "xOffset": 7.0,
+      "power": 3.0,
+      "yOffset": 0.0,
+      "floor": -500.0,
+      "ceiling": 0.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 3.0
+    }
+  },
+  "minecraft:gold_block:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": 2.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 50.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 2.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 500.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 4.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 3.0
+    }
+  },
+  "minecraft:diamond_block:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -8.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": -100.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 15.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 300.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 3.0
+    }
+  },
+  "minecraft:lapis_block:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 2.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": -25.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 2.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 100.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 14.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 1.0
+    }
+  },
+  "minecraft:brick_block:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": 10.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 100.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": -10.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": -500.0,
+      "ceiling": 0.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 2.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 5.0
+    }
+  },
+  "minecraft:stained_hardened_clay:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 100.0,
+      "xOffset": 0.0,
+      "power": 3.0,
+      "yOffset": 0.0,
+      "floor": -25.0,
+      "ceiling": 1.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 93.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": -1.0,
+      "ceiling": 40.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:stone:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 100.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": -40.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:cobblestone:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 200.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": -35.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 50.0,
+      "xOffset": -33.0,
+      "power": 2.0,
+      "yOffset": -35.0,
+      "floor": -41.0,
+      "ceiling": 250.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:sandstone:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -2.0,
+      "scaleFactorDenominator": 50.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 25.0,
+      "floor": -100.0,
+      "ceiling": 40.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 200.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:iron_block:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 75.0,
+      "xOffset": 0.0,
+      "power": 3.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 100.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 15.0,
+      "xOffset": 0.0,
+      "power": 3.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 500.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:mossy_cobblestone:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 2.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": -20.0,
+      "floor": -20.0,
+      "ceiling": 20.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": -2.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": -50.0,
+      "ceiling": 0.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:netherrack:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -2.0,
+      "scaleFactorDenominator": 2.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": -100.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 3.0,
+      "yOffset": 0.0,
+      "floor": -700.0,
+      "ceiling": 0.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:emerald_block:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 5.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 10.0
+    }
+  },
+  "minecraft:stonebrick:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 10.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": -20.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 5.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 50.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 10.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:coal_block:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 8.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 300.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "chisel:marble:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 50.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 50.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 40.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 150.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:obsidian:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 50.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 50.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 50.0,
+      "xOffset": 0.0,
+      "power": 3.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 250.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:nether_brick:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": -30.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": -50.0,
+      "ceiling": 0.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "chisel:cobblestone:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 50.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": -40.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 60.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 0.0,
+      "scaleFactorDenominator": 1.0,
+      "xOffset": 0.0,
+      "power": 0.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 0.0
+    }
+  },
+  "minecraft:end_stone:-1": {
+    "speedFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 40.0,
+      "xOffset": 0.0,
+      "power": 2.0,
+      "yOffset": 0.0,
+      "floor": -75.0,
+      "ceiling": 0.0
+    },
+    "efficiencyFunction": {
+      "scaleFactorNumerator": -1.0,
+      "scaleFactorDenominator": 16.0,
+      "xOffset": -55.0,
+      "power": 2.0,
+      "yOffset": 50.0,
+      "floor": -250.0,
+      "ceiling": 200.0
+    },
+    "multiplicityFunction": {
+      "scaleFactorNumerator": 1.0,
+      "scaleFactorDenominator": 19.0,
+      "xOffset": 0.0,
+      "power": 1.0,
+      "yOffset": 0.0,
+      "floor": 0.0,
+      "ceiling": 5.0
+    }
+  }
+}

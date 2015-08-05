@@ -1,0 +1,155 @@
+#Translated by Joccob
+itemGroup.tabModularSystems=模块化系统
+
+tile.modularsystems:furnaceCore.name=模块化熔炉核心
+tile.modularsystems:furnaceCoreActive.name=模块化熔炉核心
+
+tile.modularsystems:crusherCore.name=模块化粉碎机核心
+tile.modularsystems:crusherCoreActive.name=模块化粉碎机核心
+
+tile.modularsystems:generatorCore.name=模块化电力核心
+tile.modularsystems:generatorCoreActive.name=模块化电力核心
+
+tile.modularsystems:storageCore.name=模块化存储核心
+tile.modularsystems:storageBasic.name=存储基础扩容
+tile.modularsystems:storageCapacity.name=存储容量扩展
+tile.modularsystems:storageSearch.name=存储搜索扩展
+tile.modularsystems:storageSort.name=存储分类扩展
+tile.modularsystems:storageSecurity.name=存储安全扩展
+tile.modularsystems:storageCrafting.name=存储合成扩展
+tile.modularsystems:storageHopping.name=存储漏斗扩展
+tile.modularsystems:storageSmashing.name=存储破坏扩展
+tile.modularsystems:storageIO.name=存储接口扩展
+
+tile.modularsystems:dummy.name=Modular Furnace Dummy
+tile.modularsystems:dummyIO.name=模块化系统接口
+tile.modularsystems:redstoneIn.name=模块化系统红石接入口
+tile.modularsystems:redstoneOut.name=模块化系统红石输出口
+
+tile.modularsystems:powerRF.name=RF储能库
+tile.modularsystems:powerSolids.name=固态燃料储能库
+tile.modularsystems:powerLiquids.name=液态燃料储能库
+tile.modularsystems:powerIC2.name=IC2低压储能库
+tile.modularsystems:powerMana.name=魔力储能库
+
+tile.modularsystems:supplierRF.name=RF能源输出
+tile.modularsystems:supplierIC2.name=IC2低压能源输出
+
+item.modularsystems:dustIron.name=铁粉
+item.modularsystems:dustGold.name=金粉
+
+inventory.furnace.title=模块化熔炉
+
+inventory.crusher.title=模块化打粉机
+
+inventory.generator.title=模块化发电机
+
+inventory.storageCore.title=模块化存储仓
+inventory.storageCore.sort=分类
+inventory.storageCore.clear=清除合成表
+
+inventory.storageSecurity.lock=安全?
+
+inventory.storageHopping.title=范围配置
+
+inventory.storageSmashing.title=内部拾取
+
+inventory.storageIO.title=存储接口
+inventory.storageIO.import=输入过滤:
+inventory.storageIO.export=输出过滤:
+inventory.storageIO.importControls=输入配置
+inventory.storageIO.exportControls=输出配置
+inventory.storageIO.canImport=输入
+inventory.storageIO.importDamage=耐久
+inventory.storageIO.importNBT=NBT
+inventory.storageIO.importOre=矿物辞典
+inventory.storageIO.canExport=输出
+inventory.storageIO.exportDamage=耐久
+inventory.storageIO.exportNBT=NBT
+inventory.storageIO.exportOre=矿物辞典
+inventory.storageIO.listMode=模式列表:
+inventory.storageIO.white=白名单
+inventory.storageIO.black=黑名单
+inventory.storageIO.canImport.tip=允许输入该方块
+inventory.storageIO.importDamage.tip=匹配物品耐久
+inventory.storageIO.importNBT.tip=匹配物品NBT标签
+inventory.storageIO.importOre.tip=匹配使用矿物辞典
+inventory.storageIO.canExport.tip=允许输出该方块
+inventory.storageIO.exportDamage.tip=匹配物品耐久
+inventory.storageIO.exportNBT.tip=匹配物品NBT标签
+inventory.storageIO.exportOre.tip=匹配使用矿物辞典
+
+inventory.io.title=接口配置
+inventory.io.import=输入
+inventory.io.export=输出
+inventory.io.auto=自动
+
+inventory.dummyRedstoneIn.title=激活等级
+
+inventory.rfpower.title=RF储能库
+inventory.liquidspower.title=固态燃料储能库
+inventory.solidspower.title=液态燃料储能库
+inventory.eupower.title=EU低压储能库
+inventory.manapower.title=魔力储能库
+
+inventory.blockValuesConfig.speed=速度
+inventory.blockValuesConfig.efficiency=效率
+inventory.blockValuesConfig.multiplicity=倍数
+inventory.blockValuesConfig.save=保存
+inventory.blockValuesConfig.delete=删除
+inventory.blockValuesConfig.scaleFactorNumerator=m1=
+inventory.blockValuesConfig.scaleDenominator=m2=
+inventory.blockValuesConfig.xOffset=t=
+inventory.blockValuesConfig.power=p=
+inventory.blockValuesConfig.yOffset=b=
+inventory.blockValuesConfig.floor=f=
+inventory.blockValuesConfig.ceiling=c=
+inventory.blockValuesConfig.formula=(m1 / m2)(x + t)^p + b
+inventory.blockValuesConfig.scaleFactorNumerator.toolTip=This is the numerator of the scale factor
+inventory.blockValuesConfig.scaleDenominator.toolTip=This is the denominator of the scale factor
+inventory.blockValuesConfig.xOffset.toolTip=This will offset on the x axis
+inventory.blockValuesConfig.power.toolTip=This is the power of the function
+inventory.blockValuesConfig.yOffset.toolTip=This will offset on the y axis
+inventory.blockValuesConfig.floor.toolTip=This is the lower limit of the function
+inventory.blockValuesConfig.ceiling.toolTip=This is the upper limit of the function
+inventory.blockValuesConfig.ignoreMeta=Meta?
+inventory.blockValuesConfig.ignoreMeta.toolTip=Disable to ignore metadata
+
+inventory.nei.recipes=合成表
+
+modularsystems.nei.crusherrecipes=模块化粉碎机
+modularsystems.nei.furnacerecipes=模块化熔炉
+modularsystems.nei.blockValues=模块化系统参数
+
+commands.addBannedFurnaceBlock.usage=Usage: <TileName> or "this" to add what is in your hand
+commands.addBannedFurnaceBlock.failure=添加参数失败, 必须通过方块名称检测
+commands.addBannedFurnaceBlock.success=成功注册方块
+
+commands.addFluidFuel.usage=Usage: <fuelname> <value>
+commands.addFluidFuel.failure=添加液态燃料失败
+commands.addFluidFuel.success=成功注册液态燃料
+
+commands.usage.configureBlockValues=打开GUI来改变方块参数
+
+event.breakBlock.permission=你没有破坏它的权限
+
+achievement.modularsystems.title=模块化系统
+achievement.craftFurnace=更热门的话题
+achievement.craftFurnace.desc=合成模块化熔炉核心
+achievement.craftCrusher=磨齿装置
+achievement.craftCrusher.desc=合成模块化粉碎机核心
+achievement.craftGenerator=我们需要更多能量
+achievement.craftGenerator.desc=合成模块化电力核心
+achievement.craftStorage=更大的存储
+achievement.craftStorage.desc=合成模块化存储核心
+achievement.craftIO=让我们一起自动化
+achievement.craftIO.desc=合成模块化系统接口
+achievement.craftRedstone=高新科技
+achievement.craftRedstone.desc=合成模块化红石接入口
+
+
+modularsystems.versioncheck.start=版本检查中...
+modularsystems.versioncheck.current=模块化系统为最新版本...
+modularsystems.versioncheck.outdated=模块化系统版本过旧...
+modularsystems.versioncheck.mcversion=你到底是怎么让模块化系统在这个版本的Minecraft上运行的...
+modularsystems.versioncheck.error=无法获取最新版本...

@@ -14,5 +14,5 @@ object Reference {
     final val MOD_NAME     = "Modular Systems"
     final val MOD_ID       = "modularsystems"
     final val VERSION      = "@VERSION@"
-    final val DEPENDENCIES = "required-after:bookshelf@[1.2.0];required-after:NotEnoughItems"
+    final val DEPENDENCIES = "required-after:bookshelf;required-after:NotEnoughItems"
 }

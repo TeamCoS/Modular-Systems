@@ -1,16 +1,14 @@
 package com.teambr.modularsystems.core
 
-import com.teambr.modularsystems.core.client.itemtooltip.ToolTipEvent
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.core.managers.BlockManager
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Blocks
 import net.minecraft.item.Item
-import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod.EventHandler
-import net.minecraftforge.fml.common.event.{FMLPostInitializationEvent, FMLInitializationEvent, FMLPreInitializationEvent}
-import net.minecraftforge.fml.common.{SidedProxy, Mod}
+import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
+import net.minecraftforge.fml.common.{Mod, SidedProxy}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.apache.logging.log4j.LogManager
 
@@ -43,8 +41,6 @@ object ModularSystems {
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {
         proxy.preInit()
         BlockManager.preInit()
-
-        MinecraftForge.EVENT_BUS.register(new ToolTipEvent)
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
