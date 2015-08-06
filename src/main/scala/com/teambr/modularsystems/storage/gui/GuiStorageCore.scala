@@ -8,6 +8,7 @@ import com.teambr.bookshelf.client.gui.component.control.{ GuiComponentButton, G
 import com.teambr.bookshelf.client.gui.component.display.{ GuiComponentText, GuiTabCollection }
 import com.teambr.bookshelf.helper.GuiHelper
 import com.teambr.bookshelf.network.PacketManager
+import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.storage.container.ContainerStorageCore
 import com.teambr.modularsystems.storage.tiles.TileStorageCore
 import net.minecraft.entity.player.EntityPlayer
@@ -106,8 +107,7 @@ class GuiStorageCore(player: EntityPlayer, val storageCore : TileStorageCore)
         super.handleMouseInput()
         var scrollDirection : Int = Mouse.getEventDWheel
         if (scrollDirection != 0 && inventory.storageCore.getInventoryRowCount > 6) {
-            //TODO: NEI Callbacks
-            //  if (ModularSystems.nei != null && isInMainArea) return
+            if (ModularSystems.nei != null && isInMainArea) return
             val rowsAboveDisplay : Int = this.inventory.storageCore.getInventoryRowCount - 6
             if (scrollDirection > 0) scrollDirection = 1
             else scrollDirection = -1
