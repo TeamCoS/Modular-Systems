@@ -1,12 +1,10 @@
 package com.teambr.modularsystems.storage.tiles
 
 import com.teambr.bookshelf.collections.Location
-import com.teambr.bookshelf.common.tiles.traits.{OpensGui, UpdatingTile}
-import net.minecraft.entity.player.EntityPlayer
+import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.World
 
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
@@ -15,7 +13,7 @@ import scala.util.Random
  * Modular-Systems
  * Created by Dyonovan on 04/08/15
  */
-abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile with OpensGui {
+abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
 
     protected[storage] var core: Option[BlockPos] = None
     protected[storage] var children = new ListBuffer[BlockPos]
@@ -72,11 +70,13 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile w
       ******************************************************************************************************************/
 
     override def onServerTick() : Unit = {
-        if (core.isDefined && worldObj.rand.nextInt(80) == 0)
+        if (core.isEmpty && worldObj.rand.nextInt(80) == 0)
             searchAndConnect()
         else if (getCore.isEmpty && new Random().nextInt(20) == 0)
             removeFromNetwork(true)
     }
+
+    override def onClientTick(): Unit = { }
 
     def searchAndConnect(): Unit = {
         for (dir <- EnumFacing.values()) {
@@ -100,8 +100,8 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile w
     }
 
     def getTileInDirection(pos: BlockPos): Option[(TileEntity)] = {
-        worldObj.getTileEntity(pos) match {
-            case tile => Some(worldObj.getTileEntity(pos))
+        worldObj.getTileEntity(pos) != null match {
+            case true => Some(worldObj.getTileEntity(pos))
             case _ => None
         }
     }
@@ -111,7 +111,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile w
         if (tag.hasKey("ChildSize")) {
             children = new ListBuffer[BlockPos]
             for (i <- 0 until tag.getInteger("ChildSize"))
-                children :+ BlockPos.fromLong(tag.getLong("Child" + i))
+                children += BlockPos.fromLong(tag.getLong("Child" + i))
         }
         if (tag.hasKey("IsInNetwork"))
             core = Some(BlockPos.fromLong(tag.getLong("IsInNetwork")))
@@ -127,17 +127,5 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile w
         if (core.isDefined) {
             tag.setLong("IsInNetwork", core.get.toLong)
         }
-    }
-
-    /*******************************************************************************************************************
-      ****************************************** IOpensGui Methods *****************************************************
-      ******************************************************************************************************************/
-
-    override def getServerGuiElement(id: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Object = {
-        getCore.orNull.getServerGuiElement(id, player, world, x, y, z)
-    }
-
-    override def getClientGuiElement(id: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Object = {
-        getCore.orNull.getClientGuiElement(id, player, world, x, y, z)
     }
 }

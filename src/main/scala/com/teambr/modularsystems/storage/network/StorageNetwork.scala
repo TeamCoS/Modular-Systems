@@ -20,7 +20,7 @@ class StorageNetwork {
      * @param node The node to add
      */
     def addNode(node: Location) {
-        children :+ node
+        children += node
     }
 
     /**
@@ -72,7 +72,7 @@ class StorageNetwork {
             children = new ListBuffer[Location]
             for (i <- 0 until tag.getInteger("ChildSize")) {
                 var childLoc = new Location()
-                children :+ childLoc
+                children += childLoc
             }
         }
     }

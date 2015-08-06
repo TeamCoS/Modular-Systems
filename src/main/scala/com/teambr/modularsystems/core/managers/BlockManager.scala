@@ -1,7 +1,7 @@
 package com.teambr.modularsystems.core.managers
 
-import com.teambr.modularsystems.storage.blocks.BlockStorageCore
-import com.teambr.modularsystems.storage.tiles.TileStorageCore
+import com.teambr.modularsystems.storage.blocks.{BlockStorageExpansion, BlockStorageCore}
+import com.teambr.modularsystems.storage.tiles.{TileStorageBasic, TileStorageCore}
 import net.minecraft.block.Block
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -15,11 +15,13 @@ import net.minecraftforge.oredict.OreDictionary
 object BlockManager {
 
     val storageCore = new BlockStorageCore
+    val storageBasic = new BlockStorageExpansion("storageBasic", List(), classOf[TileStorageBasic])
 
     def preInit() : Unit = {
 
         //Storage
-        registerBlock(storageCore,"storageCore", classOf[TileStorageCore])
+        registerBlock(storageCore, "storageCore", classOf[TileStorageCore])
+        registerBlock(storageBasic, "storageBasic", classOf[TileStorageBasic])
     }
     /**
      * Helper method for registering block
