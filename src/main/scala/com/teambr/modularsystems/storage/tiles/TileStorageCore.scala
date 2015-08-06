@@ -2,13 +2,16 @@ package com.teambr.modularsystems.storage.tiles
 
 import java.util.Collections
 
-import com.teambr.bookshelf.common.tiles.traits.{ Inventory, UpdatingTile }
+import com.teambr.bookshelf.common.tiles.traits.{OpensGui, Inventory, UpdatingTile}
 import com.teambr.modularsystems.core.collections.ItemSorter
+import com.teambr.modularsystems.storage.container.ContainerStorageCore
+import com.teambr.modularsystems.storage.gui.GuiStorageCore
 import com.teambr.modularsystems.storage.network.StorageNetwork
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{ NBTTagCompound, NBTTagList }
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.world.World
 import net.minecraftforge.common.util.Constants
 
 import scala.collection.mutable.ArrayBuffer
@@ -17,7 +20,7 @@ import scala.collection.mutable.ArrayBuffer
  * Modular-Systems
  * Created by Dyonovan on 04/08/15
  */
-class TileStorageCore extends TileEntity with Inventory with UpdatingTile {
+class TileStorageCore extends TileEntity with Inventory with UpdatingTile with OpensGui {
 
     val craftingInventory = new Inventory {
         override def hasCustomName(): Boolean = true
@@ -255,4 +258,14 @@ class TileStorageCore extends TileEntity with Inventory with UpdatingTile {
     override def hasCustomName(): Boolean = true
 
     override def initialSize: Int = 66
+
+    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Option[ContainerStorageCore] = {
+        if (canOpen(player)) Some(new ContainerStorageCore(player.inventory, this))
+        else None
+    }
+
+    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Option[GuiStorageCore] = {
+        if (canOpen(player)) Some(new GuiStorageCore(player, this))
+        else None
+    }
 }
