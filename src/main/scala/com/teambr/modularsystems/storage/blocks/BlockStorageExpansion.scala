@@ -5,7 +5,7 @@ import com.teambr.bookshelf.collections.CubeTextures
 import com.teambr.bookshelf.common.blocks.traits.BlockBakeable
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
 import com.teambr.modularsystems.core.lib.Reference
-import com.teambr.modularsystems.storage.tiles.{TileStorageCore, TileEntityStorageExpansion}
+import com.teambr.modularsystems.storage.tiles.{TileEntityStorageExpansion, TileStorageCore}
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -27,11 +27,16 @@ import scala.collection.mutable.ListBuffer
  * @param tileEntity Should the block have a tile, pass the class
  */
 class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class[_ <: TileEntity])
-        extends BaseBlock(Material.wood, name, tileEntity: Class[_ <: TileEntity]) with BlockBakeable  {
+        extends BaseBlock(Material.wood, name, tileEntity: Class[_ <: TileEntity]) with BlockBakeable {
 
     override def MODID: String = Reference.MOD_ID
-
     override def blockName: String = name
+
+    override def breakBlock(world: World, pos: BlockPos, state: IBlockState) {
+
+        world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].removeFromNetwork(true)
+        super[BaseBlock].breakBlock(world, pos, state)
+    }
 
     override def getDefaultCubeTextures: CubeTextures = {
         val map = Minecraft.getMinecraft.getTextureMapBlocks
@@ -63,9 +68,12 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
     }
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-            val corePos = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.orNull
-            if (corePos != null && world.getTileEntity(corePos.getPos).asInstanceOf[TileStorageCore].canOpen(player))
-                player.openGui(Bookshelf, 0, world, corePos.getPos.getX, corePos.getPos.getY, corePos.getPos.getZ)
+        if (world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined) {
+            val corePos = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.get.getPos
+            if (world.getTileEntity(corePos).asInstanceOf[TileStorageCore].canOpen(player)) {
+                player.openGui(Bookshelf, 0, world, corePos.getX, corePos.getY, corePos.getZ)
+            }
+        }
         true
     }
 }

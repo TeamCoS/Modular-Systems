@@ -43,7 +43,6 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         }
         removedFromNetwork()
         core = None
-        LogHelper.debug(core)
         children.clear()
         worldObj.markBlockForUpdate(getPos)
     }
@@ -55,7 +54,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
     def addChild(childLoc: BlockPos) {
         if (core.isDefined) {
             getCore.get.network.addNode(childLoc)
-            children :+ childLoc
+            children += childLoc
         }
     }
 
@@ -64,7 +63,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
      * @return The network we are in
      */
     def getCore: Option[TileStorageCore] = {
-        if (core.isDefined)
+        if (core.isDefined && worldObj.getTileEntity(core.get).isInstanceOf[TileStorageCore])
             Some(worldObj.getTileEntity(core.get).asInstanceOf[TileStorageCore])
         else None
     }
