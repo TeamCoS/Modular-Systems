@@ -1,8 +1,8 @@
 package com.teambr.modularsystems.storage.network
 
-import com.teambr.bookshelf.collections.Location
 import com.teambr.modularsystems.storage.tiles.TileEntityStorageExpansion
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 
 import scala.collection.mutable.ListBuffer
@@ -13,13 +13,13 @@ import scala.collection.mutable.ListBuffer
  */
 class StorageNetwork {
 
-    protected[storage] var children = new ListBuffer[Location]
+    protected[storage] var children = new ListBuffer[BlockPos]
 
     /**
      * Used to add a new node into the network
      * @param node The node to add
      */
-    def addNode(node: Location) {
+    def addNode(node: BlockPos) {
         children += node
     }
 
@@ -28,7 +28,7 @@ class StorageNetwork {
      * @param pos The location of the node
      * @return The node that is at that location
      */
-    def getNode(pos: Location): Option[Location] = {
+    def getNode(pos: BlockPos): Option[BlockPos] = {
         for (child <- children if child == pos) Some(child)
         None
     }
@@ -39,10 +39,10 @@ class StorageNetwork {
      * @return True if found and deleted
      */
     def deleteNode(node: TileEntityStorageExpansion): Boolean = {
-        /*if (children.contains(node.getLocation)) {
-            children = children.diff(List(node.getpos))
+        if (children.contains(node.getPos)) {
+            children = children.diff(List(node.getPos))
             return true
-        }*/
+        }
         false
     }
 
@@ -51,27 +51,27 @@ class StorageNetwork {
      * @param world The world
      */
     def destroyNetwork(world: World) {
-        /*for (child <- children) {
-            if (!world.isRemote && world.getTileEntity(child.asBlockPos) != null &&
-                    world.getTileEntity(child.asBlockPos).isInstanceOf[TileEntityStorageExpansion]) {
-                world.getTileEntity(child.asBlockPos).asInstanceOf[TileEntityStorageExpansion].removeFromNetwork(false)
+        for (child <- children) {
+            if (!world.isRemote && world.getTileEntity(child) != null &&
+                    world.getTileEntity(child).isInstanceOf[TileEntityStorageExpansion]) {
+                world.getTileEntity(child).asInstanceOf[TileEntityStorageExpansion].removeFromNetwork(false)
             }
-        }*/
+        }
     }
 
     def writeToNBT(tag: NBTTagCompound) {
-        if (children != null && children.nonEmpty) {
+        if (children.nonEmpty) {
             tag.setInteger("ChildSize", children.size)
             for (i <- children.indices)
-                children(i).writeToNBT(tag, "child" + i)
+                tag.setLong("Child" + i, children(i).toLong)
         }
     }
 
     def readFromNBT(tag: NBTTagCompound) {
         if (tag.hasKey("ChildSize")) {
-            children = new ListBuffer[Location]
+            children = new ListBuffer[BlockPos]
             for (i <- 0 until tag.getInteger("ChildSize")) {
-                var childLoc = new Location()
+                var childLoc = BlockPos.fromLong(tag.getLong("child" + i))
                 children += childLoc
             }
         }

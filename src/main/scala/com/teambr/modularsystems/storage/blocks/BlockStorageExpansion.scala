@@ -1,16 +1,17 @@
 package com.teambr.modularsystems.storage.blocks
 
+import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.collections.CubeTextures
-import com.teambr.bookshelf.common.blocks.traits.{BlockBakeable, DropsItems}
-import com.teambr.bookshelf.common.tiles.traits.OpensGui
+import com.teambr.bookshelf.common.blocks.traits.BlockBakeable
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
 import com.teambr.modularsystems.core.lib.Reference
-import com.teambr.modularsystems.storage.tiles.TileEntityStorageExpansion
+import com.teambr.modularsystems.storage.tiles.{TileStorageCore, TileEntityStorageExpansion}
 import net.minecraft.block.material.Material
+import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{BlockPos, ResourceLocation}
+import net.minecraft.util.{BlockPos, EnumFacing, ResourceLocation}
 import net.minecraft.world.World
 
 import scala.collection.mutable.ListBuffer
@@ -26,7 +27,7 @@ import scala.collection.mutable.ListBuffer
  * @param tileEntity Should the block have a tile, pass the class
  */
 class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class[_ <: TileEntity])
-        extends BaseBlock(Material.wood, name, tileEntity: Class[_ <: TileEntity]) with DropsItems with BlockBakeable with OpensGui {
+        extends BaseBlock(Material.wood, name, tileEntity: Class[_ <: TileEntity]) with BlockBakeable  {
 
     override def MODID: String = Reference.MOD_ID
 
@@ -61,19 +62,12 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
         locations.toArray
     }
 
-    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        if (world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined) {
-        val corePos = world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityStorageExpansion].getCore.get.getPos
-            world.getBlockState(corePos).getBlock.asInstanceOf[BlockStorageCore].getServerGuiElement(ID, player, world, corePos.getX, corePos.getY, corePos.getZ)
-    }
-        null
-    }
-
-    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        if (world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined) {
-            val corePos = world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityStorageExpansion].getCore.get.getPos
-            world.getBlockState(corePos).getBlock.asInstanceOf[BlockStorageCore].getClientGuiElement(ID, player, world, corePos.getX, corePos.getY, corePos.getZ)
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+        if (world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined) {
+            val corePos = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.get.getPos
+            if (world.getTileEntity(corePos).asInstanceOf[TileStorageCore].canOpen(player))
+                player.openGui(Bookshelf, 0, world, corePos.getX, corePos.getY, corePos.getZ)
         }
-        null
+        true
     }
 }

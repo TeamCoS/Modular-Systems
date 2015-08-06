@@ -1,6 +1,5 @@
 package com.teambr.modularsystems.storage.tiles
 
-import com.teambr.bookshelf.collections.Location
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
@@ -51,7 +50,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
      * Used to add a child to this node
      * @param childLoc The child to add to this
      */
-    def addChild(childLoc: Location) {
+    def addChild(childLoc: BlockPos) {
         children :+ childLoc
     }
 
@@ -84,12 +83,12 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
                     getTileInDirection(pos.add(dir.getDirectionVec)).get match {
                     case tile: TileStorageCore =>
                         core = Some(tile.getPos)
-                        tile.getNetwork.addNode(new Location(getPos))
+                        tile.getNetwork.addNode(getPos)
                         addedToNetwork()
                     case tile: TileEntityStorageExpansion =>
                         if (tile.getCore.isDefined) {
                             core = Some(tile.getCore.get.getPos)
-                            tile.addChild(new Location(getPos))
+                            tile.addChild(getPos)
                             addedToNetwork()
                         }
                     case _ =>
@@ -107,7 +106,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
-        super.readFromNBT(tag)
+        super[TileEntity].readFromNBT(tag)
         if (tag.hasKey("ChildSize")) {
             children = new ListBuffer[BlockPos]
             for (i <- 0 until tag.getInteger("ChildSize"))
@@ -118,7 +117,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
     }
 
     override def writeToNBT(tag: NBTTagCompound) {
-        super.writeToNBT(tag)
+        super[TileEntity].writeToNBT(tag)
         if (children.nonEmpty) {
             tag.setInteger("ChildSize", children.size)
             for (i <- children.indices)
