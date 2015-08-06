@@ -35,10 +35,10 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
     override def breakBlock(world: World, pos: BlockPos, state: IBlockState) {
 
         world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].removeFromNetwork(true)
-        super[BaseBlock].breakBlock(world, pos, state)
+        super.breakBlock(world, pos, state)
     }
 
-    override def getDefaultCubeTextures: CubeTextures = {
+    override def getDisplayTextures(state : IBlockState): CubeTextures = {
         val map = Minecraft.getMinecraft.getTextureMapBlocks
         val sides = new ListBuffer[String]
         for (icon <- icons) {

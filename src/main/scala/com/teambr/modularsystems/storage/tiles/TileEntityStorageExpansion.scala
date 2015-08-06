@@ -1,7 +1,6 @@
 package com.teambr.modularsystems.storage.tiles
 
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
-import com.teambr.bookshelf.helper.LogHelper
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
