@@ -1,6 +1,7 @@
 package com.teambr.modularsystems.storage.tiles
 
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+import com.teambr.bookshelf.helper.LogHelper
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
@@ -42,8 +43,9 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         }
         removedFromNetwork()
         core = None
+        LogHelper.debug(core)
         children.clear()
-        worldObj.markBlockForUpdate(pos)
+        worldObj.markBlockForUpdate(getPos)
     }
 
     /**
@@ -51,7 +53,10 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
      * @param childLoc The child to add to this
      */
     def addChild(childLoc: BlockPos) {
-        children :+ childLoc
+        if (core.isDefined) {
+            getCore.get.network.addNode(childLoc)
+            children :+ childLoc
+        }
     }
 
     /**

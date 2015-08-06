@@ -9,6 +9,7 @@ import com.teambr.modularsystems.storage.container.ContainerStorageCore
 import com.teambr.modularsystems.storage.gui.GuiStorageCore
 import com.teambr.modularsystems.storage.tiles.TileStorageCore
 import net.minecraft.block.material.Material
+import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{ BlockPos, ResourceLocation }
@@ -23,6 +24,12 @@ class BlockStorageCore extends BaseBlock(Material.wood, "storageCore", classOf[T
 
     override def MODID: String = Reference.MOD_ID
     override def blockName: String = "storageCore"
+
+    override def breakBlock(world: World, pos: BlockPos, state: IBlockState) {
+
+        world.getTileEntity(pos).asInstanceOf[TileStorageCore].destroyNetwork()
+        super[DropsItems].breakBlock(world, pos, state)
+    }
 
     override def getDefaultCubeTextures: CubeTextures = {
         val map = Minecraft.getMinecraft.getTextureMapBlocks

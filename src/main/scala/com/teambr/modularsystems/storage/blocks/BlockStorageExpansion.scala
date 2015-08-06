@@ -63,11 +63,9 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
     }
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-        if (world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined) {
-            val corePos = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.get.getPos
-            if (world.getTileEntity(corePos).asInstanceOf[TileStorageCore].canOpen(player))
-                player.openGui(Bookshelf, 0, world, corePos.getX, corePos.getY, corePos.getZ)
-        }
+            val corePos = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.orNull
+            if (corePos != null && world.getTileEntity(corePos.getPos).asInstanceOf[TileStorageCore].canOpen(player))
+                player.openGui(Bookshelf, 0, world, corePos.getPos.getX, corePos.getPos.getY, corePos.getPos.getZ)
         true
     }
 }
