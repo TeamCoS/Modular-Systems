@@ -3,6 +3,7 @@ package com.teambr.modularsystems.furnace.tiles
 import com.teambr.modularsystems.core.blocks.BlockProxy
 import com.teambr.modularsystems.core.functions.BlockCountFunction
 import com.teambr.modularsystems.core.managers.BlockManager
+import com.teambr.modularsystems.core.registries.FurnaceBannedBlocks
 import com.teambr.modularsystems.core.tiles.AbstractCore
 import net.minecraft.block.Block
 import net.minecraft.inventory.Container
@@ -57,7 +58,7 @@ class TileEntityFurnaceCore extends AbstractCore {
         if (block.isInstanceOf[BlockProxy])
             false
         else
-            false //TODO Furnace Banned Blocks
+            FurnaceBannedBlocks.isBlockBanned(block, meta)
     }
 
     /**
