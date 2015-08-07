@@ -31,7 +31,7 @@ class BlockStorageCore extends BaseBlock(Material.wood, "storageCore", classOf[T
         super[DropsItems].breakBlock(world, pos, state)
     }
 
-    override def getDefaultCubeTextures: CubeTextures = {
+    override def getDisplayTextures(state : IBlockState) : CubeTextures = {
         val map = Minecraft.getMinecraft.getTextureMapBlocks
         val textures = new CubeTextures(
             map.getTextureExtry(MODID + ":blocks/" + blockName + "Front"),

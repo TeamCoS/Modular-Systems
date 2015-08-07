@@ -5,14 +5,16 @@ import com.teambr.bookshelf.collections.CubeTextures
 import com.teambr.bookshelf.common.blocks.traits.BlockBakeable
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
 import com.teambr.modularsystems.core.lib.Reference
-import com.teambr.modularsystems.storage.tiles.{TileStorageCore, TileEntityStorageExpansion}
+import com.teambr.modularsystems.storage.tiles.{ TileStorageCore, TileEntityStorageExpansion }
 import net.minecraft.block.material.Material
-import net.minecraft.block.state.IBlockState
+import net.minecraft.block.properties.{ IProperty, PropertyBool }
+import net.minecraft.block.state.{ BlockState, IBlockState }
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{BlockPos, EnumFacing, ResourceLocation}
-import net.minecraft.world.World
+import net.minecraft.util.{ EnumFacing, BlockPos, ResourceLocation }
+import net.minecraft.world.{ World, IBlockAccess }
+import net.minecraftforge.common.property.{ ExtendedBlockState, IUnlistedProperty }
 
 import scala.collection.mutable.ListBuffer
 
@@ -28,29 +30,47 @@ import scala.collection.mutable.ListBuffer
  */
 class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class[_ <: TileEntity])
         extends BaseBlock(Material.wood, name, tileEntity: Class[_ <: TileEntity]) with BlockBakeable  {
+    lazy val PROPERTY_CONNECTED = PropertyBool.create("Connected")
 
     override def MODID: String = Reference.MOD_ID
 
     override def blockName: String = name
 
-    override def getDefaultCubeTextures: CubeTextures = {
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+        val corePos = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.orNull
+        if (corePos != null && world.getTileEntity(corePos.getPos).asInstanceOf[TileStorageCore].canOpen(player))
+            player.openGui(Bookshelf, 0, world, corePos.getPos.getX, corePos.getPos.getY, corePos.getPos.getZ)
+        true
+    }
+
+    override def getDisplayTextures(state : IBlockState) : CubeTextures = {
         val map = Minecraft.getMinecraft.getTextureMapBlocks
         val sides = new ListBuffer[String]
-        for (icon <- icons) {
-            sides += MODID + ":blocks/" + blockName + icon
-        }
-        for (i <- icons.size to 6) {
-            sides += MODID + ":blocks/" + blockName
-        }
-        val textures = new CubeTextures(
-            map.getTextureExtry(sides.head),
-            map.getTextureExtry(sides(1)),
-            map.getTextureExtry(sides(2)),
-            map.getTextureExtry(sides(3)),
-            map.getTextureExtry(sides(4)),
-            map.getTextureExtry(sides(5))
-        )
-        textures
+        if (state.getValue(PROPERTY_CONNECTED).asInstanceOf[Boolean]) {
+            for (icon <- icons) {
+                sides += MODID + ":blocks/" + blockName + icon
+            }
+            for (i <- icons.size to 6) {
+                sides += MODID + ":blocks/" + blockName
+            }
+            val textures = new CubeTextures(
+                map.getTextureExtry(sides.head),
+                map.getTextureExtry(sides(1)),
+                map.getTextureExtry(sides(2)),
+                map.getTextureExtry(sides(3)),
+                map.getTextureExtry(sides(4)),
+                map.getTextureExtry(sides(5))
+            )
+            textures
+        } else
+            new CubeTextures(
+                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection"),
+                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection"),
+                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection"),
+                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection"),
+                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection"),
+                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection")
+            )
     }
 
     override def registerIcons(): Array[ResourceLocation] = {
@@ -59,13 +79,38 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
         for (icon <- icons.indices) {
             locations += new ResourceLocation(MODID + ":blocks/" + blockName + icon)
         }
+        locations += new ResourceLocation(MODID + ":blocks/" + "storageNoConnection")
         locations.toArray
     }
 
-    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-            val corePos = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.orNull
-            if (corePos != null && world.getTileEntity(corePos.getPos).asInstanceOf[TileStorageCore].canOpen(player))
-                player.openGui(Bookshelf, 0, world, corePos.getPos.getX, corePos.getPos.getY, corePos.getPos.getZ)
-        true
+    override def createBlockState() : BlockState = {
+        val listed = Array[IProperty](PROPERTY_CONNECTED) //Used to create sub variants
+        val unListed = new Array[IUnlistedProperty[_]] (0) //Things we want, but don't need displayed
+        new ExtendedBlockState(this, listed, unListed)
+    }
+
+    override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
+        val hasConnection : java.lang.Boolean = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined
+        state.withProperty(PROPERTY_CONNECTED, hasConnection)
+    }
+
+    /**
+     * Used to convert the meta to state
+     * @param meta The meta
+     * @return
+     */
+    override def getStateFromMeta(meta : Int) : IBlockState = getDefaultState.withProperty(PROPERTY_CONNECTED, java.lang.Boolean.valueOf(meta > 0))
+
+    /**
+     * Called to convert state from meta
+     * @param state The state
+     * @return
+     */
+    override def getMetaFromState(state : IBlockState) = if(state.getValue(PROPERTY_CONNECTED).asInstanceOf[Boolean]) 1 else 0
+
+
+    override def getAllPossibleStates: Array[IBlockState] = {
+        Array[IBlockState](getDefaultState.withProperty(PROPERTY_CONNECTED, true),
+                            getDefaultState.withProperty(PROPERTY_CONNECTED, false))
     }
 }
