@@ -4,7 +4,7 @@ import java.awt.Color
 
 import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambr.bookshelf.client.gui.component.BaseComponent
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentText, GuiTabCollection, GuiComponentArrow, GuiComponentFlame}
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentFlame, GuiComponentText, GuiTabCollection}
 import com.teambr.modularsystems.furnace.container.ContainerFurnaceCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import net.minecraft.entity.player.EntityPlayer

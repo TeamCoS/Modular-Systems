@@ -18,8 +18,8 @@ import scala.collection.immutable.HashMap
  * @since August 05, 2015
  */
 class BlockCountFunction {
-    val blockCount = new HashMap[String, Int]()
-    val materialCount = new HashMap[String, Int]()
+    var blockCount = new HashMap[String, Int]()
+    var materialCount = new HashMap[String, Int]()
 
     /**
      * Add a block to the count function
@@ -35,7 +35,7 @@ class BlockCountFunction {
             case None => 0
         }
         i += 1
-        blockCount + (BlockHelper.getBlockString(block, meta) -> i)
+        blockCount += (BlockHelper.getBlockString(block, meta) -> i)
         if(!BlockValueRegistry.isBlockRegistered(block, meta)) {
             var j : Int = materialCount.get(BlockValueRegistry.getMaterialString(block.getMaterial)) match {
                 case Some(value) => value
