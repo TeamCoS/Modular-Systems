@@ -44,7 +44,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         core = None
         children.clear()
         if (worldObj.getTileEntity(pos).isInstanceOf[TileEntityStorageExpansion])
-            Minecraft.getMinecraft.renderGlobal.markBlockRangeForRenderUpdate(pos.getX, pos.getY, pos.getZ, pos.getX, pos.getY, pos.getZ)
+            Minecraft.getMinecraft.renderGlobal.markBlockForUpdate(pos)
         worldObj.markBlockForUpdate(getPos)
     }
 
@@ -74,7 +74,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
       ******************************************************************************************************************/
 
     override def onServerTick() : Unit = {
-        if (core.isEmpty && worldObj.rand.nextInt(80) == 0)
+        if (core.isEmpty && worldObj.rand.nextInt(2) == 0) //TODO change back to 80
             searchAndConnect()
         else if (getCore.isEmpty && new Random().nextInt(20) == 0)
             removeFromNetwork(true)
@@ -89,20 +89,22 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
                     case tile: TileStorageCore =>
                         core = Some(tile.getPos)
                         tile.getNetwork.addNode(getPos)
+                        worldObj.markBlockForUpdate(getPos)
+                        Minecraft.getMinecraft.renderGlobal.markBlockForUpdate(pos)
                         addedToNetwork()
                     case tile: TileEntityStorageExpansion =>
                         if (tile.getCore.isDefined) {
                             core = Some(tile.getCore.get.getPos)
                             tile.addChild(getPos)
+                            worldObj.markBlockForUpdate(getPos)
+                            Minecraft.getMinecraft.renderGlobal.markBlockForUpdate(pos)
                             addedToNetwork()
                         }
                     case _ =>
                 }
             }
         }
-        if (getCore.isDefined)
-            Minecraft.getMinecraft.renderGlobal.markBlockRangeForRenderUpdate(pos.getX, pos.getY, pos.getZ, pos.getX, pos.getY, pos.getZ)
-        worldObj.markBlockForUpdate(getPos)
+        //worldObj.markBlockForUpdate(getPos)
     }
 
     def getTileInDirection(pos: BlockPos): Option[(TileEntity)] = {
