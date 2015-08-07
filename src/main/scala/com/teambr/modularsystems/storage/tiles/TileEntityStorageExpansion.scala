@@ -1,10 +1,9 @@
 package com.teambr.modularsystems.storage.tiles
 
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
-import net.minecraft.client.Minecraft
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.{ BlockPos, EnumFacing }
 
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
@@ -22,14 +21,14 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
      * Called after this has been added to a network
      */
     def addedToNetwork() {
-        Minecraft.getMinecraft.renderGlobal.markBlockForUpdate(pos)
+
     }
 
     /**
      * Called right before this is removed from a network
      */
     def removedFromNetwork() {
-        Minecraft.getMinecraft.renderGlobal.markBlockForUpdate(pos)
+
     }
 
     /**
@@ -47,7 +46,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         core = None
         children.clear()
         removedFromNetwork()
-        worldObj.markBlockForUpdate(getPos)
+       worldObj.markBlockForUpdate(pos)
     }
 
     /**
@@ -76,6 +75,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
       ******************************************************************************************************************/
 
     override def onServerTick() : Unit = {
+        worldObj.markBlockForUpdate(getPos)
         if (core.isEmpty && worldObj.rand.nextInt(2) == 0) //TODO change back to 80
             searchAndConnect()
         else if (getCore.isEmpty && new Random().nextInt(20) == 0)
@@ -103,6 +103,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
             }
         }
         worldObj.markBlockForUpdate(getPos)
+        worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
 
     def getTileInDirection(pos: BlockPos): Option[(TileEntity)] = {
@@ -122,6 +123,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         if (tag.hasKey("IsInNetwork"))
             core = Some(BlockPos.fromLong(tag.getLong("IsInNetwork")))
         else core = None
+        worldObj.markBlockRangeForRenderUpdate(pos, pos.up.north())
     }
 
     override def writeToNBT(tag: NBTTagCompound) {

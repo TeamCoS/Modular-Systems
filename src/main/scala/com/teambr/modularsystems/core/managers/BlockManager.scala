@@ -1,5 +1,7 @@
 package com.teambr.modularsystems.core.managers
 
+import com.teambr.modularsystems.core.blocks.BlockProxy
+import com.teambr.modularsystems.core.tiles.TileProxy
 import com.teambr.modularsystems.storage.blocks.{BlockStorageExpansion, BlockStorageCore}
 import com.teambr.modularsystems.storage.tiles.{TileStorageBasic, TileStorageCore}
 import net.minecraft.block.Block
@@ -17,7 +19,11 @@ object BlockManager {
     val storageCore = new BlockStorageCore
     val storageBasic = new BlockStorageExpansion("storageBasic", List(), classOf[TileStorageBasic])
 
+    val proxy = new BlockProxy
+
     def preInit() : Unit = {
+        //Core
+        registerBlock(proxy, "proxy", classOf[TileProxy])
 
         //Storage
         registerBlock(storageCore, "storageCore", classOf[TileStorageCore])

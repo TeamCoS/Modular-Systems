@@ -7,6 +7,7 @@ import com.teambr.bookshelf.common.tiles.traits.{ Inventory, UpdatingTile }
 import com.teambr.bookshelf.util.WorldUtils
 import com.teambr.modularsystems.core.collections.StandardValues
 import com.teambr.modularsystems.core.functions.BlockCountFunction
+import com.teambr.modularsystems.core.managers.BlockManager
 import net.minecraft.block.Block
 import net.minecraft.block.properties.PropertyDirection
 import net.minecraft.item.ItemStack
@@ -116,7 +117,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
                         //Continue
                     }
                     if(worldObj.isAirBlock(location.asBlockPos) ||
-                        isBlockBanned(worldObj.getBlockState(location.asBlockPos).getBlock, getBlockMetadata)) {
+                            isBlockBanned(worldObj.getBlockState(location.asBlockPos).getBlock, getBlockMetadata)) {
                         return false
                     }
                 }
@@ -148,12 +149,52 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
             val loc = outside.get(i).asBlockPos
 
             if(!loc.equals(pos)) { //Not us, so we can do something
+                worldObj.getTileEntity(loc) match {
+                    case tile : TileProxy =>
+                        tile.setCore(this)
+                    case _ =>
+                        val id = Block.getIdFromBlock(worldObj.getBlockState(loc).getBlock)
+                        val meta = worldObj.getBlockState(loc).getBlock.getMetaFromState(worldObj.getBlockState(loc))
+                        blockCountFunction.addBlock(worldObj.getBlockState(loc).getBlock, meta)
 
+                        worldObj.setBlockState(loc, BlockManager.proxy.getDefaultState)
+                        val proxy = worldObj.getTileEntity(loc).asInstanceOf[TileProxy]
+                        proxy.setCore(this)
+                        proxy.storedBlock = id
+                        proxy.metaData = meta
+                        worldObj.markBlockForUpdate(loc)
+                        worldObj.markBlockRangeForRenderUpdate(loc, loc)
+                }
+                generateValues(blockCountFunction)
+                wellFormed = true
+                worldObj.markBlockForUpdate(pos)
             }
         }
     }
 
-    def deconstructMultiblock() : Unit = {}
+    def deconstructMultiblock() : Unit = {
+        //Just to be safe...
+        if(corners == null)
+            return
+
+        values.resetStructureValues()
+        val outside = new Location(corners._1).getAllWithinBounds(new Location(corners._2), includeInner = false, includeOuter = true)
+        for(i <- 0 until outside.size()) {
+            val loc = outside.get(i).asBlockPos
+
+            if (!loc.equals(pos)) { //Not us, so we can do something
+                worldObj.getTileEntity(loc) match {
+                    case proxy : TileProxy =>
+                        val meta = proxy.metaData
+                        worldObj.setBlockState(loc, proxy.getStoredBlock.getStateFromMeta(meta))
+                        worldObj.markBlockForUpdate(loc)
+                    case _ =>
+                }
+            }
+        }
+        wellFormed = false
+        worldObj.markBlockForUpdate(pos)
+    }
 
     def getCorners : Option[(BlockPos, BlockPos)] = {
         val local = getPos
@@ -222,8 +263,8 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
     override def readFromNBT(tag : NBTTagCompound) : Unit = {}
 
     /*******************************************************************************************************************
-     ************************************************* Inventory methods ***********************************************
-     *******************************************************************************************************************/
+      ************************************************* Inventory methods ***********************************************
+      *******************************************************************************************************************/
     override def initialSize : Int = 2
 
     /**

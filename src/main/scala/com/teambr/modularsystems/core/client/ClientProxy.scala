@@ -1,5 +1,6 @@
 package com.teambr.modularsystems.core.client
 
+import com.teambr.modularsystems.core.client.modelfactory.ModelFactory
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.managers.ItemRenderManager
 
@@ -16,6 +17,8 @@ import com.teambr.modularsystems.core.managers.ItemRenderManager
 class ClientProxy extends CommonProxy {
 
     override def init() = {
+
+        ModelFactory.register()
 
         //Register Inventory Renderer for Items
         ItemRenderManager.registerItemRenderer()
