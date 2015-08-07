@@ -3,13 +3,15 @@ package com.teambr.modularsystems.core.client.modelfactory.models
 import java.util
 import javax.vecmath.Vector3f
 
-import com.teambr.modularsystems.core.blocks.ProxyState
-import com.teambr.modularsystems.core.tiles.TileProxy
+import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
+import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
+import net.minecraft.block.BlockFurnace
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model._
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.{ IBakedModel, ModelRotation }
+import net.minecraft.init.Blocks
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.client.model.ISmartBlockModel
 
@@ -21,19 +23,19 @@ import net.minecraftforge.client.model.ISmartBlockModel
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
  * @author Paul Davis <pauljoda>
- * @since August 06, 2015
+ * @since August 07, 2015
  */
-class ModelProxy extends ISmartBlockModel {
+class ModelFurnaceCore extends ISmartBlockModel {
     val faceBakery = new FaceBakery
-    var tile: TileProxy = new TileProxy
-    var modelRot = ModelRotation.X0_Y0
+    var modelRot = EnumFacing.NORTH
+    var isActive = false
 
-    def this(e : TileProxy) {
+    def this(rotation : EnumFacing, active : Boolean) = {
         this()
-        tile = e
+        modelRot = rotation
+        isActive = active
     }
-
-    override def getFaceQuads(facing : EnumFacing) : util.List[_] = {
+    override def getFaceQuads(p_177551_1_ : EnumFacing) : util.List[_] = {
         val bakedQuads = new util.ArrayList[BakedQuad]()
         val uv = new BlockFaceUV(Array[Float](0.0F, 0.0F, 16.0F, 16.0F), 0)
         val face = new BlockPartFace(null, 0, "", uv)
@@ -42,12 +44,12 @@ class ModelProxy extends ISmartBlockModel {
 
         val hopperTexture = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/hopper_top")
 
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, -0.03F, 0.0F), new Vector3f(16.0F, -0.03F, 16.0F), face, hopperTexture, EnumFacing.DOWN, modelRot, null, scale, true))
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 16.03F, 0.0F), new Vector3f(16.0F, 16.03F, 16.0F), face, hopperTexture, EnumFacing.UP, modelRot, null, scale, true))
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, -0.03F), new Vector3f(16.0F, 16.0F, -0.03F), face, hopperTexture, EnumFacing.NORTH, modelRot, null, scale, true))
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.03F), new Vector3f(16.0F, 16.0F, 16.03F), face, hopperTexture, EnumFacing.SOUTH, modelRot, null, scale, true))
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(16.03F, 0.0F, 0.0F), new Vector3f(16.03F, 16.0F, 16.0F), face, hopperTexture, EnumFacing.EAST, modelRot, null, scale, true))
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(-0.03F, 0.0F, 0.0F), new Vector3f(-0.03F, 16.0F, 16.0F), face, hopperTexture, EnumFacing.WEST, modelRot, null, scale, true))
+        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, -0.03F, 0.0F), new Vector3f(16.0F, -0.03F, 16.0F), face, hopperTexture, EnumFacing.DOWN, ModelRotation.X0_Y0, null, scale, true))
+        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 16.03F, 0.0F), new Vector3f(16.0F, 16.03F, 16.0F), face, hopperTexture, EnumFacing.UP, ModelRotation.X0_Y0, null, scale, true))
+        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, -0.03F), new Vector3f(16.0F, 16.0F, -0.03F), face, hopperTexture, EnumFacing.NORTH, ModelRotation.X0_Y0, null, scale, true))
+        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.03F), new Vector3f(16.0F, 16.0F, 16.03F), face, hopperTexture, EnumFacing.SOUTH, ModelRotation.X0_Y0, null, scale, true))
+        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(16.03F, 0.0F, 0.0F), new Vector3f(16.03F, 16.0F, 16.0F), face, hopperTexture, EnumFacing.EAST, ModelRotation.X0_Y0, null, scale, true))
+        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(-0.03F, 0.0F, 0.0F), new Vector3f(-0.03F, 16.0F, 16.0F), face, hopperTexture, EnumFacing.WEST, ModelRotation.X0_Y0, null, scale, true))
 
         bakedQuads
     }
@@ -56,7 +58,8 @@ class ModelProxy extends ISmartBlockModel {
         val blockRendererDispatcher = Minecraft.getMinecraft.getBlockRendererDispatcher
         val blockModelShapes = blockRendererDispatcher.getBlockModelShapes
 
-        val copiedModel = blockModelShapes.getModelForState(tile.getStoredBlock.getBlockState.getBaseState)
+        val copiedModel = blockModelShapes.getModelForState(Blocks.furnace.getDefaultState.withProperty(BlockFurnace.FACING, modelRot))
+
         val returnVals = new util.ArrayList[BakedQuad]()
         val otherGeneralQuads = copiedModel.getGeneralQuads
         for(i <- 0 until otherGeneralQuads.size()) {
@@ -79,12 +82,13 @@ class ModelProxy extends ISmartBlockModel {
     override def isBuiltInRenderer: Boolean = false
 
     override def handleBlockState(state : IBlockState) : IBakedModel = {
-        new ModelProxy(state.asInstanceOf[ProxyState].tile)
+        new ModelFurnaceCore(state.getValue(PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing],
+            state.getValue(state.getBlock.asInstanceOf[CoreStates].PROPERTY_ACTIVE).asInstanceOf[Boolean])
     }
 
     override def getItemCameraTransforms : ItemCameraTransforms = {
         new ItemCameraTransforms(ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
     }
 
-    override def getTexture : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/stone")
+    override def getTexture : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/furnace_front_off")
 }

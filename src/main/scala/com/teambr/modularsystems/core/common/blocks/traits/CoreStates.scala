@@ -7,9 +7,10 @@ import net.minecraft.block.properties.{ PropertyBool, IProperty }
 import net.minecraft.block.state.{ BlockState, IBlockState }
 import net.minecraft.client.resources.model.ModelRotation
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.util.{ BlockPos, EnumFacing, MathHelper }
+import net.minecraft.util.{ EnumWorldBlockLayer, BlockPos, EnumFacing, MathHelper }
 import net.minecraft.world.{ IBlockAccess, World }
 import net.minecraftforge.common.property.{ IExtendedBlockState, ExtendedBlockState, IUnlistedProperty }
+import net.minecraftforge.fml.relauncher.{ Side, SideOnly }
 
 /**
  * This file was created for Modular-Systems
@@ -52,13 +53,23 @@ trait CoreStates extends Block {
         }
     }
 
+    override def getRenderType : Int = 3
+
+    override def isOpaqueCube : Boolean = false
+
+    @SideOnly(Side.CLIENT)
+    override def isTranslucent : Boolean = true
+
+    @SideOnly(Side.CLIENT)
+    override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
+    
     /**
      * Used to convert the meta to state
      * @param meta The meta
      * @return
      */
     override def getStateFromMeta(meta : Int) : IBlockState = {
-        getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.getFront(meta & 3)).withProperty(PROPERTY_ACTIVE, if((Integer.valueOf(meta & 15) >> 2) == 1) true else false)
+        getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.getFront(meta & 5)).withProperty(PROPERTY_ACTIVE, if((Integer.valueOf(meta & 15) >> 2) == 1) true else false)
     }
 
     /**
@@ -68,7 +79,7 @@ trait CoreStates extends Block {
      */
     override def getMetaFromState(state : IBlockState) = {
         val b0 : Byte = 0
-        var i : Int = b0 | state.getValue(PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing].getHorizontalIndex
+        var i : Int = b0 | state.getValue(PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing].getIndex
         i |= (if(state.getValue(PROPERTY_ACTIVE).asInstanceOf[Boolean]) 1 else 0 ) << 2
         i
     }
@@ -82,4 +93,14 @@ trait CoreStates extends Block {
             return ModelRotation.X0_Y270
         ModelRotation.X0_Y0
     }
+
+    def getAllStates : Array[IBlockState] =
+        Array[IBlockState](getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.NORTH).withProperty(PROPERTY_ACTIVE, false),
+            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.SOUTH).withProperty(PROPERTY_ACTIVE, false),
+            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.EAST).withProperty(PROPERTY_ACTIVE, false),
+            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.WEST).withProperty(PROPERTY_ACTIVE, false),
+            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.NORTH).withProperty(PROPERTY_ACTIVE, true),
+            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.SOUTH).withProperty(PROPERTY_ACTIVE, true),
+            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.EAST).withProperty(PROPERTY_ACTIVE, true),
+            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.WEST).withProperty(PROPERTY_ACTIVE, true))
 }
