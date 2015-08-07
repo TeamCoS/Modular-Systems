@@ -10,6 +10,7 @@ import com.teambr.modularsystems.core.ModularSystems
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -48,8 +49,8 @@ object FurnaceBannedBlocks {
      * Save the current registry to a file
      */
     def saveToFile(): Unit = {
-        validateList()
-        if (!bannedBlocks.isEmpty) JsonUtils.writeToJson(bannedBlocks, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "furnaceBannedBlocks.json")
+        if (!bannedBlocks.isEmpty) JsonUtils.writeToJson(bannedBlocks, ModularSystems.configFolderLocation +
+                File.separator + "Registries" + File.separator + "furnaceBannedBlocks.json")
     }
 
     /**
@@ -86,15 +87,48 @@ object FurnaceBannedBlocks {
      */
     def isBadBlockFromBlock(block: Block): Boolean = {
         if (block eq Blocks.redstone_block) return false
-        if (block.hasTileEntity(0)) {
+        if (block.hasTileEntity(block.getDefaultState)) {
             return true
         }
         if (!block.isNormalCube) {
             return true
         }
-        val oreDictCheck: Int = OreDictionary.getOreID(new ItemStack(block))
-        val isWood: Int = OreDictionary.getOreID("logWood")
-        val isPlank: Int = OreDictionary.getOreID("plankWood")
-        oreDictCheck == isWood || oreDictCheck == isPlank
+        val oreDictCheck = OreDictionary.getOreIDs(new ItemStack(block))
+        val isWood = OreDictionary.getOreID("logWood")
+        val isPlank = OreDictionary.getOreID("plankWood")
+        oreDictCheck.contains(isWood) || oreDictCheck.contains(isPlank)
+    }
+
+    /**
+     * Add a blocks to the ban registry
+     * @param block The blocks to ban
+     * @param meta The blocks metadata
+     */
+    def addBannedBlock(block: Block, meta: Int) {
+        val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(block)
+        if (!bannedBlocks.contains(id.modId + ":" + id.name + ":" + meta))
+            bannedBlocks.add(id.modId + ":" + id.name + ":" + meta)
+    }
+
+    /**
+     * Used for adding by name, useful with command
+     * @param blockName The name of the blocks
+     *                  'modid:blockname:meta'
+     */
+    def addBannedBlock(blockName: String) {
+        if (!bannedBlocks.contains(blockName)) bannedBlocks.add(blockName)
+    }
+
+    /**
+     * Check if the blocks has been listed as banned
+     * @param block The blocks to check
+     * @param meta The blocks's metadata
+     * @return True if is banned
+     */
+    def isBlockBanned(block: Block, meta: Int): Boolean = {
+        val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(block)
+        val blockName: String = id.modId + ":" + id.name + ":" + meta
+        val blockWithNoMeta: String = id.modId + ":" + id.name + ":" + -1
+        bannedBlocks.contains(blockName) || bannedBlocks.contains(blockWithNoMeta)
     }
 }
