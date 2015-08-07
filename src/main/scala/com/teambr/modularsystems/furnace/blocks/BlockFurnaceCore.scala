@@ -1,5 +1,6 @@
 package com.teambr.modularsystems.furnace.blocks
 
+import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.ModularSystems
@@ -12,7 +13,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.BlockPos
+import net.minecraft.util.{EnumFacing, BlockPos}
 import net.minecraft.world.World
 
 /**
@@ -44,28 +45,24 @@ with OpensGui with CoreStates with DropsItems {
         super[DropsItems].breakBlock(world, pos, state)
     }
 
-    //OpensGui Methods
-    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        world.getTileEntity(new BlockPos(x, y, z)) match {
+    override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, player : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
+        world.getTileEntity(pos) match {
             case core: TileEntityFurnaceCore =>
                 if (core.wellFormed)
-                    new ContainerFurnaceCore(player.inventory, world.getTileEntity(core.getPos).asInstanceOf[TileEntityFurnaceCore])
+                    player.openGui(Bookshelf, 0, world, pos.getX, pos.getY, pos.getZ)
                 else
                     core.setDirty()
             case _ =>
         }
-        null
+        true
+    }
+
+    //OpensGui Methods
+    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
+        new ContainerFurnaceCore(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
     }
 
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        world.getTileEntity(new BlockPos(x, y, z)) match {
-            case core: TileEntityFurnaceCore =>
-                if (core.wellFormed)
-                    new GuiFurnaceCore(player, world.getTileEntity(core.getPos).asInstanceOf[TileEntityFurnaceCore])
-                else
-                    core.setDirty()
-            case _ =>
-        }
-        null
+        new GuiFurnaceCore(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
     }
 }
