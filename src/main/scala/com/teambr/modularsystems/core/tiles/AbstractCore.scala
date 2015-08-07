@@ -120,6 +120,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
                     if(location.equals(new Location(pos.getX, pos.getY, pos.getZ))) {
                         //Continue
                     }
+                    val block = worldObj.getBlockState(location.asBlockPos).getBlock
                     if(worldObj.isAirBlock(location.asBlockPos) ||
                             isBlockBanned(worldObj.getBlockState(location.asBlockPos).getBlock, getBlockMetadata)) {
                         return false
@@ -202,14 +203,14 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
 
     def getCorners : Option[(BlockPos, BlockPos)] = {
         val local = getPos
-        val firstCorner = new BlockPos(local)
-        val secondCorner = new BlockPos(local)
+        var firstCorner = new BlockPos(local)
+        var secondCorner = new BlockPos(local)
 
         val dir : EnumFacing = worldObj.getBlockState(this.pos).getValue(PropertyDirection.create("facing", util.Arrays.asList(EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST))).asInstanceOf[EnumFacing]
 
         //Move Inside
-        firstCorner.offset(dir.getOpposite)
-        secondCorner.offset(dir.getOpposite)
+        firstCorner = firstCorner.offset(dir.getOpposite)
+        secondCorner = secondCorner.offset(dir.getOpposite)
 
         //Get our directions
         val right = WorldUtils.rotateRight(dir)
@@ -218,45 +219,54 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
         //Get first corner
         //Find side
         while(worldObj.isAirBlock(firstCorner)) {
-            firstCorner.offset(right)
+            firstCorner = firstCorner.offset(right)
             if(pos.distanceSq(firstCorner) > MAX_SIZE)
                 return None
         }
 
         //Pop back inside
-        firstCorner.offset(right.getOpposite)
+        firstCorner = firstCorner.offset(right.getOpposite)
 
         //Find floor
         while(worldObj.isAirBlock(firstCorner)) {
-            firstCorner.offset(EnumFacing.DOWN)
+            firstCorner = firstCorner.offset(EnumFacing.DOWN)
             if(pos.distanceSq(firstCorner) > MAX_SIZE)
                 return None
         }
 
         //Found, so move to physical location
-        firstCorner.offset(right)
-        firstCorner.offset(dir)
+        firstCorner = firstCorner.offset(right)
+        firstCorner = firstCorner.offset(dir)
 
         //Find side
         while(worldObj.isAirBlock(secondCorner)) {
-            secondCorner.offset(left)
+            secondCorner = secondCorner.offset(left)
             if(pos.distanceSq(secondCorner) > MAX_SIZE)
                 return None
         }
 
         //Pop back inside
-        secondCorner.offset(left.getOpposite)
+        secondCorner = secondCorner.offset(left.getOpposite)
 
         //Move to back
         while(worldObj.isAirBlock(secondCorner)) {
-            secondCorner.offset(dir.getOpposite)
+            secondCorner = secondCorner.offset(dir.getOpposite)
+            if(pos.distanceSq(secondCorner) > MAX_SIZE)
+                return None
+        }
+
+        secondCorner = secondCorner.offset(dir)
+
+        //Move UP
+        while(worldObj.isAirBlock(secondCorner)) {
+            secondCorner = secondCorner.offset(EnumFacing.UP)
             if(pos.distanceSq(secondCorner) > MAX_SIZE)
                 return None
         }
 
         //Found, so move back to physical location
-        secondCorner.offset(left)
-        secondCorner.offset(dir.getOpposite)
+        secondCorner = secondCorner.offset(left)
+        secondCorner = secondCorner.offset(dir.getOpposite)
 
         Some(firstCorner, secondCorner)
     }
