@@ -12,8 +12,8 @@ import net.minecraft.block.state.{ BlockState, IBlockState }
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{ EnumFacing, BlockPos, ResourceLocation }
-import net.minecraft.world.{ World, IBlockAccess }
+import net.minecraft.util.{ ResourceLocation, EnumFacing, BlockPos }
+import net.minecraft.world.{ IBlockAccess, World }
 import net.minecraftforge.common.property.{ ExtendedBlockState, IUnlistedProperty }
 
 import scala.collection.mutable.ListBuffer
@@ -32,18 +32,26 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
         extends BaseBlock(Material.wood, name, tileEntity: Class[_ <: TileEntity]) with BlockBakeable  {
     lazy val PROPERTY_CONNECTED = PropertyBool.create("Connected")
 
-    override def MODID: String = Reference.MOD_ID
 
+    override def MODID: String = Reference.MOD_ID
     override def blockName: String = name
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-        val corePos = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.orNull
-        if (corePos != null && world.getTileEntity(corePos.getPos).asInstanceOf[TileStorageCore].canOpen(player))
-            player.openGui(Bookshelf, 0, world, corePos.getPos.getX, corePos.getPos.getY, corePos.getPos.getZ)
+        if (world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined) {
+            val corePos = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.get.getPos
+            if (world.getTileEntity(corePos).asInstanceOf[TileStorageCore].canOpen(player)) {
+                player.openGui(Bookshelf, 0, world, corePos.getX, corePos.getY, corePos.getZ)
+            }
+        }
         true
     }
 
-    override def getDisplayTextures(state : IBlockState) : CubeTextures = {
+    override def breakBlock(world: World, pos: BlockPos, state: IBlockState) {
+        world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].removeFromNetwork(true)
+        super.breakBlock(world, pos, state)
+    }
+
+    override def getDisplayTextures(state : IBlockState): CubeTextures = {
         val map = Minecraft.getMinecraft.getTextureMapBlocks
         val sides = new ListBuffer[String]
         if (state.getValue(PROPERTY_CONNECTED).asInstanceOf[Boolean]) {
@@ -111,6 +119,6 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
 
     override def getAllPossibleStates: Array[IBlockState] = {
         Array[IBlockState](getDefaultState.withProperty(PROPERTY_CONNECTED, true),
-                            getDefaultState.withProperty(PROPERTY_CONNECTED, false))
+            getDefaultState.withProperty(PROPERTY_CONNECTED, false))
     }
 }

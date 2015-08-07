@@ -3,14 +3,15 @@ package com.teambr.modularsystems.core.tiles
 import java.util
 
 import com.teambr.bookshelf.collections.Location
-import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+import com.teambr.bookshelf.common.tiles.traits.{ Inventory, UpdatingTile }
 import com.teambr.bookshelf.util.WorldUtils
 import com.teambr.modularsystems.core.collections.StandardValues
 import com.teambr.modularsystems.core.functions.BlockCountFunction
 import net.minecraft.block.Block
 import net.minecraft.block.properties.PropertyDirection
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{ BlockPos, EnumFacing }
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.{ EnumFacing, BlockPos }
 import net.minecraft.world.World
 
 /**
@@ -23,7 +24,7 @@ import net.minecraft.world.World
  * @author Paul Davis <pauljoda>
  * @since August 05, 2015
  */
-abstract class AbstractCore extends UpdatingTile /*with Inventory*/ {
+abstract class AbstractCore extends UpdatingTile with Inventory {
     final val cookSpeed = 200
     final val MAX_SIZE = 100
 
@@ -136,7 +137,21 @@ abstract class AbstractCore extends UpdatingTile /*with Inventory*/ {
         }
     }
 
-    def buildMultiblock() : Unit = {}
+    def buildMultiblock() : Unit = {
+        //Just to be safe, though it should never happen
+        if(corners == null)
+            return
+
+        val outside = new Location(corners._1).getAllWithinBounds(new Location(corners._2), includeInner = false, includeOuter = true)
+        val blockCountFunction = new BlockCountFunction
+        for(i <- 0 until outside.size()) {
+            val loc = outside.get(i).asBlockPos
+
+            if(!loc.equals(pos)) { //Not us, so we can do something
+
+            }
+        }
+    }
 
     def deconstructMultiblock() : Unit = {}
 
@@ -201,15 +216,20 @@ abstract class AbstractCore extends UpdatingTile /*with Inventory*/ {
         Some(firstCorner, secondCorner)
     }
 
+    override def markDirty() : Unit = {}
+
+    override def writeToNBT(tag : NBTTagCompound) : Unit = {}
+    override def readFromNBT(tag : NBTTagCompound) : Unit = {}
+
     /*******************************************************************************************************************
      ************************************************* Inventory methods ***********************************************
      *******************************************************************************************************************/
-   /* override def initialSize : Int = 2
+    override def initialSize : Int = 2
 
     /**
      * Does this inventory has a custom name
      * @return True if there is a name (localized)
      */
-    override def hasCustomName(): Boolean = false*/
+    override def hasCustomName(): Boolean = false
 
 }
