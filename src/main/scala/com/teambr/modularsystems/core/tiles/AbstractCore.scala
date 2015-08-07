@@ -158,6 +158,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
                 generateValues(blockCountFunction)
                 wellFormed = true
                 worldObj.markBlockForUpdate(pos)
+                worldObj.markBlockRangeForRenderUpdate(corners._1, corners._2)
             }
         }
     }
@@ -302,6 +303,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
                 markDirty()
             }
             worldObj.markBlockForUpdate(pos)
+            worldObj.markBlockRangeForRenderUpdate(pos, pos)
         }
     }
 
