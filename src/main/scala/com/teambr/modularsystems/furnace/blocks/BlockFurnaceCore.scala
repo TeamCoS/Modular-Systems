@@ -5,15 +5,16 @@ import com.teambr.bookshelf.common.blocks.traits.{BlockBakeable, DropsItems, Fou
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
-import com.teambr.modularsystems.core.common.blocks.traits.ActiveStates
 import com.teambr.modularsystems.core.lib.Reference
+import com.teambr.modularsystems.furnace.container.ContainerFurnaceCore
+import com.teambr.modularsystems.furnace.gui.GuiFurnaceCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.ResourceLocation
+import net.minecraft.util.{BlockPos, ResourceLocation}
 import net.minecraft.world.World
 
 /**
@@ -26,26 +27,27 @@ import net.minecraft.world.World
  * @author Dyonovan
  * @since August 07, 2015
  */
-class BlockFurnaceCore(name: String, var isActive: Boolean) extends BaseBlock(Material.rock, name, classOf[TileEntityFurnaceCore])
-with OpensGui with FourWayRotation with BlockBakeable with DropsItems with ActiveStates {
-
-
+class BlockFurnaceCore(name: String, isActive: Boolean) extends BaseBlock(Material.rock, name, classOf[TileEntityFurnaceCore])
+        with OpensGui with FourWayRotation with BlockBakeable with DropsItems {
 
     override def blockName: String = name
-
     override def MODID: String = Reference.MOD_ID
+    /*override def isRunning: Boolean = isActive
+    override def isRunning_=(bool: Boolean): Boolean = isActive
+
+    setDefaultState(getDefaultState.withProperty(PROPERTY_ACTIVE, isActive))*/
 
     override def getCreativeTab: CreativeTabs = {
-        if (!isActive)
-            ModularSystems.tabModularSystems
-        else
+        if (isActive)
             null
+        else
+            ModularSystems.tabModularSystems
     }
 
     override def getDisplayTextures(state: IBlockState): CubeTextures = {
         val map = Minecraft.getMinecraft.getTextureMapBlocks
         var textures: CubeTextures = null
-        if (state.getValue(PROPERTY_ACTIVE).asInstanceOf[Boolean]) {
+        /*if (state.getValue(PROPERTY_ACTIVE).asInstanceOf[Boolean]) {
             textures = new CubeTextures(
                 map.getTextureExtry("minecraft:blocks/furnace_front_on"),
                 map.getTextureExtry("minecraft:blocks/furnace_side"),
@@ -53,7 +55,7 @@ with OpensGui with FourWayRotation with BlockBakeable with DropsItems with Activ
                 map.getTextureExtry("minecraft:blocks/furnace_side"),
                 map.getTextureExtry("minecraft:blocks/furnace_top"),
                 map.getTextureExtry("minecraft:blocks/furnace_top"))
-        } else {
+        } else {*/
             textures = new CubeTextures(
                 map.getTextureExtry("minecraft:blocks/furnace_front_off"),
                 map.getTextureExtry("minecraft:blocks/furnace_side"),
@@ -61,7 +63,7 @@ with OpensGui with FourWayRotation with BlockBakeable with DropsItems with Activ
                 map.getTextureExtry("minecraft:blocks/furnace_side"),
                 map.getTextureExtry("minecraft:blocks/furnace_top"),
                 map.getTextureExtry("minecraft:blocks/furnace_top"))
-        }
+        //}
         textures
     }
 
@@ -72,8 +74,9 @@ with OpensGui with FourWayRotation with BlockBakeable with DropsItems with Activ
             new ResourceLocation("minecraft:blocks/furnace_front_on"))
     }
 
-    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
+    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
+        new ContainerFurnaceCore(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
 
-    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
-
+    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
+        new GuiFurnaceCore(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
 }

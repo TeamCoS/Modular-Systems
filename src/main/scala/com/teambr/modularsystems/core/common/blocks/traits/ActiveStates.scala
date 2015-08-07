@@ -20,10 +20,10 @@ import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty
  */
 trait ActiveStates extends Block with BlockBakeable {
 
-    lazy val PROPERTY_ACTIVE = PropertyBool.create("isActive")
+    lazy val PROPERTY_ACTIVE = PropertyBool.create("isRunning")
 
-    def isActive: Boolean
-    def isActive_=(bool: Boolean): Boolean
+    def isRunning: Boolean
+    def isRunning_=(bool: Boolean): Boolean
 
     override def createBlockState() : BlockState = {
         val listed = Array[IProperty](PROPERTY_ACTIVE) //Used to create sub variants
@@ -32,7 +32,7 @@ trait ActiveStates extends Block with BlockBakeable {
     }
 
     override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
-        state.withProperty(PROPERTY_ACTIVE, isActive)
+        state.withProperty(PROPERTY_ACTIVE, isRunning)
     }
 
     /**
