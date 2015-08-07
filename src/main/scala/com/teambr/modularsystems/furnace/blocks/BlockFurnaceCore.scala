@@ -32,11 +32,8 @@ class BlockFurnaceCore(name: String, isActive: Boolean) extends BaseBlock(Materi
 
     override def blockName: String = name
     override def MODID: String = Reference.MOD_ID
-    /*override def isRunning: Boolean = isActive
-    override def isRunning_=(bool: Boolean): Boolean = isActive
 
-    setDefaultState(getDefaultState.withProperty(PROPERTY_ACTIVE, isActive))*/
-
+    //Block Methods
     override def getCreativeTab: CreativeTabs = {
         if (isActive)
             null
@@ -44,10 +41,19 @@ class BlockFurnaceCore(name: String, isActive: Boolean) extends BaseBlock(Materi
             ModularSystems.tabModularSystems
     }
 
+    override def breakBlock(world: World, pos: BlockPos, state: IBlockState) {
+        world.getTileEntity(pos) match {
+            case core: TileEntityFurnaceCore => core.deconstructMultiblock()
+            case _ =>
+        }
+        super[DropsItems].breakBlock(world, pos, state)
+    }
+
+    //BlockBakeable Methods
     override def getDisplayTextures(state: IBlockState): CubeTextures = {
         val map = Minecraft.getMinecraft.getTextureMapBlocks
         var textures: CubeTextures = null
-        /*if (state.getValue(PROPERTY_ACTIVE).asInstanceOf[Boolean]) {
+        if (isActive) {
             textures = new CubeTextures(
                 map.getTextureExtry("minecraft:blocks/furnace_front_on"),
                 map.getTextureExtry("minecraft:blocks/furnace_side"),
@@ -55,7 +61,7 @@ class BlockFurnaceCore(name: String, isActive: Boolean) extends BaseBlock(Materi
                 map.getTextureExtry("minecraft:blocks/furnace_side"),
                 map.getTextureExtry("minecraft:blocks/furnace_top"),
                 map.getTextureExtry("minecraft:blocks/furnace_top"))
-        } else {*/
+        } else {
             textures = new CubeTextures(
                 map.getTextureExtry("minecraft:blocks/furnace_front_off"),
                 map.getTextureExtry("minecraft:blocks/furnace_side"),
@@ -63,7 +69,7 @@ class BlockFurnaceCore(name: String, isActive: Boolean) extends BaseBlock(Materi
                 map.getTextureExtry("minecraft:blocks/furnace_side"),
                 map.getTextureExtry("minecraft:blocks/furnace_top"),
                 map.getTextureExtry("minecraft:blocks/furnace_top"))
-        //}
+        }
         textures
     }
 
@@ -74,6 +80,7 @@ class BlockFurnaceCore(name: String, isActive: Boolean) extends BaseBlock(Materi
             new ResourceLocation("minecraft:blocks/furnace_front_on"))
     }
 
+    //OpensGui Methods
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
         new ContainerFurnaceCore(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
 
