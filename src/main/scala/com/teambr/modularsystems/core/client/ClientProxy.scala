@@ -1,8 +1,12 @@
 package com.teambr.modularsystems.core.client
 
+import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.modularsystems.core.client.modelfactory.ModelFactory
 import com.teambr.modularsystems.core.common.CommonProxy
-import com.teambr.modularsystems.core.managers.ItemRenderManager
+import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
+import com.teambr.modularsystems.core.managers.{ BlockManager, ItemRenderManager }
+import net.minecraft.client.renderer.block.statemap.StateMap.Builder
+import net.minecraftforge.client.model.ModelLoader
 
 /**
  * This file was created for the Modular-Systems
@@ -16,6 +20,12 @@ import com.teambr.modularsystems.core.managers.ItemRenderManager
  */
 class ClientProxy extends CommonProxy {
 
+    override def preInit() = {
+        ModelLoader.setCustomStateMapper(BlockManager.furnaceCore,
+            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY.getProperty).addPropertiesToIgnore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
+
+    }
+
     override def init() = {
 
         ModelFactory.register()
@@ -23,6 +33,4 @@ class ClientProxy extends CommonProxy {
         //Register Inventory Renderer for Items
         ItemRenderManager.registerItemRenderer()
     }
-
-
 }

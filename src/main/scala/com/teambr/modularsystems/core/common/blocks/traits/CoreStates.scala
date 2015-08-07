@@ -3,13 +3,12 @@ package com.teambr.modularsystems.core.common.blocks.traits
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.modularsystems.core.tiles.AbstractCore
 import net.minecraft.block.Block
-import net.minecraft.block.properties.{ PropertyBool, IProperty }
+import net.minecraft.block.properties.{ IProperty, PropertyBool }
 import net.minecraft.block.state.{ BlockState, IBlockState }
-import net.minecraft.client.resources.model.ModelRotation
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.{ EnumWorldBlockLayer, BlockPos, EnumFacing, MathHelper }
 import net.minecraft.world.{ IBlockAccess, World }
-import net.minecraftforge.common.property.{ IExtendedBlockState, ExtendedBlockState, IUnlistedProperty }
+import net.minecraftforge.common.property.{ ExtendedBlockState, IExtendedBlockState, IUnlistedProperty }
 import net.minecraftforge.fml.relauncher.{ Side, SideOnly }
 
 /**
@@ -53,16 +52,6 @@ trait CoreStates extends Block {
         }
     }
 
-    override def getRenderType : Int = 3
-
-    override def isOpaqueCube : Boolean = false
-
-    @SideOnly(Side.CLIENT)
-    override def isTranslucent : Boolean = true
-
-    @SideOnly(Side.CLIENT)
-    override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
-    
     /**
      * Used to convert the meta to state
      * @param meta The meta
@@ -84,23 +73,13 @@ trait CoreStates extends Block {
         i
     }
 
-    def getModelRotation(state : IBlockState) : ModelRotation = {
-        if(state == getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.EAST))
-            return ModelRotation.X0_Y90
-        else if(state == getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.SOUTH))
-            return ModelRotation.X0_Y180
-        else if(state == getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.WEST))
-            return ModelRotation.X0_Y270
-        ModelRotation.X0_Y0
-    }
+    override def getRenderType : Int = 3
 
-    def getAllStates : Array[IBlockState] =
-        Array[IBlockState](getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.NORTH).withProperty(PROPERTY_ACTIVE, false),
-            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.SOUTH).withProperty(PROPERTY_ACTIVE, false),
-            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.EAST).withProperty(PROPERTY_ACTIVE, false),
-            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.WEST).withProperty(PROPERTY_ACTIVE, false),
-            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.NORTH).withProperty(PROPERTY_ACTIVE, true),
-            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.SOUTH).withProperty(PROPERTY_ACTIVE, true),
-            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.EAST).withProperty(PROPERTY_ACTIVE, true),
-            getDefaultState.withProperty(PropertyRotation.FOUR_WAY.getProperty, EnumFacing.WEST).withProperty(PROPERTY_ACTIVE, true))
+    override def isOpaqueCube : Boolean = false
+
+    @SideOnly(Side.CLIENT)
+    override def isTranslucent : Boolean = true
+
+    @SideOnly(Side.CLIENT)
+    override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
 }

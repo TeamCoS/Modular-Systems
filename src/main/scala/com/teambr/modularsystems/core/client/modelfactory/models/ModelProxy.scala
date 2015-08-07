@@ -56,7 +56,7 @@ class ModelProxy extends ISmartBlockModel {
         val blockRendererDispatcher = Minecraft.getMinecraft.getBlockRendererDispatcher
         val blockModelShapes = blockRendererDispatcher.getBlockModelShapes
 
-        val copiedModel = blockModelShapes.getModelForState(tile.getStoredBlock.getBlockState.getBaseState)
+        val copiedModel = blockModelShapes.getModelForState(tile.getStoredBlock.getStateFromMeta(tile.metaData))
         val returnVals = new util.ArrayList[BakedQuad]()
         val otherGeneralQuads = copiedModel.getGeneralQuads
         for(i <- 0 until otherGeneralQuads.size()) {

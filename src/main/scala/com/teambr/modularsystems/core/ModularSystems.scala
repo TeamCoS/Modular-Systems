@@ -50,11 +50,11 @@ object ModularSystems {
 
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {
         configFolderLocation = event.getModConfigurationDirectory.getAbsolutePath + File.separator + "Modular-Systems"
-        proxy.preInit()
         BlockManager.preInit()
         ItemManager.preInit()
         FurnaceBannedBlocks.init()
         BlockValueRegistry.init()
+        proxy.preInit()
 
         //MinecraftForge.EVENT_BUS.register(BlockValueRegistry)
     }
