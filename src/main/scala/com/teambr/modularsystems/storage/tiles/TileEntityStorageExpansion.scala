@@ -1,9 +1,13 @@
 package com.teambr.modularsystems.storage.tiles
 
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+import com.teambr.modularsystems.storage.blocks.BlockStorageExpansion
+import net.minecraft.block.properties.PropertyBool
+import net.minecraft.client.Minecraft
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.world.World
 
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
@@ -20,12 +24,16 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
     /**
      * Called after this has been added to a network
      */
-    def addedToNetwork()
+    def addedToNetwork(): Unit = {
+        Minecraft.getMinecraft.renderGlobal.markBlockRangeForRenderUpdate(pos.getX, pos.getY, pos.getZ, pos.getX, pos.getY, pos.getZ)
+    }
 
     /**
      * Called right before this is removed from a network
      */
-    def removedFromNetwork()
+    def removedFromNetwork(): Unit = {
+        Minecraft.getMinecraft.renderGlobal.markBlockRangeForRenderUpdate(pos.getX, pos.getY, pos.getZ, pos.getX, pos.getY, pos.getZ)
+    }
 
     /**
      * Called when this block is removed from the network
@@ -34,7 +42,6 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         if (getCore.isDefined && deleteSelf) getCore.get.deleteFromNetwork(this)
 
         for (child <- children) {
-            if (worldObj.getTileEntity(child) != null)
                 worldObj.getTileEntity(child) match {
                     case expansion: TileEntityStorageExpansion => expansion.removeFromNetwork(true)
                     case _ =>
@@ -43,6 +50,8 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         removedFromNetwork()
         core = None
         children.clear()
+        if (worldObj.getTileEntity(pos).isInstanceOf[TileEntityStorageExpansion])
+            Minecraft.getMinecraft.renderGlobal.markBlockRangeForRenderUpdate(pos.getX, pos.getY, pos.getZ, pos.getX, pos.getY, pos.getZ)
         worldObj.markBlockForUpdate(getPos)
     }
 
@@ -110,13 +119,14 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].readFromNBT(tag)
+        children = new ListBuffer[BlockPos]
         if (tag.hasKey("ChildSize")) {
-            children = new ListBuffer[BlockPos]
             for (i <- 0 until tag.getInteger("ChildSize"))
                 children += BlockPos.fromLong(tag.getLong("Child" + i))
         }
         if (tag.hasKey("IsInNetwork"))
             core = Some(BlockPos.fromLong(tag.getLong("IsInNetwork")))
+        else core = None
     }
 
     override def writeToNBT(tag: NBTTagCompound) {

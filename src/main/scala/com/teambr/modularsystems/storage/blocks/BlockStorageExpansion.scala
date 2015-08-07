@@ -5,16 +5,16 @@ import com.teambr.bookshelf.collections.CubeTextures
 import com.teambr.bookshelf.common.blocks.traits.BlockBakeable
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
 import com.teambr.modularsystems.core.lib.Reference
-import com.teambr.modularsystems.storage.tiles.{ TileStorageCore, TileEntityStorageExpansion }
+import com.teambr.modularsystems.storage.tiles.{TileEntityStorageExpansion, TileStorageCore}
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.{ IProperty, PropertyBool }
-import net.minecraft.block.state.{ BlockState, IBlockState }
+import net.minecraft.block.properties.{IProperty, PropertyBool}
+import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{ ResourceLocation, EnumFacing, BlockPos }
-import net.minecraft.world.{ IBlockAccess, World }
-import net.minecraftforge.common.property.{ ExtendedBlockState, IUnlistedProperty }
+import net.minecraft.util.{BlockPos, EnumFacing, ResourceLocation}
+import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 
 import scala.collection.mutable.ListBuffer
 
