@@ -3,7 +3,6 @@ package com.teambr.modularsystems.storage.tiles
 import java.util.Random
 
 import net.minecraft.entity.item.EntityItem
-import net.minecraft.inventory.InventoryHelper
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -21,8 +20,9 @@ class TileStorageCapacity extends TileEntityStorageExpansion {
 
     override def removedFromNetwork(): Unit = {
         super.removedFromNetwork()
-        if (core.isDefined) {
-            val itemStacks = getCore.get.removeInventorySlots(11)
+        getCore match {
+            case Some(theCore) =>
+            val itemStacks = theCore.removeInventorySlots(11)
             for (i <- itemStacks.indices) {
                 val rand: Random = new Random
                 if (itemStacks(i) != null && itemStacks(i).stackSize > 0) {
@@ -41,7 +41,8 @@ class TileStorageCapacity extends TileEntityStorageExpansion {
                     itemStacks(i).stackSize = 0
                 }
             }
-            worldObj.markBlockForUpdate(getCore.get.getPos);
+            worldObj.markBlockForUpdate(getCore.get.getPos)
+            case _ =>
         }
     }
 }

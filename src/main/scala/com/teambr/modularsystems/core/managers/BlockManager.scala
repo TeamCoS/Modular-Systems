@@ -31,7 +31,7 @@ object BlockManager {
         //Core
         registerBlock(proxy, "proxy", classOf[TileProxy])
         registerBlock(furnaceCore, "furnaceCore", classOf[TileEntityFurnaceCore])
-        registerBlock(furnaceCoreActive, "furnaceCoreActive", classOf[TileEntityFurnaceCore])
+       // registerBlock(furnaceCoreActive, "furnaceCoreActive", classOf[TileEntityFurnaceCore])
 
         //Storage
         registerBlock(storageCore, "storageCore", classOf[TileStorageCore])

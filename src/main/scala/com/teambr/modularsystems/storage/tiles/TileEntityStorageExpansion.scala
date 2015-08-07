@@ -92,11 +92,13 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
                         core = Some(tile.getPos)
                         tile.getNetwork.addNode(getPos)
                         addedToNetwork()
+                        return
                     case tile: TileEntityStorageExpansion =>
                         if (tile.getCore.isDefined) {
                             core = Some(tile.getCore.get.getPos)
                             tile.addChild(getPos)
                             addedToNetwork()
+                            return
                         }
                     case _ =>
                 }
