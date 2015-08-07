@@ -1,6 +1,7 @@
 package com.teambr.modularsystems.core.tiles
 
 import java.util
+import java.util.Collections
 
 import com.teambr.bookshelf.collections.Location
 import com.teambr.bookshelf.common.tiles.traits.{ Inventory, UpdatingTile }
@@ -8,12 +9,15 @@ import com.teambr.bookshelf.util.WorldUtils
 import com.teambr.modularsystems.core.collections.StandardValues
 import com.teambr.modularsystems.core.functions.BlockCountFunction
 import com.teambr.modularsystems.core.managers.BlockManager
+import com.teambr.modularsystems.core.providers.FuelProvider
 import net.minecraft.block.Block
 import net.minecraft.block.properties.PropertyDirection
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{ EnumFacing, BlockPos }
+import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.{ BlockPos, EnumFacing }
 import net.minecraft.world.World
+import net.minecraftforge.fml.relauncher.{ Side, SideOnly }
 
 /**
  * This file was created for Modular-Systems
@@ -257,10 +261,198 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
         Some(firstCorner, secondCorner)
     }
 
-    override def markDirty() : Unit = {}
+    /*******************************************************************************************************************
+      ************************************************  Furnace Methods  ***********************************************
+      ******************************************************************************************************************/
 
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {}
-    override def readFromNBT(tag : NBTTagCompound) : Unit = {}
+    protected def doWork() : Unit = {
+        var didWork : Boolean = false
+        if (!worldObj.isRemote) {
+            if (this.values.burnTime > 0) {
+                this.values.burnTime = values.burnTime - 1
+            }
+            if (canSmelt(getStackInSlot(0), recipe(getStackInSlot(0)), getStackInSlot(1)) && !values.isPowered) {
+                if (corners == null)  corners = getCorners match {
+                    case Some(v) => v
+                    case _ => null
+                }
+
+                if (corners == null) {
+                    markDirty()
+                    return
+                }
+                val providers : util.List[FuelProvider] = getFuelProviders(new Location(corners._1).getAllWithinBounds(new Location(corners._2), includeInner = false, includeOuter = true))
+                if (this.values.burnTime <= 0 && !providers.isEmpty) {
+                    val scaledBurnTime : Int = getAdjustedBurnTime(providers.get(0).consume)
+                    this.values.burnTime = scaledBurnTime
+                    this.values.currentItemBurnTime = this.values.burnTime
+                    cook
+                    didWork = true
+                }
+                else if (isBurning) {
+                    didWork = cook
+                }
+                else {
+                    this.values.cookTime = 0
+                    this.values.burnTime = 0
+                    didWork = true
+                }
+                worldObj.markBlockForUpdate(pos)
+            }
+            else if (worldObj.getBlockState(pos).getBlock == getOnBlock && this.values.burnTime <= 0) {
+                this.values.cookTime = 0
+                didWork = true
+            }
+            if (didWork) {
+                updateBlockState(this.values.burnTime > 0, this.worldObj, pos)
+                markDirty()
+            }
+            worldObj.markBlockForUpdate(pos)
+        }
+    }
+
+    protected def getFuelProviders(coords : util.List[Location]) : util.ArrayList[FuelProvider] = {
+        val providers = new util.ArrayList[FuelProvider]
+        for (i <- 0 until coords.size()) {
+            val coord = coords.get(i)
+            val te : TileEntity = worldObj.getTileEntity(coord.asBlockPos)
+            if (te != null) {
+                te match {
+                    case provider1 : FuelProvider if provider1.canProvide =>
+                        providers.add(provider1)
+                    case _ =>
+                }
+            }
+        }
+        Collections.sort(providers, new FuelProvider.FuelSorter)
+        providers
+    }
+
+    private def cook : Boolean = {
+        this.values.cookTime += 1
+        if (this.values.cookTime >= getAdjustedCookTime) {
+            this.values.cookTime = 0
+            this.smeltItem()
+            true
+        }
+        else {
+            false
+        }
+    }
+
+    private def canSmelt(input : ItemStack, result : ItemStack, output : ItemStack) : Boolean = {
+        if (input == null || result == null)
+            false
+        else if (output == null)
+            true
+        else if (!output.isItemEqual(result))
+            false
+        else {
+            //The size below would be if the smeltingMultiplier = 1
+            //If the smelting multiplier is > 1,
+            //there is no guarantee that all potential operations will be completed.
+            val minStackSize : Int = output.stackSize + result.stackSize
+            minStackSize <= getInventoryStackLimit && minStackSize <= result.getMaxStackSize
+        }
+    }
+
+    private def smeltItem() {
+        val smeltCount : (Int, Int) = smeltCountAndSmeltSize
+        if (smeltCount != null && smeltCount._2 > 0) {
+            var recipeResult : ItemStack = recipe(getStackInSlot(0))
+            getStackInSlot(0).stackSize -= smeltCount._1
+            if (getStackInSlot(1) == null) {
+                recipeResult = recipeResult.copy
+                recipeResult.stackSize = smeltCount._2
+                setInventorySlotContents(1, recipeResult)
+            }
+            else {
+                getStackInSlot(1).stackSize += smeltCount._2
+            }
+        }
+    }
+
+    private def smeltCountAndSmeltSize : (Int, Int) = {
+        var input : ItemStack = getStackInSlot(0)
+        if (input == null) {
+            return null
+        }
+        var output : ItemStack = getStackInSlot(1)
+        val recipeResult : ItemStack = recipe(input)
+        if (recipeResult == null && output != null && !output.isItemEqual(recipeResult)) {
+            return null
+        }
+        else if (output == null) {
+            output = recipeResult.copy
+            output.stackSize = 0
+        }
+        input = input.copy
+        val recipeStackSize : Int = if (recipeResult.stackSize > 0) recipeResult.stackSize else 1
+        val outMax : Int = if (getInventoryStackLimit < output.getMaxStackSize) output.getMaxStackSize else getInventoryStackLimit()
+        val outAvailable : Int = outMax - output.stackSize
+        var avail : Int = if (values.multiplicity + 1 < input.stackSize) values.multiplicity + 1 else input.stackSize
+        var count : Int = recipeStackSize * avail
+        if (count > outAvailable) {
+            avail = outAvailable / recipeStackSize
+            count = avail * recipeStackSize
+        }
+        (avail, count)
+    }
+
+    def isBurning : Boolean =
+        values.burnTime > 0
+
+    def getAdjustedBurnTime(fuelValue : Double) : Int = {
+        var scaledTicks : Double = ((1600 + values.efficiency) / 1600) * fuelValue
+        scaledTicks = scaledTicks / (values.multiplicity + 1)
+        Math.max(scaledTicks.round.toInt, 5)
+    }
+
+    private def getAdjustedCookTime : Double =
+        Math.max(cookSpeed + values.speed, 1)
+
+    @SideOnly(Side.CLIENT) def getCookProgressScaled(scaleVal : Int) : Int =
+        ((this.values.cookTime * scaleVal) / Math.max(getAdjustedCookTime, 0.001)).toInt
+
+    @SideOnly(Side.CLIENT) def getBurnTimeRemainingScaled(scaleVal : Int) : Int =
+        ((values.burnTime * scaleVal) / Math.max(this.values.currentItemBurnTime, 0.001)).toInt
+
+
+    override def markDirty() : Unit = {
+        super[TileEntity].markDirty()
+        super[Inventory].markDirty()
+    }
+
+    /******************************************************************************************************************
+      **************************************************  Tile Methods  ************************************************
+      ******************************************************************************************************************/
+
+    override def onServerTick() : Unit = {
+        if(updateMultiblock())
+            doWork()
+    }
+
+    def setDirty() : Unit = isDirty = true
+
+    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+        super[TileEntity].writeToNBT(tag)
+        values.writeToNBT(tag)
+        tag.setBoolean("IsDirty", isDirty)
+        tag.setBoolean("WellFormed", wellFormed)
+
+        if(corners != null) {
+            tag.setLong("First", corners._1.toLong)
+            tag.setLong("Second", corners._2.toLong)
+        }
+    }
+    override def readFromNBT(tag : NBTTagCompound) : Unit = {
+        super[TileEntity].readFromNBT(tag)
+        values.readFromNBT(tag)
+        isDirty = tag.getBoolean("IsDirty")
+        wellFormed = tag.getBoolean("WellFormed")
+
+        corners = (BlockPos.fromLong(tag.getLong("First")), BlockPos.fromLong(tag.getLong("Second")))
+    }
 
     /*******************************************************************************************************************
       ************************************************* Inventory methods ***********************************************
