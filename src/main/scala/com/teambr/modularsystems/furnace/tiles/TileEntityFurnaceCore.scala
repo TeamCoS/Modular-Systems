@@ -37,7 +37,7 @@ class TileEntityFurnaceCore extends AbstractCore {
             }
         }
 
-        for (i<- function.getMaterialStrings) {
+        for (i <- function.getMaterialStrings) {
             if (BlockValueRegistry.isMaterialRegistered(i)) {
                 values.speed += BlockValueRegistry.getSpeedValueMaterial(i, function.getMaterialCount(i))
                 values.efficiency += BlockValueRegistry.getEfficiencyValueMaterial(i, function.getMaterialCount(i))

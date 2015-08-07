@@ -49,7 +49,7 @@ with OpensGui with CoreStates with DropsItems {
         world.getTileEntity(new BlockPos(x, y, z)) match {
             case core: TileEntityFurnaceCore =>
                 if (core.wellFormed)
-                    new ContainerFurnaceCore(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
+                    new ContainerFurnaceCore(player.inventory, world.getTileEntity(core.getPos).asInstanceOf[TileEntityFurnaceCore])
                 else
                     core.setDirty()
             case _ =>
@@ -61,7 +61,7 @@ with OpensGui with CoreStates with DropsItems {
         world.getTileEntity(new BlockPos(x, y, z)) match {
             case core: TileEntityFurnaceCore =>
                 if (core.wellFormed)
-                    new GuiFurnaceCore(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
+                    new GuiFurnaceCore(player, world.getTileEntity(core.getPos).asInstanceOf[TileEntityFurnaceCore])
                 else
                     core.setDirty()
             case _ =>

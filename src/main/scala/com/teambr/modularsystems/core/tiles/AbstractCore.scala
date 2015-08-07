@@ -384,7 +384,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
         val recipeStackSize : Int = if (recipeResult.stackSize > 0) recipeResult.stackSize else 1
         val outMax : Int = if (getInventoryStackLimit < output.getMaxStackSize) output.getMaxStackSize else getInventoryStackLimit()
         val outAvailable : Int = outMax - output.stackSize
-        var avail : Int = if (values.multiplicity + 1 < input.stackSize) values.multiplicity + 1 else input.stackSize
+        var avail : Int = if (values.multiplicity + 1 < input.stackSize) values.multiplicity.toInt + 1 else input.stackSize
         var count : Int = recipeStackSize * avail
         if (count > outAvailable) {
             avail = outAvailable / recipeStackSize

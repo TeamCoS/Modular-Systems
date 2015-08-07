@@ -20,14 +20,14 @@ class StandardValues extends NBTSavable {
 
     var speed = 0.0D
     var efficiency = 0.0D
-    var multiplicity = 0
+    var multiplicity = 0.0D
 
     var isPowered = false
 
     def resetStructureValues() : Unit = {
         speed = 0.0D
         efficiency = 0.0D
-        multiplicity = 0
+        multiplicity = 0.0D
         burnTime = 0
     }
 
@@ -38,7 +38,7 @@ class StandardValues extends NBTSavable {
 
         tag.setDouble("Speed", speed)
         tag.setDouble("Efficiency", efficiency)
-        tag.setInteger("Multiplicity", multiplicity)
+        tag.setDouble("Multiplicity", multiplicity)
 
         tag.setBoolean("IsPowered", isPowered)
     }
@@ -50,7 +50,7 @@ class StandardValues extends NBTSavable {
 
         speed = tag.getDouble("Speed")
         efficiency = tag.getDouble("Efficiency")
-        multiplicity = tag.getInteger("Multiplicity")
+        multiplicity = tag.getDouble("Multiplicity")
 
         isPowered = tag.getBoolean("IsPowered")
     }
