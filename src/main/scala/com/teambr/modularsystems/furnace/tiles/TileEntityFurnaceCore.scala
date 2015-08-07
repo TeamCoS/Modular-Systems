@@ -57,7 +57,7 @@ class TileEntityFurnaceCore extends AbstractCore {
         if (block.isInstanceOf[BlockProxy])
             false
         else
-            true //TODO Furnace Banned Blocks
+            false //TODO Furnace Banned Blocks
     }
 
     /**
