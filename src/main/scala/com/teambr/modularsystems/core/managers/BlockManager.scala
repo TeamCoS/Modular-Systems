@@ -2,6 +2,8 @@ package com.teambr.modularsystems.core.managers
 
 import com.teambr.modularsystems.core.blocks.BlockProxy
 import com.teambr.modularsystems.core.tiles.TileProxy
+import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore
+import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import com.teambr.modularsystems.storage.blocks.{BlockStorageExpansion, BlockStorageCore}
 import com.teambr.modularsystems.storage.tiles.{TileStorageCapacity, TileStorageBasic, TileStorageCore}
 import net.minecraft.block.Block
@@ -16,6 +18,9 @@ import net.minecraftforge.oredict.OreDictionary
 
 object BlockManager {
 
+    val furnaceCore = new BlockFurnaceCore("furnaceCore", false)
+    val furnaceCoreActive = new BlockFurnaceCore("furnaceCoreActive", true)
+
     val storageCore = new BlockStorageCore
     val storageBasic = new BlockStorageExpansion("storageBasic", List(), classOf[TileStorageBasic])
     val storageCapacity = new BlockStorageExpansion("storageCapacity", List(), classOf[TileStorageCapacity])
@@ -25,6 +30,8 @@ object BlockManager {
     def preInit() : Unit = {
         //Core
         registerBlock(proxy, "proxy", classOf[TileProxy])
+        registerBlock(furnaceCore, "furnaceCore", classOf[TileEntityFurnaceCore])
+        registerBlock(furnaceCoreActive, "furnaceCoreActive", classOf[TileEntityFurnaceCore])
 
         //Storage
         registerBlock(storageCore, "storageCore", classOf[TileStorageCore])
