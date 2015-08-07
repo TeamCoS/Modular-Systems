@@ -121,23 +121,4 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
         Array[IBlockState](getDefaultState.withProperty(PROPERTY_CONNECTED, true),
             getDefaultState.withProperty(PROPERTY_CONNECTED, false))
     }
-
-    def setState(inNetwork: Boolean, world: World, pos: BlockPos) {
-        val tileentity: TileEntity = world.getTileEntity(pos)
-        var keepInventory = true
-        if (inNetwork) {
-            world.setBlockState(pos, getDefaultState.withProperty(PROPERTY_CONNECTED, true), 3)
-            world.setBlockState(pos, getDefaultState.withProperty(PROPERTY_CONNECTED, true), 3)
-        }
-        else {
-            world.setBlockState(pos, getDefaultState.withProperty(PROPERTY_CONNECTED, false), 3)
-            world.setBlockState(pos, getDefaultState.withProperty(PROPERTY_CONNECTED, false), 3)
-        }
-        keepInventory = false
-        if (tileentity != null) {
-            tileentity.validate()
-            world.setTileEntity(pos, tileentity)
-        }
-        world.markBlockForUpdate(pos)
-    }
 }

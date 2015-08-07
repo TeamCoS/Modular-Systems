@@ -21,12 +21,16 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
     /**
      * Called after this has been added to a network
      */
-    def addedToNetwork() { }
+    def addedToNetwork() {
+        Minecraft.getMinecraft.renderGlobal.markBlockForUpdate(pos)
+    }
 
     /**
      * Called right before this is removed from a network
      */
-    def removedFromNetwork() { }
+    def removedFromNetwork() {
+        Minecraft.getMinecraft.renderGlobal.markBlockForUpdate(pos)
+    }
 
     /**
      * Called when this block is removed from the network
@@ -40,11 +44,9 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
                     case _ =>
                 }
         }
-        removedFromNetwork()
         core = None
         children.clear()
-        if (worldObj.getTileEntity(pos).isInstanceOf[TileEntityStorageExpansion])
-            Minecraft.getMinecraft.renderGlobal.markBlockForUpdate(pos)
+        removedFromNetwork()
         worldObj.markBlockForUpdate(getPos)
     }
 
@@ -89,22 +91,18 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
                     case tile: TileStorageCore =>
                         core = Some(tile.getPos)
                         tile.getNetwork.addNode(getPos)
-                        worldObj.markBlockForUpdate(getPos)
-                        Minecraft.getMinecraft.renderGlobal.markBlockForUpdate(pos)
                         addedToNetwork()
                     case tile: TileEntityStorageExpansion =>
                         if (tile.getCore.isDefined) {
                             core = Some(tile.getCore.get.getPos)
                             tile.addChild(getPos)
-                            worldObj.markBlockForUpdate(getPos)
-                            Minecraft.getMinecraft.renderGlobal.markBlockForUpdate(pos)
                             addedToNetwork()
                         }
                     case _ =>
                 }
             }
         }
-        //worldObj.markBlockForUpdate(getPos)
+        worldObj.markBlockForUpdate(getPos)
     }
 
     def getTileInDirection(pos: BlockPos): Option[(TileEntity)] = {
