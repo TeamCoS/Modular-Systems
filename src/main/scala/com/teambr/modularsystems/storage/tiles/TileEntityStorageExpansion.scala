@@ -3,7 +3,7 @@ package com.teambr.modularsystems.storage.tiles
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{ BlockPos, EnumFacing }
+import net.minecraft.util.{BlockPos, EnumFacing}
 
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
@@ -38,15 +38,15 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         if (getCore.isDefined && deleteSelf) getCore.get.deleteFromNetwork(this)
 
         for (child <- children) {
-                worldObj.getTileEntity(child) match {
-                    case expansion: TileEntityStorageExpansion => expansion.removeFromNetwork(true)
-                    case _ =>
-                }
+            worldObj.getTileEntity(child) match {
+                case expansion: TileEntityStorageExpansion => expansion.removeFromNetwork(true)
+                case _ =>
+            }
         }
+        removedFromNetwork()
         core = None
         children.clear()
-        removedFromNetwork()
-       worldObj.markBlockForUpdate(pos)
+        worldObj.markBlockForUpdate(pos)
     }
 
     /**
@@ -70,11 +70,11 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         else None
     }
 
-    /*******************************************************************************************************************
-      *********************************************** Tile Methods *****************************************************
-      ******************************************************************************************************************/
+    /** *****************************************************************************************************************
+      * ********************************************** Tile Methods *****************************************************
+      * *****************************************************************************************************************/
 
-    override def onServerTick() : Unit = {
+    override def onServerTick(): Unit = {
         worldObj.markBlockForUpdate(getPos)
         if (core.isEmpty && worldObj.rand.nextInt(80) == 0)
             searchAndConnect()
@@ -82,12 +82,12 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
             removeFromNetwork(true)
     }
 
-    override def onClientTick(): Unit = { }
+    override def onClientTick(): Unit = {}
 
     def searchAndConnect(): Unit = {
         for (dir <- EnumFacing.values()) {
             if (getTileInDirection(pos.add(dir.getDirectionVec)).isDefined) {
-                    getTileInDirection(pos.add(dir.getDirectionVec)).get match {
+                getTileInDirection(pos.add(dir.getDirectionVec)).get match {
                     case tile: TileStorageCore =>
                         core = Some(tile.getPos)
                         tile.getNetwork.addNode(getPos)
@@ -123,7 +123,8 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         if (tag.hasKey("IsInNetwork"))
             core = Some(BlockPos.fromLong(tag.getLong("IsInNetwork")))
         else core = None
-        worldObj.markBlockRangeForRenderUpdate(pos, pos)
+        if (worldObj != null)
+            worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
 
     override def writeToNBT(tag: NBTTagCompound) {

@@ -3,7 +3,7 @@ package com.teambr.modularsystems.core.managers
 import com.teambr.modularsystems.core.blocks.BlockProxy
 import com.teambr.modularsystems.core.tiles.TileProxy
 import com.teambr.modularsystems.storage.blocks.{BlockStorageExpansion, BlockStorageCore}
-import com.teambr.modularsystems.storage.tiles.{TileStorageBasic, TileStorageCore}
+import com.teambr.modularsystems.storage.tiles.{TileStorageCapacity, TileStorageBasic, TileStorageCore}
 import net.minecraft.block.Block
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -18,6 +18,7 @@ object BlockManager {
 
     val storageCore = new BlockStorageCore
     val storageBasic = new BlockStorageExpansion("storageBasic", List(), classOf[TileStorageBasic])
+    val storageCapacity = new BlockStorageExpansion("storageCapacity", List(), classOf[TileStorageCapacity])
 
     val proxy = new BlockProxy
 
@@ -28,6 +29,7 @@ object BlockManager {
         //Storage
         registerBlock(storageCore, "storageCore", classOf[TileStorageCore])
         registerBlock(storageBasic, "storageBasic", classOf[TileStorageBasic])
+        registerBlock(storageCapacity, "storageCapacity", classOf[TileStorageCapacity])
     }
     /**
      * Helper method for registering block
