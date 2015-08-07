@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{ BlockPos, EnumFacing }
-import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{ Side, SideOnly }
 
 /**
@@ -39,14 +38,6 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
     var wellFormed = false
 
     /**
-     * Used to set the blocks to its active and non-active state
-     * @param positiveBurnTime True if active
-     * @param world World object
-     * @param pos The block position
-     */
-    def updateBlockState(positiveBurnTime : Boolean, world : World, pos : BlockPos)
-
-    /**
      * Get the output of the recipe
      * @param stack The input
      * @return The output
@@ -66,12 +57,6 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
      * @param function The blocks count function
      */
     def generateValues(function : BlockCountFunction)
-
-    /**
-     * Gets around that last little bit where the values line up weird and it doesn't convert back
-     * @return The block to set when on
-     */
-    def getOnBlock : Block
 
     /**
      * Used to output the redstone single from this structure
@@ -309,12 +294,11 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
                 }
                 worldObj.markBlockForUpdate(pos)
             }
-            else if (worldObj.getBlockState(pos).getBlock == getOnBlock && this.values.burnTime <= 0) {
+            else if (this.values.burnTime <= 0) {
                 this.values.cookTime = 0
                 didWork = true
             }
             if (didWork) {
-                updateBlockState(this.values.burnTime > 0, this.worldObj, pos)
                 markDirty()
             }
             worldObj.markBlockForUpdate(pos)

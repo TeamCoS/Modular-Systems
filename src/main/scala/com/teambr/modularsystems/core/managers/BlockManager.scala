@@ -19,7 +19,6 @@ import net.minecraftforge.oredict.OreDictionary
 object BlockManager {
 
     val furnaceCore = new BlockFurnaceCore("furnaceCore", false)
-    val furnaceCoreActive = new BlockFurnaceCore("furnaceCoreActive", true)
 
     val storageCore = new BlockStorageCore
     val storageBasic = new BlockStorageExpansion("storageBasic", List(), classOf[TileStorageBasic])
@@ -31,7 +30,6 @@ object BlockManager {
         //Core
         registerBlock(proxy, "proxy", classOf[TileProxy])
         registerBlock(furnaceCore, "furnaceCore", classOf[TileEntityFurnaceCore])
-       // registerBlock(furnaceCoreActive, "furnaceCoreActive", classOf[TileEntityFurnaceCore])
 
         //Storage
         registerBlock(storageCore, "storageCore", classOf[TileStorageCore])
