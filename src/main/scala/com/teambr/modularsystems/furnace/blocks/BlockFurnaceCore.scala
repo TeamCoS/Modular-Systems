@@ -28,9 +28,10 @@ import net.minecraft.world.World
  * @since August 07, 2015
  */
 class BlockFurnaceCore(name: String, isActive: Boolean) extends BaseBlock(Material.rock, name, classOf[TileEntityFurnaceCore])
-        with OpensGui with FourWayRotation with BlockBakeable with DropsItems {
+with OpensGui with FourWayRotation with BlockBakeable with DropsItems {
 
     override def blockName: String = name
+
     override def MODID: String = Reference.MOD_ID
 
     //Block Methods
@@ -81,9 +82,27 @@ class BlockFurnaceCore(name: String, isActive: Boolean) extends BaseBlock(Materi
     }
 
     //OpensGui Methods
-    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new ContainerFurnaceCore(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
+    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
+        world.getTileEntity(new BlockPos(x, y, z)) match {
+            case core: TileEntityFurnaceCore =>
+                if (core.wellFormed)
+                    new ContainerFurnaceCore(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
+                else
+                    core.setDirty()
+            case _ =>
+        }
+        true
+    }
 
-    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new GuiFurnaceCore(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
+    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
+        world.getTileEntity(new BlockPos(x, y, z)) match {
+            case core: TileEntityFurnaceCore =>
+                if (core.wellFormed)
+                    new GuiFurnaceCore(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
+                else
+                    core.setDirty()
+            case _ =>
+        }
+        true
+    }
 }
