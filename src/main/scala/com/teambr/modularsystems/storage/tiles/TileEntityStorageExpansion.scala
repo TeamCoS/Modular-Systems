@@ -76,7 +76,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
 
     override def onServerTick() : Unit = {
         worldObj.markBlockForUpdate(getPos)
-        if (core.isEmpty && worldObj.rand.nextInt(2) == 0) //TODO change back to 80
+        if (core.isEmpty && worldObj.rand.nextInt(80) == 0)
             searchAndConnect()
         else if (getCore.isEmpty && new Random().nextInt(20) == 0)
             removeFromNetwork(true)
@@ -123,7 +123,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         if (tag.hasKey("IsInNetwork"))
             core = Some(BlockPos.fromLong(tag.getLong("IsInNetwork")))
         else core = None
-        worldObj.markBlockRangeForRenderUpdate(pos, pos.up.north())
+        worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
 
     override def writeToNBT(tag: NBTTagCompound) {
