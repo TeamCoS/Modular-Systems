@@ -42,6 +42,8 @@ object FurnaceBannedBlocks {
         LogHelper.info("Loading Furnace Banned Blocks...")
         bannedBlocks = JsonUtils.readFromJson[util.ArrayList[String]](new TypeToken[util.ArrayList[String]]() {
         }, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "furnaceBannedBlocks.json")
+        if (bannedBlocks == null)
+            bannedBlocks = new util.ArrayList[String]()
         !bannedBlocks.isEmpty
     }
 
@@ -78,6 +80,7 @@ object FurnaceBannedBlocks {
         addBannedBlock(Blocks.iron_door, -1)
         val path: File = new File(ModularSystems.configFolderLocation + File.separator + "Registries")
         if (!path.exists) path.mkdirs
+        saveToFile()
     }
 
     /**

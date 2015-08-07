@@ -1,8 +1,9 @@
 package com.teambr.modularsystems.furnace.tiles
 
+import com.teambr.bookshelf.helper.BlockHelper
 import com.teambr.modularsystems.core.blocks.BlockProxy
 import com.teambr.modularsystems.core.functions.BlockCountFunction
-import com.teambr.modularsystems.core.registries.FurnaceBannedBlocks
+import com.teambr.modularsystems.core.registries.{BlockValueRegistry, FurnaceBannedBlocks}
 import com.teambr.modularsystems.core.tiles.AbstractCore
 import net.minecraft.block.Block
 import net.minecraft.inventory.Container
@@ -26,7 +27,23 @@ class TileEntityFurnaceCore extends AbstractCore {
      * @param function The blocks count function
      */
     override def generateValues(function: BlockCountFunction): Unit = {
+        for (i <- function.getBlockIds) {
+            val t = (BlockHelper.getBlockFromString(i)._1, BlockHelper.getBlockFromString(i)._2)
 
+            if (BlockValueRegistry.isBlockRegistered(t._1, t._2)) {
+                values.speed += BlockValueRegistry.getSpeedValue(t._1, t._2, function.getBlockCount(t._1, t._2))
+                values.efficiency += BlockValueRegistry.getEfficiencyValue(t._1, t._2, function.getBlockCount(t._1, t._2))
+                values.multiplicity += BlockValueRegistry.getMultiplicityValue(t._1, t._2, function.getBlockCount(t._1, t._2))
+            }
+        }
+
+        for (i<- function.getMaterialStrings) {
+            if (BlockValueRegistry.isMaterialRegistered(i)) {
+                values.speed += BlockValueRegistry.getSpeedValueMaterial(i, function.getMaterialCount(i))
+                values.efficiency += BlockValueRegistry.getEfficiencyValueMaterial(i, function.getMaterialCount(i))
+                values.multiplicity += BlockValueRegistry.getMultiplicityValueMaterial(i, function.getMaterialCount(i))
+            }
+        }
     }
 
     /**
@@ -66,5 +83,5 @@ class TileEntityFurnaceCore extends AbstractCore {
      */
     override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
 
-    override var inventoryName: String = "inventory.furnace.title" //_
+    override var inventoryName: String = "inventory.furnace.title"
 }

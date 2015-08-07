@@ -1,18 +1,16 @@
 package com.teambr.modularsystems.core.registries
 
-import java.io.{ File, IOException }
+import java.io.{File, IOException}
 import java.net.URL
 import java.util
 
 import com.google.gson.reflect.TypeToken
-import com.teambr.bookshelf.helper.{ BlockHelper, LogHelper }
+import com.teambr.bookshelf.helper.{BlockHelper, LogHelper}
 import com.teambr.bookshelf.util.JsonUtils
 import com.teambr.modularsystems.core.ModularSystems
-import com.teambr.modularsystems.core.collections.{ BlockValues, Calculation }
+import com.teambr.modularsystems.core.collections.{BlockValues, Calculation}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraftforge.event.world.WorldEvent
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import org.apache.commons.io.FileUtils
 
 /**
@@ -28,7 +26,6 @@ import org.apache.commons.io.FileUtils
 object BlockValueRegistry {
     var blockValues = new util.LinkedHashMap[java.lang.String, BlockValues]()
     var materialValues = new util.LinkedHashMap[java.lang.String, BlockValues]()
-    init()
 
     /**
      * Add the values
@@ -72,9 +69,8 @@ object BlockValueRegistry {
                 FileUtils.copyURLToFile(fileURL, file)
             }
             catch {
-                case e : IOException => {
+                case e : IOException =>
                     e.printStackTrace()
-                }
             }
         }
         blockValues = JsonUtils.readFromJson[util.LinkedHashMap[String, BlockValues]](new TypeToken[util.LinkedHashMap[String, BlockValues]]() {
@@ -82,6 +78,7 @@ object BlockValueRegistry {
 
         addMaterialValues(Material.rock, new Calculation(-1, 200, 0, 1, 0, -100, 0), new Calculation(1, 100, 0, 1, 0, 0, 450), new Calculation(1, 1, 0, 1, 0, 0, 0))
         addMaterialValues(Material.iron, new Calculation(1, 100, 0, 1, 0, 100, 0), new Calculation(10, 1, 0, 1, 0, 0, 1600), new Calculation(1, 1, 0, 1, 0, 0, 0))
+        saveToFile()
     }
 
     /**
@@ -301,8 +298,8 @@ object BlockValueRegistry {
         if (materialValues == null) materialValues = new util.LinkedHashMap[String, BlockValues]
     }
 
-    /**
+    /*/**
      * Save stuff for later
      */
-    @SubscribeEvent def onWorldSaveEvent(event : WorldEvent.Save) : Unit = saveToFile()
+    @SubscribeEvent def onWorldSaveEvent(event : WorldEvent.Save) : Unit = saveToFile()*/
 }

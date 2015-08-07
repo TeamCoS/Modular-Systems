@@ -6,15 +6,14 @@ import com.teambr.modularsystems.core.achievement.ModAchievements
 import com.teambr.modularsystems.core.api.nei.NEICallback
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.lib.Reference
-import com.teambr.modularsystems.core.managers.{ItemManager, BlockManager}
-import com.teambr.modularsystems.core.registries.BlockValueRegistry
+import com.teambr.modularsystems.core.managers.{BlockManager, ItemManager}
+import com.teambr.modularsystems.core.registries.{BlockValueRegistry, FurnaceBannedBlocks}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Blocks
 import net.minecraft.item.Item
-import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
-import net.minecraftforge.fml.common.{ SidedProxy, FMLCommonHandler, Mod }
+import net.minecraftforge.fml.common.{FMLCommonHandler, Mod, SidedProxy}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.apache.logging.log4j.LogManager
 
@@ -54,8 +53,10 @@ object ModularSystems {
         proxy.preInit()
         BlockManager.preInit()
         ItemManager.preInit()
+        FurnaceBannedBlocks.init()
+        BlockValueRegistry.init()
 
-        MinecraftForge.EVENT_BUS.register(BlockValueRegistry)
+        //MinecraftForge.EVENT_BUS.register(BlockValueRegistry)
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
