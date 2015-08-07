@@ -1,13 +1,10 @@
 package com.teambr.modularsystems.storage.tiles
 
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
-import com.teambr.modularsystems.storage.blocks.BlockStorageExpansion
-import net.minecraft.block.properties.PropertyBool
 import net.minecraft.client.Minecraft
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.World
 
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
@@ -24,16 +21,12 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
     /**
      * Called after this has been added to a network
      */
-    def addedToNetwork(): Unit = {
-        Minecraft.getMinecraft.renderGlobal.markBlockRangeForRenderUpdate(pos.getX, pos.getY, pos.getZ, pos.getX, pos.getY, pos.getZ)
-    }
+    def addedToNetwork() { }
 
     /**
      * Called right before this is removed from a network
      */
-    def removedFromNetwork(): Unit = {
-        Minecraft.getMinecraft.renderGlobal.markBlockRangeForRenderUpdate(pos.getX, pos.getY, pos.getZ, pos.getX, pos.getY, pos.getZ)
-    }
+    def removedFromNetwork() { }
 
     /**
      * Called when this block is removed from the network
@@ -107,6 +100,8 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
                 }
             }
         }
+        if (getCore.isDefined)
+            Minecraft.getMinecraft.renderGlobal.markBlockRangeForRenderUpdate(pos.getX, pos.getY, pos.getZ, pos.getX, pos.getY, pos.getZ)
         worldObj.markBlockForUpdate(getPos)
     }
 
