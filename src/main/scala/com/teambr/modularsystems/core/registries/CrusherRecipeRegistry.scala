@@ -3,11 +3,17 @@ package com.teambr.modularsystems.core.registries
 import java.io.File
 import java.util
 
+import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
 import com.teambr.bookshelf.util.JsonUtils
 import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.collections.CrusherRecipes
+import net.minecraft.init.Items
+import net.minecraft.item.ItemStack
+import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
+
+import scala.collection.JavaConversions._
 
 /**
  * This file was created for Modular-Systems
@@ -26,51 +32,101 @@ object CrusherRecipeRegistry {
     /**
      * Add the values
      */
-    /*def init(): Unit = {
+    def init(): Unit = {
         if (!loadFromFile)
-            //generateDefaults()
+            generateDefaults()
         else
             LogHelper.info("Block Values loaded successfully")
-    }*/
+    }
 
     /**
      * Load the values from the file
      * @return True if successful
      */
-    /*def loadFromFile(): Boolean = {
+    def loadFromFile(): Boolean = {
         LogHelper.info("Loading Block Values...")
-        crusherRecipes = JsonUtils.readFromJson[util.ArrayList[CrusherRecipes](new TypeToken[util.ArrayList[CrusherRecipes]]() {
+        crusherRecipes = JsonUtils.readFromJson[util.ArrayList[CrusherRecipes]](new TypeToken[util.ArrayList[CrusherRecipes]]() {
         }, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "crusherRecipes.json")
         if (crusherRecipes == null)
             crusherRecipes = new util.ArrayList[CrusherRecipes]()
         !crusherRecipes.isEmpty
-    }*/
+    }
 
     /**
      * Save the current registry to a file
      */
     def saveToFile(): Unit = {
         if (!crusherRecipes.isEmpty) JsonUtils.writeToJson(crusherRecipes, ModularSystems.configFolderLocation +
-                File.separator + "Registries" + File.separator + "furnaceBannedBlocks.json")
+                File.separator + "Registries" + File.separator + "crusherRecipes.json")
     }
 
     /**
      * Used to generate the default values
      */
-    LogHelper.info("Json not found. Creating Dynamic Crusher Recipe List...")
+    def generateDefaults(): Unit = {
+        LogHelper.info("Json not found. Creating Dynamic Crusher Recipe List...")
 
-    val oreDict = OreDictionary.getOreNames
+        val oreDict = OreDictionary.getOreNames
 
-    for (i <- oreDict) {
-        if (i.startsWith("dust")) {
-            val oreList = OreDictionary.getOres(i.replaceFirst("dust", ""))
-            if (!oreList.isEmpty) {
-                i.replaceFirst("dust","ore") match {
-                    case "oreRedstone" =>
+        for (i <- oreDict) {
+            if (i.startsWith("dust")) {
+                val oreList = OreDictionary.getOres(i.replaceFirst("dust", "ore"))
+                if (!oreList.isEmpty) {
+                    i.replaceFirst("dust", "ore") match {
+                        case "oreRedstone" =>
+                            crusherRecipes.add(new CrusherRecipes("oreRedstone",
+                                getItemStackString(new ItemStack(Items.redstone)), 6, getItemStackString(new ItemStack(Items.redstone))))
+                        /*case "oreLapis" =>
+                            crusherRecipes.add(new CrusherRecipes("oreLapis",
+                                getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))*/
+                        case _ =>
+                            val itemList = OreDictionary.getOres(i)
+                            if (itemList.size() > 0)
+                                crusherRecipes.add(new CrusherRecipes(i.replaceFirst("dust", "ore"),
+                                    getItemStackString(new ItemStack(itemList.get(0).getItem, 1, itemList.get(0).getItemDamage)),
+                                    2, ""))
+                    }
+                }
+            } else if (i.startsWith("ingot")) {
+                val oreList = OreDictionary.getOres(i.replaceFirst("ingot", "dust"))
+                if (!oreList.isEmpty) {
+                    val itemList = OreDictionary.getOres(i.replaceFirst("ingot", "dust"))
+                    if (itemList.size() > 0) {
+                        crusherRecipes.add(new CrusherRecipes(i, getItemStackString(
+                            new ItemStack(itemList.get(0).getItem, 1, itemList.get(0).getItemDamage)), 1, ""))
+                    }
                 }
             }
-        } else if (i.startsWith("ingot")) {
+        }
+        //TODO add more things
+        saveToFile()
+        LogHelper.info("Finished adding " + crusherRecipes.size + " Crusher Recipes")
+    }
 
+    /**
+     * Get the output for an input
+     */
+    def getOutput(itemStack: ItemStack): Option[ItemStack] = {
+        val list = crusherRecipes.toSet
+        for (i <- list) {
+
+
+
+        }
+        None
+    }
+
+    private def getItemStackString(itemStack: ItemStack): String = {
+        val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(itemStack.getItem)
+        id.modId + ":" + id.name + ":" + itemStack.getItemDamage
+    }
+
+    private def getItemStackFromString(item: String): ItemStack = {
+        val name: Array[String] = item.split(":")
+        name.length match {
+            case 3 => new ItemStack(GameRegistry.findItem(name(0), name(1)), 1, Integer.valueOf(name(2)))
+            case _ =>
+                null
         }
     }
 }
