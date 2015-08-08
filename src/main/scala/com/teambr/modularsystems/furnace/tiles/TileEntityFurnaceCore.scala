@@ -1,7 +1,7 @@
 package com.teambr.modularsystems.furnace.tiles
 
 import com.teambr.bookshelf.helper.BlockHelper
-import com.teambr.modularsystems.core.blocks.BlockProxy
+import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.functions.BlockCountFunction
 import com.teambr.modularsystems.core.registries.{BlockValueRegistry, FurnaceBannedBlocks}
 import com.teambr.modularsystems.core.tiles.AbstractCore

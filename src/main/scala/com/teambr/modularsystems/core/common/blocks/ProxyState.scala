@@ -1,4 +1,4 @@
-package com.teambr.modularsystems.core.blocks
+package com.teambr.modularsystems.core.common.blocks
 
 import java.util
 

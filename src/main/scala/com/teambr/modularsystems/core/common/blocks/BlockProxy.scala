@@ -1,14 +1,13 @@
-package com.teambr.modularsystems.core.blocks
+package com.teambr.modularsystems.core.common.blocks
 
-import com.teambr.modularsystems.core.common.blocks.BaseBlock
 import com.teambr.modularsystems.core.tiles.TileProxy
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
-import net.minecraft.block.state.{ BlockState, IBlockState }
-import net.minecraft.util.{ EnumWorldBlockLayer, BlockPos }
+import net.minecraft.block.state.{BlockState, IBlockState}
+import net.minecraft.util.{BlockPos, EnumWorldBlockLayer}
 import net.minecraft.world.IBlockAccess
-import net.minecraftforge.common.property.{ IUnlistedProperty, ExtendedBlockState }
-import net.minecraftforge.fml.relauncher.{ SideOnly, Side }
+import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  * This file was created for Modular-Systems

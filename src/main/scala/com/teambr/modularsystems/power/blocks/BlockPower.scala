@@ -1,6 +1,6 @@
 package com.teambr.modularsystems.power.blocks
 
-import com.teambr.modularsystems.core.blocks.BlockProxy
+import com.teambr.modularsystems.core.common.blocks.BlockProxy
 
 /**
  * This file was created for Modular-Systems

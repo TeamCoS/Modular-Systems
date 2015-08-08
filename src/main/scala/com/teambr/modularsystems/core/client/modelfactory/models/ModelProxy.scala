@@ -2,8 +2,7 @@ package com.teambr.modularsystems.core.client.modelfactory.models
 
 import java.util
 import javax.vecmath.Vector3f
-
-import com.teambr.modularsystems.core.blocks.ProxyState
+import com.teambr.modularsystems.core.common.blocks.ProxyState
 import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.core.tiles.TileProxy
 import net.minecraft.block.state.IBlockState
