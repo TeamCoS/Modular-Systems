@@ -155,12 +155,12 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
                         worldObj.markBlockForUpdate(loc)
                         worldObj.markBlockRangeForRenderUpdate(loc, loc)
                 }
-                generateValues(blockCountFunction)
-                wellFormed = true
-                worldObj.markBlockForUpdate(pos)
-                worldObj.markBlockRangeForRenderUpdate(corners._1, corners._2)
             }
         }
+        generateValues(blockCountFunction)
+        wellFormed = true
+        worldObj.markBlockForUpdate(pos)
+        worldObj.markBlockRangeForRenderUpdate(corners._1, corners._2)
     }
 
     def deconstructMultiblock() : Unit = {
