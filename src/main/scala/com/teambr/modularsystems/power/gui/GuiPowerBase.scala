@@ -10,7 +10,6 @@ import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener
 import com.teambr.bookshelf.network.PacketManager
 import com.teambr.modularsystems.core.network.OpenContainerPacket
 import com.teambr.modularsystems.core.tiles.AbstractCore
-import com.teambr.modularsystems.power.gui.traits.ContainerBuilder
 import com.teambr.modularsystems.power.tiles.TileBankSolids
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.init.Blocks
@@ -29,8 +28,8 @@ import scala.collection.mutable.ArrayBuffer
  * @author Dyonovan
  * @since August 07, 2015
  */
-abstract class GuiPowerBase[C <: Container: ContainerBuilder](tile: TileBankSolids, player: InventoryPlayer, width: Int, height: Int, name: String)
-                                        extends GuiBase[C](ContainerBuilder[C].build(player, tile), width, height, name) {
+abstract class GuiPowerBase[C <: Container](container : C, tile: TileBankSolids, player: InventoryPlayer, width: Int, height: Int, name: String)
+                                        extends GuiBase[C](container, width, height, name) {
 
     var core = tile.getCore.orNull
     addRightTabs(rightTabs)

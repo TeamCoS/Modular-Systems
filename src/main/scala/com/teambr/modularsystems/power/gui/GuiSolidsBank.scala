@@ -14,9 +14,8 @@ import net.minecraft.entity.player.EntityPlayer
  * @author Dyonovan
  * @since August 07, 2015
  */
-class GuiSolidsBank(player: EntityPlayer, tileEntity: TileBankSolids)
-        extends GuiPowerBase[ContainerSolidsBank](tileEntity, player.inventory, 175, 165, "inventory.solidspower.title") {
+class GuiSolidsBank[C <: ContainerSolidsBank](container : C, player: EntityPlayer, tileEntity: TileBankSolids)
+        extends GuiPowerBase[ContainerSolidsBank](container, tileEntity, player.inventory, 175, 165, "inventory.solidspower.title") {
 
     override def addComponents(): Unit = { }
-
 }
