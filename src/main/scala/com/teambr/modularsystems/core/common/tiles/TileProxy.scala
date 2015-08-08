@@ -1,7 +1,11 @@
 package com.teambr.modularsystems.core.common.tiles
 
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+import com.teambr.modularsystems.core.lib.Reference
+import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import net.minecraft.block.Block
+import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.inventory.IInventory
@@ -51,6 +55,14 @@ class TileProxy extends UpdatingTile with IInventory {
         Block.getBlockById(storedBlock) match {
             case block : Block => block
             case _ => Blocks.stone
+        }
+    }
+
+    def getOverlay : TextureAtlasSprite = {
+        getCore match {
+            case Some(core : TileEntityFurnaceCore) =>
+                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID + ":blocks/furnaceOverlay")
+            case _ => Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID + ":blocks/furnaceOverlay")
         }
     }
 

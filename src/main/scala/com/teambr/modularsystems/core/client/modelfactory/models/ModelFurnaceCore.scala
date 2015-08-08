@@ -27,31 +27,60 @@ import net.minecraftforge.client.model.ISmartBlockModel
  */
 class ModelFurnaceCore extends ISmartBlockModel {
     val faceBakery = new FaceBakery
-    var modelRot = EnumFacing.NORTH
+    var facingDirection = EnumFacing.NORTH
+    val modelRot = ModelRotation.X0_Y0
     var isActive = false
 
     def this(rotation : EnumFacing, active : Boolean) = {
         this()
-        modelRot = rotation
+        facingDirection = rotation
         isActive = active
     }
-    override def getFaceQuads(p_177551_1_ : EnumFacing) : util.List[_] = {
+    override def getFaceQuads(facing : EnumFacing) : util.List[_] = {
         val bakedQuads = new util.ArrayList[BakedQuad]()
+        addBorderAndOverlay(facing, bakedQuads)
+        bakedQuads
+    }
+
+    private def addBorderAndOverlay(facing : EnumFacing, bakedQuad: util.ArrayList[BakedQuad]) : Unit = {
         val uv = new BlockFaceUV(Array[Float](0.0F, 0.0F, 16.0F, 16.0F), 0)
         val face = new BlockPartFace(null, 0, "", uv)
 
         val scale = true
+        val hopperTop = Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("minecraft:blocks/hopper_top")
 
-        val hopperTexture = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/hopper_top")
-
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, -0.03F, 0.0F), new Vector3f(16.0F, -0.03F, 16.0F), face, hopperTexture, EnumFacing.DOWN, ModelRotation.X0_Y0, null, scale, true))
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 16.03F, 0.0F), new Vector3f(16.0F, 16.03F, 16.0F), face, hopperTexture, EnumFacing.UP, ModelRotation.X0_Y0, null, scale, true))
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, -0.03F), new Vector3f(16.0F, 16.0F, -0.03F), face, hopperTexture, EnumFacing.NORTH, ModelRotation.X0_Y0, null, scale, true))
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.03F), new Vector3f(16.0F, 16.0F, 16.03F), face, hopperTexture, EnumFacing.SOUTH, ModelRotation.X0_Y0, null, scale, true))
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(16.03F, 0.0F, 0.0F), new Vector3f(16.03F, 16.0F, 16.0F), face, hopperTexture, EnumFacing.EAST, ModelRotation.X0_Y0, null, scale, true))
-        bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(-0.03F, 0.0F, 0.0F), new Vector3f(-0.03F, 16.0F, 16.0F), face, hopperTexture, EnumFacing.WEST, ModelRotation.X0_Y0, null, scale, true))
-
-        bakedQuads
+        facing match {
+            case EnumFacing.UP =>
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 16.03F, 0.0F), new Vector3f(16.0F, 16.03F, 2.0F), face, hopperTop, EnumFacing.UP, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 16.03F, 14.0F), new Vector3f(16.0F, 16.03F, 16.0F), face, hopperTop, EnumFacing.UP, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 16.03F, 0.0F), new Vector3f(2.0F, 16.03F, 16.0F), face, hopperTop, EnumFacing.UP, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(14.0F, 16.03F, 0.0F), new Vector3f(16.0F, 16.03F, 16.0F), face, hopperTop, EnumFacing.UP, modelRot, null, scale, true))
+            case EnumFacing.DOWN =>
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, -0.03F, 0.0F), new Vector3f(16.0F, -0.03F, 2.0F), face, hopperTop, EnumFacing.DOWN, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, -0.03F, 14.0F), new Vector3f(16.0F, -0.03F, 16.0F), face, hopperTop, EnumFacing.DOWN, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, -0.03F, 0.0F), new Vector3f(2.0F, -0.03F, 16.0F), face, hopperTop, EnumFacing.DOWN, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(14.0F, -0.03F, 0.0F), new Vector3f(16.0F, -0.03F, 16.0F), face, hopperTop, EnumFacing.DOWN, modelRot, null, scale, true))
+            case EnumFacing.NORTH =>
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, -0.03F), new Vector3f(16.0F, 2.0F, -0.03F), face, hopperTop, EnumFacing.NORTH, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 14.0F, -0.03F), new Vector3f(16.0F, 16.0F, -0.03F), face, hopperTop, EnumFacing.NORTH, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, -0.03F), new Vector3f(2.0F, 16.0F, -0.03F), face, hopperTop, EnumFacing.NORTH, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(14.0F, 0.0F, -0.03F), new Vector3f(16.0F, 16.0F, -0.03F), face, hopperTop, EnumFacing.NORTH, modelRot, null, scale, true))
+            case EnumFacing.SOUTH =>
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.03F), new Vector3f(16.0F, 2.0F, 16.03F), face, hopperTop, EnumFacing.SOUTH, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 14.0F, 16.03F), new Vector3f(16.0F, 16.0F, 16.03F), face, hopperTop, EnumFacing.SOUTH, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.03F), new Vector3f(2.0F, 16.0F, 16.03F), face, hopperTop, EnumFacing.SOUTH, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(14.0F, 0.0F, 16.03F), new Vector3f(16.0F, 16.0F, 16.03F), face, hopperTop, EnumFacing.SOUTH, modelRot, null, scale, true))
+            case EnumFacing.EAST =>
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(16.03F, 0.0F, 0.0F), new Vector3f(16.03F, 2.0F, 16.0F), face, hopperTop, EnumFacing.EAST, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(16.03F, 14.0F, 0.0F), new Vector3f(16.03F, 16.0F, 16.0F), face, hopperTop, EnumFacing.EAST, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(16.03F, 0.0F, 0.0F), new Vector3f(16.03F, 16.0F, 2.0F), face, hopperTop, EnumFacing.EAST, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(16.03F, 0.0F, 14.0F), new Vector3f(16.03F, 16.0F, 16.0F), face, hopperTop, EnumFacing.EAST, modelRot, null, scale, true))
+            case EnumFacing.WEST =>
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(-0.03F, 0.0F, 0.0F), new Vector3f(-0.03F, 2.0F, 16.0F), face, hopperTop, EnumFacing.WEST, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(-0.03F, 14.0F, 0.0F), new Vector3f(-0.03F, 16.0F, 16.0F), face, hopperTop, EnumFacing.WEST, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(-0.03F, 0.0F, 0.0F), new Vector3f(-0.03F, 16.0F, 2.0F), face, hopperTop, EnumFacing.WEST, modelRot, null, scale, true))
+                bakedQuad.add(faceBakery.makeBakedQuad(new Vector3f(-0.03F, 0.0F, 14.0F), new Vector3f(-0.03F, 16.0F, 16.0F), face, hopperTop, EnumFacing.WEST, modelRot, null, scale, true))
+        }
     }
 
     override def getGeneralQuads : util.List[_] = {
@@ -60,9 +89,9 @@ class ModelFurnaceCore extends ISmartBlockModel {
 
         val copiedModel : IBakedModel =
         if(!isActive)
-            blockModelShapes.getModelForState(Blocks.furnace.getDefaultState.withProperty(BlockFurnace.FACING, modelRot))
+            blockModelShapes.getModelForState(Blocks.furnace.getDefaultState.withProperty(BlockFurnace.FACING, facingDirection))
         else
-            blockModelShapes.getModelForState(Blocks.lit_furnace.getDefaultState.withProperty(BlockFurnace.FACING, modelRot))
+            blockModelShapes.getModelForState(Blocks.lit_furnace.getDefaultState.withProperty(BlockFurnace.FACING, facingDirection))
 
         val returnVals = new util.ArrayList[BakedQuad]()
         val otherGeneralQuads = copiedModel.getGeneralQuads

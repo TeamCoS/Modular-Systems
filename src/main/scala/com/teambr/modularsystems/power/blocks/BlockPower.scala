@@ -13,6 +13,8 @@ import com.teambr.modularsystems.power.container.ContainerSolidsBank
 import com.teambr.modularsystems.power.gui.GuiSolidsBank
 import com.teambr.modularsystems.power.tiles.{TileBankBase, TileBankSolids}
 import net.minecraft.block.state.IBlockState
+import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
@@ -62,7 +64,11 @@ class BlockPower(name: String, tileEntity: Class[_ <: TileEntity]) extends Block
     }
 
     override def colorMultiplier(worldIn : IBlockAccess, pos : BlockPos, renderPass : Int) : Int = {
-        0xFFFFFF
+        0x4A390E
+    }
+
+    def getTextureForItem(block : BlockPower) : TextureAtlasSprite = {
+        Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/solidsOverlay")
     }
 
     /*******************************************************************************************************************
