@@ -7,8 +7,8 @@ import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.common.blocks.BlockProxy
-import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.core.common.tiles.TileProxy
+import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.power.container.ContainerSolidsBank
 import com.teambr.modularsystems.power.gui.GuiSolidsBank
 import com.teambr.modularsystems.power.tiles.{TileBankBase, TileBankSolids}
@@ -18,7 +18,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.World
+import net.minecraft.world.{ IBlockAccess, World }
 
 /**
  * This file was created for Modular-Systems
@@ -59,7 +59,11 @@ class BlockPower(name: String, tileEntity: Class[_ <: TileEntity]) extends Block
     }
 
     override def getItemDropped(state: IBlockState, rand: Random, fortune: Int): Item = {
-        Item.getItemFromBlock(state.getBlock)
+        null
+    }
+
+    override def colorMultiplier(worldIn : IBlockAccess, pos : BlockPos, renderPass : Int) : Int = {
+        0xFFFFFF
     }
 
     /*******************************************************************************************************************
