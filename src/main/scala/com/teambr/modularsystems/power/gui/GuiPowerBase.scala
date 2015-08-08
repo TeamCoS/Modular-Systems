@@ -8,9 +8,9 @@ import com.teambr.bookshelf.client.gui.component.control.GuiComponentSetNumber
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentText, GuiTabCollection}
 import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener
 import com.teambr.bookshelf.network.PacketManager
-import com.teambr.modularsystems.core.network.OpenContainerPacket
 import com.teambr.modularsystems.core.common.tiles.AbstractCore
-import com.teambr.modularsystems.power.tiles.TileBankSolids
+import com.teambr.modularsystems.core.network.OpenContainerPacket
+import com.teambr.modularsystems.power.tiles.TileBankBase
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.inventory.Container
@@ -28,7 +28,7 @@ import scala.collection.mutable.ArrayBuffer
  * @author Dyonovan
  * @since August 07, 2015
  */
-abstract class GuiPowerBase[C <: Container](container : C, tile: TileBankSolids, player: InventoryPlayer, width: Int, height: Int, name: String)
+abstract class GuiPowerBase[C <: Container](container : C, tile: TileBankBase, player: InventoryPlayer, width: Int, height: Int, name: String)
                                         extends GuiBase[C](container, width, height, name) {
 
     var core = tile.getCore.orNull

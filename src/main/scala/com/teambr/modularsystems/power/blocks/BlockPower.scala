@@ -1,7 +1,5 @@
 package com.teambr.modularsystems.power.blocks
 
-import java.util.Random
-
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
@@ -14,11 +12,12 @@ import com.teambr.modularsystems.power.gui.GuiSolidsBank
 import com.teambr.modularsystems.power.tiles.{TileBankBase, TileBankSolids}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.{ IBlockAccess, World }
+import net.minecraft.world.{IBlockAccess, World}
 
 /**
  * This file was created for Modular-Systems
@@ -54,12 +53,14 @@ class BlockPower(name: String, tileEntity: Class[_ <: TileEntity]) extends Block
         if (core != null) {
             core.get.deconstructMultiblock()
         }
+        val f: Float = world.rand.nextFloat * 0.8F + 0.1F
+        val f1: Float = world.rand.nextFloat * 0.8F + 0.1F
+        val f2: Float = world.rand.nextFloat * 0.8F + 0.1F
+        val entityitem: EntityItem = new EntityItem(world, pos.getX.toDouble + f, pos.getY.toDouble + f1, pos.getZ.toDouble + f2, new ItemStack(state.getBlock))
+        world.spawnEntityInWorld(entityitem)
+        world.notifyNeighborsOfStateChange(pos, this)
 
         super[DropsItems].breakBlock(world, pos, state)
-    }
-
-    override def getItemDropped(state: IBlockState, rand: Random, fortune: Int): Item = {
-        null
     }
 
     override def colorMultiplier(worldIn : IBlockAccess, pos : BlockPos, renderPass : Int) : Int = {
