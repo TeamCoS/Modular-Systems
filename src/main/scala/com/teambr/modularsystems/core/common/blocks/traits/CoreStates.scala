@@ -1,7 +1,7 @@
 package com.teambr.modularsystems.core.common.blocks.traits
 
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
-import com.teambr.modularsystems.core.tiles.AbstractCore
+import com.teambr.modularsystems.core.common.tiles.AbstractCore
 import net.minecraft.block.Block
 import net.minecraft.block.properties.{ IProperty, PropertyBool }
 import net.minecraft.block.state.{ BlockState, IBlockState }

@@ -4,7 +4,7 @@ import com.teambr.bookshelf.helper.BlockHelper
 import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.functions.BlockCountFunction
 import com.teambr.modularsystems.core.registries.{FurnaceBannedBlocks, BlockValueRegistry}
-import com.teambr.modularsystems.core.tiles.AbstractCore
+import com.teambr.modularsystems.core.common.tiles.AbstractCore
 import net.minecraft.block.Block
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack

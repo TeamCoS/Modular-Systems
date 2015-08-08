@@ -1,4 +1,4 @@
-package com.teambr.modularsystems.core.tiles
+package com.teambr.modularsystems.core.common.tiles
 
 import java.util
 import java.util.Collections
@@ -10,6 +10,7 @@ import com.teambr.modularsystems.core.collections.StandardValues
 import com.teambr.modularsystems.core.functions.BlockCountFunction
 import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.core.providers.FuelProvider
+import com.teambr.modularsystems.power.tiles.TileBankBase
 import net.minecraft.block.Block
 import net.minecraft.block.properties.PropertyDirection
 import net.minecraft.item.ItemStack
@@ -175,7 +176,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
 
             if (!loc.equals(pos) && !worldObj.isAirBlock(loc)) { //Not us, so we can do something
                 worldObj.getTileEntity(loc) match {
-                    case proxy : TileProxy =>
+                    case proxy : TileProxy if !proxy.isInstanceOf[TileBankBase] =>
                         val meta = proxy.metaData
                         worldObj.setBlockState(loc, proxy.getStoredBlock.getStateFromMeta(meta))
                         worldObj.markBlockForUpdate(loc)

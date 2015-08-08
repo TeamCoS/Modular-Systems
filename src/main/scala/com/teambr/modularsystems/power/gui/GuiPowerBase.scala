@@ -5,11 +5,11 @@ import java.awt.Color
 import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambr.bookshelf.client.gui.component.BaseComponent
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentSetNumber
-import com.teambr.bookshelf.client.gui.component.display.GuiTabCollection
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentText, GuiTabCollection}
 import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener
 import com.teambr.bookshelf.network.PacketManager
 import com.teambr.modularsystems.core.network.OpenContainerPacket
-import com.teambr.modularsystems.core.tiles.AbstractCore
+import com.teambr.modularsystems.core.common.tiles.AbstractCore
 import com.teambr.modularsystems.power.tiles.TileBankSolids
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.init.Blocks
@@ -50,6 +50,7 @@ abstract class GuiPowerBase[C <: Container](container : C, tile: TileBankSolids,
 
             //Priority Tab
             var priorityTab = new ArrayBuffer[BaseComponent]
+            priorityTab += new GuiComponentText("Fuel Priority", 22, 7)
             priorityTab += new GuiComponentSetNumber(26, 25, 40, tile.getPriority, 0, 100) {
                 override def setValue(i: Int): Unit = {
                     tile.priority = i

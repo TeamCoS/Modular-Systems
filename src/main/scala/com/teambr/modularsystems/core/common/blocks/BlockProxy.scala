@@ -3,7 +3,7 @@ package com.teambr.modularsystems.core.common.blocks
 import java.util.Random
 
 import com.teambr.bookshelf.Bookshelf
-import com.teambr.modularsystems.core.tiles.{AbstractCore, TileProxy}
+import com.teambr.modularsystems.core.common.tiles.{AbstractCore, TileProxy}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty

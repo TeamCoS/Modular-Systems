@@ -8,7 +8,7 @@ import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.managers.BlockManager
-import com.teambr.modularsystems.core.tiles.TileProxy
+import com.teambr.modularsystems.core.common.tiles.TileProxy
 import com.teambr.modularsystems.power.container.ContainerSolidsBank
 import com.teambr.modularsystems.power.gui.GuiSolidsBank
 import com.teambr.modularsystems.power.tiles.{TileBankBase, TileBankSolids}

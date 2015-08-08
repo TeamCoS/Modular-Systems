@@ -4,7 +4,7 @@ import java.util
 import javax.vecmath.Vector3f
 import com.teambr.modularsystems.core.common.blocks.ProxyState
 import com.teambr.modularsystems.core.lib.Reference
-import com.teambr.modularsystems.core.tiles.TileProxy
+import com.teambr.modularsystems.core.common.tiles.TileProxy
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model._

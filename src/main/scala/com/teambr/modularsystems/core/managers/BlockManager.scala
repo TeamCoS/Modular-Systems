@@ -1,7 +1,7 @@
 package com.teambr.modularsystems.core.managers
 
 import com.teambr.modularsystems.core.common.blocks.BlockProxy
-import com.teambr.modularsystems.core.tiles.TileProxy
+import com.teambr.modularsystems.core.common.tiles.TileProxy
 import com.teambr.modularsystems.crusher.blocks.BlockCrusherCore
 import com.teambr.modularsystems.crusher.tiles.TileCrusherCore
 import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore

@@ -1,4 +1,4 @@
-package com.teambr.modularsystems.core.tiles
+package com.teambr.modularsystems.core.common.tiles
 
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
 import net.minecraft.block.Block

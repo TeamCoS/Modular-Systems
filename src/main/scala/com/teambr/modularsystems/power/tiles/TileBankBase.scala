@@ -1,7 +1,7 @@
 package com.teambr.modularsystems.power.tiles
 
 import com.teambr.modularsystems.core.providers.FuelProvider
-import com.teambr.modularsystems.core.tiles.TileProxy
+import com.teambr.modularsystems.core.common.tiles.TileProxy
 import net.minecraft.nbt.NBTTagCompound
 
 /**
