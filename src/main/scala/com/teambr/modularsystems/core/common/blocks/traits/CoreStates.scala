@@ -43,9 +43,14 @@ trait CoreStates extends Block {
     }
 
     override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
-        state.withProperty(PropertyRotation.FOUR_WAY.getProperty, world.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing])
-        .withProperty(PROPERTY_ACTIVE, world.getTileEntity(pos).asInstanceOf[AbstractCore].isBurning.asInstanceOf[java.lang.Boolean])
-
+        world.getTileEntity(pos) match {
+            case core : AbstractCore =>
+                state.withProperty (PropertyRotation.FOUR_WAY.getProperty, world.getBlockState (pos).getValue (PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing] )
+                        .withProperty(PROPERTY_ACTIVE, core.isBurning.asInstanceOf[java.lang.Boolean])
+            case _ =>
+                state.withProperty (PropertyRotation.FOUR_WAY.getProperty, world.getBlockState (pos).getValue (PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing] )
+                    .withProperty(PROPERTY_ACTIVE, true)
+        }
     }
 
     /**

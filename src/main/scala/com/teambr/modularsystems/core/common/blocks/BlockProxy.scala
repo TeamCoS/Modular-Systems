@@ -89,9 +89,6 @@ class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseB
     override def isTranslucent : Boolean =
         true
 
-    override def canRenderInLayer(layer : EnumWorldBlockLayer) : Boolean =
-        layer == EnumWorldBlockLayer.CUTOUT || layer == EnumWorldBlockLayer.TRANSLUCENT
-
     @SideOnly(Side.CLIENT)
     override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
 

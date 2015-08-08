@@ -52,23 +52,26 @@ class ModelProxy extends ISmartBlockModel {
     }
 
     override def getGeneralQuads : util.List[_] = {
-        val blockRendererDispatcher = Minecraft.getMinecraft.getBlockRendererDispatcher
-        val blockModelShapes = blockRendererDispatcher.getBlockModelShapes
+        if(tile != null) {
+            val blockRendererDispatcher = Minecraft.getMinecraft.getBlockRendererDispatcher
+            val blockModelShapes = blockRendererDispatcher.getBlockModelShapes
 
-        val copiedModel = blockModelShapes.getModelForState(tile.getStoredBlock.getStateFromMeta(tile.metaData))
-        val returnVals = new util.ArrayList[BakedQuad]()
-        val otherGeneralQuads = copiedModel.getGeneralQuads
-        for(i <- 0 until otherGeneralQuads.size()) {
-            returnVals.add(otherGeneralQuads.get(i).asInstanceOf[BakedQuad])
-        }
-
-        for(facing <- EnumFacing.values()) {
-            val facingQuads = copiedModel.getFaceQuads(facing)
-            for(i <- 0 until facingQuads.size()) {
-                returnVals.add(facingQuads.get(i).asInstanceOf[BakedQuad])
+            val copiedModel = blockModelShapes.getModelForState(tile.getStoredBlock.getStateFromMeta(tile.metaData))
+            val returnVals = new util.ArrayList[BakedQuad]()
+            val otherGeneralQuads = copiedModel.getGeneralQuads
+            for (i <- 0 until otherGeneralQuads.size()) {
+                returnVals.add(otherGeneralQuads.get(i).asInstanceOf[BakedQuad])
             }
+
+            for (facing <- EnumFacing.values()) {
+                val facingQuads = copiedModel.getFaceQuads(facing)
+                for (i <- 0 until facingQuads.size()) {
+                    returnVals.add(facingQuads.get(i).asInstanceOf[BakedQuad])
+                }
+            }
+            returnVals
         }
-        returnVals
+        else new util.ArrayList[Nothing]()
     }
 
     override def isAmbientOcclusion: Boolean = true
@@ -78,7 +81,10 @@ class ModelProxy extends ISmartBlockModel {
     override def isBuiltInRenderer: Boolean = false
 
     override def handleBlockState(state : IBlockState) : IBakedModel = {
-        new ModelProxy(state.asInstanceOf[ProxyState].tile)
+        state match {
+            case proxyState : ProxyState => new ModelProxy(proxyState.tile)
+            case _ => new ModelProxy()
+        }
     }
 
     override def getItemCameraTransforms : ItemCameraTransforms = {
