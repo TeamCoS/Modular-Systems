@@ -1,13 +1,18 @@
 package com.teambr.modularsystems.core.common.blocks
 
+import java.util.Random
+
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.modularsystems.core.tiles.{AbstractCore, TileProxy}
+import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{EnumFacing, BlockPos, EnumWorldBlockLayer}
+import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.util.{BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -28,14 +33,30 @@ class BlockProxy extends BaseBlock(Material.rock, "proxy", classOf[TileProxy]) {
         null
     }
 
+    override def getItemDropped(state: IBlockState, rand: Random, fortune: Int): Item = {
+        null
+    }
+
     override def breakBlock(world: World, pos: BlockPos, state: IBlockState) {
         world.getTileEntity(pos) match {
             case tile: TileProxy =>
                 if (tile.getCore.isDefined) {
                     world.getTileEntity(tile.getCore.get.getPos).asInstanceOf[AbstractCore].deconstructMultiblock()
                 }
+                val block: Block = tile.getStoredBlock
+                val meta: Int = tile.metaData
+
+                if (world.isAirBlock(pos)) {
+                    val f: Float = world.rand.nextFloat * 0.8F + 0.1F
+                    val f1: Float = world.rand.nextFloat * 0.8F + 0.1F
+                    val f2: Float = world.rand.nextFloat * 0.8F + 0.1F
+                    val entityitem: EntityItem = new EntityItem(world, pos.getX.toDouble + f, pos.getY.toDouble + f1, pos.getZ.toDouble + f2, new ItemStack(block, 1, meta))
+                    world.spawnEntityInWorld(entityitem)
+                    world.notifyNeighborsOfStateChange(pos, this)
+                }
             case _ =>
         }
+        super.breakBlock(world, pos, state)
     }
 
     override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, player : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
