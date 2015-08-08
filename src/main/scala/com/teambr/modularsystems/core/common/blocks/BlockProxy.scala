@@ -12,6 +12,7 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
@@ -27,7 +28,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Paul Davis <pauljoda>
  * @since August 06, 2015
  */
-class BlockProxy extends BaseBlock(Material.rock, "proxy", classOf[TileProxy]) {
+class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseBlock(Material.rock, name, tileEntity) {
 
     override def getCreativeTab: CreativeTabs = {
         null

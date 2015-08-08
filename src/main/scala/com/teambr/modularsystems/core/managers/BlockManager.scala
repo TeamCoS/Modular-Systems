@@ -4,6 +4,8 @@ import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.tiles.TileProxy
 import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
+import com.teambr.modularsystems.power.blocks.BlockPower
+import com.teambr.modularsystems.power.tiles.TileBankSolids
 import com.teambr.modularsystems.storage.blocks.{BlockStorageExpansion, BlockStorageCore}
 import com.teambr.modularsystems.storage.tiles.{TileStorageCapacity, TileStorageBasic, TileStorageCore}
 import net.minecraft.block.Block
@@ -18,18 +20,25 @@ import net.minecraftforge.oredict.OreDictionary
 
 object BlockManager {
 
+    //Cores
     val furnaceCore = new BlockFurnaceCore("furnaceCore", false)
 
+    //Power
+    val bankSolids = new BlockPower("bankSolids", classOf[TileBankSolids])
+    //Storage
     val storageCore = new BlockStorageCore
     val storageBasic = new BlockStorageExpansion("storageBasic", List(), classOf[TileStorageBasic])
     val storageCapacity = new BlockStorageExpansion("storageCapacity", List(), classOf[TileStorageCapacity])
 
-    val proxy = new BlockProxy
+    val proxy = new BlockProxy("proxy", classOf[TileProxy])
 
     def preInit() : Unit = {
         //Core
         registerBlock(proxy, "proxy", classOf[TileProxy])
         registerBlock(furnaceCore, "furnaceCore", classOf[TileEntityFurnaceCore])
+
+        //Power
+        registerBlock(bankSolids, "bankSolids", classOf[TileBankSolids])
 
         //Storage
         registerBlock(storageCore, "storageCore", classOf[TileStorageCore])

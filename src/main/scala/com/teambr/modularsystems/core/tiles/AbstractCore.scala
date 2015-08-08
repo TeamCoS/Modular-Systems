@@ -105,7 +105,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
                     if(location.equals(new Location(pos.getX, pos.getY, pos.getZ))) {
                         //Continue
                     }
-                    val block = worldObj.getBlockState(location.asBlockPos).getBlock
+                    //val block = worldObj.getBlockState(location.asBlockPos).getBlock
                     if(worldObj.isAirBlock(location.asBlockPos) ||
                             isBlockBanned(worldObj.getBlockState(location.asBlockPos).getBlock, getBlockMetadata)) {
                         return false
