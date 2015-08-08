@@ -5,7 +5,7 @@ import com.teambr.modularsystems.core.tiles.TileProxy
 import net.minecraft.nbt.NBTTagCompound
 
 /**
- * This file was created for NeoTech
+ * This file was created for Modular-Systems
  *
  * Modular-Systems is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:

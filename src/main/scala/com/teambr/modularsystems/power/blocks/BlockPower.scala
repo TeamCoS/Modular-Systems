@@ -77,7 +77,7 @@ class BlockPower(name: String, tileEntity: Class[_ <: TileEntity]) extends Block
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getBlockState(new BlockPos(x, y, z)).getBlock match {
             case block: BlockManager.bankSolids.type =>
-                new GuiSolidsBank(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids])
+                new GuiSolidsBank(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids])
             case _ => null
         }
     }

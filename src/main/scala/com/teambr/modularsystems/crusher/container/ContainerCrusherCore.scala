@@ -1,7 +1,7 @@
-package com.teambr.modularsystems.power.container
+package com.teambr.modularsystems.crusher.container
 
 import com.teambr.bookshelf.common.container.BaseContainer
-import com.teambr.modularsystems.power.tiles.TileBankSolids
+import com.teambr.modularsystems.crusher.tiles.TileCrusherCore
 import net.minecraft.entity.player.InventoryPlayer
 
 /**
@@ -12,11 +12,9 @@ import net.minecraft.entity.player.InventoryPlayer
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
  * @author Dyonovan
- * @since August 07, 2015
+ * @since August 08, 2015
  */
-class ContainerSolidsBank(playerInventory: InventoryPlayer, tileEntity: TileBankSolids)
-        extends BaseContainer(playerInventory, tileEntity) {
+class ContainerCrusherCore(playerInventory: InventoryPlayer, tile: TileCrusherCore)
+        extends BaseContainer(playerInventory, tile) {
 
-    addInventoryGrid(8, 20, 9)
-    addPlayerInventorySlots(8, 84)
 }

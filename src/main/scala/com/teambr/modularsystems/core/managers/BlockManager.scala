@@ -2,6 +2,8 @@ package com.teambr.modularsystems.core.managers
 
 import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.tiles.TileProxy
+import com.teambr.modularsystems.crusher.blocks.BlockCrusherCore
+import com.teambr.modularsystems.crusher.tiles.TileCrusherCore
 import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import com.teambr.modularsystems.power.blocks.BlockPower
@@ -21,10 +23,12 @@ import net.minecraftforge.oredict.OreDictionary
 object BlockManager {
 
     //Cores
-    val furnaceCore = new BlockFurnaceCore("furnaceCore", false)
+    val furnaceCore = new BlockFurnaceCore("furnaceCore")
+    val crusherCore = new BlockCrusherCore("crusherCore")
 
     //Power
     val bankSolids = new BlockPower("bankSolids", classOf[TileBankSolids])
+
     //Storage
     val storageCore = new BlockStorageCore
     val storageBasic = new BlockStorageExpansion("storageBasic", List(), classOf[TileStorageBasic])
@@ -36,6 +40,7 @@ object BlockManager {
         //Core
         registerBlock(proxy, "proxy", classOf[TileProxy])
         registerBlock(furnaceCore, "furnaceCore", classOf[TileEntityFurnaceCore])
+        registerBlock(crusherCore, "crusherCore", classOf[TileCrusherCore])
 
         //Power
         registerBlock(bankSolids, "bankSolids", classOf[TileBankSolids])

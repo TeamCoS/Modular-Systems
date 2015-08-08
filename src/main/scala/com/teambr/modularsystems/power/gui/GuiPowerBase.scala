@@ -10,7 +10,8 @@ import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener
 import com.teambr.bookshelf.network.PacketManager
 import com.teambr.modularsystems.core.network.OpenContainerPacket
 import com.teambr.modularsystems.core.tiles.AbstractCore
-import com.teambr.modularsystems.power.tiles.TileBankBase
+import com.teambr.modularsystems.power.gui.traits.ContainerBuilder
+import com.teambr.modularsystems.power.tiles.TileBankSolids
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.inventory.Container
@@ -19,7 +20,7 @@ import net.minecraft.item.ItemStack
 import scala.collection.mutable.ArrayBuffer
 
 /**
- * This file was created for NeoTech
+ * This file was created for Modular-Systems
  *
  * Modular-Systems is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
@@ -28,10 +29,10 @@ import scala.collection.mutable.ArrayBuffer
  * @author Dyonovan
  * @since August 07, 2015
  */
-abstract class GuiPowerBase[C <: Container](val tile: TileBankBase, player: InventoryPlayer, val width: Int, val height: Int, val name: String)
-        extends GuiBase[C](new C(player, tile), width, height, name) {
+abstract class GuiPowerBase[C <: Container: ContainerBuilder](tile: TileBankSolids, player: InventoryPlayer, width: Int, height: Int, name: String)
+                                        extends GuiBase[C](ContainerBuilder[C].build(player, tile), width, height, name) {
 
-    var core = tile.getCore.get
+    var core = tile.getCore.orNull
     addRightTabs(rightTabs)
 
     override def drawGuiContainerForegroundLayer(x: Int, y: Int): Unit = {

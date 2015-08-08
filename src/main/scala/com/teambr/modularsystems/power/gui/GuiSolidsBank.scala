@@ -2,10 +2,10 @@ package com.teambr.modularsystems.power.gui
 
 import com.teambr.modularsystems.power.container.ContainerSolidsBank
 import com.teambr.modularsystems.power.tiles.TileBankSolids
-import net.minecraft.entity.player.InventoryPlayer
+import net.minecraft.entity.player.EntityPlayer
 
 /**
- * This file was created for NeoTech
+ * This file was created for Modular-Systems
  *
  * Modular-Systems is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
@@ -14,8 +14,9 @@ import net.minecraft.entity.player.InventoryPlayer
  * @author Dyonovan
  * @since August 07, 2015
  */
-class GuiSolidsBank(player: InventoryPlayer, tileEntity: TileBankSolids)
-        extends GuiPowerBase[ContainerSolidsBank](tileEntity, player, 175, 165, "inventory.solidspower.title") {
+class GuiSolidsBank(player: EntityPlayer, tileEntity: TileBankSolids)
+        extends GuiPowerBase[ContainerSolidsBank](tileEntity, player.inventory, 175, 165, "inventory.solidspower.title") {
 
     override def addComponents(): Unit = { }
+
 }

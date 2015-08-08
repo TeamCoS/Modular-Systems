@@ -2,10 +2,11 @@ package com.teambr.modularsystems.power.tiles
 
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import com.teambr.modularsystems.core.providers.FuelProvider.FuelProviderType
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 
 /**
- * This file was created for NeoTech
+ * This file was created for Modular-Systems
  *
  * Modular-Systems is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
@@ -71,4 +72,19 @@ class TileBankSolids extends TileBankBase with Inventory {
     override def initialSize: Int = 27
 
     override var inventoryName: String = "inventory.solidspower.title"
+
+    override def readFromNBT(tag: NBTTagCompound) : Unit = {
+        super[TileBankBase].readFromNBT(tag)
+        super[Inventory].readFromNBT(tag)
+    }
+
+    override def writeToNBT(tag: NBTTagCompound) {
+        super[TileBankBase].writeToNBT(tag)
+        super[Inventory].writeToNBT(tag)
+    }
+
+    override def markDirty(): Unit = {
+        super[TileBankBase].markDirty()
+        super[Inventory].markDirty()
+    }
 }

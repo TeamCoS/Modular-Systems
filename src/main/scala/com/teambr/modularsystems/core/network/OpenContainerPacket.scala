@@ -6,7 +6,7 @@ import net.minecraft.util.BlockPos
 import net.minecraftforge.fml.common.network.simpleimpl.{MessageContext, IMessage, IMessageHandler}
 
 /**
- * This file was created for NeoTech
+ * This file was created for Modular-Systems
  *
  * Modular-Systems is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:

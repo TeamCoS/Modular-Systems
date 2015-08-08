@@ -1,13 +1,13 @@
-package com.teambr.modularsystems.furnace.blocks
+package com.teambr.modularsystems.crusher.blocks
 
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
 import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
-import com.teambr.modularsystems.furnace.container.ContainerFurnaceCore
-import com.teambr.modularsystems.furnace.gui.GuiFurnaceCore
-import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
+import com.teambr.modularsystems.crusher.container.ContainerCrusherCore
+import com.teambr.modularsystems.crusher.gui.GuiCrusherCore
+import com.teambr.modularsystems.crusher.tiles.TileCrusherCore
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
@@ -22,15 +22,14 @@ import net.minecraft.world.World
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
  * @author Dyonovan
- * @since August 07, 2015
+ * @since August 08, 2015
  */
-class BlockFurnaceCore(name: String) extends BaseBlock(Material.rock, name, classOf[TileEntityFurnaceCore])
-with OpensGui with CoreStates with DropsItems {
+class BlockCrusherCore(name: String) extends BaseBlock(Material.rock, name, classOf[TileCrusherCore])
+        with OpensGui with CoreStates with DropsItems {
 
-    //Block Methods
     override def breakBlock(world: World, pos: BlockPos, state: IBlockState) {
         world.getTileEntity(pos) match {
-            case core: TileEntityFurnaceCore => core.deconstructMultiblock()
+            case core: TileCrusherCore => core.deconstructMultiblock()
             case _ =>
         }
         super[DropsItems].breakBlock(world, pos, state)
@@ -38,7 +37,7 @@ with OpensGui with CoreStates with DropsItems {
 
     override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, player : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
         world.getTileEntity(pos) match {
-            case core: TileEntityFurnaceCore =>
+            case core: TileCrusherCore =>
                 if (core.wellFormed)
                     player.openGui(Bookshelf, 0, world, pos.getX, pos.getY, pos.getZ)
                 else
@@ -48,12 +47,11 @@ with OpensGui with CoreStates with DropsItems {
         true
     }
 
-    //OpensGui Methods
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        new ContainerFurnaceCore(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
+        new ContainerCrusherCore(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileCrusherCore])
     }
 
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        new GuiFurnaceCore(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
+        new GuiCrusherCore(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileCrusherCore])
     }
 }
