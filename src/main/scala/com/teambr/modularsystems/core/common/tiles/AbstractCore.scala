@@ -13,6 +13,7 @@ import com.teambr.modularsystems.core.providers.FuelProvider
 import com.teambr.modularsystems.power.tiles.TileBankBase
 import net.minecraft.block.Block
 import net.minecraft.block.properties.PropertyDirection
+import net.minecraft.inventory.ISidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
@@ -29,7 +30,7 @@ import net.minecraftforge.fml.relauncher.{ Side, SideOnly }
  * @author Paul Davis <pauljoda>
  * @since August 05, 2015
  */
-abstract class AbstractCore extends UpdatingTile with Inventory {
+abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInventory {
     final val cookSpeed = 200
     final val MAX_SIZE = 100
 
@@ -433,6 +434,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
 
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super[TileEntity].writeToNBT(tag)
+        super[Inventory].writeToNBT(tag)
         values.writeToNBT(tag)
         tag.setBoolean("IsDirty", isDirty)
         tag.setBoolean("WellFormed", wellFormed)
@@ -444,6 +446,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
     }
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super[TileEntity].readFromNBT(tag)
+        super[Inventory].readFromNBT(tag)
         val oldBurn = values.burnTime
         values.readFromNBT(tag)
         isDirty = tag.getBoolean("IsDirty")
@@ -459,6 +462,38 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
     /*******************************************************************************************************************
       ************************************************* Inventory methods ***********************************************
       *******************************************************************************************************************/
+    def getSlotsForFace(side : EnumFacing) : Array[Int] = {
+        side match {
+            case EnumFacing.UP => Array[Int](0)
+            case _ => Array[Int](1)
+        }
+    }
+
+    /**
+     * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
+     * side
+     */
+    def canInsertItem(index : Int, itemStackIn : ItemStack, direction : EnumFacing) : Boolean = {
+        if(index == 0) {
+            return recipe(itemStackIn) != null
+        }
+        false
+    }
+
+    /**
+     * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
+     * side
+     */
+    def canExtractItem(index : Int, stack : ItemStack, direction : EnumFacing) : Boolean = index == 1
+
+    /**
+     * Used to define if an item is valid for a slot
+     * @param index The slot id
+     * @param stack The stack to check
+     * @return True if you can put this there
+     */
+    override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = index == 0
+
     override def initialSize : Int = 2
 
     /**

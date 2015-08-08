@@ -8,10 +8,10 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.inventory.IInventory
+import net.minecraft.inventory.{ ISidedInventory, IInventory }
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{ BlockPos, IChatComponent }
+import net.minecraft.util.{ EnumFacing, BlockPos, IChatComponent }
 
 /**
  * This file was created for Modular-Systems
@@ -23,7 +23,7 @@ import net.minecraft.util.{ BlockPos, IChatComponent }
  * @author Paul Davis <pauljoda>
  * @since August 06, 2015
  */
-class TileProxy extends UpdatingTile with IInventory {
+class TileProxy extends UpdatingTile with IInventory with ISidedInventory {
     var coreLocation : Option[BlockPos] = None
     var storedBlock : Int = -1
     var metaData : Int = 0
@@ -129,7 +129,7 @@ class TileProxy extends UpdatingTile with IInventory {
 
     override def getInventoryStackLimit : Int = {
         getCore match {
-            case Some(core) => getInventoryStackLimit
+            case Some(core) => core.getInventoryStackLimit()
             case _ => 0
         }
     }
@@ -207,6 +207,27 @@ class TileProxy extends UpdatingTile with IInventory {
     override def hasCustomName : Boolean = {
         getCore match {
             case Some(core) => core.hasCustomName()
+            case _ => false
+        }
+    }
+
+    override def getSlotsForFace(side : EnumFacing) : Array[Int] = {
+        getCore match {
+            case Some(core) => core.getSlotsForFace(side)
+            case _ => Array[Int]()
+        }
+    }
+
+    override def canExtractItem(index : Int, stack : ItemStack, direction : EnumFacing) : Boolean = {
+        getCore match {
+            case Some(core) => core.canExtractItem(index, stack, direction)
+            case _ => false
+        }
+    }
+
+    override def canInsertItem(index : Int, itemStackIn : ItemStack, direction : EnumFacing) : Boolean = {
+        getCore match {
+            case Some(core) => core.canInsertItem(index, itemStackIn, direction)
             case _ => false
         }
     }

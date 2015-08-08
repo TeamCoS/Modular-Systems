@@ -68,7 +68,10 @@ class ModelProxy extends ISmartBlockModel {
 
         val scale = true
         val hopperTop = Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("minecraft:blocks/hopper_top")
-        val overlay = this.tile.getOverlay
+        var overlay = hopperTop
+        if(tile != null) {
+             overlay = this.tile.getOverlay
+        }
 
         facing match {
             case EnumFacing.UP =>

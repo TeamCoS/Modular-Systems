@@ -70,6 +70,7 @@ class ModelPowerBank extends ISmartBlockModel with ISmartItemModel {
                 bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(6.0F, 12.0F, 1.0F), new Vector3f(10.0F, 13.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true))
                 bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(6.0F, 3.0F, 1.0F), new Vector3f(7.0F, 13.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true))
                 bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(9.0F, 3.0F, 1.0F), new Vector3f(10.0F, 13.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true))
+                bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(7.0F, 4.0F, 1.9F), new Vector3f(9.0F, 12.0F, 1.9F), face, Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("minecraft:blocks/hardened_clay_stained_black"), enumFacing, modelRot, null, scale, true))
             }
             //Front border
             bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(16.0F, 2.0F, 2.0F), face, texture, enumFacing, ModelRotation.X0_Y0, null, scale, true))
