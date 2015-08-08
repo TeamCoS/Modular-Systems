@@ -42,7 +42,7 @@ class BlockCountFunction {
                 case None => 0
             }
             j += 1
-            materialCount + (BlockValueRegistry.getMaterialString(block.getMaterial) -> j)
+            materialCount += (BlockValueRegistry.getMaterialString(block.getMaterial) -> j)
         }
     }
 

@@ -58,9 +58,16 @@ class GuiFurnaceCore(player: EntityPlayer, tile: TileEntityFurnaceCore) extends
             }
             furnaceInfoSpeed += new GuiComponentText(f"$speed%.2f" + "%", 15, 33, if (speed > 0) 0x5CE62E else if (speed == 0) 0x000000 else 0xE62E00)
             furnaceInfoSpeed += new GuiComponentText("Efficiency: ", 5, 48, 0xFFFFFF)
-            //furnaceInfoSpeed += new GuiComponentText(String.format("%.2f", if (-1 * (100 - ((1600 + core.values.efficiency) / 1600) * 100) != 0) -1 * (100 - ((1600 + core.values.efficiency) / 1600) * 100) else 0.00) + "%", 15, 58, if (-1 * (100 - ((1600 + core.values.efficiency) / 1600) * 100) > 0) 0x5CE62E else if (-1 * (100 - ((1600 + core.values.efficiency) / 1600) * 100) == 0) 0x000000 else 0xE62E00)
+            val eff: Double = {
+                if (-1 * (100 - ((1600 + core.values.efficiency) / 1600) * 100) != 0)
+                    -1 * (100 - ((1600 + core.values.efficiency) / 1600) * 100)
+                else
+                    0.00
+
+            }
+            furnaceInfoSpeed += new GuiComponentText(f"$eff%.2f" + "%", 15, 58, if (eff > 0) 0x5CE62E else if (eff == 0) 0x000000 else 0xE62E00)
             furnaceInfoSpeed += new GuiComponentText("Multiplicity: ", 5, 73, 0xFFFFFF)
-            //furnaceInfoSpeed += new GuiComponentText((core.values.multiplicity + 1) + "x", 15, 83, if (core.values.multiplicity > 0) 0x5CE62E else 0x000000)
+            furnaceInfoSpeed += new GuiComponentText((core.values.multiplicity + 1) + "x", 15, 83, if (core.values.multiplicity > 0) 0x5CE62E else 0x000000)
             tabs.addTab(furnaceInfoSpeed.toList, 95, 100, new Color(150, 112, 50), new ItemStack(Items.book))
         }
     }
