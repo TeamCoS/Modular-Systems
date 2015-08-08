@@ -48,7 +48,7 @@ class TileBankSolids extends TileBankBase with Inventory {
                     decrStackSize(i, 1)
                     worldObj.markBlockForUpdate(pos)
                 }
-                burnValue
+                return burnValue
             }
         }
         0

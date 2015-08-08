@@ -356,7 +356,8 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
         val smeltCount : (Int, Int) = smeltCountAndSmeltSize
         if (smeltCount != null && smeltCount._2 > 0) {
             var recipeResult : ItemStack = recipe(getStackInSlot(0))
-            getStackInSlot(0).stackSize -= smeltCount._1
+            decrStackSize(0, smeltCount._1)
+            //getStackInSlot(0).stackSize -= smeltCount._1
             if (getStackInSlot(1) == null) {
                 recipeResult = recipeResult.copy
                 recipeResult.stackSize = smeltCount._2

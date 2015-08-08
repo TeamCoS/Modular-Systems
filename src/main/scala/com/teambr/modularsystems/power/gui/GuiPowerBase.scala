@@ -28,7 +28,7 @@ import scala.collection.mutable.ArrayBuffer
  * @author Dyonovan
  * @since August 07, 2015
  */
-abstract class GuiPowerBase[C <: Container](container : C, tile: TileBankBase, player: InventoryPlayer, width: Int, height: Int, name: String)
+abstract class GuiPowerBase[C <: Container](container : C, var tile: TileBankBase, player: InventoryPlayer, width: Int, height: Int, name: String)
                                         extends GuiBase[C](container, width, height, name) {
 
     var core = tile.getCore.orNull
