@@ -266,6 +266,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
         if (!worldObj.isRemote) {
             if (this.values.burnTime > 0) {
                 this.values.burnTime = values.burnTime - 1
+                worldObj.markBlockForUpdate(pos)
             }
             if (canSmelt(getStackInSlot(0), recipe(getStackInSlot(0)), getStackInSlot(1)) && !values.isPowered) {
                 if (corners == null)  corners = getCorners match {
@@ -293,16 +294,15 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
                     this.values.burnTime = 0
                     didWork = true
                 }
-                worldObj.markBlockForUpdate(pos)
             }
             else if (this.values.burnTime <= 0) {
                 this.values.cookTime = 0
                 didWork = true
             }
             if (didWork) {
+                worldObj.markBlockForUpdate(pos)
                 markDirty()
             }
-            worldObj.markBlockForUpdate(pos)
         }
     }
 
@@ -410,7 +410,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
         ((this.values.cookTime * scaleVal) / Math.max(getAdjustedCookTime, 0.001)).toInt
 
     @SideOnly(Side.CLIENT) def getBurnTimeRemainingScaled(scaleVal : Int) : Int =
-        ((values.burnTime * scaleVal) / Math.max(this.values.currentItemBurnTime, 0.001)).toInt
+        ((this.values.burnTime * scaleVal) / Math.max(this.values.currentItemBurnTime, 0.001)).toInt
 
 
     override def markDirty() : Unit = {
@@ -442,13 +442,16 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
     }
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super[TileEntity].readFromNBT(tag)
+        val oldBurn = values.burnTime
         values.readFromNBT(tag)
         isDirty = tag.getBoolean("IsDirty")
         wellFormed = tag.getBoolean("WellFormed")
 
         corners = (BlockPos.fromLong(tag.getLong("First")), BlockPos.fromLong(tag.getLong("Second")))
-        if (worldObj != null)
-            worldObj.markBlockRangeForRenderUpdate(corners._1, corners._2)
+        if(worldObj != null) { //We only want to update when there has been a state change
+            if(oldBurn == 0 && values.burnTime > 0 || oldBurn > 0 && values.burnTime <= 0)
+                worldObj.markBlockRangeForRenderUpdate(pos, pos)
+        }
     }
 
     /*******************************************************************************************************************
