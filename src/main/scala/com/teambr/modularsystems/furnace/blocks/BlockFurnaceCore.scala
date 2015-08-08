@@ -13,7 +13,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{EnumFacing, BlockPos}
+import net.minecraft.util.{ BlockPos, EnumFacing }
 import net.minecraft.world.World
 
 /**

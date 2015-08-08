@@ -58,7 +58,11 @@ class ModelFurnaceCore extends ISmartBlockModel {
         val blockRendererDispatcher = Minecraft.getMinecraft.getBlockRendererDispatcher
         val blockModelShapes = blockRendererDispatcher.getBlockModelShapes
 
-        val copiedModel = blockModelShapes.getModelForState(Blocks.furnace.getDefaultState.withProperty(BlockFurnace.FACING, modelRot))
+        val copiedModel : IBakedModel =
+        if(!isActive)
+            blockModelShapes.getModelForState(Blocks.furnace.getDefaultState.withProperty(BlockFurnace.FACING, modelRot))
+        else
+            blockModelShapes.getModelForState(Blocks.lit_furnace.getDefaultState.withProperty(BlockFurnace.FACING, modelRot))
 
         val returnVals = new util.ArrayList[BakedQuad]()
         val otherGeneralQuads = copiedModel.getGeneralQuads

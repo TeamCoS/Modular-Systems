@@ -40,7 +40,6 @@ class ModelProxy extends ISmartBlockModel {
         val face = new BlockPartFace(null, 0, "", uv)
 
         val scale = true
-
         val overlay = Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID + ":blocks/furnaceOverlay")
 
         bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, -0.03F, 0.0F), new Vector3f(16.0F, -0.03F, 16.0F), face, overlay, EnumFacing.DOWN, modelRot, null, scale, true))

@@ -6,9 +6,9 @@ import net.minecraft.block.Block
 import net.minecraft.block.properties.{ IProperty, PropertyBool }
 import net.minecraft.block.state.{ BlockState, IBlockState }
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.util.{ EnumWorldBlockLayer, BlockPos, EnumFacing, MathHelper }
+import net.minecraft.util.{ BlockPos, EnumFacing, EnumWorldBlockLayer, MathHelper }
 import net.minecraft.world.{ IBlockAccess, World }
-import net.minecraftforge.common.property.{ ExtendedBlockState, IExtendedBlockState, IUnlistedProperty }
+import net.minecraftforge.common.property.{ ExtendedBlockState, IUnlistedProperty }
 import net.minecraftforge.fml.relauncher.{ Side, SideOnly }
 
 /**
@@ -43,13 +43,9 @@ trait CoreStates extends Block {
     }
 
     override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
-        state match {
-            case returnValue : IExtendedBlockState =>
-                returnValue.withProperty(PropertyRotation.FOUR_WAY, world.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing])
-                returnValue.withProperty(PROPERTY_ACTIVE, world.getTileEntity(pos).asInstanceOf[AbstractCore].isBurning)
-                returnValue
-            case _ =>state
-        }
+        state.withProperty(PropertyRotation.FOUR_WAY.getProperty, world.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing])
+        .withProperty(PROPERTY_ACTIVE, world.getTileEntity(pos).asInstanceOf[AbstractCore].isBurning.asInstanceOf[java.lang.Boolean])
+
     }
 
     /**
