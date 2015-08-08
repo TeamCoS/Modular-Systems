@@ -173,7 +173,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
         for(i <- 0 until outside.size()) {
             val loc = outside.get(i).asBlockPos
 
-            if (!loc.equals(pos)) { //Not us, so we can do something
+            if (!loc.equals(pos) && !worldObj.isAirBlock(loc)) { //Not us, so we can do something
                 worldObj.getTileEntity(loc) match {
                     case proxy : TileProxy =>
                         val meta = proxy.metaData
