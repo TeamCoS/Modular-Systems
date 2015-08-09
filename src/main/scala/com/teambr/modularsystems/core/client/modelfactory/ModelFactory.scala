@@ -70,6 +70,7 @@ class ModelFactory {
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/furnaceOverlay"))
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/crusherOverlay"))
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/solidsOverlay"))
+        event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/liquidsOverlay"))
 
         //Core Icons
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/crusherFront_off"))

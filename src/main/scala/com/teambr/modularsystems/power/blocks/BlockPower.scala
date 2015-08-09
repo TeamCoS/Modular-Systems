@@ -33,7 +33,7 @@ import net.minecraft.world.{IBlockAccess, World}
  * @since August 07, 2015
  */
 class BlockPower(name: String, tileEntity: Class[_ <: TileEntity], blockColor: Int) extends BlockProxy(name, tileEntity)
-    with DropsItems with OpensGui {
+with DropsItems with OpensGui {
 
     override def getCreativeTab: CreativeTabs = {
         ModularSystems.tabModularSystems
@@ -68,7 +68,14 @@ class BlockPower(name: String, tileEntity: Class[_ <: TileEntity], blockColor: I
     }
 
     def getTextureForItem(block : BlockPower) : TextureAtlasSprite = {
-        Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/solidsOverlay")
+        block match {
+            case BlockManager.bankSolids =>
+                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry ("modularsystems:blocks/solidsOverlay")
+            case BlockManager.bankLiquids =>
+                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/liquidsOverlay")
+            case _ =>
+                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry ("modularsystems:blocks/solidsOverlay")
+        }
     }
 
     /*******************************************************************************************************************

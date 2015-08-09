@@ -114,27 +114,4 @@ class ModelPowerBank extends ISmartBlockModel with ISmartItemModel {
     override def handleItemState(stack : ItemStack) : IBakedModel = {
         new ModelPowerBank(Block.getBlockFromItem(stack.getItem).asInstanceOf[BlockPower], true)
     }
-
-    /**
-     * Converts the vertex information to the int array format expected by BakedQuads.
-     * @param x x coordinate
-     * @param y y coordinate
-     * @param z z coordinate
-     * @param color RGBA colour format - white for no effect, non-white to tint the face with the specified colour
-     * @param textureAtlasSprite the texture to use for the face
-     * @param u u-coordinate of the texture (0 - 16) corresponding to [x,y,z]
-     * @param v v-coordinate of the texture (0 - 16) corresponding to [x,y,z]
-     * @return
-     */
-    private def vertexToInts(x : Float, y : Float, z : Float, color : Int, textureAtlasSprite: TextureAtlasSprite, u : Float, v : Float) : Array[Int] = {
-        Array[Int] (
-            java.lang.Float.floatToRawIntBits(x),
-            java.lang.Float.floatToRawIntBits(y),
-            java.lang.Float.floatToRawIntBits(z),
-            color,
-            java.lang.Float.floatToRawIntBits(u),
-            java.lang.Float.floatToRawIntBits(v),
-            0
-        )
-    }
 }
