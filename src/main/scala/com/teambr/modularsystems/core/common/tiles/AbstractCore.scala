@@ -144,6 +144,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
                 worldObj.getTileEntity(loc) match {
                     case tile : TileProxy =>
                         tile.setCore(this)
+                        worldObj.markBlockForUpdate(loc)
                     case _ =>
                         val id = Block.getIdFromBlock(worldObj.getBlockState(loc).getBlock)
                         val meta = worldObj.getBlockState(loc).getBlock.getMetaFromState(worldObj.getBlockState(loc))
@@ -180,6 +181,9 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
                     case proxy : TileProxy if !proxy.isInstanceOf[TileBankBase] =>
                         val meta = proxy.metaData
                         worldObj.setBlockState(loc, proxy.getStoredBlock.getStateFromMeta(meta))
+                        worldObj.markBlockForUpdate(loc)
+                    case tile : TileBankBase =>
+                        tile.coreLocation = None
                         worldObj.markBlockForUpdate(loc)
                     case _ =>
                 }

@@ -27,8 +27,8 @@ object BlockManager {
     val crusherCore = new BlockCrusherCore("crusherCore")
 
     //Power
-    val bankSolids = new BlockPower("bankSolids", classOf[TileBankSolids])
-    val bankLiquids = new BlockPower("bankLiquids", classOf[TileBankLiquids])
+    val bankSolids = new BlockPower("bankSolids", classOf[TileBankSolids], 0x4A390E)
+    val bankLiquids = new BlockPower("bankLiquids", classOf[TileBankLiquids], 0x215045)
 
     //Storage
     val storageCore = new BlockStorageCore

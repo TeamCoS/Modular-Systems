@@ -130,5 +130,9 @@ class ModelFactory {
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageCrafting", "normal"), new ModelStorageExpansion())
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageCrafting", "inventory"), new ModelStorageExpansion())
         itemModelMesher.register(Item.getItemFromBlock(BlockManager.storageCrafting), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "storageCrafting", "inventory"))
+
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "normal"), new ModelPowerBank(BlockManager.bankLiquids, false))
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "inventory"), new ModelPowerBank(BlockManager.bankLiquids, true))
+        itemModelMesher.register(Item.getItemFromBlock(BlockManager.bankLiquids), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "inventory"))
     }
 }

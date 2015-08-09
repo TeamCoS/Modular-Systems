@@ -37,8 +37,8 @@ abstract class GuiPowerBase[C <: Container](container : C, var tile: TileBankBas
     override def drawGuiContainerForegroundLayer(x: Int, y: Int): Unit = {
         super.drawGuiContainerForegroundLayer(x, y)
 
-        if (tile.getCore.isDefined) {
-            core = core.getWorld.getTileEntity(core.getPos).asInstanceOf[AbstractCore]
+        if (tile.coreLocation.isDefined) {
+            core = core.getWorld.getTileEntity(tile.coreLocation.get).asInstanceOf[AbstractCore]
         }
     }
 

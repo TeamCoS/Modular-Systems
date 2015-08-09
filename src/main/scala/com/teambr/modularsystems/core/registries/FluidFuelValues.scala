@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.FluidRegistry
  */
 object FluidFuelValues {
 
-    var values = new util.HashMap[String, Int]()
+    var values = new util.HashMap[String, Integer]()
 
     /**
      * Add the values
@@ -39,10 +39,10 @@ object FluidFuelValues {
      */
     def loadFromFile(): Boolean = {
         LogHelper.info("Loading Fluid Fuel Values...")
-        values = JsonUtils.readFromJson[util.LinkedHashMap[String, Int]](new TypeToken[util.LinkedHashMap[String, Int]]() {
+        values = JsonUtils.readFromJson[util.LinkedHashMap[String, Integer]](new TypeToken[util.LinkedHashMap[String, Integer]]() {
         }, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "fluidFuelValues.json")
         if (values == null) {
-            values = new util.HashMap[String, Int]()
+            values = new util.HashMap[String, Integer]()
         }
         !values.isEmpty
     }

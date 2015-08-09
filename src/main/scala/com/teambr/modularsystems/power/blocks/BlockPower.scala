@@ -32,7 +32,7 @@ import net.minecraft.world.{IBlockAccess, World}
  * @author Dyonovan
  * @since August 07, 2015
  */
-class BlockPower(name: String, tileEntity: Class[_ <: TileEntity]) extends BlockProxy(name, tileEntity)
+class BlockPower(name: String, tileEntity: Class[_ <: TileEntity], blockColor: Int) extends BlockProxy(name, tileEntity)
     with DropsItems with OpensGui {
 
     override def getCreativeTab: CreativeTabs = {
@@ -64,7 +64,7 @@ class BlockPower(name: String, tileEntity: Class[_ <: TileEntity]) extends Block
     }
 
     override def colorMultiplier(worldIn : IBlockAccess, pos : BlockPos, renderPass : Int) : Int = {
-        0x4A390E
+        blockColor
     }
 
     def getTextureForItem(block : BlockPower) : TextureAtlasSprite = {
