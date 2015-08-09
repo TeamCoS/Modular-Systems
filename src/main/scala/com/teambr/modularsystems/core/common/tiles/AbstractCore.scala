@@ -345,7 +345,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
         }
     }
 
-    private def canSmelt(input : ItemStack, result : ItemStack, output : ItemStack) : Boolean = {
+    def canSmelt(input : ItemStack, result : ItemStack, output : ItemStack) : Boolean = {
         if (input == null || result == null)
             false
         else if (output == null)

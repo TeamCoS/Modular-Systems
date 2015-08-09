@@ -73,7 +73,7 @@ class GuiCrusherCore(player: EntityPlayer, tile: TileCrusherCore)
             furnaceInfoSpeed += new GuiComponentText((core.values.multiplicity + 1) + "x", 15, 83, if (core.values.multiplicity > 0) 0x5CE62E else 0x000000)
             furnaceInfoSpeed += new GuiComponentText("Secondary", 5, 98, 0xFFFFFF)
             furnaceInfoSpeed += new GuiComponentText("Output Chance:", 5, 108, 0xFFFFFF)
-            furnaceInfoSpeed += new GuiComponentText(core.getCrusherExpansionCount + "%", 15, 118, if (core.getCrusherExpansionCount > 0) 0x5CE62E else 0x000000)
+            furnaceInfoSpeed += new GuiComponentText(core.getCrusherExtraCount + "%", 15, 118, if (core.getCrusherExtraCount > 0) 0x5CE62E else 0x000000)
             tabs.addTab(furnaceInfoSpeed.toList, 95, 135, new Color(150, 112, 50), new ItemStack(Items.book))
         }
     }

@@ -102,7 +102,7 @@ object CrusherRecipeRegistry {
         }
         //TODO add more things
         crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.lapis_ore)),
-                getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))
+            getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))
 
         saveToFile()
         LogHelper.info("Finished adding " + crusherRecipes.size + " Crusher Recipes")
@@ -125,19 +125,21 @@ object CrusherRecipeRegistry {
     /**
      * Get the output for an input
      */
-    def getOutput(itemStack: ItemStack): Option[ItemStack] = {
+    def getOutput(itemStack: ItemStack): Option[(ItemStack, ItemStack)] = {
         //val list = crusherRecipes.toSet
         for (i <- crusherRecipes) {
             val name = i.input.split(":")
             val stackOut = getItemStackFromString(i.output)
+            val stackExtra = getItemStackFromString(i.outputSecondary)
             name.length match {
                 case 3 =>
                     val stackIn = getItemStackFromString(i.input)
-                    if (stackIn != null && itemStack.isItemEqual(stackIn))
-                        return Some(new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage))
+                    if (stackIn != null && itemStack.isItemEqual(stackIn)) {
+                            return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
+                    }
                 case 1 =>
                     if (checkOreDict(i.input, itemStack))
-                        return Some(new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage))
+                        return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
             }
         }
         None
@@ -163,7 +165,7 @@ object CrusherRecipeRegistry {
             if (i.getItemDamage == OreDictionary.WILDCARD_VALUE) {
                 if (i.getItem == itemStack.getItem)
                     return true
-            } else if (i.isItemEqual(itemStack)){
+            } else if (i.isItemEqual(itemStack)) {
                 return true
             }
         }
@@ -178,9 +180,12 @@ object CrusherRecipeRegistry {
     private def getItemStackFromString(item: String): ItemStack = {
         val name: Array[String] = item.split(":")
         name.length match {
-            case 3 => new ItemStack(GameRegistry.findItem(name(0), name(1)), 1, Integer.valueOf(name(2)))
-            case _ =>
-                null
+            case 3 =>
+                if (item == "")
+                    null
+                else
+                    new ItemStack(GameRegistry.findItem(name(0), name(1)), 1, Integer.valueOf(name(2)))
+            case _ => null
         }
     }
 }
