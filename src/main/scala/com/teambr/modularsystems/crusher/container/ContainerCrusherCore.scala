@@ -18,7 +18,8 @@ import net.minecraft.inventory.SlotFurnaceOutput
 class ContainerCrusherCore(playerInventory: InventoryPlayer, tile: TileCrusherCore)
         extends BaseContainer(playerInventory, tile) {
 
-    addSlotToContainer(new RestrictedSlot(tile, 0, 56, 35))
-    addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, tile, 1, 116, 35))
+    addSlotToContainer(new RestrictedSlot(tile, 0, 36, 35))
+    addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, tile, 1, 96, 35))
+    addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, tile, 2, 126, 35))
     addPlayerInventorySlots(8, 84)
 }

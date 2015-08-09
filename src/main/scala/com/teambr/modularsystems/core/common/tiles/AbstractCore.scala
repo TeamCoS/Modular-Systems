@@ -4,12 +4,13 @@ import java.util
 import java.util.Collections
 
 import com.teambr.bookshelf.collections.Location
-import com.teambr.bookshelf.common.tiles.traits.{ Inventory, UpdatingTile }
+import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import com.teambr.bookshelf.util.WorldUtils
 import com.teambr.modularsystems.core.collections.StandardValues
 import com.teambr.modularsystems.core.functions.BlockCountFunction
 import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.core.providers.FuelProvider
+import com.teambr.modularsystems.crusher.tiles.TileCrusherExpansion
 import com.teambr.modularsystems.power.tiles.TileBankBase
 import net.minecraft.block.Block
 import net.minecraft.block.properties.PropertyDirection
@@ -17,8 +18,8 @@ import net.minecraft.inventory.ISidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{ BlockPos, EnumFacing }
-import net.minecraftforge.fml.relauncher.{ Side, SideOnly }
+import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  * This file was created for Modular-Systems
@@ -178,11 +179,14 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
 
             if (!loc.equals(pos) && !worldObj.isAirBlock(loc)) { //Not us, so we can do something
                 worldObj.getTileEntity(loc) match {
-                    case proxy : TileProxy if !proxy.isInstanceOf[TileBankBase] =>
+                    case proxy : TileProxy if !proxy.isInstanceOf[TileBankBase] && !proxy.isInstanceOf[TileCrusherExpansion] =>
                         val meta = proxy.metaData
                         worldObj.setBlockState(loc, proxy.getStoredBlock.getStateFromMeta(meta))
                         worldObj.markBlockForUpdate(loc)
                     case tile : TileBankBase =>
+                        tile.coreLocation = None
+                        worldObj.markBlockForUpdate(loc)
+                    case tile : TileCrusherExpansion =>
                         tile.coreLocation = None
                         worldObj.markBlockForUpdate(loc)
                     case _ =>

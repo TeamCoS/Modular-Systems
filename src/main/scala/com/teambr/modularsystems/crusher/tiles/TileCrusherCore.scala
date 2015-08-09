@@ -1,8 +1,10 @@
 package com.teambr.modularsystems.crusher.tiles
 
+import com.teambr.bookshelf.collections.Location
 import com.teambr.bookshelf.helper.BlockHelper
 import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.functions.BlockCountFunction
+import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.core.registries.{CrusherRecipeRegistry, FurnaceBannedBlocks, BlockValueRegistry}
 import com.teambr.modularsystems.core.common.tiles.AbstractCore
 import net.minecraft.block.Block
@@ -35,6 +37,19 @@ class TileCrusherCore extends AbstractCore {
                 getStackInSlot(1).stackSize += smeltCount._2
             }
         }
+    }
+
+    def getCrusherExpansionCount: Int = {
+        val coords = new Location(corners._1).getAllWithinBounds(new Location(corners._2), includeInner = false, includeOuter = true)
+        var count = 0
+        for (i <- 0 until coords.size()) {
+            val coord = coords.get(i)
+            val block: Block = worldObj.getBlockState(coord.asBlockPos).getBlock
+            if (block != null) {
+                if (block == BlockManager.crusherExpansion) count += 1
+            }
+        }
+        count * 10
     }
 
     /**

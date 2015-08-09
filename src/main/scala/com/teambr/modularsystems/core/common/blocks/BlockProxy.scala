@@ -4,6 +4,7 @@ import java.util.Random
 
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.modularsystems.core.common.tiles.{AbstractCore, TileProxy}
+import com.teambr.modularsystems.crusher.tiles.TileCrusherExpansion
 import com.teambr.modularsystems.power.tiles.TileBankBase
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -48,7 +49,7 @@ class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseB
                 val block: Block = tile.getStoredBlock
                 val meta: Int = tile.metaData
 
-                if (world.isAirBlock(pos) && !tile.isInstanceOf[TileBankBase]) {
+                if (world.isAirBlock(pos) && !tile.isInstanceOf[TileBankBase] && !tile.isInstanceOf[TileCrusherExpansion]) {
                     val f: Float = world.rand.nextFloat * 0.8F + 0.1F
                     val f1: Float = world.rand.nextFloat * 0.8F + 0.1F
                     val f2: Float = world.rand.nextFloat * 0.8F + 0.1F
