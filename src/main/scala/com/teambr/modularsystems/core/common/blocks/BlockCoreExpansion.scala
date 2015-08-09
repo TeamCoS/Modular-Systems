@@ -1,4 +1,4 @@
-package com.teambr.modularsystems.power.blocks
+package com.teambr.modularsystems.core.common.blocks
 
 import java.util.Random
 
@@ -6,12 +6,11 @@ import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.ModularSystems
-import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.common.tiles.TileProxy
 import com.teambr.modularsystems.core.managers.BlockManager
-import com.teambr.modularsystems.power.container.{ContainerBankLiquids, ContainerBankSolids}
-import com.teambr.modularsystems.power.gui.{GuiBankLiquids, GuiBankSolids}
-import com.teambr.modularsystems.power.tiles.{TileBankLiquids, TileBankBase, TileBankSolids}
+import com.teambr.modularsystems.power.container.{ ContainerBankLiquids, ContainerBankSolids }
+import com.teambr.modularsystems.power.gui.{ GuiBankLiquids, GuiBankSolids }
+import com.teambr.modularsystems.power.tiles.{ TileBankBase, TileBankLiquids, TileBankSolids }
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
@@ -19,8 +18,8 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.{IBlockAccess, World}
+import net.minecraft.util.{ BlockPos, EnumFacing }
+import net.minecraft.world.{ IBlockAccess, World }
 
 /**
  * This file was created for Modular-Systems
@@ -32,7 +31,7 @@ import net.minecraft.world.{IBlockAccess, World}
  * @author Dyonovan
  * @since August 07, 2015
  */
-class BlockPower(name: String, tileEntity: Class[_ <: TileEntity], blockColor: Int) extends BlockProxy(name, tileEntity)
+class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], blockColor: Int) extends BlockProxy(name, tileEntity)
     with DropsItems with OpensGui {
 
     override def getCreativeTab: CreativeTabs = {
@@ -67,12 +66,14 @@ class BlockPower(name: String, tileEntity: Class[_ <: TileEntity], blockColor: I
         blockColor
     }
 
-    def getTextureForItem(block : BlockPower) : TextureAtlasSprite = {
+    def getTextureForItem(block : BlockCoreExpansion) : TextureAtlasSprite = {
         block match {
             case BlockManager.bankSolids =>
                 Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry ("modularsystems:blocks/solidsOverlay")
             case BlockManager.bankLiquids =>
                 Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/liquidsOverlay")
+            case BlockManager.crusherExpansion =>
+                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/crusherExpansionOverlay")
             case _ =>
                 Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry ("modularsystems:blocks/solidsOverlay")
         }

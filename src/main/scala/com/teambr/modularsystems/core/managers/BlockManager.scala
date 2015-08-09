@@ -1,12 +1,11 @@
 package com.teambr.modularsystems.core.managers
 
-import com.teambr.modularsystems.core.common.blocks.BlockProxy
+import com.teambr.modularsystems.core.common.blocks.{ BlockCoreExpansion, BlockProxy }
 import com.teambr.modularsystems.core.common.tiles.TileProxy
-import com.teambr.modularsystems.crusher.blocks.{BlockCrusherCore, BlockCrusherExpansion}
+import com.teambr.modularsystems.crusher.blocks.BlockCrusherCore
 import com.teambr.modularsystems.crusher.tiles.{TileCrusherExpansion, TileCrusherCore}
 import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
-import com.teambr.modularsystems.power.blocks.BlockPower
 import com.teambr.modularsystems.power.tiles.{TileBankLiquids, TileBankSolids}
 import com.teambr.modularsystems.storage.blocks.{BlockStorageCore, BlockStorageExpansion}
 import com.teambr.modularsystems.storage.tiles.{TileStorageBasic, TileStorageCapacity, TileStorageCore, TileStorageCrafting}
@@ -27,8 +26,8 @@ object BlockManager {
     val crusherCore = new BlockCrusherCore("crusherCore")
 
     //Power
-    val bankSolids = new BlockPower("bankSolids", classOf[TileBankSolids], 0x4A390E)
-    val bankLiquids = new BlockPower("bankLiquids", classOf[TileBankLiquids], 0x215045)
+    val bankSolids = new BlockCoreExpansion("bankSolids", classOf[TileBankSolids], 0x4A390E)
+    val bankLiquids = new BlockCoreExpansion("bankLiquids", classOf[TileBankLiquids], 0x215045)
 
     //Storage
     val storageCore = new BlockStorageCore
@@ -37,7 +36,7 @@ object BlockManager {
     val storageCrafting = new BlockStorageExpansion("storageCrafting", List(), classOf[TileStorageCrafting])
 
     //Expansions
-    val crusherExpansion = new BlockCrusherExpansion("crusherExpansion", classOf[TileCrusherExpansion])
+    val crusherExpansion = new BlockCoreExpansion("crusherExpansion", classOf[TileCrusherExpansion], 0x555555)
 
     val proxy = new BlockProxy("proxy", classOf[TileProxy])
 

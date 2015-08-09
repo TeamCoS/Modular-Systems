@@ -3,8 +3,8 @@ package com.teambr.modularsystems.core.client.modelfactory.models
 import java.util
 import javax.vecmath.Vector3f
 
+import com.teambr.modularsystems.core.common.blocks.BlockCoreExpansion
 import com.teambr.modularsystems.core.managers.BlockManager
-import com.teambr.modularsystems.power.blocks.BlockPower
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -25,13 +25,13 @@ import net.minecraftforge.client.model.{ ISmartBlockModel, ISmartItemModel }
  * @author Paul Davis <pauljoda>
  * @since August 08, 2015
  */
-class ModelPowerBank extends ISmartBlockModel with ISmartItemModel {
+class ModelCoreExpansion extends ISmartBlockModel with ISmartItemModel {
     val faceBakery = new FaceBakery
 
-    var block : BlockPower = BlockManager.bankSolids
+    var block : BlockCoreExpansion = BlockManager.bankSolids
     var isItem = false
 
-    def this(b : BlockPower, bool : Boolean) {
+    def this(b : BlockCoreExpansion, bool : Boolean) {
         this()
         this.block = b
         isItem = bool
@@ -65,12 +65,22 @@ class ModelPowerBank extends ISmartBlockModel with ISmartItemModel {
         val barTexture =  Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("minecraft:blocks/stone")
         for(enumFacing <- EnumFacing.values()) {
             for(modelRot <- List(ModelRotation.X0_Y0, ModelRotation.X0_Y90, ModelRotation.X0_Y180, ModelRotation.X0_Y270)) {
-                //The Bar holder
-                bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(6.0F, 3.0F, 1.0F), new Vector3f(10.0F, 4.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true))
-                bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(6.0F, 12.0F, 1.0F), new Vector3f(10.0F, 13.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true))
-                bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(6.0F, 3.0F, 1.0F), new Vector3f(7.0F, 13.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true))
-                bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(9.0F, 3.0F, 1.0F), new Vector3f(10.0F, 13.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true))
-                bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(7.0F, 4.0F, 1.9F), new Vector3f(9.0F, 12.0F, 1.9F), face, Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("minecraft:blocks/hardened_clay_stained_black"), enumFacing, modelRot, null, scale, true))
+
+                block match {
+                    case BlockManager.bankLiquids | BlockManager.bankSolids =>
+                        //The Bar holder
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (6.0F, 3.0F, 1.0F), new Vector3f (10.0F, 4.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (6.0F, 12.0F, 1.0F), new Vector3f (10.0F, 13.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (6.0F, 3.0F, 1.0F), new Vector3f (7.0F, 13.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (9.0F, 3.0F, 1.0F), new Vector3f (10.0F, 13.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (7.0F, 4.0F, 1.9F), new Vector3f (9.0F, 12.0F, 1.9F), face, Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry ("minecraft:blocks/hardened_clay_stained_black"), enumFacing, modelRot, null, scale, true) )
+                    case BlockManager.crusherExpansion =>
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (4.0F, 6.0F, 1.0F), new Vector3f (12.0F, 7.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (4.0F, 9.0F, 1.0F), new Vector3f (12.0F, 10.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (6.0F, 4.0F, 1.0F), new Vector3f (7.0F, 12.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (9.0F, 4.0F, 1.0F), new Vector3f (10.0F, 12.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                    case _ =>
+                }
             }
             //Front border
             bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(16.0F, 2.0F, 2.0F), face, texture, enumFacing, ModelRotation.X0_Y0, null, scale, true))
@@ -108,10 +118,10 @@ class ModelPowerBank extends ISmartBlockModel with ISmartItemModel {
     override def getTexture : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/iron_block")
 
     override def handleBlockState(state : IBlockState) : IBakedModel = {
-        new ModelPowerBank(state.getBlock.asInstanceOf[BlockPower], false)
+        new ModelCoreExpansion(state.getBlock.asInstanceOf[BlockCoreExpansion], false)
     }
 
     override def handleItemState(stack : ItemStack) : IBakedModel = {
-        new ModelPowerBank(Block.getBlockFromItem(stack.getItem).asInstanceOf[BlockPower], true)
+        new ModelCoreExpansion(Block.getBlockFromItem(stack.getItem).asInstanceOf[BlockCoreExpansion], true)
     }
 }

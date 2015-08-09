@@ -71,6 +71,7 @@ class ModelFactory {
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/crusherOverlay"))
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/solidsOverlay"))
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/liquidsOverlay"))
+        event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/crusherExpansionOverlay"))
 
         //Core Icons
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/crusherFront_off"))
@@ -116,9 +117,17 @@ class ModelFactory {
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "crusherCore", "inventory"), new ModelOtherCore())
         itemModelMesher.register(Item.getItemFromBlock(BlockManager.crusherCore), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "crusherCore", "inventory"))
 
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankSolids", "normal"), new ModelPowerBank(BlockManager.bankSolids, false))
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankSolids", "inventory"), new ModelPowerBank(BlockManager.bankSolids, true))
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankSolids", "normal"), new ModelCoreExpansion(BlockManager.bankSolids, false))
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankSolids", "inventory"), new ModelCoreExpansion(BlockManager.bankSolids, true))
         itemModelMesher.register(Item.getItemFromBlock(BlockManager.bankSolids), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "bankSolids", "inventory"))
+
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "normal"), new ModelCoreExpansion(BlockManager.bankLiquids, false))
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "inventory"), new ModelCoreExpansion(BlockManager.bankLiquids, true))
+        itemModelMesher.register(Item.getItemFromBlock(BlockManager.bankLiquids), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "inventory"))
+
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "crusherExpansion", "normal"), new ModelCoreExpansion(BlockManager.crusherExpansion, false))
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "crusherExpansion", "inventory"), new ModelCoreExpansion(BlockManager.crusherExpansion, true))
+        itemModelMesher.register(Item.getItemFromBlock(BlockManager.crusherExpansion), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "crusherExpansion", "inventory"))
 
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageBasic", "normal"), new ModelStorageExpansion())
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageBasic", "inventory"), new ModelStorageExpansion())
@@ -131,9 +140,5 @@ class ModelFactory {
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageCrafting", "normal"), new ModelStorageExpansion())
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageCrafting", "inventory"), new ModelStorageExpansion())
         itemModelMesher.register(Item.getItemFromBlock(BlockManager.storageCrafting), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "storageCrafting", "inventory"))
-
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "normal"), new ModelPowerBank(BlockManager.bankLiquids, false))
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "inventory"), new ModelPowerBank(BlockManager.bankLiquids, true))
-        itemModelMesher.register(Item.getItemFromBlock(BlockManager.bankLiquids), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "inventory"))
     }
 }
