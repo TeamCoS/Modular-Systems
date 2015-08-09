@@ -10,6 +10,7 @@ import com.teambr.modularsystems.core.registries.{BlockValueRegistry, CrusherRec
 import net.minecraft.block.Block
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
+import net.minecraft.util.EnumFacing
 
 import scala.util.Random
 
@@ -25,66 +26,54 @@ import scala.util.Random
  */
 class TileCrusherCore extends AbstractCore {
 
+    /*******************************************************************************************************************
+      ************************************************  Furnace Methods  ***********************************************
+      ******************************************************************************************************************/
+
     override def smeltItem() {
-        val smeltCount : (Int, Int) = smeltCountAndSmeltSize
+        val smeltCount: (Int, Int) = smeltCountAndSmeltSize
         if (smeltCount != null && smeltCount._2 > 0) {
-            val recipeResult = recipeCrusher(getStackInSlot(0))
+            var recipeResult: ItemStack = recipe(getStackInSlot(0))
             decrStackSize(0, smeltCount._1)
+            //getStackInSlot(0).stackSize -= smeltCount._1
             if (getStackInSlot(1) == null) {
-                val recipeOutput = recipeResult._1.copy
-                recipeOutput.stackSize = smeltCount._2
-                setInventorySlotContents(1, recipeOutput)
+                recipeResult = recipeResult.copy
+                recipeResult.stackSize = smeltCount._2
+                setInventorySlotContents(1, recipeResult)
             }
             else {
                 getStackInSlot(1).stackSize += smeltCount._2
             }
-            if (getCrusherExtraCount != 0 && recipeResult._2 != null) {
-                var extraCount = 0
-                for (i <- 0 until values.multiplicity.toInt + 1) {
-                    val random = Random.nextInt(100)
-                    if (getCrusherExtraCount >=  random) {
-                        extraCount += 1
-                    }
-                }
-                if (getStackInSlot(2) == null && extraCount > 0) {
-                    val extraOutput = recipeResult._2.copy
-                    extraOutput.stackSize = extraCount
-                    setInventorySlotContents(2, extraOutput)
-                } else if (extraCount > 0) {
-                    getStackInSlot(2).stackSize += extraCount
-                }
-            }
+            extraOutput(getStackInSlot(0), smeltCount._1)
         }
     }
 
-    override def canSmelt(input : ItemStack, result : ItemStack, output : ItemStack) : Boolean = {
-        val recipeResults = recipeCrusher(input)
-        if (recipeResults != null) {
-            val crusherOutput = recipeResults._1
-            val crusherExtra = recipeResults._2
-            if (input == null || result == crusherOutput)
-                return false
-            else if (output == null && crusherExtra != null)
-                return true
-            else if (getStackInSlot(2) != null || !crusherExtra.isItemEqual(getStackInSlot(2)))
-                return false
-            else if (!output.isItemEqual(result))
-                return false
-            else {
-                //The size below would be if the smeltingMultiplier = 1
-                //If the smelting multiplier is > 1,
-                //there is no guarantee that all potential operations will be completed.
-                val minStackSize: Int = output.stackSize + result.stackSize
-                if (getCrusherExtraCount == 0 || crusherExtra == null || getStackInSlot(2) == null) {
-                    return minStackSize <= getInventoryStackLimit && minStackSize <= result.getMaxStackSize
-                } else {
-                    val extraMinStackSize = crusherExtra.stackSize + getStackInSlot(2).stackSize
-                    return extraMinStackSize <= getInventoryStackLimit() && extraMinStackSize <= getStackInSlot(2).getMaxStackSize &&
-                            minStackSize <= getInventoryStackLimit && minStackSize <= result.getMaxStackSize
+    def extraOutput(input: ItemStack, count: Int): Unit = {
+        if (getCrusherExtraCount > 0) {
+            val recipeResult = recipeCrusher(input)
+            if (recipeResult != null && recipeResult._2 != null) {
+                var extraCount = 0
+                for (i <- 0 until (values.multiplicity.toInt + 1)) {
+                    val random = Random.nextInt(100)
+                    if (getCrusherExtraCount >= random) {
+                        extraCount += 1
+                    }
+                }
+                val extra = recipeResult._2.copy
+                if (getStackInSlot(2) == null && extraCount > 0) {
+                    if (extraCount > extra.getMaxStackSize)
+                        extra.stackSize = extra.getMaxStackSize
+                    else
+                        extra.stackSize = extraCount
+                    setInventorySlotContents(2, extra)
+                } else if (extraCount > 0) {
+                    if (extraCount + getStackInSlot(2).stackSize > extra.getMaxStackSize)
+                        getStackInSlot(2).stackSize = extra.getMaxStackSize
+                    else
+                        getStackInSlot(2).stackSize += extraCount
                 }
             }
         }
-        false
     }
 
     def getCrusherExtraCount: Int = {
@@ -110,6 +99,10 @@ class TileCrusherCore extends AbstractCore {
     def recipeCrusher(stack: ItemStack): (ItemStack, ItemStack) = {
         CrusherRecipeRegistry.getOutput(stack).orNull
     }
+
+    /*******************************************************************************************************************
+      ************************************************  Core Methods  **************************************************
+      ******************************************************************************************************************/
 
     /**
      * Take the blocks in this structure and generate the speed etc values
@@ -160,7 +153,21 @@ class TileCrusherCore extends AbstractCore {
      */
     override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
 
+    /*******************************************************************************************************************
+      ************************************************* Inventory methods ***********************************************
+      *******************************************************************************************************************/
+
     override var inventoryName: String = "inventory.crusher.title"
 
-    override def initialSize : Int = 3
+    override def initialSize: Int = 3
+
+     /**
+     * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
+     * side
+     */
+    override def canExtractItem(index : Int, stack : ItemStack, direction : EnumFacing) : Boolean = {index == 1 || index == 2}
+
+    override def getSlotsForFace(side : EnumFacing) : Array[Int] = {
+        Array[Int](0, 1, 2)
+    }
 }

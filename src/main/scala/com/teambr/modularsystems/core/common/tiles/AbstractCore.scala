@@ -474,11 +474,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
       ************************************************* Inventory methods ***********************************************
       *******************************************************************************************************************/
     def getSlotsForFace(side : EnumFacing) : Array[Int] = {
-        side match {
-            case EnumFacing.UP => Array[Int](0)
-            case EnumFacing.DOWN => Array[Int](1)
-            case _ => Array[Int](0)
-        }
+        Array[Int](0, 1)
     }
 
     /**
