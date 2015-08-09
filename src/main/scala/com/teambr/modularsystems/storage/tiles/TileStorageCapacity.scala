@@ -13,13 +13,11 @@ import net.minecraft.nbt.NBTTagCompound
 class TileStorageCapacity extends TileEntityStorageExpansion {
 
     override def addedToNetwork(): Unit = {
-        super.addedToNetwork()
         getCore.get.addInventorySlots(11)
         worldObj.markBlockForUpdate(getCore.get.getPos)
     }
 
     override def removedFromNetwork(): Unit = {
-        super.removedFromNetwork()
         getCore match {
             case Some(theCore) =>
             val itemStacks = theCore.removeInventorySlots(11)

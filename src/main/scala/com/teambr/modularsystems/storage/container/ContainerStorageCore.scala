@@ -159,10 +159,10 @@ class ContainerStorageCore(playerInventory: IInventory, val storageCore: TileSto
             }
             else if (slotId >= inventorySlots.size - 10 && storageCore.hasCraftingUpgrade) {
                 if (slotId == inventorySlots.size - 1) {
-                    if (!mergeItemStackSafe(itemToTransfer, 0, if (storageCore.hasCraftingUpgrade) inventorySlots.size - 10 else inventorySlots.size, reverse = true)) return null
+                    if (!mergeItemStackSafe(itemToTransfer, 0, inventory.getSizeInventory, reverse = false)) return null
                 }
                 else {
-                    if (!mergeItemStackSafe(itemToTransfer, 0, if (storageCore.hasCraftingUpgrade) inventorySlots.size - 10 else inventorySlots.size, reverse = false)) return null
+                    if (!mergeItemStackSafe(itemToTransfer, 0, inventory.getSizeInventory, reverse = false)) return null
                 }
             }
             else if (!mergeItemStackSafe(itemToTransfer, 0, inventorySize, reverse = false)) return null

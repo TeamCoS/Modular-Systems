@@ -80,8 +80,6 @@ class GuiStorageCore(player: EntityPlayer, val storageCore : TileStorageCore)
     def clearCraftingGrid() : Unit = {
         inventory.clearCraftingGrid()
         PacketManager.updateTileWithClientInfo(storageCore)
-        for(i <- 0 until this.mc.thePlayer.inventory.getSizeInventory)
-            this.mc.playerController.sendSlotPacket(this.mc.thePlayer.inventory.getStackInSlot(i), i)
     }
 
     protected override def keyTyped(letter : Char, keyCode : Int) {
