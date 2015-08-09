@@ -179,7 +179,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
 
             if (!loc.equals(pos) && !worldObj.isAirBlock(loc)) { //Not us, so we can do something
                 worldObj.getTileEntity(loc) match {
-                    case proxy : TileProxy if !proxy.isInstanceOf[TileBankBase] && !proxy.isInstanceOf[TileCrusherExpansion] =>
+                    case proxy : TileProxy if !proxy.isInstanceOf[TileBankBase] && !proxy.isInstanceOf[TileCrusherExpansion] && !proxy.isInstanceOf[TileIOExpansion] =>
                         val meta = proxy.metaData
                         worldObj.setBlockState(loc, proxy.getStoredBlock.getStateFromMeta(meta))
                         worldObj.markBlockForUpdate(loc)
