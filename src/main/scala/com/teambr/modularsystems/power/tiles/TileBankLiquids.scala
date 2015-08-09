@@ -85,7 +85,7 @@ class TileBankLiquids extends TileBankBase with IFluidHandler with Inventory wit
             val value = FluidFuelValues.getFluidFuelValue(fluid.getFluid.getName)
             val actual = tank.drain(100, true)
             worldObj.markBlockForUpdate(pos)
-            Math.round(actual.amount / FluidContainerRegistry.BUCKET_VOLUME) * value
+            return Math.round(actual.amount.toFloat / FluidContainerRegistry.BUCKET_VOLUME * value)
         }
         0
     }
@@ -98,7 +98,7 @@ class TileBankLiquids extends TileBankBase with IFluidHandler with Inventory wit
             val value = FluidFuelValues.getFluidFuelValue(fluid.getFluid.getName)
             val actual = tank.drain(100, true)
             worldObj.markBlockForUpdate(pos)
-            Math.round(actual.amount / FluidContainerRegistry.BUCKET_VOLUME) * value
+            return Math.round(actual.amount.toFloat / FluidContainerRegistry.BUCKET_VOLUME * value)
         }
         0
     }
