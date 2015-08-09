@@ -52,7 +52,9 @@ class ModelOtherCore  extends ISmartBlockModel with ISmartItemModel {
 
         val scale = true
         val hopperTop = Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("minecraft:blocks/hopper_top")
-        val ourTexture = getTextureForBlock(facing)
+        var ourTexture = getTextureForBlock(facing)
+        if(ourTexture == null)
+            ourTexture = hopperTop
 
         facing match {
             case EnumFacing.UP =>
