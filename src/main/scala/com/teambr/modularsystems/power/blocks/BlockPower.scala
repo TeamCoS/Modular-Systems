@@ -33,7 +33,7 @@ import net.minecraft.world.{IBlockAccess, World}
  * @since August 07, 2015
  */
 class BlockPower(name: String, tileEntity: Class[_ <: TileEntity], blockColor: Int) extends BlockProxy(name, tileEntity)
-with DropsItems with OpensGui {
+    with DropsItems with OpensGui {
 
     override def getCreativeTab: CreativeTabs = {
         ModularSystems.tabModularSystems

@@ -5,7 +5,6 @@ import codechicken.nei.FastTransferManager;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IOverlayHandler;
 import codechicken.nei.recipe.IRecipeHandler;
-import com.teambr.bookshelf.network.PacketManager;
 import com.teambr.modularsystems.storage.gui.GuiStorageCore;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Slot;
@@ -78,10 +77,9 @@ public class GuiStorageCraftingHandler implements IOverlayHandler {
         assignIngredSlots(gui, ingredients, assignedIngredients);
         int quantity = calculateRecipeQuantity(assignedIngredients);
 
-        if(quantity != 0) {
+        if(quantity != 0)
             moveIngredients(gui, assignedIngredients, quantity);
-            PacketManager.updateTileWithClientInfo(((GuiStorageCore) gui).storageCore());
-        }
+
     }
 
     @SuppressWarnings("unchecked")

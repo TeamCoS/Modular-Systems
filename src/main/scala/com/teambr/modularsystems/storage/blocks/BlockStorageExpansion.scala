@@ -65,7 +65,9 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
 
     def getConnectionArrayForFace(world : IBlockAccess, pos : BlockPos,  facing : EnumFacing): Array[Boolean] = {
         val connections = new Array[Boolean](16)
-         facing match {
+        if (world.isAirBlock(pos.offset(facing)) || (!world.getBlockState(pos.offset(facing)).getBlock.isOpaqueCube &&
+                                     !canBlockConnect(world.getBlockState(pos.offset(facing)).getBlock))) {
+            facing match {
                 case EnumFacing.UP =>
                     connections(0) = canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock)
                     connections(1) = canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock)
@@ -75,14 +77,14 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
                     connections(5) = canBlockConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock)
                     connections(6) = canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock)
                     connections(7) = canBlockConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock)
-                    connections(8) = !world.isAirBlock(pos.add(-1, 1, -1))
-                    connections(9) = !world.isAirBlock(pos.add(0, 1, -1))
-                    connections(10) = !world.isAirBlock(pos.add(1, 1, -1))
-                    connections(11) = !world.isAirBlock(pos.add(-1, 1, 0))
-                    connections(12) = !world.isAirBlock(pos.add(1, 1, 0))
-                    connections(13) = !world.isAirBlock(pos.add(-1, 1, 1))
-                    connections(14) = !world.isAirBlock(pos.add(0, 1, 1))
-                    connections(15) = !world.isAirBlock(pos.add(1, 1, 1))
+                    connections(8) = !world.isAirBlock(pos.add(-1, 1, -1)) && world.getBlockState(pos.add(-1, 1, -1)).getBlock.isOpaqueCube
+                    connections(9) = !world.isAirBlock(pos.add(0, 1, -1)) && world.getBlockState(pos.add(0, 1, -1)).getBlock.isOpaqueCube
+                    connections(10) = !world.isAirBlock(pos.add(1, 1, -1)) && world.getBlockState(pos.add(1, 1, -1)).getBlock.isOpaqueCube
+                    connections(11) = !world.isAirBlock(pos.add(-1, 1, 0)) && world.getBlockState(pos.add(-1, 1, 0)).getBlock.isOpaqueCube
+                    connections(12) = !world.isAirBlock(pos.add(1, 1, 0)) && world.getBlockState(pos.add(1, 1, 0)).getBlock.isOpaqueCube
+                    connections(13) = !world.isAirBlock(pos.add(-1, 1, 1)) && world.getBlockState(pos.add(-1, 1, 1)).getBlock.isOpaqueCube
+                    connections(14) = !world.isAirBlock(pos.add(0, 1, 1)) && world.getBlockState(pos.add(0, 1, 1)).getBlock.isOpaqueCube
+                    connections(15) = !world.isAirBlock(pos.add(1, 1, 1)) && world.getBlockState(pos.add(1, 1, 1)).getBlock.isOpaqueCube
                     return connections
                 case EnumFacing.DOWN =>
                     connections(0) = canBlockConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock)
@@ -93,14 +95,14 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
                     connections(5) = canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock)
                     connections(6) = canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock)
                     connections(7) = canBlockConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock)
-                    connections(8) = !world.isAirBlock(pos.add(-1, -1, 1))
-                    connections(9) = !world.isAirBlock(pos.add(0, -1, 1))
-                    connections(10) = !world.isAirBlock(pos.add(1, -1, 1))
-                    connections(11) = !world.isAirBlock(pos.add(-1, -1, 0))
-                    connections(12) = !world.isAirBlock(pos.add(1, -1, 0))
-                    connections(13) = !world.isAirBlock(pos.add(-1, -1, -1))
-                    connections(14) = !world.isAirBlock(pos.add(0, -1, -1))
-                    connections(15) = !world.isAirBlock(pos.add(1, -1, -1))
+                    connections(8) = !world.isAirBlock(pos.add(-1, -1, 1)) && world.getBlockState(pos.add(-1, -1, 1)).getBlock.isOpaqueCube
+                    connections(9) = !world.isAirBlock(pos.add(0, -1, 1)) && world.getBlockState(pos.add(0, -1, 1)).getBlock.isOpaqueCube
+                    connections(10) = !world.isAirBlock(pos.add(1, -1, 1)) && world.getBlockState(pos.add(1, -1, 1)).getBlock.isOpaqueCube
+                    connections(11) = !world.isAirBlock(pos.add(-1, -1, 0)) && world.getBlockState(pos.add(-1, -1, 0)).getBlock.isOpaqueCube
+                    connections(12) = !world.isAirBlock(pos.add(1, -1, 0)) && world.getBlockState(pos.add(1, -1, 0)).getBlock.isOpaqueCube
+                    connections(13) = !world.isAirBlock(pos.add(-1, -1, -1)) && world.getBlockState(pos.add(-1, -1, -1)).getBlock.isOpaqueCube
+                    connections(14) = !world.isAirBlock(pos.add(0, -1, -1)) && world.getBlockState(pos.add(0, -1, -1)).getBlock.isOpaqueCube
+                    connections(15) = !world.isAirBlock(pos.add(1, -1, -1)) && world.getBlockState(pos.add(1, -1, -1)).getBlock.isOpaqueCube
                     return connections
                 case EnumFacing.NORTH =>
                     connections(0) = canBlockConnect(world.getBlockState(pos.add(1, 1, 0)).getBlock)
@@ -111,14 +113,14 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
                     connections(5) = canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock)
                     connections(6) = canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
                     connections(7) = canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock)
-                    connections(8) = !world.isAirBlock(pos.add(1, 1, -1))
-                    connections(9) = !world.isAirBlock(pos.add(0, 1, -1))
-                    connections(10) = !world.isAirBlock(pos.add(-1, 1, -1))
-                    connections(11) = !world.isAirBlock(pos.add(1, 0, -1))
-                    connections(12) = !world.isAirBlock(pos.add(-1, 0, -1))
-                    connections(13) = !world.isAirBlock(pos.add(1, -1, -1))
-                    connections(14) = !world.isAirBlock(pos.add(0, -1, -1))
-                    connections(15) = !world.isAirBlock(pos.add(-1, -1, -1))
+                    connections(8) = !world.isAirBlock(pos.add(1, 1, -1)) && world.getBlockState(pos.add(1, 1, -1)).getBlock.isOpaqueCube
+                    connections(9) = !world.isAirBlock(pos.add(0, 1, -1)) && world.getBlockState(pos.add(0, 1, -1)).getBlock.isOpaqueCube
+                    connections(10) = !world.isAirBlock(pos.add(-1, 1, -1)) && world.getBlockState(pos.add(-1, 1, -1)).getBlock.isOpaqueCube
+                    connections(11) = !world.isAirBlock(pos.add(1, 0, -1)) && world.getBlockState(pos.add(1, 0, -1)).getBlock.isOpaqueCube
+                    connections(12) = !world.isAirBlock(pos.add(-1, 0, -1)) && world.getBlockState(pos.add(-1, 0, -1)).getBlock.isOpaqueCube
+                    connections(13) = !world.isAirBlock(pos.add(1, -1, -1)) && world.getBlockState(pos.add(1, -1, -1)).getBlock.isOpaqueCube
+                    connections(14) = !world.isAirBlock(pos.add(0, -1, -1)) && world.getBlockState(pos.add(0, -1, -1)).getBlock.isOpaqueCube
+                    connections(15) = !world.isAirBlock(pos.add(-1, -1, -1)) && world.getBlockState(pos.add(-1, -1, -1)).getBlock.isOpaqueCube
                     return connections
                 case EnumFacing.SOUTH =>
                     connections(0) = canBlockConnect(world.getBlockState(pos.add(-1, 1, 0)).getBlock)
@@ -129,14 +131,14 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
                     connections(5) = canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock)
                     connections(6) = canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
                     connections(7) = canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock)
-                    connections(8) = !world.isAirBlock(pos.add(-1, 1, 1))
-                    connections(9) = !world.isAirBlock(pos.add(0, 1, 1))
-                    connections(10) = !world.isAirBlock(pos.add(1, 1, 1))
-                    connections(11) = !world.isAirBlock(pos.add(-1, 0, 1))
-                    connections(12) = !world.isAirBlock(pos.add(1, 0, 1))
-                    connections(13) = !world.isAirBlock(pos.add(-1, -1, 1))
-                    connections(14) = !world.isAirBlock(pos.add(0, -1, 1))
-                    connections(15) = !world.isAirBlock(pos.add(1, -1, 1))
+                    connections(8) = !world.isAirBlock(pos.add(-1, 1, 1)) && world.getBlockState(pos.add(-1, 1, 1)).getBlock.isOpaqueCube
+                    connections(9) = !world.isAirBlock(pos.add(0, 1, 1)) && world.getBlockState(pos.add(0, 1, 1)).getBlock.isOpaqueCube
+                    connections(10) = !world.isAirBlock(pos.add(1, 1, 1)) && world.getBlockState(pos.add(1, 1, 1)).getBlock.isOpaqueCube
+                    connections(11) = !world.isAirBlock(pos.add(-1, 0, 1)) && world.getBlockState(pos.add(-1, 0, 1)).getBlock.isOpaqueCube
+                    connections(12) = !world.isAirBlock(pos.add(1, 0, 1)) && world.getBlockState(pos.add(1, 0, 1)).getBlock.isOpaqueCube
+                    connections(13) = !world.isAirBlock(pos.add(-1, -1, 1)) && world.getBlockState(pos.add(-1, -1, 1)).getBlock.isOpaqueCube
+                    connections(14) = !world.isAirBlock(pos.add(0, -1, 1)) && world.getBlockState(pos.add(0, -1, 1)).getBlock.isOpaqueCube
+                    connections(15) = !world.isAirBlock(pos.add(1, -1, 1)) && world.getBlockState(pos.add(1, -1, 1)).getBlock.isOpaqueCube
                     return connections
                 case EnumFacing.WEST =>
                     connections(0) = canBlockConnect(world.getBlockState(pos.add(0, 1, -1)).getBlock)
@@ -147,14 +149,14 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
                     connections(5) = canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock)
                     connections(6) = canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
                     connections(7) = canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock)
-                    connections(8) = !world.isAirBlock(pos.add(-1, 1, -1))
-                    connections(9) = !world.isAirBlock(pos.add(-1, 1, 0))
-                    connections(10) = !world.isAirBlock(pos.add(-1, 1, 1))
-                    connections(11) = !world.isAirBlock(pos.add(-1, 0, -1))
-                    connections(12) = !world.isAirBlock(pos.add(-1, 0, 1))
-                    connections(13) = !world.isAirBlock(pos.add(-1, -1, -1))
-                    connections(14) = !world.isAirBlock(pos.add(-1, -1, 0))
-                    connections(15) = !world.isAirBlock(pos.add(-1, -1, 1))
+                    connections(8) = !world.isAirBlock(pos.add(-1, 1, -1)) && world.getBlockState(pos.add(-1, 1, -1)).getBlock.isOpaqueCube
+                    connections(9) = !world.isAirBlock(pos.add(-1, 1, 0)) && world.getBlockState(pos.add(-1, 1, 0)).getBlock.isOpaqueCube
+                    connections(10) = !world.isAirBlock(pos.add(-1, 1, 1)) && world.getBlockState(pos.add(-1, 1, 1)).getBlock.isOpaqueCube
+                    connections(11) = !world.isAirBlock(pos.add(-1, 0, -1)) && world.getBlockState(pos.add(-1, 0, -1)).getBlock.isOpaqueCube
+                    connections(12) = !world.isAirBlock(pos.add(-1, 0, 1)) && world.getBlockState(pos.add(-1, 0, 1)).getBlock.isOpaqueCube
+                    connections(13) = !world.isAirBlock(pos.add(-1, -1, -1)) && world.getBlockState(pos.add(-1, -1, -1)).getBlock.isOpaqueCube
+                    connections(14) = !world.isAirBlock(pos.add(-1, -1, 0)) && world.getBlockState(pos.add(-1, -1, 0)).getBlock.isOpaqueCube
+                    connections(15) = !world.isAirBlock(pos.add(-1, -1, 1)) && world.getBlockState(pos.add(-1, -1, 1)).getBlock.isOpaqueCube
                     return connections
                 case EnumFacing.EAST =>
                     connections(0) = canBlockConnect(world.getBlockState(pos.add(0, 1, 1)).getBlock)
@@ -165,17 +167,18 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
                     connections(5) = canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock)
                     connections(6) = canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
                     connections(7) = canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock)
-                    connections(8) = !world.isAirBlock(pos.add(1, 1, 1))
-                    connections(9) = !world.isAirBlock(pos.add(1, 1, 0))
-                    connections(10) = !world.isAirBlock(pos.add(1, 1, -1))
-                    connections(11) = !world.isAirBlock(pos.add(1, 0, 1))
-                    connections(12) = !world.isAirBlock(pos.add(1, 0, -1))
-                    connections(13) = !world.isAirBlock(pos.add(1, -1, 1))
-                    connections(14) = !world.isAirBlock(pos.add(1, -1, 0))
-                    connections(15) = !world.isAirBlock(pos.add(1, -1, -1))
+                    connections(8) = !world.isAirBlock(pos.add(1, 1, 1)) && world.getBlockState(pos.add(1, 1, 1)).getBlock.isOpaqueCube
+                    connections(9) = !world.isAirBlock(pos.add(1, 1, 0)) && world.getBlockState(pos.add(1, 1, 0)).getBlock.isOpaqueCube
+                    connections(10) = !world.isAirBlock(pos.add(1, 1, -1)) && world.getBlockState(pos.add(1, 1, -1)).getBlock.isOpaqueCube
+                    connections(11) = !world.isAirBlock(pos.add(1, 0, 1)) && world.getBlockState(pos.add(1, 0, 1)).getBlock.isOpaqueCube
+                    connections(12) = !world.isAirBlock(pos.add(1, 0, -1)) && world.getBlockState(pos.add(1, 0, -1)).getBlock.isOpaqueCube
+                    connections(13) = !world.isAirBlock(pos.add(1, -1, 1)) && world.getBlockState(pos.add(1, -1, 1)).getBlock.isOpaqueCube
+                    connections(14) = !world.isAirBlock(pos.add(1, -1, 0)) && world.getBlockState(pos.add(1, -1, 0)).getBlock.isOpaqueCube
+                    connections(15) = !world.isAirBlock(pos.add(1, -1, -1)) && world.getBlockState(pos.add(1, -1, -1)).getBlock.isOpaqueCube
                     return connections
                 case _ => return connections
             }
+        }
         connections
     }
 
