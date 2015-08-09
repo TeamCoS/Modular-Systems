@@ -4,9 +4,11 @@ import java.util.Random
 
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
+import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.ModularSystems
-import com.teambr.modularsystems.core.common.tiles.TileProxy
+import com.teambr.modularsystems.core.client.gui.GuiIOExpansion
+import com.teambr.modularsystems.core.common.tiles.{ TileIOExpansion, TileProxy }
 import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.power.container.{ ContainerBankLiquids, ContainerBankSolids }
 import com.teambr.modularsystems.power.gui.{ GuiBankLiquids, GuiBankSolids }
@@ -43,6 +45,8 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
             world.getTileEntity(pos) match {
                 case tile: TileBankBase =>
                     player.openGui(Bookshelf, 0, world, pos.getX, pos.getY, pos.getZ)
+                case tile : TileIOExpansion =>
+                    player.openGui(Bookshelf, 0, world, pos.getX, pos.getY, pos.getZ)
                 case _ =>
             }
         } else
@@ -74,6 +78,8 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
                 Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/liquidsOverlay")
             case BlockManager.crusherExpansion =>
                 Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/crusherExpansionOverlay")
+            case BlockManager.ioExpansion =>
+                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/ioExpansionOverlay")
             case _ =>
                 Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry ("modularsystems:blocks/solidsOverlay")
         }
@@ -89,6 +95,8 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
                 new ContainerBankSolids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids])
             case block: BlockManager.bankLiquids.type =>
                 new ContainerBankLiquids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankLiquids])
+            case block : BlockManager.ioExpansion.type =>
+                new ContainerGeneric
             case _ => null
         }
     }
@@ -101,6 +109,8 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
             case block: BlockManager.bankLiquids.type =>
                 new GuiBankLiquids(new ContainerBankLiquids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankLiquids]),
                     player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankLiquids])
+            case block : BlockManager.ioExpansion.type =>
+                new GuiIOExpansion(world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileIOExpansion])
             case _ => null
         }
     }

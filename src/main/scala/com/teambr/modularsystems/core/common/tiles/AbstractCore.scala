@@ -189,6 +189,9 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
                     case tile : TileCrusherExpansion =>
                         tile.coreLocation = None
                         worldObj.markBlockForUpdate(loc)
+                    case tile : TileIOExpansion =>
+                        tile.coreLocation = None
+                        worldObj.markBlockForUpdate(loc)
                     case _ =>
                 }
             }
@@ -473,7 +476,8 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
     def getSlotsForFace(side : EnumFacing) : Array[Int] = {
         side match {
             case EnumFacing.UP => Array[Int](0)
-            case _ => Array[Int](1)
+            case EnumFacing.DOWN => Array[Int](1)
+            case _ => Array[Int](0)
         }
     }
 

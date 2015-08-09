@@ -1,7 +1,7 @@
 package com.teambr.modularsystems.core.managers
 
 import com.teambr.modularsystems.core.common.blocks.{ BlockCoreExpansion, BlockProxy }
-import com.teambr.modularsystems.core.common.tiles.TileProxy
+import com.teambr.modularsystems.core.common.tiles.{ TileIOExpansion, TileProxy }
 import com.teambr.modularsystems.crusher.blocks.BlockCrusherCore
 import com.teambr.modularsystems.crusher.tiles.{TileCrusherExpansion, TileCrusherCore}
 import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore
@@ -37,6 +37,7 @@ object BlockManager {
 
     //Expansions
     val crusherExpansion = new BlockCoreExpansion("crusherExpansion", classOf[TileCrusherExpansion], 0x555555)
+    val ioExpansion = new BlockCoreExpansion("ioExpansion", classOf[TileIOExpansion], 0xBBBBBB)
 
     val proxy = new BlockProxy("proxy", classOf[TileProxy])
 
@@ -58,6 +59,7 @@ object BlockManager {
 
         //Expansions
         registerBlock(crusherExpansion, "crusherExpansion", classOf[TileCrusherExpansion])
+        registerBlock(ioExpansion, "ioExpansion", classOf[TileIOExpansion])
     }
     /**
      * Helper method for registering block

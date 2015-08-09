@@ -23,7 +23,7 @@ tile.modularsystems:storageRemote.name=Remote Storage Terminal Receiver
 item.modularsystems:itemStorageRemote.name=Remote Storage Terminal
 
 tile.modularsystems:proxy.name=Modular Furnace Dummy
-tile.modularsystems:dummyIO.name=Modular Systems I/O
+tile.modularsystems:ioExpansion.name=Modular Systems I/O
 tile.modularsystems:redstoneIn.name=Modular Systems Redstone Input
 tile.modularsystems:redstoneOut.name=Modular Systems Redstone Output
 

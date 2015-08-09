@@ -79,6 +79,11 @@ class ModelCoreExpansion extends ISmartBlockModel with ISmartItemModel {
                         bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (4.0F, 9.0F, 1.0F), new Vector3f (12.0F, 10.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
                         bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (6.0F, 4.0F, 1.0F), new Vector3f (7.0F, 12.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
                         bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (9.0F, 4.0F, 1.0F), new Vector3f (10.0F, 12.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                    case BlockManager.ioExpansion =>
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (7.0F, 6.0F, 0.0F), new Vector3f (9.0F, 7.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (7.0F, 9.0F, 0.0F), new Vector3f (9.0F, 10.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (6.0F, 7.0F, 0.0F), new Vector3f (7.0F, 9.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
+                        bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (9.0F, 7.0F, 0.0F), new Vector3f (10.0F, 9.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
                     case _ =>
                 }
             }
