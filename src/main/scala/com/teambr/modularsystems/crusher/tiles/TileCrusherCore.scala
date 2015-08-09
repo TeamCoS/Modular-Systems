@@ -3,7 +3,7 @@ package com.teambr.modularsystems.crusher.tiles
 import com.teambr.bookshelf.helper.BlockHelper
 import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.functions.BlockCountFunction
-import com.teambr.modularsystems.core.registries.{FurnaceBannedBlocks, BlockValueRegistry}
+import com.teambr.modularsystems.core.registries.{CrusherRecipeRegistry, FurnaceBannedBlocks, BlockValueRegistry}
 import com.teambr.modularsystems.core.common.tiles.AbstractCore
 import net.minecraft.block.Block
 import net.minecraft.inventory.Container
@@ -21,13 +21,12 @@ import net.minecraft.item.ItemStack
  */
 class TileCrusherCore extends AbstractCore {
 
-
     /**
      * Get the output of the recipe
      * @param stack The input
      * @return The output
      */
-    override def recipe(stack: ItemStack): ItemStack = ???
+    override def recipe(stack: ItemStack): ItemStack = CrusherRecipeRegistry.getOutput(stack).orNull
 
     /**
      * Take the blocks in this structure and generate the speed etc values

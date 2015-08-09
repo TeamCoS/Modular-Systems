@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * This file was created for Modular-Systems
@@ -27,7 +28,7 @@ import scala.collection.JavaConversions._
  */
 object CrusherRecipeRegistry {
 
-    var crusherRecipes = new util.ArrayList[CrusherRecipes]()
+    var crusherRecipes = new ArrayBuffer[CrusherRecipes]()
 
     /**
      * Add the values
@@ -45,18 +46,19 @@ object CrusherRecipeRegistry {
      */
     def loadFromFile(): Boolean = {
         LogHelper.info("Loading Block Values...")
-        crusherRecipes = JsonUtils.readFromJson[util.ArrayList[CrusherRecipes]](new TypeToken[util.ArrayList[CrusherRecipes]]() {
-        }, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "crusherRecipes.json")
+        val crusherRecipesTemp = JsonUtils.readFromJson[util.ArrayList[CrusherRecipes]](new TypeToken[util.ArrayList[CrusherRecipes]]() {
+        }, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "crusherRecipes.json").toList
+        crusherRecipes = crusherRecipesTemp.to[ArrayBuffer]
         if (crusherRecipes == null)
-            crusherRecipes = new util.ArrayList[CrusherRecipes]()
-        !crusherRecipes.isEmpty
+            crusherRecipes = new ArrayBuffer[CrusherRecipes]()
+        crusherRecipes.nonEmpty
     }
 
     /**
      * Save the current registry to a file
      */
     def saveToFile(): Unit = {
-        if (!crusherRecipes.isEmpty) JsonUtils.writeToJson(crusherRecipes, ModularSystems.configFolderLocation +
+        if (crusherRecipes.nonEmpty) JsonUtils.writeToJson(crusherRecipes, ModularSystems.configFolderLocation +
                 File.separator + "Registries" + File.separator + "crusherRecipes.json")
     }
 
@@ -107,13 +109,48 @@ object CrusherRecipeRegistry {
      * Get the output for an input
      */
     def getOutput(itemStack: ItemStack): Option[ItemStack] = {
-        val list = crusherRecipes.toSet
-        for (i <- list) {
-
-
-
+        //val list = crusherRecipes.toSet
+        for (i <- crusherRecipes) {
+            val name = i.input.split(":")
+            val stackOut = getItemStackFromString(i.output)
+            name.length match {
+                case 3 =>
+                    val stackIn = getItemStackFromString(i.input)
+                    if (stackIn != null && itemStack.isItemEqual(stackIn))
+                        return Some(new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage))
+                case 1 =>
+                    if (checkOreDict(i.input, itemStack))
+                        return Some(new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage))
+            }
         }
         None
+    }
+
+    /**
+     * Checks if the item is a valid item for this registry
+     * @param itemStack The stack to test
+     * @return True if an output exists
+     */
+    def isItemValid(itemStack: ItemStack): Boolean = {
+        getOutput(itemStack).isDefined
+    }
+
+    /**
+     * Get the oreDict tag for an item
+     * @param itemStack The stack to find
+     * @return The string for this stack or OreDict name
+     */
+    def checkOreDict(oreDict: String, itemStack: ItemStack): Boolean = {
+        val oreList = OreDictionary.getOres(oreDict)
+        for (i <- oreList) {
+            if (i.getItemDamage == OreDictionary.WILDCARD_VALUE) {
+                if (i.getItem == itemStack.getItem)
+                    return true
+            } else if (i.isItemEqual(itemStack)){
+                return true
+            }
+        }
+        false
     }
 
     private def getItemStackString(itemStack: ItemStack): String = {

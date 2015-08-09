@@ -25,7 +25,7 @@ import net.minecraft.world.World
  * @since August 07, 2015
  */
 class BlockFurnaceCore(name: String) extends BaseBlock(Material.rock, name, classOf[TileEntityFurnaceCore])
-with OpensGui with CoreStates with DropsItems {
+        with OpensGui with CoreStates with DropsItems {
 
     //Block Methods
     override def breakBlock(world: World, pos: BlockPos, state: IBlockState) {

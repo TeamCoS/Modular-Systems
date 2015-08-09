@@ -39,6 +39,10 @@ class GuiFurnaceCore(player: EntityPlayer, tile: TileEntityFurnaceCore) extends
     override def addComponents(): Unit = {
         components += new GuiComponentFlame(81, 55) {
             override def getCurrentBurn: Int = if (core.isBurning) core.getBurnTimeRemainingScaled(14) else 0
+
+            override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
+                ArrayBuffer(core.values.burnTime + " ticks left.")
+            }
         }
         components += new GuiComponentArrow(79, 34) {
             override def getCurrentProgress: Int = core.getCookProgressScaled(24)
