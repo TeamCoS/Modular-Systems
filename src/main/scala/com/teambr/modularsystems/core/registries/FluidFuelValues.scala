@@ -60,7 +60,7 @@ object FluidFuelValues {
      * Used to generate the default values
      */
     def generateDefaults(): Unit = {
-        values.put(FluidRegistry.LAVA.getName, 3200)
+        values.put(FluidRegistry.LAVA.getName, 6400)
         saveToFile()
     }
 

@@ -21,6 +21,22 @@ import net.minecraft.item.ItemStack
  */
 class TileCrusherCore extends AbstractCore {
 
+    override def smeltItem() {
+        val smeltCount : (Int, Int) = smeltCountAndSmeltSize
+        if (smeltCount != null && smeltCount._2 > 0) {
+            var recipeResult : ItemStack = recipe(getStackInSlot(0))
+            decrStackSize(0, smeltCount._1)
+            if (getStackInSlot(1) == null) {
+                recipeResult = recipeResult.copy
+                recipeResult.stackSize = smeltCount._2
+                setInventorySlotContents(1, recipeResult)
+            }
+            else {
+                getStackInSlot(1).stackSize += smeltCount._2
+            }
+        }
+    }
+
     /**
      * Get the output of the recipe
      * @param stack The input
@@ -78,4 +94,6 @@ class TileCrusherCore extends AbstractCore {
     override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
 
     override var inventoryName: String = "inventory.crusher.title"
+
+    override def initialSize : Int = 3
 }

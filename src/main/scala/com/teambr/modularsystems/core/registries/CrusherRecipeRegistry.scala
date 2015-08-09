@@ -8,7 +8,7 @@ import com.teambr.bookshelf.helper.LogHelper
 import com.teambr.bookshelf.util.JsonUtils
 import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.collections.CrusherRecipes
-import net.minecraft.init.Items
+import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
@@ -101,8 +101,25 @@ object CrusherRecipeRegistry {
             }
         }
         //TODO add more things
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.lapis_ore)),
+                getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))
+
         saveToFile()
         LogHelper.info("Finished adding " + crusherRecipes.size + " Crusher Recipes")
+    }
+
+    /**
+     * Get the oreDict tag for an item
+     * @param itemstack The stack to try
+     * @return The string for this stack or OreDict name
+     */
+    private def getOreDict(itemstack: ItemStack): String = {
+        val registered: Array[Int] = OreDictionary.getOreIDs(itemstack)
+        if (registered.length > 0)
+            OreDictionary.getOreName(registered(0))
+        else {
+            getItemStackString(itemstack)
+        }
     }
 
     /**

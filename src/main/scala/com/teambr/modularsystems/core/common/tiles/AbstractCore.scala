@@ -357,7 +357,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
         }
     }
 
-    private def smeltItem() {
+    def smeltItem() {
         val smeltCount : (Int, Int) = smeltCountAndSmeltSize
         if (smeltCount != null && smeltCount._2 > 0) {
             var recipeResult : ItemStack = recipe(getStackInSlot(0))
@@ -374,7 +374,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
         }
     }
 
-    private def smeltCountAndSmeltSize : (Int, Int) = {
+    def smeltCountAndSmeltSize : (Int, Int) = {
         var input : ItemStack = getStackInSlot(0)
         if (input == null) {
             return null
