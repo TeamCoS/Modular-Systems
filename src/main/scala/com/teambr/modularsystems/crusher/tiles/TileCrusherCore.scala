@@ -53,20 +53,21 @@ class TileCrusherCore extends AbstractCore {
             val recipeResult = recipeCrusher(input)
             if (recipeResult != null && recipeResult._2 != null) {
                 var extraCount = 0
-                for (i <- 0 until (values.multiplicity.toInt + 1)) {
+                for (i <- 0 until count) {
                     val random = Random.nextInt(100)
                     if (getCrusherExtraCount >= random) {
                         extraCount += 1
                     }
                 }
                 val extra = recipeResult._2.copy
+
                 if (getStackInSlot(2) == null && extraCount > 0) {
                     if (extraCount > extra.getMaxStackSize)
                         extra.stackSize = extra.getMaxStackSize
                     else
                         extra.stackSize = extraCount
                     setInventorySlotContents(2, extra)
-                } else if (extraCount > 0) {
+                } else if (extraCount > 0 && getStackInSlot(2).isItemEqual(extra)) {
                     if (extraCount + getStackInSlot(2).stackSize > extra.getMaxStackSize)
                         getStackInSlot(2).stackSize = extra.getMaxStackSize
                     else
