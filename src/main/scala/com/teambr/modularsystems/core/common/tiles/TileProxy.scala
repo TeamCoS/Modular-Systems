@@ -2,6 +2,7 @@ package com.teambr.modularsystems.core.common.tiles
 
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
 import com.teambr.modularsystems.core.lib.Reference
+import com.teambr.modularsystems.crusher.tiles.TileCrusherCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
@@ -62,6 +63,8 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory {
         getCore match {
             case Some(core : TileEntityFurnaceCore) =>
                 Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID + ":blocks/furnaceOverlay")
+            case Some(core : TileCrusherCore) =>
+                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID + ":blocks/crusherOverlay")
             case _ => Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID + ":blocks/furnaceOverlay")
         }
     }

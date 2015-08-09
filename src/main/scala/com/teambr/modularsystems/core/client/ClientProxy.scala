@@ -23,6 +23,9 @@ class ClientProxy extends CommonProxy {
     override def preInit() = {
         ModelLoader.setCustomStateMapper(BlockManager.furnaceCore,
             (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY.getProperty).addPropertiesToIgnore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
+        ModelLoader.setCustomStateMapper(BlockManager.crusherCore,
+            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY.getProperty).addPropertiesToIgnore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
+
     }
 
     override def init() = {

@@ -3,7 +3,9 @@ package com.teambr.modularsystems.core.api.nei
 import codechicken.nei.api.{ API, IConfigureNEI }
 import codechicken.nei.recipe.TemplateRecipeHandler
 import com.teambr.modularsystems.core.ModularSystems
+import com.teambr.modularsystems.core.api.nei.storage.GuiStorageCraftingHandler
 import com.teambr.modularsystems.core.lib.Reference
+import com.teambr.modularsystems.storage.gui.GuiStorageCore
 import net.minecraft.util.StatCollector
 
 /**
@@ -18,6 +20,9 @@ import net.minecraft.util.StatCollector
  */
 class NEIAddonConfig extends IConfigureNEI {
     override def loadConfig() : Unit = {
+
+        API.registerGuiOverlay(classOf[GuiStorageCore], "crafting")
+        API.registerGuiOverlayHandler(classOf[GuiStorageCore], new GuiStorageCraftingHandler(180, 162), "crafting")
 
         //By setting this here, we can let the rest of the mod know NEI is installed
         ModularSystems.nei = new NEICallback

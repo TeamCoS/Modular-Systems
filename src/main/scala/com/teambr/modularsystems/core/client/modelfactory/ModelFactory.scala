@@ -1,6 +1,6 @@
 package com.teambr.modularsystems.core.client.modelfactory
 
-import com.teambr.modularsystems.core.client.modelfactory.models.{ ModelPowerBank, ModelFurnaceCore, ModelProxy }
+import com.teambr.modularsystems.core.client.modelfactory.models.{ ModelOtherCore, ModelPowerBank, ModelFurnaceCore, ModelProxy }
 import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.core.managers.BlockManager
 import net.minecraft.block.Block
@@ -51,6 +51,10 @@ class ModelFactory {
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "furnaceCore", "normal"), new ModelFurnaceCore())
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "furnaceCore", "inventory"), new ModelFurnaceCore())
         itemModelMesher.register(Item.getItemFromBlock(BlockManager.furnaceCore), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "furnaceCore", "inventory"))
+
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "crusherCore", "normal"), new ModelOtherCore())
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "crusherCore", "inventory"), new ModelOtherCore())
+        itemModelMesher.register(Item.getItemFromBlock(BlockManager.crusherCore), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "crusherCore", "inventory"))
 
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankSolids", "normal"), new ModelPowerBank(BlockManager.bankSolids, false))
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankSolids", "inventory"), new ModelPowerBank(BlockManager.bankSolids, true))
