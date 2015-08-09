@@ -20,16 +20,12 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
     /**
      * Called after this has been added to a network
      */
-    def addedToNetwork() {
-
-    }
+    def addedToNetwork() : Unit
 
     /**
      * Called right before this is removed from a network
      */
-    def removedFromNetwork() {
-
-    }
+    def removedFromNetwork() : Unit
 
     /**
      * Called when this block is removed from the network
@@ -75,8 +71,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
       * *****************************************************************************************************************/
 
     override def onServerTick(): Unit = {
-        worldObj.markBlockForUpdate(getPos)
-        if (core.isEmpty && worldObj.rand.nextInt(80) == 0)
+        if (core.isEmpty && worldObj.rand.nextInt(40) == 0)
             searchAndConnect()
         else if (getCore.isEmpty && new Random().nextInt(20) == 0)
             removeFromNetwork(true)
@@ -92,20 +87,20 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
                         core = Some(tile.getPos)
                         tile.getNetwork.addNode(getPos)
                         addedToNetwork()
+                        worldObj.markBlockForUpdate(getPos)
                         return
                     case tile: TileEntityStorageExpansion =>
                         if (tile.getCore.isDefined) {
                             core = Some(tile.getCore.get.getPos)
                             tile.addChild(getPos)
                             addedToNetwork()
+                            worldObj.markBlockForUpdate(getPos)
                             return
                         }
                     case _ =>
                 }
             }
         }
-        worldObj.markBlockForUpdate(getPos)
-        worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
 
     def getTileInDirection(pos: BlockPos): Option[(TileEntity)] = {
