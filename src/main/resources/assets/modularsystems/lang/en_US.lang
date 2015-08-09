@@ -22,19 +22,16 @@ tile.modularsystems:storageIO.name=I/O Storage Expansion
 tile.modularsystems:storageRemote.name=Remote Storage Terminal Receiver
 item.modularsystems:itemStorageRemote.name=Remote Storage Terminal
 
-tile.modularsystems:dummy.name=Modular Furnace Dummy
+tile.modularsystems:proxy.name=Modular Furnace Dummy
 tile.modularsystems:dummyIO.name=Modular Systems I/O
 tile.modularsystems:redstoneIn.name=Modular Systems Redstone Input
 tile.modularsystems:redstoneOut.name=Modular Systems Redstone Output
 
-tile.modularsystems:powerRF.name=RedstoneFlux Power Bank
-tile.modularsystems:powerSolids.name=Solid Fuel Power Bank
-tile.modularsystems:powerLiquids.name=Liquid Fuel Power Bank
-tile.modularsystems:powerIC2.name=IC2 LV Fuel Power Bank
-tile.modularsystems:powerMana.name=Mana Fuel Power Bank
+tile.modularsystems:bankRF.name=RedstoneFlux Power Bank
+tile.modularsystems:bankSolids.name=Solid Fuel Power Bank
+tile.modularsystems:bankLiquids.name=Liquid Fuel Power Bank
 
 tile.modularsystems:supplierRF.name=RF Power Output
-tile.modularsystems:supplierIC2.name=IC2 LV Power Output
 
 item.modularsystems:dustIron.name=Iron Dust
 item.modularsystems:dustGold.name=Gold Dust
@@ -93,8 +90,6 @@ inventory.dummyRedstoneIn.title=Trigger Level
 inventory.rfpower.title=RedstoneFlux Power Bank
 inventory.liquidspower.title=Liquid Fuel Power Bank
 inventory.solidspower.title=Solid Fuel Power Bank
-inventory.eupower.title=EU LV Power Bank
-inventory.manapower.title=Mana Fuel Power Bank
 
 inventory.blockValuesConfig.speed=Speed
 inventory.blockValuesConfig.efficiency=Efficiency
@@ -150,7 +145,6 @@ achievement.craftIO=Let's automate
 achievement.craftIO.desc=Craft a Modular Systems IO
 achievement.craftRedstone=Technical Builder
 achievement.craftRedstone.desc=Craft a Modular Systems Redstone Input
-
 
 modularsystems.versioncheck.start=Starting version check...
 modularsystems.versioncheck.current=Modular Systems is up to date...

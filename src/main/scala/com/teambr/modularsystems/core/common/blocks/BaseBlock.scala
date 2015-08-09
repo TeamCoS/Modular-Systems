@@ -19,13 +19,11 @@ class BaseBlock(material: Material, name: String, tileEntity: Class[_ <: TileEnt
     setCreativeTab(getCreativeTab)
     setHardness(getHardness)
 
-
     /**
      * Used to change the hardness of a block, but will default to 2.0F if not overwritten
      * @return The hardness value, default 2.0F
      */
     def getHardness: Float = 2.0F
-
 
     /**
      * Used to tell if this should be in a creative tab, and if so which one
@@ -36,5 +34,4 @@ class BaseBlock(material: Material, name: String, tileEntity: Class[_ <: TileEnt
 
     override def createNewTileEntity(worldIn: World, meta: Int): TileEntity =
         if (tileEntity != null) tileEntity.newInstance() else null
-
 }

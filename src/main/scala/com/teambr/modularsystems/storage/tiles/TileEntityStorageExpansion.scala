@@ -3,10 +3,9 @@ package com.teambr.modularsystems.storage.tiles
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.{ BlockPos, EnumFacing }
 
 import scala.collection.mutable.ListBuffer
-import scala.util.Random
 
 /**
  * Modular-Systems
@@ -73,7 +72,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
     override def onServerTick(): Unit = {
         if (core.isEmpty && worldObj.rand.nextInt(40) == 0)
             searchAndConnect()
-        else if (getCore.isEmpty && new Random().nextInt(20) == 0)
+        else if (getCore.isEmpty && worldObj.rand.nextInt(20) == 0)
             removeFromNetwork(true)
     }
 

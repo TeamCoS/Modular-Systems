@@ -1,22 +1,17 @@
 package com.teambr.modularsystems.storage.blocks
 
 import com.teambr.bookshelf.Bookshelf
-import com.teambr.bookshelf.collections.CubeTextures
-import com.teambr.bookshelf.common.blocks.traits.BlockBakeable
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
-import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.storage.tiles.{ TileEntityStorageExpansion, TileStorageCore }
+import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.{ IProperty, PropertyBool }
+import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.{ BlockState, IBlockState }
-import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{ BlockPos, EnumFacing, ResourceLocation }
+import net.minecraft.util.{ EnumWorldBlockLayer, BlockPos, EnumFacing }
 import net.minecraft.world.{ IBlockAccess, World }
 import net.minecraftforge.common.property.{ ExtendedBlockState, IUnlistedProperty }
-
-import scala.collection.mutable.ListBuffer
 
 /**
  * Modular-Systems
@@ -29,12 +24,7 @@ import scala.collection.mutable.ListBuffer
  * @param tileEntity Should the block have a tile, pass the class
  */
 class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class[_ <: TileEntity])
-        extends BaseBlock(Material.wood, name, tileEntity: Class[_ <: TileEntity]) with BlockBakeable  {
-    lazy val PROPERTY_CONNECTED = PropertyBool.create("Connected")
-
-
-    override def MODID: String = Reference.MOD_ID
-    override def blockName: String = name
+        extends BaseBlock(Material.wood, name, tileEntity: Class[_ <: TileEntity]) {
 
     override def onBlockAdded(world: World, pos: BlockPos, state : IBlockState) : Unit = {
         world.getTileEntity(pos) match {
@@ -59,74 +49,142 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
         super.breakBlock(world, pos, state)
     }
 
-    override def getDisplayTextures(state : IBlockState): CubeTextures = {
-        val map = Minecraft.getMinecraft.getTextureMapBlocks
-        val sides = new ListBuffer[String]
-        if (state.getValue(PROPERTY_CONNECTED).asInstanceOf[Boolean]) {
-            for (icon <- icons) {
-                sides += MODID + ":blocks/" + blockName + icon
-            }
-            for (i <- icons.size to 6) {
-                sides += MODID + ":blocks/" + blockName
-            }
-            val textures = new CubeTextures(
-                map.getTextureExtry(sides.head),
-                map.getTextureExtry(sides(1)),
-                map.getTextureExtry(sides(2)),
-                map.getTextureExtry(sides(3)),
-                map.getTextureExtry(sides(4)),
-                map.getTextureExtry(sides(5))
-            )
-            textures
-        } else
-            new CubeTextures(
-                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection"),
-                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection"),
-                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection"),
-                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection"),
-                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection"),
-                map.getTextureExtry(MODID + ":blocks/" + "storageNoConnection")
-            )
-    }
-
-    override def registerIcons(): Array[ResourceLocation] = {
-        val locations = new ListBuffer[ResourceLocation]
-        if (icons.size < 6) locations += new ResourceLocation(MODID + ":blocks/" + blockName)
-        for (icon <- icons.indices) {
-            locations += new ResourceLocation(MODID + ":blocks/" + blockName + icon)
-        }
-        locations += new ResourceLocation(MODID + ":blocks/" + "storageNoConnection")
-        locations.toArray
-    }
-
+    /**
+     * Used to say what our block state is
+     */
     override def createBlockState() : BlockState = {
-        val listed = Array[IProperty](PROPERTY_CONNECTED) //Used to create sub variants
-        val unListed = new Array[IUnlistedProperty[_]] (0) //Things we want, but don't need displayed
-        new ExtendedBlockState(this, listed, unListed)
+        val listed : Array[IProperty] = new Array(0)
+        val unlisted = new Array[IUnlistedProperty[_]](0)
+        new ExtendedBlockState(this, listed, unlisted)
     }
 
     override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
         val hasConnection : java.lang.Boolean = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined
-        state.withProperty(PROPERTY_CONNECTED, hasConnection)
+        new StorageState(hasConnection, pos, world, state.getBlock)
     }
 
-    /**
-     * Used to convert the meta to state
-     * @param meta The meta
-     * @return
-     */
-    override def getStateFromMeta(meta : Int) : IBlockState = getDefaultState.withProperty(PROPERTY_CONNECTED, java.lang.Boolean.valueOf(meta > 0))
-
-    /**
-     * Called to convert state from meta
-     * @param state The state
-     * @return
-     */
-    override def getMetaFromState(state : IBlockState) = if(state.getValue(PROPERTY_CONNECTED).asInstanceOf[Boolean]) 1 else 0
-
-
-    override def getAllPossibleStates: Array[IBlockState] = {
-        Array[IBlockState](getDefaultState.withProperty(PROPERTY_CONNECTED, true),
-            getDefaultState.withProperty(PROPERTY_CONNECTED, false))
+    def getConnectionArrayForFace(world : IBlockAccess, pos : BlockPos,  facing : EnumFacing): Array[Boolean] = {
+        val connections = new Array[Boolean](16)
+         facing match {
+                case EnumFacing.UP =>
+                    connections(0) = canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock)
+                    connections(1) = canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock)
+                    connections(2) = canBlockConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock)
+                    connections(3) = canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock)
+                    connections(4) = canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock)
+                    connections(5) = canBlockConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock)
+                    connections(6) = canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock)
+                    connections(7) = canBlockConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock)
+                    connections(8) = !world.isAirBlock(pos.add(-1, 1, -1))
+                    connections(9) = !world.isAirBlock(pos.add(0, 1, -1))
+                    connections(10) = !world.isAirBlock(pos.add(1, 1, -1))
+                    connections(11) = !world.isAirBlock(pos.add(-1, 1, 0))
+                    connections(12) = !world.isAirBlock(pos.add(1, 1, 0))
+                    connections(13) = !world.isAirBlock(pos.add(-1, 1, 1))
+                    connections(14) = !world.isAirBlock(pos.add(0, 1, 1))
+                    connections(15) = !world.isAirBlock(pos.add(1, 1, 1))
+                    return connections
+                case EnumFacing.DOWN =>
+                    connections(0) = canBlockConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock)
+                    connections(1) = canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock)
+                    connections(2) = canBlockConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock)
+                    connections(3) = canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock)
+                    connections(4) = canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock)
+                    connections(5) = canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock)
+                    connections(6) = canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock)
+                    connections(7) = canBlockConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock)
+                    connections(8) = !world.isAirBlock(pos.add(-1, -1, 1))
+                    connections(9) = !world.isAirBlock(pos.add(0, -1, 1))
+                    connections(10) = !world.isAirBlock(pos.add(1, -1, 1))
+                    connections(11) = !world.isAirBlock(pos.add(-1, -1, 0))
+                    connections(12) = !world.isAirBlock(pos.add(1, -1, 0))
+                    connections(13) = !world.isAirBlock(pos.add(-1, -1, -1))
+                    connections(14) = !world.isAirBlock(pos.add(0, -1, -1))
+                    connections(15) = !world.isAirBlock(pos.add(1, -1, -1))
+                    return connections
+                case EnumFacing.NORTH =>
+                    connections(0) = canBlockConnect(world.getBlockState(pos.add(1, 1, 0)).getBlock)
+                    connections(1) = canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock)
+                    connections(2) = canBlockConnect(world.getBlockState(pos.add(-1, 1, 0)).getBlock)
+                    connections(3) = canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock)
+                    connections(4) = canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock)
+                    connections(5) = canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock)
+                    connections(6) = canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
+                    connections(7) = canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock)
+                    connections(8) = !world.isAirBlock(pos.add(1, 1, -1))
+                    connections(9) = !world.isAirBlock(pos.add(0, 1, -1))
+                    connections(10) = !world.isAirBlock(pos.add(-1, 1, -1))
+                    connections(11) = !world.isAirBlock(pos.add(1, 0, -1))
+                    connections(12) = !world.isAirBlock(pos.add(-1, 0, -1))
+                    connections(13) = !world.isAirBlock(pos.add(1, -1, -1))
+                    connections(14) = !world.isAirBlock(pos.add(0, -1, -1))
+                    connections(15) = !world.isAirBlock(pos.add(-1, -1, -1))
+                    return connections
+                case EnumFacing.SOUTH =>
+                    connections(0) = canBlockConnect(world.getBlockState(pos.add(-1, 1, 0)).getBlock)
+                    connections(1) = canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock)
+                    connections(2) = canBlockConnect(world.getBlockState(pos.add(1, 1, 0)).getBlock)
+                    connections(3) = canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock)
+                    connections(4) = canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock)
+                    connections(5) = canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock)
+                    connections(6) = canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
+                    connections(7) = canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock)
+                    connections(8) = !world.isAirBlock(pos.add(-1, 1, 1))
+                    connections(9) = !world.isAirBlock(pos.add(0, 1, 1))
+                    connections(10) = !world.isAirBlock(pos.add(1, 1, 1))
+                    connections(11) = !world.isAirBlock(pos.add(-1, 0, 1))
+                    connections(12) = !world.isAirBlock(pos.add(1, 0, 1))
+                    connections(13) = !world.isAirBlock(pos.add(-1, -1, 1))
+                    connections(14) = !world.isAirBlock(pos.add(0, -1, 1))
+                    connections(15) = !world.isAirBlock(pos.add(1, -1, 1))
+                    return connections
+                case EnumFacing.WEST =>
+                    connections(0) = canBlockConnect(world.getBlockState(pos.add(0, 1, -1)).getBlock)
+                    connections(1) = canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock)
+                    connections(2) = canBlockConnect(world.getBlockState(pos.add(0, 1, 1)).getBlock)
+                    connections(3) = canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock)
+                    connections(4) = canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock)
+                    connections(5) = canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock)
+                    connections(6) = canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
+                    connections(7) = canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock)
+                    connections(8) = !world.isAirBlock(pos.add(-1, 1, -1))
+                    connections(9) = !world.isAirBlock(pos.add(-1, 1, 0))
+                    connections(10) = !world.isAirBlock(pos.add(-1, 1, 1))
+                    connections(11) = !world.isAirBlock(pos.add(-1, 0, -1))
+                    connections(12) = !world.isAirBlock(pos.add(-1, 0, 1))
+                    connections(13) = !world.isAirBlock(pos.add(-1, -1, -1))
+                    connections(14) = !world.isAirBlock(pos.add(-1, -1, 0))
+                    connections(15) = !world.isAirBlock(pos.add(-1, -1, 1))
+                    return connections
+                case EnumFacing.EAST =>
+                    connections(0) = canBlockConnect(world.getBlockState(pos.add(0, 1, 1)).getBlock)
+                    connections(1) = canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock)
+                    connections(2) = canBlockConnect(world.getBlockState(pos.add(0, 1, -1)).getBlock)
+                    connections(3) = canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock)
+                    connections(4) = canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock)
+                    connections(5) = canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock)
+                    connections(6) = canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
+                    connections(7) = canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock)
+                    connections(8) = !world.isAirBlock(pos.add(1, 1, 1))
+                    connections(9) = !world.isAirBlock(pos.add(1, 1, 0))
+                    connections(10) = !world.isAirBlock(pos.add(1, 1, -1))
+                    connections(11) = !world.isAirBlock(pos.add(1, 0, 1))
+                    connections(12) = !world.isAirBlock(pos.add(1, 0, -1))
+                    connections(13) = !world.isAirBlock(pos.add(1, -1, 1))
+                    connections(14) = !world.isAirBlock(pos.add(1, -1, 0))
+                    connections(15) = !world.isAirBlock(pos.add(1, -1, -1))
+                    return connections
+                case _ => return connections
+            }
+        connections
     }
+
+    def canBlockConnect(block : Block): Boolean = {
+        block.isInstanceOf[BlockStorageExpansion]
+    }
+
+    override def canRenderInLayer(layer : EnumWorldBlockLayer) : Boolean =
+        layer == EnumWorldBlockLayer.CUTOUT || layer == EnumWorldBlockLayer.TRANSLUCENT
+
+    override def getRenderType : Int = 3
 }

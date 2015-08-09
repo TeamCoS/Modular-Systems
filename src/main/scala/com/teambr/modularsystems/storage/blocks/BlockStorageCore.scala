@@ -46,12 +46,7 @@ class BlockStorageCore extends BaseBlock(Material.wood, "storageCore", classOf[T
 
     override def registerIcons() : Array[ResourceLocation] = {
         Array[ResourceLocation](new ResourceLocation(MODID + ":blocks/" + blockName + "Side"),
-            new ResourceLocation(MODID + ":blocks/" + blockName + "Front"),
-            new ResourceLocation(MODID + ":blocks/furnaceOverlay"),
-            new ResourceLocation(MODID + ":blocks/crusherOverlay"),
-            new ResourceLocation(MODID + ":blocks/crusherFront_off"),
-            new ResourceLocation(MODID + ":blocks/crusherFront_On"),
-            new ResourceLocation(MODID + ":blocks/solidsOverlay"))
+            new ResourceLocation(MODID + ":blocks/" + blockName + "Front"))
     }
 
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
