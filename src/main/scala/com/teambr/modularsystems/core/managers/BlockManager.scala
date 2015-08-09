@@ -7,7 +7,7 @@ import com.teambr.modularsystems.crusher.tiles.TileCrusherCore
 import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import com.teambr.modularsystems.power.blocks.BlockPower
-import com.teambr.modularsystems.power.tiles.TileBankSolids
+import com.teambr.modularsystems.power.tiles.{TileBankLiquids, TileBankSolids}
 import com.teambr.modularsystems.storage.blocks.{BlockStorageExpansion, BlockStorageCore}
 import com.teambr.modularsystems.storage.tiles.{ TileStorageCrafting, TileStorageCapacity, TileStorageBasic, TileStorageCore }
 import net.minecraft.block.Block
@@ -28,6 +28,7 @@ object BlockManager {
 
     //Power
     val bankSolids = new BlockPower("bankSolids", classOf[TileBankSolids])
+    val bankLiquids = new BlockPower("bankLiquids", classOf[TileBankLiquids])
 
     //Storage
     val storageCore = new BlockStorageCore
@@ -45,6 +46,7 @@ object BlockManager {
 
         //Power
         registerBlock(bankSolids, "bankSolids", classOf[TileBankSolids])
+        registerBlock(bankLiquids, "bankLiquids", classOf[TileBankLiquids])
 
         //Storage
         registerBlock(storageCore, "storageCore", classOf[TileStorageCore])

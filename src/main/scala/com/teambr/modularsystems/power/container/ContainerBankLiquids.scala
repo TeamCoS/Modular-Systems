@@ -1,5 +1,10 @@
 package com.teambr.modularsystems.power.container
 
+import com.teambr.bookshelf.common.container.BaseContainer
+import com.teambr.modularsystems.power.tiles.TileBankLiquids
+import net.minecraft.entity.player.InventoryPlayer
+import net.minecraft.inventory.SlotFurnaceOutput
+
 /**
  * This file was created for Modular-Systems
  *
@@ -10,6 +15,10 @@ package com.teambr.modularsystems.power.container
  * @author Dyonovan
  * @since August 08, 2015
  */
-class ContainerBankLiquids {
+class ContainerBankLiquids(playerInventory: InventoryPlayer, tileEntity: TileBankLiquids)
+        extends BaseContainer(playerInventory, tileEntity) {
 
+    addSlotToContainer(new RestrictedSlot(tileEntity, 0, 25, 20))
+    addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, tileEntity, 1, 25, 50))
+    addPlayerInventorySlots(8, 84)
 }

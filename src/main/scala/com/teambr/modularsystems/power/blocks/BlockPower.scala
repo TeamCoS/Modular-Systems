@@ -9,9 +9,9 @@ import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.common.tiles.TileProxy
 import com.teambr.modularsystems.core.managers.BlockManager
-import com.teambr.modularsystems.power.container.ContainerBankSolids
-import com.teambr.modularsystems.power.gui.GuiBankSolids
-import com.teambr.modularsystems.power.tiles.{TileBankBase, TileBankSolids}
+import com.teambr.modularsystems.power.container.{ContainerBankLiquids, ContainerBankSolids}
+import com.teambr.modularsystems.power.gui.{GuiBankLiquids, GuiBankSolids}
+import com.teambr.modularsystems.power.tiles.{TileBankLiquids, TileBankBase, TileBankSolids}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
@@ -79,6 +79,8 @@ class BlockPower(name: String, tileEntity: Class[_ <: TileEntity]) extends Block
         world.getBlockState(new BlockPos(x, y, z)).getBlock match {
             case block: BlockManager.bankSolids.type =>
                 new ContainerBankSolids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids])
+            case block: BlockManager.bankLiquids.type =>
+                new ContainerBankLiquids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankLiquids])
             case _ => null
         }
     }
@@ -88,6 +90,9 @@ class BlockPower(name: String, tileEntity: Class[_ <: TileEntity]) extends Block
             case block: BlockManager.bankSolids.type =>
                 new GuiBankSolids(new ContainerBankSolids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids]),
                     player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids])
+            case block: BlockManager.bankLiquids.type =>
+                new GuiBankLiquids(new ContainerBankLiquids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankLiquids]),
+                    player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankLiquids])
             case _ => null
         }
     }

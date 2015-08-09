@@ -8,7 +8,7 @@ import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.core.managers.{BlockManager, ItemManager}
 import com.teambr.modularsystems.core.network.PacketManager
-import com.teambr.modularsystems.core.registries.{CrusherRecipeRegistry, BlockValueRegistry, FurnaceBannedBlocks}
+import com.teambr.modularsystems.core.registries.{FluidFuelValues, CrusherRecipeRegistry, BlockValueRegistry, FurnaceBannedBlocks}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Blocks
 import net.minecraft.item.Item
@@ -55,6 +55,7 @@ object ModularSystems {
         ItemManager.preInit()
         FurnaceBannedBlocks.init()
         BlockValueRegistry.init()
+        FluidFuelValues.init()
         proxy.preInit()
 
         //MinecraftForge.EVENT_BUS.register(BlockValueRegistry)
