@@ -9,8 +9,8 @@ import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.common.tiles.TileProxy
 import com.teambr.modularsystems.core.managers.BlockManager
-import com.teambr.modularsystems.power.container.ContainerSolidsBank
-import com.teambr.modularsystems.power.gui.GuiSolidsBank
+import com.teambr.modularsystems.power.container.ContainerBankSolids
+import com.teambr.modularsystems.power.gui.GuiBankSolids
 import com.teambr.modularsystems.power.tiles.{TileBankBase, TileBankSolids}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -78,7 +78,7 @@ class BlockPower(name: String, tileEntity: Class[_ <: TileEntity]) extends Block
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getBlockState(new BlockPos(x, y, z)).getBlock match {
             case block: BlockManager.bankSolids.type =>
-                new ContainerSolidsBank(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids])
+                new ContainerBankSolids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids])
             case _ => null
         }
     }
@@ -86,7 +86,7 @@ class BlockPower(name: String, tileEntity: Class[_ <: TileEntity]) extends Block
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getBlockState(new BlockPos(x, y, z)).getBlock match {
             case block: BlockManager.bankSolids.type =>
-                new GuiSolidsBank(new ContainerSolidsBank(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids]),
+                new GuiBankSolids(new ContainerBankSolids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids]),
                     player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids])
             case _ => null
         }

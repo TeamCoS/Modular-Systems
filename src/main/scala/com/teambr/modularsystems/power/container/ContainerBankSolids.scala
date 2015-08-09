@@ -14,7 +14,7 @@ import net.minecraft.entity.player.InventoryPlayer
  * @author Dyonovan
  * @since August 07, 2015
  */
-class ContainerSolidsBank(playerInventory: InventoryPlayer, tileEntity: TileBankSolids)
+class ContainerBankSolids(playerInventory: InventoryPlayer, tileEntity: TileBankSolids)
         extends BaseContainer(playerInventory, tileEntity) {
 
     addInventoryGrid(8, 20, 9)

@@ -1,6 +1,6 @@
 package com.teambr.modularsystems.power.gui
 
-import com.teambr.modularsystems.power.container.ContainerSolidsBank
+import com.teambr.modularsystems.power.container.ContainerBankSolids
 import com.teambr.modularsystems.power.tiles.TileBankSolids
 import net.minecraft.entity.player.EntityPlayer
 
@@ -14,8 +14,8 @@ import net.minecraft.entity.player.EntityPlayer
  * @author Dyonovan
  * @since August 07, 2015
  */
-class GuiSolidsBank[C <: ContainerSolidsBank](container : C, player: EntityPlayer, tileEntity: TileBankSolids)
-        extends GuiPowerBase[ContainerSolidsBank](container, tileEntity, player.inventory, 175, 165, "inventory.solidspower.title") {
+class GuiBankSolids[C <: ContainerBankSolids](container : C, player: EntityPlayer, tileEntity: TileBankSolids)
+        extends GuiPowerBase[ContainerBankSolids](container, tileEntity, player.inventory, 175, 165, "inventory.solidspower.title") {
 
     override def addComponents(): Unit = { }
 }
