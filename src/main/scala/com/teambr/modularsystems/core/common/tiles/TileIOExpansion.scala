@@ -61,9 +61,11 @@ class TileIOExpansion extends TileProxy with RedstoneAware {
 
                                         if (output) {
                                             for (i <- 0 until tile.getSizeInventory) {
-                                                if (InventoryUtils.moveItemInto(theCore, 1, tile, i, 64, dir.getOpposite, doMove = true, canStack = true) > 0) {
-                                                    worldObj.markBlockForUpdate(theCore.getPos)
-                                                    return
+                                                for(s <- theCore.getSlotsForFace(dir)) {
+                                                    if (InventoryUtils.moveItemInto(theCore, s, tile, i, 64, dir.getOpposite, doMove = true, canStack = true) > 0) {
+                                                        worldObj.markBlockForUpdate(theCore.getPos)
+                                                        return
+                                                    }
                                                 }
                                             }
                                         }
