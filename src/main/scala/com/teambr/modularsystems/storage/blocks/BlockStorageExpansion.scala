@@ -66,7 +66,7 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
         catch { // Just to be safe for those tiny chances. Not sure the cause but this will solve that issue
             case nullPoint : NullPointerException =>
                 state
-            case _ => state
+            case _ : Throwable => state
         }
     }
 

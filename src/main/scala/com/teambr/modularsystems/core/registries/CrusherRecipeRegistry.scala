@@ -14,7 +14,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
 import scala.collection.JavaConversions._
-import scala.collection.mutable.ArrayBuffer
 
 /**
  * This file was created for Modular-Systems
@@ -28,7 +27,7 @@ import scala.collection.mutable.ArrayBuffer
  */
 object CrusherRecipeRegistry {
 
-    var crusherRecipes = new ArrayBuffer[CrusherRecipes]()
+    var crusherRecipes = new util.ArrayList[CrusherRecipes]()
 
     /**
      * Add the values
@@ -46,11 +45,10 @@ object CrusherRecipeRegistry {
      */
     def loadFromFile(): Boolean = {
         LogHelper.info("Loading Block Values...")
-        val crusherRecipesTemp = JsonUtils.readFromJson[util.ArrayList[CrusherRecipes]](new TypeToken[util.ArrayList[CrusherRecipes]]() {
-        }, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "crusherRecipes.json").toList
-        crusherRecipes = crusherRecipesTemp.to[ArrayBuffer]
+        crusherRecipes = JsonUtils.readFromJson[util.ArrayList[CrusherRecipes]](new TypeToken[util.ArrayList[CrusherRecipes]]() {
+        }, ModularSystems.configFolderLocation + File.separator + "Registries" + File.separator + "crusherRecipes.json")
         if (crusherRecipes == null)
-            crusherRecipes = new ArrayBuffer[CrusherRecipes]()
+            crusherRecipes = new util.ArrayList[CrusherRecipes]()
         crusherRecipes.nonEmpty
     }
 
@@ -100,9 +98,34 @@ object CrusherRecipeRegistry {
                 }
             }
         }
-        //TODO add more things
-        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.lapis_ore)),
+
+        crusherRecipes.add(new CrusherRecipes("oreLapis",
             getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Items.blaze_rod)),
+            getItemStackString(new ItemStack(Items.blaze_powder)), 5, getItemStackString(new ItemStack(Items.blaze_powder))))
+        crusherRecipes.add(new CrusherRecipes("cobblestone",
+            getItemStackString(new ItemStack(Blocks.sand)), 1, ""))
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Items.bone)),
+            getItemStackString(new ItemStack(Items.dye, 1, 15)), 4, getItemStackString(new ItemStack(Items.dye, 1, 15))))
+        crusherRecipes.add(new CrusherRecipes("oreQuartz",
+            getItemStackString(new ItemStack(Items.quartz)), 3, getItemStackString(new ItemStack(Items.quartz))))
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.clay)),
+            getItemStackString(new ItemStack(Items.clay_ball)), 4, ""))
+        crusherRecipes.add(new CrusherRecipes("oreDiamond",
+            getItemStackString(new ItemStack(Items.diamond)), 2, getItemStackString(new ItemStack(Items.diamond))))
+        crusherRecipes.add(new CrusherRecipes("oreEmerald",
+            getItemStackString(new ItemStack(Items.emerald)), 2, getItemStackString(new ItemStack(Items.emerald))))
+        crusherRecipes.add(new CrusherRecipes("glowstone",
+            getItemStackString(new ItemStack(Items.glowstone_dust)), 3, getItemStackString(new ItemStack(Items.glowstone_dust))))
+        crusherRecipes.add(new CrusherRecipes("oreCoal",
+            getItemStackString(new ItemStack(Items.coal, 1, 0)), 3, getItemStackString(new ItemStack(Items.coal, 1, 0))))
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.wool)),
+            getItemStackString(new ItemStack(Items.string)), 3, getItemStackString(new ItemStack(Items.string))))
+        crusherRecipes.add(new CrusherRecipes("blockGlass",
+            getItemStackString(new ItemStack(Blocks.sand)), 1, ""))
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.gravel)),
+            getItemStackString(new ItemStack(Items.flint)), 1, getItemStackString(new ItemStack(Items.flint))))
+
 
         saveToFile()
         LogHelper.info("Finished adding " + crusherRecipes.size + " Crusher Recipes")
@@ -126,20 +149,21 @@ object CrusherRecipeRegistry {
      * Get the output for an input
      */
     def getOutput(itemStack: ItemStack): Option[(ItemStack, ItemStack)] = {
-        //val list = crusherRecipes.toSet
-        for (i <- crusherRecipes) {
-            val name = i.input.split(":")
-            val stackOut = getItemStackFromString(i.output)
-            val stackExtra = getItemStackFromString(i.outputSecondary)
-            name.length match {
-                case 3 =>
-                    val stackIn = getItemStackFromString(i.input)
-                    if (stackIn != null && itemStack.isItemEqual(stackIn)) {
+        if (itemStack != null) {
+            for (i <- crusherRecipes) {
+                val name = i.input.split(":")
+                val stackOut = getItemStackFromString(i.output)
+                val stackExtra = getItemStackFromString(i.outputSecondary)
+                name.length match {
+                    case 3 =>
+                        val stackIn = getItemStackFromString(i.input)
+                        if (stackIn != null && itemStack.isItemEqual(stackIn)) {
                             return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
-                    }
-                case 1 =>
-                    if (checkOreDict(i.input, itemStack))
-                        return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
+                        }
+                    case 1 =>
+                        if (checkOreDict(i.input, itemStack))
+                            return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
+                }
             }
         }
         None

@@ -87,7 +87,7 @@ class TileCrusherCore extends AbstractCore {
                 if (block == BlockManager.crusherExpansion) count += 1
             }
         }
-        count * 10
+        if (count * 10 > 100) 100 else count * 10
     }
 
     /**
