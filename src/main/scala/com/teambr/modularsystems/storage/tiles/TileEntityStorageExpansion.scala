@@ -35,13 +35,13 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         for (child <- children) {
             worldObj.getTileEntity(child) match {
                 case expansion: TileEntityStorageExpansion => expansion.removeFromNetwork(true)
+                    worldObj.markBlockForUpdate(pos)
                 case _ =>
             }
         }
         removedFromNetwork()
         core = None
         children.clear()
-        worldObj.markBlockForUpdate(pos)
     }
 
     /**
@@ -72,7 +72,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
     override def onServerTick(): Unit = {
         if (core.isEmpty && worldObj.rand.nextInt(40) == 0)
             searchAndConnect()
-        else if (getCore.isEmpty && worldObj.rand.nextInt(20) == 0)
+        else if (getCore.isEmpty && worldObj.rand.nextInt(40) == 0)
             removeFromNetwork(true)
     }
 

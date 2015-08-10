@@ -59,8 +59,15 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
     }
 
     override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
-        val hasConnection : java.lang.Boolean = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined
-        new StorageState(hasConnection, pos, world, state.getBlock)
+        try {
+            val hasConnection : java.lang.Boolean = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined
+            new StorageState(hasConnection, pos, world, state.getBlock)
+        }
+        catch { // Just to be safe for those tiny chances. Not sure the cause but this will solve that issue
+            case nullPoint : NullPointerException =>
+                state
+            case _ => state
+        }
     }
 
     def getConnectionArrayForFace(world : IBlockAccess, pos : BlockPos,  facing : EnumFacing): Array[Boolean] = {
