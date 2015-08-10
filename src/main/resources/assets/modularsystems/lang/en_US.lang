@@ -26,6 +26,7 @@ tile.modularsystems:proxy.name=Modular Furnace Dummy
 tile.modularsystems:ioExpansion.name=Modular Systems I/O
 tile.modularsystems:redstoneIn.name=Modular Systems Redstone Input
 tile.modularsystems:redstoneOut.name=Modular Systems Redstone Output
+tile.modularsystems:crusherExpansion.name=Modular Crusher Seconday Output Expansion
 
 tile.modularsystems:bankRF.name=RedstoneFlux Power Bank
 tile.modularsystems:bankSolids.name=Solid Fuel Power Bank

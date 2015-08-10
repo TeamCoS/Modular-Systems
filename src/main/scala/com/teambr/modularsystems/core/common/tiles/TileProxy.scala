@@ -1,9 +1,12 @@
 package com.teambr.modularsystems.core.common.tiles
 
+import com.teambr.bookshelf.api.waila.IWaila
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
 import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.crusher.tiles.TileCrusherCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
+import mcp.mobius.waila.api.ITaggedList.ITipList
+import mcp.mobius.waila.api.{IWailaDataAccessorServer, IWailaConfigHandler, IWailaDataAccessor}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
@@ -12,6 +15,7 @@ import net.minecraft.init.Blocks
 import net.minecraft.inventory.{ ISidedInventory, IInventory }
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{ EnumFacing, BlockPos, IChatComponent }
 
 /**
@@ -24,7 +28,7 @@ import net.minecraft.util.{ EnumFacing, BlockPos, IChatComponent }
  * @author Paul Davis <pauljoda>
  * @since August 06, 2015
  */
-class TileProxy extends UpdatingTile with IInventory with ISidedInventory {
+class TileProxy extends UpdatingTile with IInventory with ISidedInventory with IWaila {
     var coreLocation : Option[BlockPos] = None
     var storedBlock : Int = -1
     var metaData : Int = 0
@@ -234,4 +238,19 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory {
             case _ => false
         }
     }
+
+    override def returnWailaBody(tipList: ITipList): Unit = tipList
+
+    override def returnWailaTail(tipList: ITipList): Unit = tipList
+
+    override def returnNBTData(te: TileEntity, tag: NBTTagCompound, accessor: IWailaDataAccessorServer): NBTTagCompound = tag
+
+    override def returnWailaStack(accessor: IWailaDataAccessor, config: IWailaConfigHandler): ItemStack = {
+        if (getStoredBlock != Blocks.air) {
+            return new ItemStack(getStoredBlock, 1, getBlockMetadata)
+        }
+        null
+    }
+
+    override def returnWailaHead(tipList: ITipList): Unit = tipList
 }
