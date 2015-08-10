@@ -1,12 +1,14 @@
 package com.teambr.modularsystems.core.managers
 
+import java.awt.Color
+
 import com.teambr.modularsystems.core.common.blocks.{ BlockCoreExpansion, BlockProxy }
 import com.teambr.modularsystems.core.common.tiles.{ TileIOExpansion, TileProxy }
 import com.teambr.modularsystems.crusher.blocks.BlockCrusherCore
 import com.teambr.modularsystems.crusher.tiles.{TileCrusherExpansion, TileCrusherCore}
 import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
-import com.teambr.modularsystems.power.tiles.{TileBankLiquids, TileBankSolids}
+import com.teambr.modularsystems.power.tiles.{TileBankRF, TileBankLiquids, TileBankSolids}
 import com.teambr.modularsystems.storage.blocks.{BlockStorageCore, BlockStorageExpansion}
 import com.teambr.modularsystems.storage.tiles.{TileStorageBasic, TileStorageCapacity, TileStorageCore, TileStorageCrafting}
 import net.minecraft.block.Block
@@ -28,6 +30,7 @@ object BlockManager {
     //Power
     val bankSolids = new BlockCoreExpansion("bankSolids", classOf[TileBankSolids], 0x4A390E)
     val bankLiquids = new BlockCoreExpansion("bankLiquids", classOf[TileBankLiquids], 0x215045)
+    val bankRF = new BlockCoreExpansion("bankRF", classOf[TileBankRF], new Color(174, 0, 36).getRGB)
 
     //Storage
     val storageCore = new BlockStorageCore
@@ -50,6 +53,7 @@ object BlockManager {
         //Power
         registerBlock(bankSolids, "bankSolids", classOf[TileBankSolids])
         registerBlock(bankLiquids, "bankLiquids", classOf[TileBankLiquids])
+        registerBlock(bankRF, "bankRF", classOf[TileBankRF])
 
         //Storage
         registerBlock(storageCore, "storageCore", classOf[TileStorageCore])

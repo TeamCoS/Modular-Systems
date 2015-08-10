@@ -15,4 +15,6 @@ object Reference {
     final val MOD_ID       = "modularsystems"
     final val VERSION      = "@VERSION@"
     final val DEPENDENCIES = "required-after:bookshelf;required-after:NotEnoughItems"
+
+    final val POWER        = "Power Bank Settings"
 }

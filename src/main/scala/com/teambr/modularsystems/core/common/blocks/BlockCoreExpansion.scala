@@ -8,11 +8,11 @@ import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.client.gui.GuiIOExpansion
-import com.teambr.modularsystems.core.common.tiles.{ TileIOExpansion, TileProxy }
+import com.teambr.modularsystems.core.common.tiles.{TileIOExpansion, TileProxy}
 import com.teambr.modularsystems.core.managers.BlockManager
-import com.teambr.modularsystems.power.container.{ ContainerBankLiquids, ContainerBankSolids }
-import com.teambr.modularsystems.power.gui.{ GuiBankLiquids, GuiBankSolids }
-import com.teambr.modularsystems.power.tiles.{ TileBankBase, TileBankLiquids, TileBankSolids }
+import com.teambr.modularsystems.power.container.{ContainerBankLiquids, ContainerBankSolids}
+import com.teambr.modularsystems.power.gui.{GuiBankLiquids, GuiBankRF, GuiBankSolids}
+import com.teambr.modularsystems.power.tiles.{TileBankBase, TileBankLiquids, TileBankRF, TileBankSolids}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
@@ -20,8 +20,8 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{ BlockPos, EnumFacing }
-import net.minecraft.world.{ IBlockAccess, World }
+import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.world.{IBlockAccess, World}
 
 /**
  * This file was created for Modular-Systems
@@ -95,6 +95,8 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
                 new ContainerBankSolids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankSolids])
             case block: BlockManager.bankLiquids.type =>
                 new ContainerBankLiquids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankLiquids])
+            case block: BlockManager.bankRF.type =>
+                new ContainerGeneric
             case block : BlockManager.ioExpansion.type =>
                 new ContainerGeneric
             case _ => null
@@ -109,6 +111,9 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
             case block: BlockManager.bankLiquids.type =>
                 new GuiBankLiquids(new ContainerBankLiquids(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankLiquids]),
                     player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankLiquids])
+            case block: BlockManager.bankRF.type =>
+                new GuiBankRF(new ContainerGeneric(),
+                    player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileBankRF])
             case block : BlockManager.ioExpansion.type =>
                 new GuiIOExpansion(world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileIOExpansion])
             case _ => null

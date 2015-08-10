@@ -8,7 +8,7 @@ import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.core.managers.{BlockManager, ItemManager}
 import com.teambr.modularsystems.core.network.PacketManager
-import com.teambr.modularsystems.core.registries.{FluidFuelValues, CrusherRecipeRegistry, BlockValueRegistry, FurnaceBannedBlocks}
+import com.teambr.modularsystems.core.registries._
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Blocks
 import net.minecraft.item.Item
@@ -51,6 +51,7 @@ object ModularSystems {
 
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {
         configFolderLocation = event.getModConfigurationDirectory.getAbsolutePath + File.separator + "Modular-Systems"
+        ConfigRegistry.preInit()
         BlockManager.preInit()
         ItemManager.preInit()
         FurnaceBannedBlocks.init()
