@@ -76,6 +76,8 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
                 Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry ("modularsystems:blocks/solidsOverlay")
             case BlockManager.bankLiquids =>
                 Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/liquidsOverlay")
+            case BlockManager.bankRF =>
+                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/rfOverlay")
             case BlockManager.crusherExpansion =>
                 Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/crusherExpansionOverlay")
             case BlockManager.ioExpansion =>

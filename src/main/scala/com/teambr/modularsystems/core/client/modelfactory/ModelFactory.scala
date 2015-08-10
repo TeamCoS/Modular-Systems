@@ -71,6 +71,7 @@ class ModelFactory {
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/crusherOverlay"))
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/solidsOverlay"))
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/liquidsOverlay"))
+        event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/rfOverlay"))
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/crusherExpansionOverlay"))
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/ioExpansionOverlay"))
 
@@ -125,6 +126,10 @@ class ModelFactory {
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "normal"), new ModelCoreExpansion(BlockManager.bankLiquids, false))
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "inventory"), new ModelCoreExpansion(BlockManager.bankLiquids, true))
         itemModelMesher.register(Item.getItemFromBlock(BlockManager.bankLiquids), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "bankLiquids", "inventory"))
+
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankRF", "normal"), new ModelCoreExpansion(BlockManager.bankRF, false))
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "bankRF", "inventory"), new ModelCoreExpansion(BlockManager.bankRF, true))
+        itemModelMesher.register(Item.getItemFromBlock(BlockManager.bankRF), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "bankRF", "inventory"))
 
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "ioExpansion", "normal"), new ModelCoreExpansion(BlockManager.ioExpansion, false))
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "ioExpansion", "inventory"), new ModelCoreExpansion(BlockManager.ioExpansion, true))

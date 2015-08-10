@@ -67,7 +67,7 @@ class ModelCoreExpansion extends ISmartBlockModel with ISmartItemModel {
             for(modelRot <- List(ModelRotation.X0_Y0, ModelRotation.X0_Y90, ModelRotation.X0_Y180, ModelRotation.X0_Y270)) {
 
                 block match {
-                    case BlockManager.bankLiquids | BlockManager.bankSolids =>
+                    case BlockManager.bankLiquids | BlockManager.bankSolids | BlockManager.bankRF =>
                         //The Bar holder
                         bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (6.0F, 3.0F, 1.0F), new Vector3f (10.0F, 4.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
                         bakedQuads.add (faceBakery.makeBakedQuad (new Vector3f (6.0F, 12.0F, 1.0F), new Vector3f (10.0F, 13.0F, 2.0F), face, barTexture, enumFacing, modelRot, null, scale, true) )
