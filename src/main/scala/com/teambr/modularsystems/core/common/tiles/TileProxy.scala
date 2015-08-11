@@ -239,6 +239,10 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with I
         }
     }
 
+    /*******************************************************************************************************************
+      ************************************************ Inventory methods ***********************************************
+      ******************************************************************************************************************/
+
     override def returnWailaBody(tipList: ITipList): Unit = tipList
 
     override def returnWailaTail(tipList: ITipList): Unit = tipList

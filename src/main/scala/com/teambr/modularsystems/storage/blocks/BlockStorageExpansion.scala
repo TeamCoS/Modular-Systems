@@ -1,17 +1,21 @@
 package com.teambr.modularsystems.storage.blocks
 
 import com.teambr.bookshelf.Bookshelf
+import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
-import com.teambr.modularsystems.storage.tiles.{ TileEntityStorageExpansion, TileStorageCore }
+import com.teambr.modularsystems.core.managers.BlockManager
+import com.teambr.modularsystems.storage.container.ContainerStorageRemote
+import com.teambr.modularsystems.storage.gui.GuiStorageRemote
+import com.teambr.modularsystems.storage.tiles.{TileStorageRemote, TileEntityStorageExpansion, TileStorageCore}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
-import net.minecraft.block.state.{ BlockState, IBlockState }
+import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{ EnumWorldBlockLayer, BlockPos, EnumFacing }
-import net.minecraft.world.{ IBlockAccess, World }
-import net.minecraftforge.common.property.{ ExtendedBlockState, IUnlistedProperty }
+import net.minecraft.util.{EnumWorldBlockLayer, BlockPos, EnumFacing}
+import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 
 /**
  * Modular-Systems
@@ -24,11 +28,11 @@ import net.minecraftforge.common.property.{ ExtendedBlockState, IUnlistedPropert
  * @param tileEntity Should the block have a tile, pass the class
  */
 class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class[_ <: TileEntity])
-        extends BaseBlock(Material.wood, name, tileEntity: Class[_ <: TileEntity]) {
+        extends BaseBlock(Material.wood, name, tileEntity: Class[_ <: TileEntity]) with OpensGui {
 
-    override def onBlockAdded(world: World, pos: BlockPos, state : IBlockState) : Unit = {
+    override def onBlockAdded(world: World, pos: BlockPos, state: IBlockState): Unit = {
         world.getTileEntity(pos) match {
-            case tile : TileEntityStorageExpansion =>
+            case tile: TileEntityStorageExpansion =>
                 tile.searchAndConnect()
             case t =>
         }
@@ -36,9 +40,14 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
         if (world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined) {
-            val corePos = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.get.getPos
-            if (world.getTileEntity(corePos).asInstanceOf[TileStorageCore].canOpen(player)) {
-                player.openGui(Bookshelf, 0, world, corePos.getX, corePos.getY, corePos.getZ)
+            val tile = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion]
+            if (player.isSneaking) {
+                player.openGui(Bookshelf, 0, world, pos.getX, pos.getY, pos.getZ)
+            } else {
+                val corePos = tile.getCore.get.getPos
+                if (world.getTileEntity(corePos).asInstanceOf[TileStorageCore].canOpen(player)) {
+                    player.openGui(Bookshelf, 0, world, corePos.getX, corePos.getY, corePos.getZ)
+                }
             }
         }
         true
@@ -52,28 +61,29 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
     /**
      * Used to say what our block state is
      */
-    override def createBlockState() : BlockState = {
-        val listed : Array[IProperty] = new Array(0)
+    override def createBlockState(): BlockState = {
+        val listed: Array[IProperty] = new Array(0)
         val unlisted = new Array[IUnlistedProperty[_]](0)
         new ExtendedBlockState(this, listed, unlisted)
     }
 
-    override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
+    override def getExtendedState(state: IBlockState, world: IBlockAccess, pos: BlockPos): IBlockState = {
         try {
-            val hasConnection : java.lang.Boolean = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined
+            val hasConnection: java.lang.Boolean = world.getTileEntity(pos).asInstanceOf[TileEntityStorageExpansion].getCore.isDefined
             new StorageState(hasConnection, pos, world, state.getBlock)
         }
-        catch { // Just to be safe for those tiny chances. Not sure the cause but this will solve that issue
-            case nullPoint : NullPointerException =>
+        catch {
+            // Just to be safe for those tiny chances. Not sure the cause but this will solve that issue
+            case nullPoint: NullPointerException =>
                 state
-            case _ : Throwable => state
+            case _: Throwable => state
         }
     }
 
-    def getConnectionArrayForFace(world : IBlockAccess, pos : BlockPos,  facing : EnumFacing): Array[Boolean] = {
+    def getConnectionArrayForFace(world: IBlockAccess, pos: BlockPos, facing: EnumFacing): Array[Boolean] = {
         val connections = new Array[Boolean](16)
         if (world.isAirBlock(pos.offset(facing)) || (!world.getBlockState(pos.offset(facing)).getBlock.isOpaqueCube &&
-                                     !canBlockConnect(world.getBlockState(pos.offset(facing)).getBlock))) {
+                !canBlockConnect(world.getBlockState(pos.offset(facing)).getBlock))) {
             facing match {
                 case EnumFacing.UP =>
                     connections(0) = canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock)
@@ -189,12 +199,28 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
         connections
     }
 
-    def canBlockConnect(block : Block): Boolean = {
+    def canBlockConnect(block: Block): Boolean = {
         block.isInstanceOf[BlockStorageExpansion]
     }
 
-    override def canRenderInLayer(layer : EnumWorldBlockLayer) : Boolean =
+    override def canRenderInLayer(layer: EnumWorldBlockLayer): Boolean =
         layer == EnumWorldBlockLayer.CUTOUT || layer == EnumWorldBlockLayer.TRANSLUCENT
 
-    override def getRenderType : Int = 3
+    override def getRenderType: Int = 3
+
+    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
+        world.getBlockState(new BlockPos(x, y, z)).getBlock match {
+            case block: BlockManager.storageRemote.type =>
+                new ContainerStorageRemote(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileStorageRemote])
+            case _ => null
+        }
+    }
+
+    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
+        world.getBlockState(new BlockPos(x, y, z)).getBlock match {
+            case block: BlockManager.storageRemote.type =>
+                new GuiStorageRemote(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileStorageRemote])
+            case _ => null
+        }
+    }
 }

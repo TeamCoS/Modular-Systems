@@ -79,6 +79,8 @@ class ModelStorageExpansion extends ISmartBlockModel with ISmartItemModel {
                 ModelFactory.STORAGE_CAPACITY_TEXTURE
             case BlockManager.storageCrafting =>
                 ModelFactory.STORAGE_CRAFTING_TEXTURE
+            case BlockManager.storageRemote =>
+                ModelFactory.STORAGE_REMOTE_TEXTURE
             case _ =>
                 ModelFactory.STORAGE_CAPACITY_TEXTURE
         }

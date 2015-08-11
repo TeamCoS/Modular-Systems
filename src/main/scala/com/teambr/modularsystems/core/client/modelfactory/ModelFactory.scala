@@ -150,5 +150,9 @@ class ModelFactory {
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageCrafting", "normal"), new ModelStorageExpansion())
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageCrafting", "inventory"), new ModelStorageExpansion())
         itemModelMesher.register(Item.getItemFromBlock(BlockManager.storageCrafting), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "storageCrafting", "inventory"))
+
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageRemote", "normal"), new ModelStorageExpansion())
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageRemote", "inventory"), new ModelStorageExpansion())
+        itemModelMesher.register(Item.getItemFromBlock(BlockManager.storageRemote), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "storageRemote", "inventory"))
     }
 }
