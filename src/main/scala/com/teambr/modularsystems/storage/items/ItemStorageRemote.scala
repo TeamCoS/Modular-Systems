@@ -53,7 +53,7 @@ class ItemStorageRemote extends BaseItem("itemStorageRemote", 1) with IEnergyCon
     @SideOnly(Side.CLIENT)
     override def getSubItems(item: Item, tab: CreativeTabs, subItems: java.util.List[_]): Unit = {
         var is = new ItemStack(this)
-        setFull(is)
+        setEnergy(is, CAPACITY)
         subItems.asInstanceOf[java.util.List[ItemStack]].add(is)
 
         is = new ItemStack(this)
@@ -110,10 +110,6 @@ class ItemStorageRemote extends BaseItem("itemStorageRemote", 1) with IEnergyCon
         val r = getEnergyStored(stack).toFloat / getMaxEnergyStored(stack)
         val res = 16 - (r * 16).toInt
         stack.setItemDamage(res)
-    }
-
-    private def setFull(container: ItemStack): Unit = {
-        setEnergy(container, CAPACITY)
     }
 
     override def extractEnergy(container: ItemStack, maxExtract: Int, simulate: Boolean): Int = {
