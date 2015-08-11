@@ -34,10 +34,11 @@ object BlockManager {
 
     //Storage
     val storageCore = new BlockStorageCore
-    val storageBasic = new BlockStorageExpansion("storageBasic", List(), classOf[TileStorageBasic])
-    val storageCapacity = new BlockStorageExpansion("storageCapacity", List(), classOf[TileStorageCapacity])
-    val storageCrafting = new BlockStorageExpansion("storageCrafting", List(), classOf[TileStorageCrafting])
-    val storageRemote = new BlockStorageExpansion("storageRemote", List(), classOf[TileStorageRemote])
+    val storageBasic = new BlockStorageExpansion("storageBasic", classOf[TileStorageBasic])
+    val storageCapacity = new BlockStorageExpansion("storageCapacity", classOf[TileStorageCapacity])
+    val storageCrafting = new BlockStorageExpansion("storageCrafting", classOf[TileStorageCrafting])
+    val storageRemote = new BlockStorageExpansion("storageRemote", classOf[TileStorageRemote])
+    val storageHopping = new BlockStorageExpansion("storageHopping", classOf[TileStorageHopping])
 
     //Expansions
     val crusherExpansion = new BlockCoreExpansion("crusherExpansion", classOf[TileCrusherExpansion], 0x555555)
@@ -62,6 +63,7 @@ object BlockManager {
         registerBlock(storageCapacity, "storageCapacity", classOf[TileStorageCapacity])
         registerBlock(storageCrafting, "storageCrafting", classOf[TileStorageCrafting])
         registerBlock(storageRemote, "storageRemote", classOf[TileStorageRemote])
+        registerBlock(storageHopping, "storageHopping", classOf[TileStorageHopping])
 
         //Expansions
         registerBlock(crusherExpansion, "crusherExpansion", classOf[TileCrusherExpansion])

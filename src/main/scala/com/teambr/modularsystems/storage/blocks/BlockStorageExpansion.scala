@@ -1,12 +1,13 @@
 package com.teambr.modularsystems.storage.blocks
 
 import com.teambr.bookshelf.Bookshelf
+import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
 import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.storage.container.ContainerStorageRemote
-import com.teambr.modularsystems.storage.gui.GuiStorageRemote
-import com.teambr.modularsystems.storage.tiles.{TileStorageRemote, TileEntityStorageExpansion, TileStorageCore}
+import com.teambr.modularsystems.storage.gui.{ GuiStorageHopping, GuiStorageRemote }
+import com.teambr.modularsystems.storage.tiles.{ TileStorageHopping, TileStorageRemote, TileEntityStorageExpansion, TileStorageCore }
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
@@ -24,10 +25,9 @@ import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty
  * Used as a common class for all blocks. Makes things a bit easier
  *
  * @param name The unlocalized name of the block
- * @param icons List of block side icons, up to 6. Less than 6 will default to just blockName
  * @param tileEntity Should the block have a tile, pass the class
  */
-class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class[_ <: TileEntity])
+class BlockStorageExpansion(name: String, tileEntity: Class[_ <: TileEntity])
         extends BaseBlock(Material.wood, name, tileEntity: Class[_ <: TileEntity]) with OpensGui {
 
     override def onBlockAdded(world: World, pos: BlockPos, state: IBlockState): Unit = {
@@ -74,8 +74,7 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
         }
         catch {
             // Just to be safe for those tiny chances. Not sure the cause but this will solve that issue
-            case nullPoint: NullPointerException =>
-                state
+            case nullPoint: NullPointerException => state
             case _: Throwable => state
         }
     }
@@ -212,6 +211,8 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
         world.getBlockState(new BlockPos(x, y, z)).getBlock match {
             case block: BlockManager.storageRemote.type =>
                 new ContainerStorageRemote(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileStorageRemote])
+            case block : BlockManager.storageHopping.type  =>
+                new ContainerGeneric
             case _ => null
         }
     }
@@ -220,6 +221,8 @@ class BlockStorageExpansion(name: String, icons: List[String], tileEntity: Class
         world.getBlockState(new BlockPos(x, y, z)).getBlock match {
             case block: BlockManager.storageRemote.type =>
                 new GuiStorageRemote(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileStorageRemote])
+            case block : BlockManager.storageHopping.type =>
+                new GuiStorageHopping(world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileStorageHopping])
             case _ => null
         }
     }
