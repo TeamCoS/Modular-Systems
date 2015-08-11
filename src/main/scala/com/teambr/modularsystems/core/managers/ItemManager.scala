@@ -2,7 +2,8 @@ package com.teambr.modularsystems.core.managers
 
 import com.teambr.modularsystems.core.common.items.BaseItem
 import com.teambr.modularsystems.storage.items.ItemStorageRemote
-import net.minecraft.item.Item
+import net.minecraft.init.Items
+import net.minecraft.item.{ ItemStack, Item }
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
@@ -24,7 +25,9 @@ object ItemManager {
         OreDictionary.getOres("dustIron").isEmpty match {
             case true =>
                 registerItem(dustGold, "dustGold", "dustGold")
+                GameRegistry.addSmelting(dustIron, new ItemStack(Items.iron_ingot), 1.0F)
                 registerItem(dustIron, "dustIron", "dustIron")
+                GameRegistry.addSmelting(dustGold, new ItemStack(Items.gold_ingot), 2.0F)
             case _ =>
         }
     }

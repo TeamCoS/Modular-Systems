@@ -2,6 +2,7 @@ package com.teambr.modularsystems.storage.items
 
 import cofh.api.energy.IEnergyContainerItem
 import com.teambr.bookshelf.Bookshelf
+import com.teambr.bookshelf.client.gui.{ GuiColor, GuiTextFormat }
 import com.teambr.modularsystems.core.common.items.BaseItem
 import com.teambr.modularsystems.storage.tiles.TileStorageRemote
 import net.minecraft.creativetab.CreativeTabs
@@ -65,13 +66,17 @@ class ItemStorageRemote extends BaseItem("itemStorageRemote", 1) with IEnergyCon
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[_], boolean: Boolean): Unit = {
         if (stack.hasTagCompound) {
             if (stack.getTagCompound.getLong("Core") != 0) {
-                list.asInstanceOf[java.util.List[String]].add("Receiver Location: " + BlockPos.fromLong(stack.getTagCompound.getLong("Core")).toString)
-            } else list.asInstanceOf[java.util.List[String]].add("Unlinked")
+                val position = BlockPos.fromLong(stack.getTagCompound.getLong("Core"))
+                list.asInstanceOf[java.util.List[String]].add(GuiTextFormat.BOLD + "" +  GuiColor.GREEN +  "Receiver Location:")
+                list.asInstanceOf[java.util.List[String]].add("  " + GuiTextFormat.ITALICS + "" +  GuiColor.YELLOW +  "X: " + GuiColor.WHITE + position.getX)
+                list.asInstanceOf[java.util.List[String]].add("  " + GuiTextFormat.ITALICS + "" +  GuiColor.YELLOW +  "Y: " + GuiColor.WHITE + position.getY)
+                list.asInstanceOf[java.util.List[String]].add("  " + GuiTextFormat.ITALICS + "" +  GuiColor.YELLOW +  "Z: " + GuiColor.WHITE + position.getZ)
 
+            } else list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "Unlinked")
             if (stack.getTagCompound.getInteger("Energy") != 0) {
-                list.asInstanceOf[java.util.List[String]].add(stack.getTagCompound.getInteger("Energy") + "/" + CAPACITY + " RF")
-            } else list.asInstanceOf[java.util.List[String]].add("0/" + CAPACITY + " RF")
-        } else list.asInstanceOf[java.util.List[String]].add("Unlinked")
+                list.asInstanceOf[java.util.List[String]].add(GuiColor.ORANGE + (stack.getTagCompound.getInteger("Energy") + "/" + CAPACITY + " RF"))
+            } else list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "0/" + CAPACITY + " RF")
+        } else list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "Unlinked")
     }
 
     private def getCoords(tag: NBTTagCompound): Option[BlockPos] = {
