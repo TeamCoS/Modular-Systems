@@ -97,7 +97,9 @@ class ItemStorageRemote extends BaseItem("itemStorageRemote", 1) with IEnergyCon
     }
 
     private def setEnergy(container: ItemStack, energy: Int): Unit = {
-        val tag = container.getTagCompound
+        var tag = new NBTTagCompound
+        if (container.getTagCompound != null)
+            tag = container.getTagCompound
         tag.setInteger("Energy", energy)
 
         container.setTagCompound(tag)
