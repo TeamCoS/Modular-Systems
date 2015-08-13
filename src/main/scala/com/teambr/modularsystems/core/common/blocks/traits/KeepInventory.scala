@@ -1,9 +1,11 @@
 package com.teambr.modularsystems.core.common.blocks.traits
 
+import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ Item, ItemStack }
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
@@ -12,7 +14,7 @@ import net.minecraft.world.World
 
 import scala.util.Random
 
-trait KeepInventory extends Block {
+trait KeepInventory extends Block with DropsItems {
 
     /**
      * Override this is you want to do a specific tag write to the item
@@ -20,16 +22,20 @@ trait KeepInventory extends Block {
      */
     def manualOverride(tile : TileEntity, stack : ItemStack, tag : NBTTagCompound) : Boolean = false
 
-    override def breakBlock(world: World, pos: BlockPos, state: IBlockState): Unit = {
-        world.getTileEntity(pos) match {
-            case tile: TileEntity =>
-                val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
-                val tag = new NBTTagCompound
-                if(!manualOverride(tile, item, tag)) //If the manual override doesn't do anything, just write the whole tag
-                    tile.writeToNBT(tag)
-                item.setTagCompound(tag) //Set the tile's tag to the stack
-                dropItem(world, item, pos) //Drop it
-            case _ =>
+    override def onBlockHarvested(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer): Unit = {
+        if (!player.capabilities.isCreativeMode) {
+            world.getTileEntity(pos) match {
+                case tile: TileEntity =>
+                    val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
+                    val tag = new NBTTagCompound
+                    if (!manualOverride(tile, item, tag)) //If the manual override doesn't do anything, just write the whole tag
+                        tile.writeToNBT(tag)
+                    item.setTagCompound(tag) //Set the tile's tag to the stack
+                    dropItem(world, item, pos) //Drop it
+                case _ =>
+            }
+        } else {
+            super[DropsItems].breakBlock(world, pos, state)
         }
     }
 

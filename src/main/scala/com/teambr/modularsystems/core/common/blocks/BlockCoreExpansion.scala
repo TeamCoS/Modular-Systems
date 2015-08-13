@@ -65,12 +65,15 @@ with KeepInventory with OpensGui {
     }
 
     override def breakBlock(world: World, pos: BlockPos, state: IBlockState): Unit = {
-        val core = world.getTileEntity(pos).asInstanceOf[TileProxy].getCore
-        if (core.isDefined)
-            core.get.deconstructMultiblock()
+        world.getTileEntity(pos) match {
+            case tile: TileProxy =>
+                val core = tile.getCore
+                if (core.isDefined)
+                    core.get.deconstructMultiblock()
+            case _ =>
+        }
 
-        //super[DropsItems].breakBlock(world, pos, state)
-        super[KeepInventory].breakBlock(world, pos, state)
+        //super[KeepInventory].breakBlock(world, pos, state)
         super[BlockProxy].breakBlock(world, pos, state)
     }
 

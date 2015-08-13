@@ -243,9 +243,9 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with I
       ************************************************ Inventory methods ***********************************************
       ******************************************************************************************************************/
 
-    override def returnWailaBody(tipList: ITipList): Unit = tipList
+    override def returnWailaBody(tipList: ITipList): Unit = {}
 
-    override def returnWailaTail(tipList: ITipList): Unit = tipList
+    override def returnWailaTail(tipList: ITipList): Unit = {}
 
     override def returnNBTData(te: TileEntity, tag: NBTTagCompound, accessor: IWailaDataAccessorServer): NBTTagCompound = tag
 
@@ -256,5 +256,5 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with I
         null
     }
 
-    override def returnWailaHead(tipList: ITipList): Unit = tipList
+    override def returnWailaHead(tipList: ITipList): Unit = {}
 }
