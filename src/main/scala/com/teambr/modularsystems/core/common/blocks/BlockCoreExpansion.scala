@@ -1,28 +1,26 @@
 package com.teambr.modularsystems.core.common.blocks
 
-import java.util.Random
-
 import com.teambr.bookshelf.Bookshelf
-import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.client.gui.GuiIOExpansion
 import com.teambr.modularsystems.core.common.blocks.traits.KeepInventory
-import com.teambr.modularsystems.core.common.tiles.{TileIOExpansion, TileProxy}
+import com.teambr.modularsystems.core.common.tiles.{ TileIOExpansion, TileProxy }
 import com.teambr.modularsystems.core.managers.BlockManager
-import com.teambr.modularsystems.power.container.{ContainerBankLiquids, ContainerBankSolids}
-import com.teambr.modularsystems.power.gui.{GuiBankLiquids, GuiBankRF, GuiBankSolids}
-import com.teambr.modularsystems.power.tiles.{TileBankBase, TileBankLiquids, TileBankRF, TileBankSolids}
+import com.teambr.modularsystems.power.container.{ ContainerBankLiquids, ContainerBankSolids }
+import com.teambr.modularsystems.power.gui.{ GuiBankLiquids, GuiBankRF, GuiBankSolids }
+import com.teambr.modularsystems.power.tiles.{ TileBankBase, TileBankLiquids, TileBankRF, TileBankSolids }
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.{IBlockAccess, World}
+import net.minecraft.util.{ BlockPos, EnumFacing }
+import net.minecraft.world.{ IBlockAccess, World }
 
 /**
  * This file was created for Modular-Systems
@@ -35,10 +33,21 @@ import net.minecraft.world.{IBlockAccess, World}
  * @since August 07, 2015
  */
 class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], blockColor: Int) extends BlockProxy(name, tileEntity)
-    with KeepInventory with OpensGui {
+with KeepInventory with OpensGui {
 
     override def getCreativeTab: CreativeTabs = {
         ModularSystems.tabModularSystems
+    }
+
+    override def manualOverride(tile : TileEntity, stack : ItemStack, tag : NBTTagCompound) : Boolean = {
+        tile match {
+            case tile : TileProxy =>
+                tile.writeToNBT(tag)
+                if(tag.hasKey("CoreLocation"))
+                    tag.removeTag("CoreLocation")
+                true
+            case _ => false
+        }
     }
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
@@ -65,12 +74,12 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
         super[BlockProxy].breakBlock(world, pos, state)
     }
 
-    override def getItemDropped(state: IBlockState, rand: Random, fortune: Int): Item = {
-        if (tileEntity.isInstanceOf[classOf TileBankBase])
-            super[KeepInventory].getItemDropped(state, rand, fortune)
-        else
-            Item.getItemFromBlock(this)
-    }
+    /* override def getItemDropped(state: IBlockState, rand: Random, fortune: Int): Item = {
+         if (tileEntity.isInstanceOf[classOf TileBankBase])
+             super[KeepInventory].getItemDropped(state, rand, fortune)
+         else
+             Item.getItemFromBlock(this)
+     }*/
 
     override def colorMultiplier(worldIn : IBlockAccess, pos : BlockPos, renderPass : Int) : Int = {
         blockColor

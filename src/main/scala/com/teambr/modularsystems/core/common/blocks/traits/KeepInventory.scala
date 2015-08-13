@@ -1,63 +1,44 @@
 package com.teambr.modularsystems.core.common.blocks.traits
 
-import java.util
-
-import com.teambr.bookshelf.common.tiles.traits.Inventory
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
-import net.minecraft.item.{Item, ItemStack}
-import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.item.{ Item, ItemStack }
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 
 import scala.util.Random
 
 trait KeepInventory extends Block {
 
+    /**
+     * Override this is you want to do a specific tag write to the item
+     * @return True if you did something to it, otherwise we will use defaults
+     */
+    def manualOverride(tile : TileEntity, stack : ItemStack, tag : NBTTagCompound) : Boolean = false
+
     override def breakBlock(world: World, pos: BlockPos, state: IBlockState): Unit = {
         world.getTileEntity(pos) match {
-            case tile: Inventory =>
+            case tile: TileEntity =>
                 val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
                 val tag = new NBTTagCompound
-
-                tag.setInteger("Size:" + tile.inventoryName, tile.getSizeInventory())
-                val nbttaglist = new NBTTagList
-                for (i <- 0 until tile.inventoryContents.size()) {
-                    if (tile.inventoryContents.get(i) != null) {
-                        val stackTag = new NBTTagCompound
-                        stackTag.setByte("Slot:" + tile.inventoryName, i.asInstanceOf[Byte])
-                        tile.inventoryContents.get(i).writeToNBT(stackTag)
-                        nbttaglist.appendTag(stackTag)
-                    }
-                }
-                tag.setTag("Items:" + tile.inventoryName, nbttaglist)
-                item.setTagCompound(tag)
-
-                dropItem(world, item, pos)
+                if(!manualOverride(tile, item, tag)) //If the manual override doesn't do anything, just write the whole tag
+                    tile.writeToNBT(tag)
+                item.setTagCompound(tag) //Set the tile's tag to the stack
+                dropItem(world, item, pos) //Drop it
             case _ =>
         }
     }
 
     override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack:
     ItemStack): Unit = {
-        world.getTileEntity(pos) match {
-            case tile: Inventory =>
-                if (stack.hasTagCompound) {
-                    val nbttaglist = stack.getTagCompound.getTagList("Items:" + tile.inventoryName, 10)
-                    if (nbttaglist != null) {
-                        if (stack.getTagCompound.hasKey("Size:" + tile.inventoryName)) tile.inventoryContents.
-                                setSize(stack.getTagCompound.getInteger("Size:" + tile.inventoryName))
-                        for (i <- 0 until nbttaglist.tagCount()) {
-                            val stacktag = nbttaglist.getCompoundTagAt(i)
-                            val j = stacktag.getByte("Slot:" + tile.inventoryName)
-                            if (j >= 0 && j < tile.inventoryContents.size())
-                                tile.inventoryContents.set(j, ItemStack.loadItemStackFromNBT(stacktag))
-                        }
-                    }
-                }
-            case _ =>
+        if(stack.hasTagCompound && !world.isRemote) { //If there is a tag and is on the server
+            world.getTileEntity(pos).readFromNBT(stack.getTagCompound) //Set the tag
+            world.getTileEntity(pos).setPos(pos) //Set the saved tag to here
+            world.markBlockForUpdate(pos) //Mark for update to client
         }
     }
 
