@@ -8,6 +8,7 @@ import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.client.gui.GuiIOExpansion
+import com.teambr.modularsystems.core.common.blocks.traits.KeepInventory
 import com.teambr.modularsystems.core.common.tiles.{TileIOExpansion, TileProxy}
 import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.power.container.{ContainerBankLiquids, ContainerBankSolids}
@@ -34,7 +35,7 @@ import net.minecraft.world.{IBlockAccess, World}
  * @since August 07, 2015
  */
 class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], blockColor: Int) extends BlockProxy(name, tileEntity)
-    with DropsItems with OpensGui {
+    with KeepInventory with OpensGui {
 
     override def getCreativeTab: CreativeTabs = {
         ModularSystems.tabModularSystems
@@ -59,11 +60,16 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
         if (core.isDefined)
             core.get.deconstructMultiblock()
 
-        super[DropsItems].breakBlock(world, pos, state)
+        //super[DropsItems].breakBlock(world, pos, state)
+        super[KeepInventory].breakBlock(world, pos, state)
+        super[BlockProxy].breakBlock(world, pos, state)
     }
 
     override def getItemDropped(state: IBlockState, rand: Random, fortune: Int): Item = {
-        Item.getItemFromBlock(this)
+        if (tileEntity.isInstanceOf[classOf TileBankBase])
+            super[KeepInventory].getItemDropped(state, rand, fortune)
+        else
+            Item.getItemFromBlock(this)
     }
 
     override def colorMultiplier(worldIn : IBlockAccess, pos : BlockPos, renderPass : Int) : Int = {
