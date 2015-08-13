@@ -1,11 +1,11 @@
 package com.teambr.modularsystems.core.common.blocks
 
 import com.teambr.bookshelf.Bookshelf
+import com.teambr.bookshelf.common.blocks.traits.KeepInventory
 import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.client.gui.GuiIOExpansion
-import com.teambr.modularsystems.core.common.blocks.traits.KeepInventory
 import com.teambr.modularsystems.core.common.tiles.{ TileIOExpansion, TileProxy }
 import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.power.container.{ ContainerBankLiquids, ContainerBankSolids }
