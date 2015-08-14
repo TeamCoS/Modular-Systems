@@ -158,5 +158,17 @@ class ModelFactory {
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageHopping", "normal"), new ModelStorageExpansion())
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageHopping", "inventory"), new ModelStorageExpansion())
         itemModelMesher.register(Item.getItemFromBlock(BlockManager.storageHopping), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "storageHopping", "inventory"))
+
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageSearch", "normal"), new ModelStorageExpansion())
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageSearch", "inventory"), new ModelStorageExpansion())
+        itemModelMesher.register(Item.getItemFromBlock(BlockManager.storageSearch), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "storageSearch", "inventory"))
+
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageSort", "normal"), new ModelStorageExpansion())
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageSort", "inventory"), new ModelStorageExpansion())
+        itemModelMesher.register(Item.getItemFromBlock(BlockManager.storageSort), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "storageSort", "inventory"))
+
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageSmashing", "normal"), new ModelStorageExpansion())
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "storageSmashing", "inventory"), new ModelStorageExpansion())
+        itemModelMesher.register(Item.getItemFromBlock(BlockManager.storageSmashing), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + "storageSmashing", "inventory"))
     }
 }

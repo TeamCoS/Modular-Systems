@@ -3,6 +3,7 @@ package com.teambr.modularsystems.core.client.modelfactory.models
 import java.util
 import javax.vecmath.Vector3f
 
+import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.modularsystems.core.client.modelfactory.ModelFactory
 import com.teambr.modularsystems.core.collections.ConnectedTextures
 import com.teambr.modularsystems.core.managers.BlockManager
@@ -49,7 +50,7 @@ class ModelStorageExpansion extends ISmartBlockModel with ISmartItemModel {
         pos = p
     }
 
-    def drawFace(connections : Array[Boolean], list : java.util.List[BakedQuad], rot : ModelRotation) {
+    def drawFace(connections : Array[Boolean], list : java.util.List[BakedQuad], rot : ModelRotation, facing : EnumFacing) {
         val face : BlockPartFace = new BlockPartFace(null, 0, "", new BlockFaceUV(Array[Float](0.0F, 0.0F, 16.0F, 16.0F), 0))
         val scale : Boolean = true
 
@@ -59,7 +60,7 @@ class ModelStorageExpansion extends ISmartBlockModel with ISmartItemModel {
         list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(5, connections), EnumFacing.SOUTH, rot, null, scale, true))
 
         if(MinecraftForgeClient.getRenderLayer == EnumWorldBlockLayer.CUTOUT || world == null)
-            list.add(faceBakery.makeBakedQuad(new Vector3f(-0.01F, -0.01F, -0.01F), new Vector3f(16.01F, 16.01F, 16.01F), face, getOverlayTexture, EnumFacing.SOUTH, rot, null, scale, true))
+            list.add(faceBakery.makeBakedQuad(new Vector3f(-0.01F, -0.01F, -0.01F), new Vector3f(16.01F, 16.01F, 16.01F), face, getOverlayTexture(facing), EnumFacing.SOUTH, rot, null, scale, true))
 
         if (block != null && block.isTranslucent) {
             list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(6, connections), EnumFacing.NORTH, rot, null, scale, true))
@@ -69,7 +70,7 @@ class ModelStorageExpansion extends ISmartBlockModel with ISmartItemModel {
         }
     }
 
-    def getOverlayTexture : TextureAtlasSprite = {
+    def getOverlayTexture(facing : EnumFacing) : TextureAtlasSprite = {
         if(!connected)
             return ModelFactory.STORAGE_NOCONNECTION_TEXTURE
         block match {
@@ -83,6 +84,22 @@ class ModelStorageExpansion extends ISmartBlockModel with ISmartItemModel {
                 ModelFactory.STORAGE_REMOTE_TEXTURE
             case BlockManager.storageHopping =>
                 ModelFactory.STORAGE_HOPPING_TEXTURE
+            case BlockManager.storageSearch =>
+                ModelFactory.STORAGE_SEARCH_TEXTURE
+            case BlockManager.storageSort =>
+                ModelFactory.STORAGE_SORT_TEXTURE
+            case BlockManager.storageSmashing =>
+                if(world != null) {
+                    val newFacing = world.getBlockState(pos).getValue(PropertyRotation.SIX_WAY.getProperty).asInstanceOf[EnumFacing]
+                    if (newFacing == facing)
+                        return ModelFactory.STORAGE_SMASHING_TEXTURE
+                    else if (newFacing == facing.getOpposite)
+                        return ModelFactory.STORAGE_BACKIO_TEXTURE
+                } else {
+                    if(facing == EnumFacing.NORTH)
+                        return ModelFactory.STORAGE_SMASHING_TEXTURE
+                }
+                ModelFactory.STORAGE_CAPACITY_TEXTURE
             case _ =>
                 ModelFactory.STORAGE_CAPACITY_TEXTURE
         }
@@ -95,9 +112,9 @@ class ModelStorageExpansion extends ISmartBlockModel with ISmartItemModel {
     override def getFaceQuads(facing : EnumFacing) : java.util.List[_] = {
         val bakedQuads = new util.ArrayList[BakedQuad]()
         if(world != null)
-            drawFace(block.getConnectionArrayForFace(world, pos, facing), bakedQuads, lookUpRotationForFace(facing))
+            drawFace(block.getConnectionArrayForFace(world, pos, facing), bakedQuads, lookUpRotationForFace(facing), facing)
         else
-            drawFace(Array[Boolean](false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false), bakedQuads, lookUpRotationForFace(facing))
+            drawFace(Array[Boolean](false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false), bakedQuads, lookUpRotationForFace(facing), facing)
         bakedQuads
     }
 

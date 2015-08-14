@@ -5,9 +5,9 @@ import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
 import com.teambr.modularsystems.core.managers.BlockManager
-import com.teambr.modularsystems.storage.container.ContainerStorageRemote
-import com.teambr.modularsystems.storage.gui.{ GuiStorageHopping, GuiStorageRemote }
-import com.teambr.modularsystems.storage.tiles.{ TileStorageHopping, TileStorageRemote, TileEntityStorageExpansion, TileStorageCore }
+import com.teambr.modularsystems.storage.container.{ ContainerSmashing, ContainerStorageRemote }
+import com.teambr.modularsystems.storage.gui.{ GuiSmashing, GuiStorageHopping, GuiStorageRemote }
+import com.teambr.modularsystems.storage.tiles._
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
@@ -213,6 +213,8 @@ class BlockStorageExpansion(name: String, tileEntity: Class[_ <: TileEntity])
                 new ContainerStorageRemote(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileStorageRemote])
             case block : BlockManager.storageHopping.type  =>
                 new ContainerGeneric
+            case block : BlockManager.storageSmashing.type  =>
+                new ContainerSmashing(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileStorageSmashing])
             case _ => null
         }
     }
@@ -223,6 +225,8 @@ class BlockStorageExpansion(name: String, tileEntity: Class[_ <: TileEntity])
                 new GuiStorageRemote(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileStorageRemote])
             case block : BlockManager.storageHopping.type =>
                 new GuiStorageHopping(world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileStorageHopping])
+            case block : BlockManager.storageSmashing.type  =>
+                new GuiSmashing(new ContainerSmashing(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileStorageSmashing]))
             case _ => null
         }
     }

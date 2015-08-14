@@ -2,11 +2,14 @@ package com.teambr.modularsystems.core.client
 
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.modularsystems.core.client.modelfactory.ModelFactory
+import com.teambr.modularsystems.core.client.renderer.TileSpecialDummyRenderer
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
 import com.teambr.modularsystems.core.managers.{ BlockManager, ItemRenderManager }
+import com.teambr.modularsystems.power.tiles.TileBankBase
 import net.minecraft.client.renderer.block.statemap.StateMap.Builder
 import net.minecraftforge.client.model.ModelLoader
+import net.minecraftforge.fml.client.registry.ClientRegistry
 
 /**
  * This file was created for the Modular-Systems
@@ -25,7 +28,10 @@ class ClientProxy extends CommonProxy {
             (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY.getProperty).addPropertiesToIgnore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
         ModelLoader.setCustomStateMapper(BlockManager.crusherCore,
             (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY.getProperty).addPropertiesToIgnore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
+        ModelLoader.setCustomStateMapper(BlockManager.storageSmashing,
+            (new Builder).addPropertiesToIgnore(PropertyRotation.SIX_WAY.getProperty).build())
 
+        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileBankBase], new TileSpecialDummyRenderer)
     }
 
     override def init() = {

@@ -463,35 +463,6 @@
       "ceiling": 0.0
     }
   },
-  "chisel:marble:-1": {
-    "speedFunction": {
-      "scaleFactorNumerator": 1.0,
-      "scaleFactorDenominator": 50.0,
-      "xOffset": 0.0,
-      "power": 2.0,
-      "yOffset": 0.0,
-      "floor": 0.0,
-      "ceiling": 50.0
-    },
-    "efficiencyFunction": {
-      "scaleFactorNumerator": 1.0,
-      "scaleFactorDenominator": 40.0,
-      "xOffset": 0.0,
-      "power": 2.0,
-      "yOffset": 0.0,
-      "floor": 0.0,
-      "ceiling": 150.0
-    },
-    "multiplicityFunction": {
-      "scaleFactorNumerator": 0.0,
-      "scaleFactorDenominator": 1.0,
-      "xOffset": 0.0,
-      "power": 0.0,
-      "yOffset": 0.0,
-      "floor": 0.0,
-      "ceiling": 0.0
-    }
-  },
   "minecraft:obsidian:-1": {
     "speedFunction": {
       "scaleFactorNumerator": 1.0,
@@ -539,35 +510,6 @@
       "yOffset": 0.0,
       "floor": -50.0,
       "ceiling": 0.0
-    },
-    "multiplicityFunction": {
-      "scaleFactorNumerator": 0.0,
-      "scaleFactorDenominator": 1.0,
-      "xOffset": 0.0,
-      "power": 0.0,
-      "yOffset": 0.0,
-      "floor": 0.0,
-      "ceiling": 0.0
-    }
-  },
-  "chisel:cobblestone:-1": {
-    "speedFunction": {
-      "scaleFactorNumerator": -1.0,
-      "scaleFactorDenominator": 50.0,
-      "xOffset": 0.0,
-      "power": 2.0,
-      "yOffset": 0.0,
-      "floor": -40.0,
-      "ceiling": 0.0
-    },
-    "efficiencyFunction": {
-      "scaleFactorNumerator": 1.0,
-      "scaleFactorDenominator": 1.0,
-      "xOffset": 0.0,
-      "power": 1.0,
-      "yOffset": 0.0,
-      "floor": 0.0,
-      "ceiling": 60.0
     },
     "multiplicityFunction": {
       "scaleFactorNumerator": 0.0,
