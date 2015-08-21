@@ -1,6 +1,6 @@
 package com.teambr.modularsystems.core.common.tiles
 
-import com.teambr.bookshelf.api.waila.IWaila
+import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
 import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.crusher.tiles.TileCrusherCore
@@ -28,7 +28,7 @@ import net.minecraft.util.{ EnumFacing, BlockPos, IChatComponent }
  * @author Paul Davis <pauljoda>
  * @since August 06, 2015
  */
-class TileProxy extends UpdatingTile with IInventory with ISidedInventory with IWaila {
+class TileProxy extends UpdatingTile with IInventory with ISidedInventory with Waila {
     var coreLocation : Option[BlockPos] = None
     var storedBlock : Int = -1
     var metaData : Int = 0
@@ -243,18 +243,11 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with I
       ************************************************ Inventory methods ***********************************************
       ******************************************************************************************************************/
 
-    override def returnWailaBody(tipList: ITipList): Unit = {}
-
-    override def returnWailaTail(tipList: ITipList): Unit = {}
-
-    override def returnNBTData(te: TileEntity, tag: NBTTagCompound, accessor: IWailaDataAccessorServer): NBTTagCompound = tag
-
     override def returnWailaStack(accessor: IWailaDataAccessor, config: IWailaConfigHandler): ItemStack = {
         if (getStoredBlock != Blocks.air) {
             return new ItemStack(getStoredBlock, 1, getBlockMetadata)
         }
         null
     }
-
-    override def returnWailaHead(tipList: ITipList): Unit = {}
+    
 }

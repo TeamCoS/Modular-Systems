@@ -57,7 +57,7 @@ class BlockFurnaceCore(name: String) extends BaseBlock(Material.rock, name, clas
         world.getTileEntity(pos) match {
             case tile : TileEntityFurnaceCore =>
                 if(tile.isBurning) {
-                    val facing = state.getValue(PropertyRotation.FOUR_WAY.getProperty)
+                    val facing = state.getValue(PropertyRotation.FOUR_WAY)
                     val f : Float = pos.getX.toFloat + 0.5F
                     val f1 : Float = pos.getY.toFloat + 0.0F + rand.nextFloat * 6.0F / 16.0F
                     val f2 : Float = pos.getZ.toFloat + 0.5F

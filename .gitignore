@@ -197,7 +197,6 @@ src/main/options.txt
 src/main/crash-reports/
 src/main/mods/
 src/main/asm/
-gradlew.bat
 run/mods/CodeChickenCore-1.7.10-1.0.3.26-dev.jar
 run/mods/NotEnoughItems-1.7.10-1.0.3.56-dev.jar
 README.txt

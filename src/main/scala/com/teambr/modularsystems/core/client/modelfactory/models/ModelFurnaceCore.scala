@@ -10,7 +10,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model._
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.client.resources.model.{ IBakedModel, ModelRotation }
+import net.minecraft.client.resources.model.{IBakedModel, ModelRotation}
 import net.minecraft.init.Blocks
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.client.model.ISmartBlockModel
@@ -115,7 +115,7 @@ class ModelFurnaceCore extends ISmartBlockModel {
     override def isBuiltInRenderer: Boolean = false
 
     override def handleBlockState(state : IBlockState) : IBakedModel = {
-        new ModelFurnaceCore(state.getValue(PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing],
+        new ModelFurnaceCore(state.getValue(PropertyRotation.FOUR_WAY).asInstanceOf[EnumFacing],
             state.getValue(state.getBlock.asInstanceOf[CoreStates].PROPERTY_ACTIVE).asInstanceOf[Boolean])
     }
 

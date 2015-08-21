@@ -53,7 +53,7 @@ class TileStorageSmashing extends TileEntityStorageExpansion with Inventory with
         super.update()
         if (!worldObj.isRemote && !isPowered && getCore != null && getStackInSlot(0) != null && worldObj.rand.nextInt(20) == 0) {
 
-            val dir : EnumFacing = worldObj.getBlockState(pos).getValue(PropertyRotation.SIX_WAY.getProperty).asInstanceOf[EnumFacing]
+            val dir : EnumFacing = worldObj.getBlockState(pos).getValue(PropertyRotation.SIX_WAY).asInstanceOf[EnumFacing]
             val blockBreakLocation = new Location(pos)
             blockBreakLocation.travel(dir)
 

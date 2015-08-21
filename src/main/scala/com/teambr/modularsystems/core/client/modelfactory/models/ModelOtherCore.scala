@@ -123,7 +123,7 @@ class ModelOtherCore  extends ISmartBlockModel with ISmartItemModel {
     override def isBuiltInRenderer: Boolean = false
 
     override def handleBlockState(state : IBlockState) : IBakedModel = {
-        new ModelOtherCore(state.getValue(PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing],
+        new ModelOtherCore(state.getValue(PropertyRotation.FOUR_WAY).asInstanceOf[EnumFacing],
             state.getValue(state.getBlock.asInstanceOf[CoreStates].PROPERTY_ACTIVE).asInstanceOf[Boolean], state.getBlock)
     }
 

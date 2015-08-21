@@ -56,7 +56,7 @@ class BlockCrusherCore(name: String) extends BaseBlock(Material.rock, name, clas
         world.getTileEntity(pos) match {
             case tile : TileCrusherCore =>
                 if(tile.isBurning) {
-                    val facing = state.getValue(PropertyRotation.FOUR_WAY.getProperty)
+                    val facing = state.getValue(PropertyRotation.FOUR_WAY)
                     val f : Float = pos.getX.toFloat + 0.5F
                     val f1 : Float = pos.getY.toFloat + 0.3F + rand.nextFloat * 6.0F / 16.0F
                     val f2 : Float = pos.getZ.toFloat + 0.5F

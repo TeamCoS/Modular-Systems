@@ -90,7 +90,7 @@ class ModelStorageExpansion extends ISmartBlockModel with ISmartItemModel {
                 ModelFactory.STORAGE_SORT_TEXTURE
             case BlockManager.storageSmashing =>
                 if(world != null) {
-                    val newFacing = world.getBlockState(pos).getValue(PropertyRotation.SIX_WAY.getProperty).asInstanceOf[EnumFacing]
+                    val newFacing = world.getBlockState(pos).getValue(PropertyRotation.SIX_WAY).asInstanceOf[EnumFacing]
                     if (newFacing == facing)
                         return ModelFactory.STORAGE_SMASHING_TEXTURE
                     else if (newFacing == facing.getOpposite)
