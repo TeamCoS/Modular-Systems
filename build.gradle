@@ -25,7 +25,7 @@ repositories {
         url "http://chickenbones.net/maven/"
     }
     maven {
-        url "http://www.beyondrealitypack.com/maven2/"
+        url "http://www.dyonovan.com/maven2/"
     }
     maven {
         name = "ic2"

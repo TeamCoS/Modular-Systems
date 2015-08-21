@@ -12,6 +12,7 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -261,7 +262,10 @@ public class CrusherRecipeRegistry {
         String[] name = item.split(":");
         switch(name.length) {
             case 3:
-                return new ItemStack(GameRegistry.findItem(name[0], name[1]), 1, Integer.valueOf(name[2]));
+                Item itemFromString = GameRegistry.findItem(name[0], name[1]);
+                if (itemFromString != null)
+                    return new ItemStack(itemFromString, 1, Integer.valueOf(name[2]));
+                else return null;
             default:
                 return null;
         }
