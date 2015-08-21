@@ -6,7 +6,7 @@ import com.teambr.modularsystems.core.achievement.ModAchievements
 import com.teambr.modularsystems.core.api.nei.NEICallback
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.lib.Reference
-import com.teambr.modularsystems.core.managers.{BlockManager, ItemManager}
+import com.teambr.modularsystems.core.managers.{CraftingManager, BlockManager, ItemManager}
 import com.teambr.modularsystems.core.network.PacketManager
 import com.teambr.modularsystems.core.registries._
 import net.minecraft.creativetab.CreativeTabs
@@ -58,6 +58,7 @@ object ModularSystems {
         BlockValueRegistry.init()
         FluidFuelValues.init()
         proxy.preInit()
+        CraftingManager.init()
 
         //MinecraftForge.EVENT_BUS.register(BlockValueRegistry)
     }
