@@ -34,7 +34,14 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 
-version = "${config.minecraft_version}-${config.mod_version}"
+String build = System.getenv("BUILD_NUMBER")
+
+if (build == null || build == '') {
+    version = "${config.minecraft_version}-${config.mod_version}"
+} else {
+    version = "${config.minecraft_version}-${config.mod_version}-B" + System.getenv("BUILD_NUMBER")
+}
+
 group= "com.teamcos.modularsystems" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ModularSystems"
 
