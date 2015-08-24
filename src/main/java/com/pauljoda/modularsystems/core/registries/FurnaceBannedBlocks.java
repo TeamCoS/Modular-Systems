@@ -95,6 +95,9 @@ public class FurnaceBannedBlocks {
     public static boolean isBadBlockFromBlock(Block block) {
         if (block == Blocks.redstone_block) return false;
 
+        //Fix for Thermal Foundation Blocks
+        if (block.getUnlocalizedName().equals("tile.thermalfoundation.storage")) return false;
+
         if (block.hasTileEntity(0)) {
             return true;
         }
