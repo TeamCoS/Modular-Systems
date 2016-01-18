@@ -55,8 +55,9 @@ class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseB
                     val f2: Float = world.rand.nextFloat * 0.8F + 0.1F
                     val entityitem: EntityItem = new EntityItem(world, pos.getX.toDouble + f, pos.getY.toDouble + f1, pos.getZ.toDouble + f2, new ItemStack(block, 1, meta))
                     world.spawnEntityInWorld(entityitem)
-                    world.notifyNeighborsOfStateChange(pos, this)
                 }
+                world.notifyNeighborsOfStateChange(pos, this)
+
             case _ =>
         }
         super.breakBlock(world, pos, state)

@@ -1,5 +1,7 @@
 package com.teambr.modularsystems.core.common.blocks
 
+import java.util.Random
+
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.traits.KeepInventory
 import com.teambr.bookshelf.common.container.ContainerGeneric
@@ -16,7 +18,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{ BlockPos, EnumFacing }
@@ -24,17 +26,17 @@ import net.minecraft.world.{ IBlockAccess, World }
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
- * This file was created for Modular-Systems
- *
- * Modular-Systems is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 07, 2015
- */
+  * This file was created for Modular-Systems
+  *
+  * Modular-Systems is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 07, 2015
+  */
 class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], blockColor: Int) extends BlockProxy(name, tileEntity)
-with KeepInventory with OpensGui {
+    with KeepInventory with OpensGui {
 
     override def getCreativeTab: CreativeTabs = {
         ModularSystems.tabModularSystems
@@ -66,24 +68,17 @@ with KeepInventory with OpensGui {
     }
 
     override def breakBlock(world: World, pos: BlockPos, state: IBlockState): Unit = {
-        world.getTileEntity(pos) match {
-            case tile: TileProxy =>
-                val core = tile.getCore
-                if (core.isDefined)
-                    core.get.deconstructMultiblock()
-            case _ =>
-        }
-
-        //super[KeepInventory].breakBlock(world, pos, state)
         super[BlockProxy].breakBlock(world, pos, state)
     }
 
-    /* override def getItemDropped(state: IBlockState, rand: Random, fortune: Int): Item = {
-         if (tileEntity.isInstanceOf[classOf TileBankBase])
-             super[KeepInventory].getItemDropped(state, rand, fortune)
-         else
-             Item.getItemFromBlock(this)
-     }*/
+    override def getItemDropped(state: IBlockState, rand: Random, fortune: Int): Item = {
+        if (state.getBlock == BlockManager.bankLiquids ||
+                state.getBlock == BlockManager.bankSolids ||
+                state.getBlock == BlockManager.bankRF)
+            super[KeepInventory].getItemDropped(state, rand, fortune)
+        else
+            null
+    }
 
     override def colorMultiplier(worldIn : IBlockAccess, pos : BlockPos, renderPass : Int) : Int = {
         blockColor

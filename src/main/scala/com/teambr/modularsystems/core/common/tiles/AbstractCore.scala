@@ -509,5 +509,4 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
      * @return True if there is a name (localized)
      */
     override def hasCustomName(): Boolean = false
-
 }
