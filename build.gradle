@@ -16,9 +16,8 @@ repositories {
     maven {
         url "http://www.teambrmodding.com/maven2/"
     }
-	maven { // the repo from which to get NEI and stuff
-        name "CB Repo"
-        url "http://chickenbones.net/maven/"
+	maven { // the repo from which to get JEI
+        url "http://dvs1.progwml6.com/files/maven"
     }
     maven { // The repo from which to get waila
         name "Mobius Repo"
@@ -92,9 +91,7 @@ processResources
 }
 
 dependencies {
-    //compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
-    //compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
-    //compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
+    deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
 }
 

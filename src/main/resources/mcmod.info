@@ -11,9 +11,7 @@
   "credits": "Everyone who supported me over my time modding",
   "logoFile": "/assets/modularsystems/textures/logo.png",
   "screenshots": [],
-  "requiredMods": [],
   "dependencies": [],
-  "dependants": [],
-  "useDependencyInformation": true
+  "dependants": []
 }
 ]
