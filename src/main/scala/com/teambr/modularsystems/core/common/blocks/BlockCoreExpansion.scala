@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{ BlockPos, EnumFacing }
 import net.minecraft.world.{ IBlockAccess, World }
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  * This file was created for Modular-Systems
@@ -88,6 +89,7 @@ with KeepInventory with OpensGui {
         blockColor
     }
 
+    @SideOnly(Side.CLIENT)
     def getTextureForItem(block : BlockCoreExpansion) : TextureAtlasSprite = {
         block match {
             case BlockManager.bankSolids =>
