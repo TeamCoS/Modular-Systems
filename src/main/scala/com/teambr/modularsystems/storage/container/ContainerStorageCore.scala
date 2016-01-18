@@ -196,9 +196,6 @@ class ContainerStorageCore(playerInventory: IInventory, val storageCore: TileSto
             else  null
         }
 
-        override def getStackInSlotOnClosing(slot : Int) : ItemStack =
-             tile.craftingInventory.getStackInSlot(slot)
-
         override def decrStackSize(slot : Int, amount : Int) : ItemStack = {
             if (tile.craftingInventory.getStackInSlot(slot) != null) {
                 var returnStack : ItemStack = null

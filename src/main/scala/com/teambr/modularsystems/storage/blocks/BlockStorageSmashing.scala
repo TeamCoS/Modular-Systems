@@ -33,7 +33,7 @@ class BlockStorageSmashing(name: String, tileEntity: Class[_ <: TileEntity]) ext
      * Used to say what our block state is
      */
     override def createBlockState() : BlockState = {
-        val listed = new Array[IProperty](1)
+        val listed = new Array[IProperty[_]](1)
         listed(0) = PropertyRotation.SIX_WAY
         val unlisted = new Array[IUnlistedProperty[_]](0)
         new ExtendedBlockState(this, listed, unlisted)

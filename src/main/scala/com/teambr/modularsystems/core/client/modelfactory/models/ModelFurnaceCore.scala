@@ -1,7 +1,6 @@
 package com.teambr.modularsystems.core.client.modelfactory.models
 
 import java.util
-import javax.vecmath.Vector3f
 
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
@@ -14,6 +13,7 @@ import net.minecraft.client.resources.model.{IBakedModel, ModelRotation}
 import net.minecraft.init.Blocks
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.client.model.ISmartBlockModel
+import org.lwjgl.util.vector.Vector3f
 
 /**
  * This file was created for Modular-Systems
@@ -36,7 +36,7 @@ class ModelFurnaceCore extends ISmartBlockModel {
         facingDirection = rotation
         isActive = active
     }
-    override def getFaceQuads(facing : EnumFacing) : util.List[_] = {
+    override def getFaceQuads(facing : EnumFacing) : util.List[BakedQuad] = {
         val bakedQuads = new util.ArrayList[BakedQuad]()
         addBorderAndOverlay(facing, bakedQuads)
         bakedQuads
@@ -83,7 +83,7 @@ class ModelFurnaceCore extends ISmartBlockModel {
         }
     }
 
-    override def getGeneralQuads : util.List[_] = {
+    override def getGeneralQuads : util.List[BakedQuad] = {
         val blockRendererDispatcher = Minecraft.getMinecraft.getBlockRendererDispatcher
         val blockModelShapes = blockRendererDispatcher.getBlockModelShapes
 
@@ -121,8 +121,8 @@ class ModelFurnaceCore extends ISmartBlockModel {
 
     val MovedUp = new ItemTransformVec3f(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(-0.05F, 0.05F, -0.15F), new Vector3f(-0.5F, -0.5F, -0.5F))
     override def getItemCameraTransforms : ItemCameraTransforms = {
-        new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
+        new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
     }
 
-    override def getTexture : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/furnace_front_off")
+    override def getParticleTexture : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/furnace_front_off")
 }

@@ -1,8 +1,6 @@
 package com.teambr.modularsystems.core.client.modelfactory.models
 
 import java.util
-import javax.vecmath.Vector3f
-
 import com.teambr.modularsystems.core.common.blocks.ProxyState
 import com.teambr.modularsystems.core.common.tiles.TileProxy
 import net.minecraft.block.state.IBlockState
@@ -13,6 +11,7 @@ import net.minecraft.client.resources.model.{ IBakedModel, ModelRotation }
 import net.minecraft.util.{ EnumWorldBlockLayer, EnumFacing }
 import net.minecraftforge.client.MinecraftForgeClient
 import net.minecraftforge.client.model.ISmartBlockModel
+import org.lwjgl.util.vector.Vector3f
 
 /**
  * This file was created for Modular-Systems
@@ -34,13 +33,13 @@ class ModelProxy extends ISmartBlockModel {
         tile = e
     }
 
-    override def getFaceQuads(facing : EnumFacing) : util.List[_] = {
+    override def getFaceQuads(facing : EnumFacing) : util.List[BakedQuad] = {
         val bakedQuads = new util.ArrayList[BakedQuad]()
         addBorderAndOverlay(facing, bakedQuads, MinecraftForgeClient.getRenderLayer == EnumWorldBlockLayer.TRANSLUCENT)
         bakedQuads
     }
 
-    override def getGeneralQuads : util.List[_] = {
+    override def getGeneralQuads : util.List[BakedQuad] = {
         if(tile != null) {
             val blockRendererDispatcher = Minecraft.getMinecraft.getBlockRendererDispatcher
             val blockModelShapes = blockRendererDispatcher.getBlockModelShapes
@@ -60,7 +59,7 @@ class ModelProxy extends ISmartBlockModel {
             }
             returnVals
         }
-        else new util.ArrayList[Nothing]()
+        else new util.ArrayList[BakedQuad]()
     }
 
     private def addBorderAndOverlay(facing : EnumFacing, bakedQuad: util.ArrayList[BakedQuad], doOverlay : Boolean) : Unit = {
@@ -146,8 +145,8 @@ class ModelProxy extends ISmartBlockModel {
     }
 
     override def getItemCameraTransforms : ItemCameraTransforms = {
-        new ItemCameraTransforms(ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
+        new ItemCameraTransforms(ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
     }
 
-    override def getTexture : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/stone")
+    override def getParticleTexture : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/stone")
 }

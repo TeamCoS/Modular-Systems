@@ -105,7 +105,7 @@ class GuiStorageCore(player: EntityPlayer, val storageCore : TileStorageCore)
         super.handleMouseInput()
         var scrollDirection : Int = Mouse.getEventDWheel
         if (scrollDirection != 0 && inventory.storageCore.getInventoryRowCount > 6) {
-            if (ModularSystems.nei != null && isInMainArea) return
+            //if (isInMainArea) return
             val rowsAboveDisplay : Int = this.inventory.storageCore.getInventoryRowCount - 6
             if (scrollDirection > 0) scrollDirection = 1
             else scrollDirection = -1
@@ -128,9 +128,9 @@ class GuiStorageCore(player: EntityPlayer, val storageCore : TileStorageCore)
     override def addRightTabs (tabs : GuiTabCollection) : Unit = {
         if (storageCore != null) {
             val children  = List[BaseComponent](
-                new GuiComponentText("Information", 26, 6, 0xFFCC00),
-                new GuiComponentText("Size: ", 10, 23, 0xFFFFFF),
-                new GuiComponentText(String.valueOf(storageCore.getSizeInventory()) + " Slots", 20, 33, 0x777777))
+                new GuiComponentText("Information", 26, 6, new Color(255, 204, 0)),
+                new GuiComponentText("Size: ", 10, 23, new Color(255, 255, 255)),
+                new GuiComponentText(String.valueOf(storageCore.getSizeInventory()) + " Slots", 20, 33, new Color(119, 119, 199)))
             tabs.addTab(children, 100, 100, new Color(77, 75, 196), new ItemStack(Items.book, 1))
         }
     }

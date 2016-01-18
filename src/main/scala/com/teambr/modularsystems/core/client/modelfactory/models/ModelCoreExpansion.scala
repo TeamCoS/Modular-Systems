@@ -1,7 +1,6 @@
 package com.teambr.modularsystems.core.client.modelfactory.models
 
 import java.util
-import javax.vecmath.Vector3f
 
 import com.teambr.modularsystems.core.common.blocks.BlockCoreExpansion
 import com.teambr.modularsystems.core.managers.BlockManager
@@ -10,10 +9,11 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model._
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.client.resources.model.{ IBakedModel, ModelRotation }
+import net.minecraft.client.resources.model.{IBakedModel, ModelRotation}
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
-import net.minecraftforge.client.model.{ ISmartBlockModel, ISmartItemModel }
+import net.minecraftforge.client.model.{ISmartBlockModel, ISmartItemModel}
+import org.lwjgl.util.vector.Vector3f
 
 /**
  * This file was created for Modular-Systems
@@ -37,7 +37,7 @@ class ModelCoreExpansion extends ISmartBlockModel with ISmartItemModel {
         isItem = bool
     }
 
-    override def getFaceQuads(facing : EnumFacing) : util.List[_] = {
+    override def getFaceQuads(facing : EnumFacing) : util.List[BakedQuad] = {
         val bakedQuads = new util.ArrayList[BakedQuad]()
         val uv = new BlockFaceUV(Array[Float](0.0F, 0.0F, 16.0F, 16.0F), 0)
         val face = new BlockPartFace(null, 0, "", uv)
@@ -55,7 +55,7 @@ class ModelCoreExpansion extends ISmartBlockModel with ISmartItemModel {
         bakedQuads
     }
 
-    override def getGeneralQuads : util.List[_] = {
+    override def getGeneralQuads : util.List[BakedQuad] = {
         val bakedQuads = new util.ArrayList[BakedQuad]()
         val uv = new BlockFaceUV(Array[Float](0.0F, 0.0F, 16.0F, 16.0F), 0)
         val face = new BlockPartFace(null, -1, "", uv)
@@ -117,10 +117,10 @@ class ModelCoreExpansion extends ISmartBlockModel with ISmartItemModel {
 
     val MovedUp = new ItemTransformVec3f(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(-0.05F, 0.05F, -0.15F), new Vector3f(-0.5F, -0.5F, -0.5F))
     override def getItemCameraTransforms : ItemCameraTransforms = {
-        new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
+        new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
     }
 
-    override def getTexture : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/iron_block")
+    override def getParticleTexture : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/iron_block")
 
     override def handleBlockState(state : IBlockState) : IBakedModel = {
         new ModelCoreExpansion(state.getBlock.asInstanceOf[BlockCoreExpansion], false)
@@ -129,4 +129,5 @@ class ModelCoreExpansion extends ISmartBlockModel with ISmartItemModel {
     override def handleItemState(stack : ItemStack) : IBakedModel = {
         new ModelCoreExpansion(Block.getBlockFromItem(stack.getItem).asInstanceOf[BlockCoreExpansion], true)
     }
+
 }

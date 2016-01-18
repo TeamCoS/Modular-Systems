@@ -25,13 +25,13 @@ class ClientProxy extends CommonProxy {
 
     override def preInit() = {
         ModelLoader.setCustomStateMapper(BlockManager.furnaceCore,
-            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY).addPropertiesToIgnore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
+            (new Builder).ignore(PropertyRotation.FOUR_WAY).ignore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
         ModelLoader.setCustomStateMapper(BlockManager.crusherCore,
-            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY).addPropertiesToIgnore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
+            (new Builder).ignore(PropertyRotation.FOUR_WAY).ignore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
         ModelLoader.setCustomStateMapper(BlockManager.storageSmashing,
-            (new Builder).addPropertiesToIgnore(PropertyRotation.SIX_WAY).build())
+            (new Builder).ignore(PropertyRotation.SIX_WAY).build())
 
-        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileBankBase], new TileSpecialDummyRenderer)
+       // ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileBankBase], new TileSpecialDummyRenderer)
     }
 
     override def init() = {

@@ -1,7 +1,6 @@
 package com.teambr.modularsystems.core.client.modelfactory.models
 
 import java.util
-import javax.vecmath.Vector3f
 
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
@@ -16,6 +15,7 @@ import net.minecraft.client.resources.model.{ IBakedModel, ModelRotation }
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.client.model.{ ISmartItemModel, ISmartBlockModel }
+import org.lwjgl.util.vector.Vector3f
 
 /**
  * This file was created for Modular-Systems
@@ -40,7 +40,7 @@ class ModelOtherCore  extends ISmartBlockModel with ISmartItemModel {
         isActive = active
         block = theBlock
     }
-    override def getFaceQuads(facing : EnumFacing) : util.List[_] = {
+    override def getFaceQuads(facing : EnumFacing) : util.List[BakedQuad] = {
         val bakedQuads = new util.ArrayList[BakedQuad]()
         addFacesAndStuff(facing, bakedQuads)
         bakedQuads
@@ -112,8 +112,8 @@ class ModelOtherCore  extends ISmartBlockModel with ISmartItemModel {
             Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("minecraft:blocks/furnace_side")
     }
 
-    override def getGeneralQuads : util.List[_] = {
-        new util.ArrayList[Nothing]()
+    override def getGeneralQuads : util.List[BakedQuad] = {
+        new util.ArrayList[BakedQuad]()
     }
 
     override def isAmbientOcclusion: Boolean = true
@@ -133,8 +133,8 @@ class ModelOtherCore  extends ISmartBlockModel with ISmartItemModel {
 
     val MovedUp = new ItemTransformVec3f(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(-0.05F, 0.05F, -0.15F), new Vector3f(-0.5F, -0.5F, -0.5F))
     override def getItemCameraTransforms : ItemCameraTransforms = {
-        new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
+        new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
     }
 
-    override def getTexture : TextureAtlasSprite = getTextureForBlock(facingDirection)
+    override def getParticleTexture : TextureAtlasSprite = getTextureForBlock(facingDirection)
 }

@@ -1,7 +1,7 @@
 package com.teambr.modularsystems.core.common.tiles
 
 import com.teambr.bookshelf.api.waila.Waila
-import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.crusher.tiles.TileCrusherCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
@@ -113,13 +113,6 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with W
     override def decrStackSize(index : Int, count : Int) : ItemStack = {
         getCore match {
             case Some(core) => core.decrStackSize(index, count)
-            case _ => null
-        }
-    }
-
-    override def getStackInSlotOnClosing(index : Int) : ItemStack = {
-        getCore match {
-            case Some(core) => core.getStackInSlotOnClosing(index)
             case _ => null
         }
     }
@@ -236,6 +229,14 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with W
         }
     }
 
+    override def removeStackFromSlot(index: Int): ItemStack = {
+        getCore match {
+            case Some(core) => core.removeStackFromSlot(index)
+            case _ => null
+        }
+    }
+
+
     /*******************************************************************************************************************
       ************************************************ Inventory methods ***********************************************
       ******************************************************************************************************************/
@@ -246,5 +247,4 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with W
         }
         null
     }*/
-    
 }

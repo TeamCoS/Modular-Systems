@@ -1,7 +1,6 @@
 package com.teambr.modularsystems.core.client.modelfactory.models
 
 import java.util
-import javax.vecmath.Vector3f
 
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.modularsystems.core.client.modelfactory.ModelFactory
@@ -18,6 +17,7 @@ import net.minecraft.util.{ EnumWorldBlockLayer, BlockPos, EnumFacing }
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.client.MinecraftForgeClient
 import net.minecraftforge.client.model.{ ISmartBlockModel, ISmartItemModel }
+import org.lwjgl.util.vector.Vector3f
 
 /**
  * This file was created for Modular-Systems
@@ -105,11 +105,11 @@ class ModelStorageExpansion extends ISmartBlockModel with ISmartItemModel {
         }
     }
 
-    override def getGeneralQuads : java.util.List[_] = {
-        new util.ArrayList[Nothing]()
+    override def getGeneralQuads : java.util.List[BakedQuad] = {
+        new util.ArrayList[BakedQuad]()
     }
 
-    override def getFaceQuads(facing : EnumFacing) : java.util.List[_] = {
+    override def getFaceQuads(facing : EnumFacing) : java.util.List[BakedQuad] = {
         val bakedQuads = new util.ArrayList[BakedQuad]()
         if(world != null)
             drawFace(block.getConnectionArrayForFace(world, pos, facing), bakedQuads, lookUpRotationForFace(facing), facing)
@@ -158,8 +158,8 @@ class ModelStorageExpansion extends ISmartBlockModel with ISmartItemModel {
 
     val MovedUp = new ItemTransformVec3f(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(-0.05F, 0.05F, -0.15F), new Vector3f(-0.5F, -0.5F, -0.5F))
     override def getItemCameraTransforms : ItemCameraTransforms = {
-        new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
+        new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
     }
 
-    override def getTexture : TextureAtlasSprite = textures.corners
+    override def getParticleTexture : TextureAtlasSprite = textures.corners
 }

@@ -62,7 +62,7 @@ class BlockStorageExpansion(name: String, tileEntity: Class[_ <: TileEntity])
      * Used to say what our block state is
      */
     override def createBlockState(): BlockState = {
-        val listed: Array[IProperty] = new Array(0)
+        val listed: Array[IProperty[_]] = new Array(0)
         val unlisted = new Array[IUnlistedProperty[_]](0)
         new ExtendedBlockState(this, listed, unlisted)
     }

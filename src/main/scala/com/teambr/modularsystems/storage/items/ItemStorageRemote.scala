@@ -52,7 +52,7 @@ class ItemStorageRemote extends BaseItem("itemStorageRemote", 1) with IEnergyCon
     }
 
     @SideOnly(Side.CLIENT)
-    override def getSubItems(item: Item, tab: CreativeTabs, subItems: java.util.List[_]): Unit = {
+    override def getSubItems(item: Item, tab: CreativeTabs, subItems: java.util.List[ItemStack]): Unit = {
         var is = new ItemStack(this)
         setEnergy(is, CAPACITY)
         subItems.asInstanceOf[java.util.List[ItemStack]].add(is)
@@ -63,7 +63,7 @@ class ItemStorageRemote extends BaseItem("itemStorageRemote", 1) with IEnergyCon
     }
 
     @SideOnly(Side.CLIENT)
-    override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[_], boolean: Boolean): Unit = {
+    override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
         if (stack.hasTagCompound) {
             if (stack.getTagCompound.getLong("Core") != 0) {
                 val position = BlockPos.fromLong(stack.getTagCompound.getLong("Core"))

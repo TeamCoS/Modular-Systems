@@ -73,7 +73,7 @@ class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseB
     }
 
     override def createBlockState() : BlockState = {
-        val listed = new Array[IProperty](0)
+        val listed = new Array[IProperty[_]](0)
         val unlisted = new Array[IUnlistedProperty[_]](0)
         new ExtendedBlockState(this, listed, unlisted)
     }

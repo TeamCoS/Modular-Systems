@@ -37,7 +37,7 @@ trait CoreStates extends Block {
      * Used to say what our block state is
      */
     override def createBlockState() : BlockState = {
-        val listed : Array[IProperty] = Array(PropertyRotation.FOUR_WAY, PROPERTY_ACTIVE)
+        val listed : Array[IProperty[_]] = Array(PropertyRotation.FOUR_WAY, PROPERTY_ACTIVE)
         val unlisted = new Array[IUnlistedProperty[_]](0)
         new ExtendedBlockState(this, listed, unlisted)
     }
@@ -49,7 +49,7 @@ trait CoreStates extends Block {
                         .withProperty(PROPERTY_ACTIVE, core.isBurning.asInstanceOf[java.lang.Boolean])
             case _ =>
                 state.withProperty (PropertyRotation.FOUR_WAY, world.getBlockState (pos).getValue (PropertyRotation.FOUR_WAY).asInstanceOf[EnumFacing] )
-                    .withProperty(PROPERTY_ACTIVE, true)
+                    .withProperty(PROPERTY_ACTIVE, true.asInstanceOf[java.lang.Boolean])
         }
     }
 
@@ -59,7 +59,7 @@ trait CoreStates extends Block {
      * @return
      */
     override def getStateFromMeta(meta : Int) : IBlockState = {
-        getDefaultState.withProperty(PropertyRotation.FOUR_WAY, EnumFacing.getFront(meta & 5)).withProperty(PROPERTY_ACTIVE, if((Integer.valueOf(meta & 15) >> 2) == 1) true else false)
+        getDefaultState.withProperty(PropertyRotation.FOUR_WAY, EnumFacing.getFront(meta & 5)).withProperty(PROPERTY_ACTIVE, if((Integer.valueOf(meta & 15) >> 2) == 1) true.asInstanceOf[java.lang.Boolean] else false.asInstanceOf[java.lang.Boolean])
     }
 
     /**
