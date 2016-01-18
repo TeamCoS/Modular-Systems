@@ -23,7 +23,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{ BlockPos, EnumFacing }
 import net.minecraft.world.{ IBlockAccess, World }
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 
 /**
   * This file was created for Modular-Systems
@@ -120,6 +120,7 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
         }
     }
 
+    @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getBlockState(new BlockPos(x, y, z)).getBlock match {
             case block: BlockManager.bankSolids.type =>
