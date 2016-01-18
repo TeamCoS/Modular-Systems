@@ -57,8 +57,7 @@ class GuiStorageCore(player: EntityPlayer, val storageCore : TileStorageCore)
             if(storageCore.hasSortUpgrade) {
                 components += new GuiComponentButton(3, 26, 20, 20, "S") {
                     override def doAction() : Unit = {
-                        storageCore.sortInventory
-                        PacketManager.updateTileWithClientInfo(storageCore)
+                        storageCore.sendValueToServer(0, 0)
                     }
                     override def getDynamicToolTip(mouseX : Int, mouseY : Int) : ArrayBuffer[String] =
                         ArrayBuffer(StatCollector.translateToLocal("inventory.storageCore.sort"))
@@ -95,8 +94,7 @@ class GuiStorageCore(player: EntityPlayer, val storageCore : TileStorageCore)
     protected override def mouseClicked(par1 : Int, par2 : Int, par3 : Int) {
         super.mouseClicked(par1, par2, par3)
         if (par3 == 2 && storageCore != null && storageCore.hasSortUpgrade) {
-            storageCore.sortInventory
-            PacketManager.updateTileWithClientInfo(storageCore)
+            storageCore.sendValueToServer(0, 0)
             GuiHelper.playButtonSound
         }
     }
