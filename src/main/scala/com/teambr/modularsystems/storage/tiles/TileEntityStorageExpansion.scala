@@ -35,7 +35,7 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         for (child <- children) {
             worldObj.getTileEntity(child) match {
                 case expansion: TileEntityStorageExpansion => expansion.removeFromNetwork(true)
-                    worldObj.markBlockForUpdate(pos)
+                    worldObj.markBlockForUpdate(child)
                 case _ =>
             }
         }
@@ -118,7 +118,8 @@ abstract class TileEntityStorageExpansion extends TileEntity with UpdatingTile {
         }
         if (tag.hasKey("IsInNetwork"))
             core = Some(BlockPos.fromLong(tag.getLong("IsInNetwork")))
-        else core = None
+        else
+            core = None
         if (worldObj != null)
             worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
