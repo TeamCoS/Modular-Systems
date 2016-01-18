@@ -1,30 +1,34 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
+
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
 
 repositories {
     maven {
-        url "http://www.dyonovan.com/maven2/"
+        url "http://www.teambrmodding.com/maven2/"
+    }
+	maven { // the repo from which to get NEI and stuff
+        name "CB Repo"
+        url "http://chickenbones.net/maven/"
+    }
+    maven { // The repo from which to get waila
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
     }
 }
 
+apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'scala'
-apply plugin: 'forge'
 apply plugin: 'maven'
-apply plugin: 'java'
 
 ext.configFile = file "build.properties"
 
@@ -55,7 +59,8 @@ minecraft {
     replaceIn "core/lib/Reference.scala"
     replace "@VERSION@","${config.mod_version}"
 
-    mappings = "snapshot_20141130"
+    mappings = "stable_20"
+    makeObfSourceJar = false
 }
 
 configurations.all {
@@ -87,20 +92,9 @@ processResources
 }
 
 dependencies {
-    compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
-    compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
-    compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
+    //compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
+    //compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
+    //compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
 }
 
-repositories {
-    mavenCentral()
-    maven { // the repo from which to get NEI and stuff
-        name "CB Repo"
-        url "http://chickenbones.net/maven/"
-    }
-    maven { // The repo from which to get waila
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
-    }
-}
