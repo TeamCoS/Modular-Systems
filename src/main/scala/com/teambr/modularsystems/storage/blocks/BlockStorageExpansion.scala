@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{EnumWorldBlockLayer, BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
+import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 
 /**
  * Modular-Systems
@@ -219,6 +220,7 @@ class BlockStorageExpansion(name: String, tileEntity: Class[_ <: TileEntity])
         }
     }
 
+    @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getBlockState(new BlockPos(x, y, z)).getBlock match {
             case block: BlockManager.storageRemote.type =>

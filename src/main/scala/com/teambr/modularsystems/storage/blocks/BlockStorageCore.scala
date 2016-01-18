@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{ BlockPos, ResourceLocation }
 import net.minecraft.world.World
+import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 
 /**
  * Modular-Systems
@@ -49,6 +50,7 @@ class BlockStorageCore extends BaseBlock(Material.wood, "storageCore", classOf[T
             new ResourceLocation(MODID + ":blocks/" + blockName + "Front"))
     }
 
+    @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
         new GuiStorageCore(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileStorageCore])
 
