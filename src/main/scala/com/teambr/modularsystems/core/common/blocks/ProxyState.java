@@ -54,6 +54,6 @@ public class ProxyState implements IBlockState {
 
     @Override
     public Block getBlock() {
-        return null;
+        return block;
     }
 }

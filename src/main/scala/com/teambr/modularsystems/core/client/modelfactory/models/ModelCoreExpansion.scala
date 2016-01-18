@@ -87,6 +87,7 @@ class ModelCoreExpansion extends ISmartBlockModel with ISmartItemModel {
                     case _ =>
                 }
             }
+
             //Front border
             bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(16.0F, 2.0F, 2.0F), face, texture, enumFacing, ModelRotation.X0_Y0, null, scale, true))
             bakedQuads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 14.0F, 0.0F), new Vector3f(16.0F, 16.0F, 2.0F), face, texture, enumFacing, ModelRotation.X0_Y0, null, scale, true))

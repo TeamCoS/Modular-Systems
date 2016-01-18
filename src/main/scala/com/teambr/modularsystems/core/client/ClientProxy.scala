@@ -8,6 +8,7 @@ import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
 import com.teambr.modularsystems.core.managers.{ BlockManager, ItemRenderManager }
 import com.teambr.modularsystems.power.tiles.TileBankBase
 import net.minecraft.client.renderer.block.statemap.StateMap.Builder
+import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fml.client.registry.ClientRegistry
 
@@ -31,7 +32,7 @@ class ClientProxy extends CommonProxy {
         ModelLoader.setCustomStateMapper(BlockManager.storageSmashing,
             (new Builder).ignore(PropertyRotation.SIX_WAY).build())
 
-       // ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileBankBase], new TileSpecialDummyRenderer)
+        RenderRegistry.doTheThing()
     }
 
     override def init() = {
