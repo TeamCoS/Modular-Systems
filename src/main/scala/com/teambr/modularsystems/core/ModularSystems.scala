@@ -3,7 +3,6 @@ package com.teambr.modularsystems.core
 import java.io.File
 
 import com.teambr.modularsystems.core.achievement.ModAchievements
-import com.teambr.modularsystems.core.api.nei.NEICallback
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.core.managers.{CraftingManager, BlockManager, ItemManager}
@@ -35,8 +34,6 @@ import org.apache.logging.log4j.LogManager
 object ModularSystems {
     //The logger. For logging
     final val logger = LogManager.getLogger(Reference.MOD_NAME)
-
-    var nei : NEICallback = null
 
     var configFolderLocation : String = ""
 

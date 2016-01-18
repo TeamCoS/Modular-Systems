@@ -5,8 +5,6 @@ import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
 import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.crusher.tiles.TileCrusherCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
-import mcp.mobius.waila.api.ITaggedList.ITipList
-import mcp.mobius.waila.api.{IWailaDataAccessorServer, IWailaConfigHandler, IWailaDataAccessor}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
@@ -15,7 +13,6 @@ import net.minecraft.init.Blocks
 import net.minecraft.inventory.{ ISidedInventory, IInventory }
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{ EnumFacing, BlockPos, IChatComponent }
 
 /**
@@ -243,11 +240,11 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with W
       ************************************************ Inventory methods ***********************************************
       ******************************************************************************************************************/
 
-    override def returnWailaStack(accessor: IWailaDataAccessor, config: IWailaConfigHandler): ItemStack = {
+    /*override def returnWailaStack(accessor: IWailaDataAccessor, config: IWailaConfigHandler): ItemStack = {
         if (getStoredBlock != Blocks.air) {
             return new ItemStack(getStoredBlock, 1, getBlockMetadata)
         }
         null
-    }
+    }*/
     
 }
