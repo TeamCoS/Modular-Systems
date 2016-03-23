@@ -9,8 +9,6 @@ import com.teambr.modularsystems.crusher.tiles.{TileCrusherExpansion, TileCrushe
 import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import com.teambr.modularsystems.power.tiles.{TileBankRF, TileBankLiquids, TileBankSolids}
-import com.teambr.modularsystems.storage.blocks.{ BlockStorageSmashing, BlockStorageCore, BlockStorageExpansion }
-import com.teambr.modularsystems.storage.tiles._
 import net.minecraft.block.Block
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -32,17 +30,6 @@ object BlockManager {
     val bankLiquids = new BlockCoreExpansion("bankLiquids", classOf[TileBankLiquids], 0x215045)
     val bankRF = new BlockCoreExpansion("bankRF", classOf[TileBankRF], new Color(174, 0, 36).getRGB)
 
-    //Storage
-    val storageCore = new BlockStorageCore
-    val storageBasic = new BlockStorageExpansion("storageBasic", classOf[TileStorageBasic])
-    val storageCapacity = new BlockStorageExpansion("storageCapacity", classOf[TileStorageCapacity])
-    val storageCrafting = new BlockStorageExpansion("storageCrafting", classOf[TileStorageCrafting])
-    val storageRemote = new BlockStorageExpansion("storageRemote", classOf[TileStorageRemote])
-    val storageHopping = new BlockStorageExpansion("storageHopping", classOf[TileStorageHopping])
-    val storageSearch = new BlockStorageExpansion("storageSearch", classOf[TileStorageSearch])
-    val storageSort = new BlockStorageExpansion("storageSort", classOf[TileStorageSorting])
-    val storageSmashing = new BlockStorageSmashing("storageSmashing", classOf[TileStorageSmashing])
-
     //Expansions
     val crusherExpansion = new BlockCoreExpansion("crusherExpansion", classOf[TileCrusherExpansion], 0x555555)
     val ioExpansion = new BlockCoreExpansion("ioExpansion", classOf[TileIOExpansion], 0xBBBBBB)
@@ -59,17 +46,6 @@ object BlockManager {
         registerBlock(bankSolids, "bankSolids", classOf[TileBankSolids])
         registerBlock(bankLiquids, "bankLiquids", classOf[TileBankLiquids])
         registerBlock(bankRF, "bankRF", classOf[TileBankRF])
-
-        //Storage
-        registerBlock(storageCore, "storageCore", classOf[TileStorageCore])
-        registerBlock(storageBasic, "storageBasic", classOf[TileStorageBasic])
-        registerBlock(storageCapacity, "storageCapacity", classOf[TileStorageCapacity])
-        registerBlock(storageCrafting, "storageCrafting", classOf[TileStorageCrafting])
-        registerBlock(storageRemote, "storageRemote", classOf[TileStorageRemote])
-        registerBlock(storageHopping, "storageHopping", classOf[TileStorageHopping])
-        registerBlock(storageSearch, "storageSearch", classOf[TileStorageSearch])
-        registerBlock(storageSort, "storageSort", classOf[TileStorageSorting])
-        registerBlock(storageSmashing, "storageSmashing", classOf[TileStorageSmashing])
 
         //Expansions
         registerBlock(crusherExpansion, "crusherExpansion", classOf[TileCrusherExpansion])

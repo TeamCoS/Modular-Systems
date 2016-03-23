@@ -37,12 +37,12 @@ class BlockCountFunction {
         i += 1
         blockCount += (BlockHelper.getBlockString(block, meta) -> i)
         if(!BlockValueRegistry.isBlockRegistered(block, meta)) {
-            var j : Int = materialCount.get(BlockValueRegistry.getMaterialString(block.getMaterial)) match {
+            var j : Int = materialCount.get(BlockValueRegistry.getMaterialString(block.getMaterial(block.getDefaultState))) match {
                 case Some(value) => value
                 case None => 0
             }
             j += 1
-            materialCount += (BlockValueRegistry.getMaterialString(block.getMaterial) -> j)
+            materialCount += (BlockValueRegistry.getMaterialString(block.getMaterial(block.getDefaultState)) -> j)
         }
     }
 

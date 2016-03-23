@@ -56,41 +56,5 @@ public class CraftingManager {
                 "IPI",
                 "RIR", 'R', Blocks.redstone_block, 'I', Items.iron_ingot, 'P', Blocks.piston);
 
-        //Storage Core
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageCore(), 1),
-                "LWL",
-                "WCW",
-                "LWL", 'L', "logWood", 'W', "plankWood", 'C', Blocks.chest));
-
-        //Basic Storage Expansion
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageBasic(), 4),
-                "WWW",
-                "WSW",
-                "WWW", 'W', "plankWood", 'S', Items.string));
-
-        //Capacity Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageCapacity(), 1),
-                BlockManager.storageBasic(), Blocks.chest);
-
-        //Search Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSearch(), 1),
-                BlockManager.storageBasic(), Items.writable_book);
-
-        //Sort Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSort(), 1),
-                BlockManager.storageBasic(), Items.book);
-
-        //Crafting Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageCrafting(), 1),
-                BlockManager.storageBasic(), Blocks.crafting_table);
-
-        //Hopping Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageHopping(), 1),
-                BlockManager.storageBasic(), Blocks.hopper, Items.ender_pearl);
-
-        //Smashing Expansion
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.storageSmashing(), 1),
-                BlockManager.storageBasic(), Items.iron_pickaxe);
-
     }
 }

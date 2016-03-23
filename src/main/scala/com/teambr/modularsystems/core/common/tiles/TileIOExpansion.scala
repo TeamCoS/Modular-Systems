@@ -1,7 +1,6 @@
 package com.teambr.modularsystems.core.common.tiles
 
 import com.teambr.bookshelf.common.tiles.traits.RedstoneAware
-import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -50,25 +49,7 @@ class TileIOExpansion extends TileProxy with RedstoneAware {
                                 case tile : IInventory =>
                                     if (!tile.isInstanceOf[TileProxy] && !tile.isInstanceOf[AbstractCore]) {
 
-                                        if (input) {
-                                            for (i <- 0 until tile.getSizeInventory) {
-                                                if (InventoryUtils.moveItemInto(tile, i, theCore, -1, 64, dir.getOpposite, doMove = true, canStack = true) > 0) {
-                                                    worldObj.markBlockForUpdate(theCore.getPos)
-                                                    return
-                                                }
-                                            }
-                                        }
 
-                                        if (output) {
-                                            for (i <- 0 until tile.getSizeInventory) {
-                                                for(s <- theCore.getSlotsForFace(dir)) {
-                                                    if (s !=  0 && InventoryUtils.moveItemInto(theCore, s, tile, i, 64, dir.getOpposite, doMove = true, canStack = true) > 0) {
-                                                        worldObj.markBlockForUpdate(theCore.getPos)
-                                                        return
-                                                    }
-                                                }
-                                            }
-                                        }
                                     }
                                 case _ =>
                             }

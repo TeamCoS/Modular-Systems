@@ -93,7 +93,7 @@ object FurnaceBannedBlocks {
         if (block.hasTileEntity(block.getDefaultState)) {
             return true
         }
-        if (!block.isNormalCube) {
+        if (!block.isNormalCube(block.getDefaultState)) {
             return true
         }
         val oreDictCheck = OreDictionary.getOreIDs(new ItemStack(block))

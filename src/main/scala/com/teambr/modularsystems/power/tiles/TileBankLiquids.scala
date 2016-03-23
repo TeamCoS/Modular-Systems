@@ -50,7 +50,7 @@ class TileBankLiquids extends TileBankBase with IFluidHandler with Inventory wit
                     getStackInSlot(BUCKET_OUT).stackSize += 1
 
                 decrStackSize(BUCKET_IN, 1)
-                worldObj.markBlockForUpdate(pos)
+                worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
             }
         } else if (getStackInSlot(BUCKET_IN) != null && FluidContainerRegistry.isEmptyContainer(getStackInSlot(BUCKET_IN))
                 && tank.getFluid != null && tank.getFluidAmount > FluidContainerRegistry.getContainerCapacity(getStackInSlot(BUCKET_IN))) {
@@ -63,7 +63,7 @@ class TileBankLiquids extends TileBankBase with IFluidHandler with Inventory wit
 
                 //clear input slot
                 decrStackSize(BUCKET_IN, 1)
-                worldObj.markBlockForUpdate(pos)
+                worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
             }
         }
     }
@@ -84,7 +84,7 @@ class TileBankLiquids extends TileBankBase with IFluidHandler with Inventory wit
             val fluid = tank.getFluid
             val value = FluidFuelValues.getFluidFuelValue(fluid.getFluid.getName)
             val actual = tank.drain(100, true)
-            worldObj.markBlockForUpdate(pos)
+            worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
             return Math.round(actual.amount.toFloat / FluidContainerRegistry.BUCKET_VOLUME * value)
         }
         0
@@ -97,7 +97,7 @@ class TileBankLiquids extends TileBankBase with IFluidHandler with Inventory wit
             val fluid = tank.getFluid
             val value = FluidFuelValues.getFluidFuelValue(fluid.getFluid.getName)
             val actual = tank.drain(100, true)
-            worldObj.markBlockForUpdate(pos)
+            worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
             return Math.round(actual.amount.toFloat / FluidContainerRegistry.BUCKET_VOLUME * value)
         }
         0
@@ -125,7 +125,7 @@ class TileBankLiquids extends TileBankBase with IFluidHandler with Inventory wit
     override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
         if (FluidFuelValues.getFluidFuelValue(resource.getFluid.getName) > 0) {
             val amount = tank.fill(resource, doFill)
-            worldObj.markBlockForUpdate(pos)
+            worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
             return amount
         }
         0
@@ -136,8 +136,6 @@ class TileBankLiquids extends TileBankBase with IFluidHandler with Inventory wit
     /** *****************************************************************************************************************
       * ************************************* Inventory Methods *********************************************************
       * *****************************************************************************************************************/
-
-    override var inventoryName: String = _
 
     override def initialSize: Int = 2
 

@@ -1,16 +1,11 @@
 package com.teambr.modularsystems.core.client
 
-import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
-import com.teambr.modularsystems.core.client.modelfactory.ModelFactory
-import com.teambr.modularsystems.core.client.renderer.TileSpecialDummyRenderer
+import com.teambr.bookshelf.common.blocks.properties.Properties
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
-import com.teambr.modularsystems.core.managers.{ BlockManager, ItemRenderManager }
-import com.teambr.modularsystems.power.tiles.TileBankBase
+import com.teambr.modularsystems.core.managers.{BlockManager, ItemRenderManager}
 import net.minecraft.client.renderer.block.statemap.StateMap.Builder
-import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.client.model.ModelLoader
-import net.minecraftforge.fml.client.registry.ClientRegistry
 
 /**
  * This file was created for the Modular-Systems
@@ -26,18 +21,16 @@ class ClientProxy extends CommonProxy {
 
     override def preInit() = {
         ModelLoader.setCustomStateMapper(BlockManager.furnaceCore,
-            (new Builder).ignore(PropertyRotation.FOUR_WAY).ignore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
+            (new Builder).ignore(Properties.FOUR_WAY)
+                    .ignore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
         ModelLoader.setCustomStateMapper(BlockManager.crusherCore,
-            (new Builder).ignore(PropertyRotation.FOUR_WAY).ignore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
-        ModelLoader.setCustomStateMapper(BlockManager.storageSmashing,
-            (new Builder).ignore(PropertyRotation.SIX_WAY).build())
+            (new Builder).ignore(Properties.FOUR_WAY)
+                    .ignore(BlockManager.furnaceCore.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
 
         RenderRegistry.doTheThing()
     }
 
     override def init() = {
-
-        ModelFactory.register()
 
         //Register Inventory Renderer for Items
         ItemRenderManager.registerItemRenderer()

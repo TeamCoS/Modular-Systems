@@ -1,12 +1,12 @@
 package com.teambr.modularsystems.power.tiles
 
 import com.teambr.bookshelf.helper.BlockHelper
+import com.teambr.bookshelf.util.InventoryUtils
 import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.common.tiles.AbstractCore
 import com.teambr.modularsystems.core.functions.BlockCountFunction
-import com.teambr.modularsystems.core.registries.{FurnaceBannedBlocks, BlockValueRegistry}
+import com.teambr.modularsystems.core.registries.{BlockValueRegistry, FurnaceBannedBlocks}
 import net.minecraft.block.Block
-import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
 
 /**
@@ -27,6 +27,7 @@ class TileBatteryCore extends AbstractCore {
 
     /**
      * Get the output of the recipe
+ *
      * @param stack The input
      * @return The output
      */
@@ -34,6 +35,7 @@ class TileBatteryCore extends AbstractCore {
 
     /**
      * Take the blocks in this structure and generate the speed etc values
+ *
      * @param function The blocks count function
      */
     override def generateValues(function: BlockCountFunction): Unit = {
@@ -58,6 +60,7 @@ class TileBatteryCore extends AbstractCore {
 
     /**
      * Check if this blocks is not allowed in the structure
+ *
      * @param block The blocks to check
      * @param meta The meta data of said blocks
      * @return True if it is banned
@@ -79,7 +82,5 @@ class TileBatteryCore extends AbstractCore {
      *
      * @return int range 0 - 16
      */
-    override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
-
-    override var inventoryName: String = _
+    override def getRedstoneOutput: Int = InventoryUtils.calcRedstoneFromInventory(this)
 }

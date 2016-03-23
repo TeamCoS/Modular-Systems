@@ -2,7 +2,7 @@ package com.teambr.modularsystems.core.network
 
 import com.teambr.bookshelf.Bookshelf
 import io.netty.buffer.ByteBuf
-import net.minecraft.util.BlockPos
+import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.network.simpleimpl.{MessageContext, IMessage, IMessageHandler}
 
 /**

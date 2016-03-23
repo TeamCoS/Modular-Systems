@@ -5,7 +5,8 @@ import com.teambr.modularsystems.core.lib.Reference
 import mezz.jei.api.gui.{IDrawableAnimated, IGuiItemStackGroup, IDrawable, IRecipeLayout}
 import mezz.jei.api.recipe.{IRecipeWrapper, IRecipeCategory}
 import net.minecraft.client.Minecraft
-import net.minecraft.util.{ResourceLocation, StatCollector}
+import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.translation.I18n
 
 /**
   * Created by Dyonovan on 1/18/2016.
@@ -39,7 +40,7 @@ class CrusherRecipeCatagory extends IRecipeCategory {
 
     override def drawExtras(minecraft: Minecraft): Unit = { }
 
-    override def getTitle: String = StatCollector.translateToLocal("inventory.crusher.title")
+    override def getTitle: String = I18n.translateToLocal("inventory.crusher.title")
 
     override def getUid: String = Reference.MOD_ID + ":modularCrusher"
 }

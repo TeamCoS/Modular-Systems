@@ -8,7 +8,9 @@ import com.teambr.modularsystems.power.tiles.TileBatteryCore
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.item.ItemStack
+import net.minecraft.util.{EnumHand, EnumFacing}
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 /**
@@ -32,7 +34,9 @@ class BlockBatteryCore(name:String) extends BaseBlock(Material.rock, name, class
         super[DropsItems].breakBlock(world, pos, state)
     }
 
-    override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, player : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer,
+                                  hand: EnumHand, heldItem: ItemStack,
+                                  side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         world.getTileEntity(pos) match {
             case core: TileBatteryCore =>
                 if (core.wellFormed)
@@ -44,7 +48,7 @@ class BlockBatteryCore(name:String) extends BaseBlock(Material.rock, name, class
         true
     }
 
-    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
+    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = { null }
 
-    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
+    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = { null }
 }

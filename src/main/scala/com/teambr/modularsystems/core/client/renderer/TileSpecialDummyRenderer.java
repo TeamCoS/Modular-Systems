@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -25,7 +25,7 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         GlStateManager.pushAttrib();
         GL11.glDisable(GL11.GL_CULL_FACE);
 
-        WorldRenderer tess = Tessellator.getInstance().getWorldRenderer();
+        VertexBuffer tess = Tessellator.getInstance().getBuffer();
         GlStateManager.translate((float) x, (float) y, (float) z);
         RenderUtils.bindGuiComponentsSheet();
 
@@ -68,7 +68,7 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         GlStateManager.popAttrib();
     }
 
-    protected void drawLevel(float x1, float y1, float z1, float x2, float y2, float z2, WorldRenderer tess) {
+    protected void drawLevel(float x1, float y1, float z1, float x2, float y2, float z2, VertexBuffer tess) {
         tess.begin(GL11.GL_QUADS, RenderUtils.POSITION_TEX_NORMALF());
         tess.pos(x1, y1, z1).tex(2 / 255F, 2 / 255F).normal(0, -1, 0).endVertex();
         tess.pos(x1, y2, z1).tex(2 / 255F, 4 / 255F).normal(0, -1, 0).endVertex();
@@ -77,7 +77,8 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         Tessellator.getInstance().draw();
     }
 
-    protected void drawLevel(float x1, float y1, float z1, float x2, float y2, float z2, float u1, float v1, float u2, float v2, WorldRenderer tess) {
+    protected void drawLevel(float x1, float y1, float z1, float x2, float y2, float z2, float u1,
+                             float v1, float u2, float v2, VertexBuffer tess) {
         tess.begin(GL11.GL_QUADS, RenderUtils.POSITION_TEX_NORMALF());
         tess.pos(x1, y1, z1).tex(u1, v1).normal(0, -1, 0).endVertex();
         tess.pos(x1, y2, z1).tex(u1, v2).normal(0, -1, 0).endVertex();

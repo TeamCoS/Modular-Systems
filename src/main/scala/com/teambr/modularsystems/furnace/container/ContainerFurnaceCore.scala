@@ -1,9 +1,9 @@
 package com.teambr.modularsystems.furnace.container
 
 import com.teambr.bookshelf.common.container.BaseContainer
+import com.teambr.modularsystems.core.slots.SlotFurnaceOutputItemHandler
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import net.minecraft.entity.player.InventoryPlayer
-import net.minecraft.inventory.SlotFurnaceOutput
 
 /**
  * This file was created for Modular-Systems
@@ -19,7 +19,7 @@ class ContainerFurnaceCore(playerInventory: InventoryPlayer, tile: TileEntityFur
         extends BaseContainer(playerInventory, tile) {
 
     addSlotToContainer(new RestrictedSlot(tile, 0, 56, 35))
-    addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, tile, 1, 116, 35))
+    addSlotToContainer(new SlotFurnaceOutputItemHandler(playerInventory.player, tile, 1, 116, 35))
     addPlayerInventorySlots(8, 84)
 
 }

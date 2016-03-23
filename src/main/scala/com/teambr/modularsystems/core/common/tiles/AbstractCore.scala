@@ -4,6 +4,7 @@ import java.util
 import java.util.Collections
 
 import com.teambr.bookshelf.collections.Location
+import com.teambr.bookshelf.common.blocks.properties.Properties
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import com.teambr.bookshelf.util.WorldUtils
 import com.teambr.modularsystems.core.collections.StandardValues
@@ -13,12 +14,11 @@ import com.teambr.modularsystems.core.providers.FuelProvider
 import com.teambr.modularsystems.crusher.tiles.TileCrusherExpansion
 import com.teambr.modularsystems.power.tiles.TileBankBase
 import net.minecraft.block.Block
-import net.minecraft.block.properties.PropertyDirection
-import net.minecraft.inventory.ISidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Paul Davis <pauljoda>
  * @since August 05, 2015
  */
-abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInventory {
+abstract class AbstractCore extends UpdatingTile with Inventory {
     final val cookSpeed = 200
     final val MAX_SIZE = 100
 
@@ -42,14 +42,16 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
 
     /**
      * Get the output of the recipe
-     * @param stack The input
+      *
+      * @param stack The input
      * @return The output
      */
     def recipe(stack : ItemStack) : ItemStack
 
     /**
      * Check if this blocks is not allowed in the structure
-     * @param block The blocks to check
+      *
+      * @param block The blocks to check
      * @param meta The meta data of said blocks
      * @return True if it is banned
      */
@@ -57,7 +59,8 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
 
     /**
      * Take the blocks in this structure and generate the speed etc values
-     * @param function The blocks count function
+      *
+      * @param function The blocks count function
      */
     def generateValues(function : BlockCountFunction)
 
@@ -145,7 +148,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
                 worldObj.getTileEntity(loc) match {
                     case tile : TileProxy =>
                         tile.setCore(this)
-                        worldObj.markBlockForUpdate(loc)
+                        worldObj.notifyBlockUpdate(loc, worldObj.getBlockState(loc), worldObj.getBlockState(loc), 3)
                     case _ =>
                         val id = Block.getIdFromBlock(worldObj.getBlockState(loc).getBlock)
                         val meta = worldObj.getBlockState(loc).getBlock.getMetaFromState(worldObj.getBlockState(loc))
@@ -156,14 +159,14 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
                         proxy.setCore(this)
                         proxy.storedBlock = id
                         proxy.metaData = meta
-                        worldObj.markBlockForUpdate(loc)
+                        worldObj.notifyBlockUpdate(loc, worldObj.getBlockState(loc), worldObj.getBlockState(loc), 3)
                         worldObj.markBlockRangeForRenderUpdate(loc, loc)
                 }
             }
         }
         generateValues(blockCountFunction)
         wellFormed = true
-        worldObj.markBlockForUpdate(pos)
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3)
         worldObj.markBlockRangeForRenderUpdate(corners._1, corners._2)
     }
 
@@ -182,22 +185,22 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
                     case proxy : TileProxy if !proxy.isInstanceOf[TileBankBase] && !proxy.isInstanceOf[TileCrusherExpansion] && !proxy.isInstanceOf[TileIOExpansion] =>
                         val meta = proxy.metaData
                         worldObj.setBlockState(loc, proxy.getStoredBlock.getStateFromMeta(meta))
-                        worldObj.markBlockForUpdate(loc)
+                        worldObj.notifyBlockUpdate(loc, worldObj.getBlockState(loc), worldObj.getBlockState(loc), 3)
                     case tile : TileBankBase =>
                         tile.coreLocation = None
-                        worldObj.markBlockForUpdate(loc)
+                        worldObj.notifyBlockUpdate(loc, worldObj.getBlockState(loc), worldObj.getBlockState(loc), 3)
                     case tile : TileCrusherExpansion =>
                         tile.coreLocation = None
-                        worldObj.markBlockForUpdate(loc)
+                        worldObj.notifyBlockUpdate(loc, worldObj.getBlockState(loc), worldObj.getBlockState(loc), 3)
                     case tile : TileIOExpansion =>
                         tile.coreLocation = None
-                        worldObj.markBlockForUpdate(loc)
+                        worldObj.notifyBlockUpdate(loc, worldObj.getBlockState(loc), worldObj.getBlockState(loc), 3)
                     case _ =>
                 }
             }
         }
         wellFormed = false
-        worldObj.markBlockForUpdate(pos)
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3)
     }
 
     def getCorners : Option[(BlockPos, BlockPos)] = {
@@ -205,7 +208,8 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
         var firstCorner = new BlockPos(local)
         var secondCorner = new BlockPos(local)
 
-        val dir : EnumFacing = worldObj.getBlockState(this.pos).getValue(PropertyDirection.create("facing", util.Arrays.asList(EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST))).asInstanceOf[EnumFacing]
+        val dir : EnumFacing = worldObj.getBlockState(this.pos)
+                .getValue(Properties.FOUR_WAY)
 
         //Move Inside
         firstCorner = firstCorner.offset(dir.getOpposite)
@@ -279,7 +283,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
         if (!worldObj.isRemote) {
             if (this.values.burnTime > 0) {
                 this.values.burnTime = values.burnTime - 1
-                worldObj.markBlockForUpdate(pos)
+                worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
             }
             if (canSmelt(getStackInSlot(0), recipe(getStackInSlot(0)), getStackInSlot(1)) && !values.isPowered) {
                 if (corners == null)  corners = getCorners match {
@@ -313,7 +317,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
                 didWork = true
             }
             if (didWork) {
-                worldObj.markBlockForUpdate(pos)
+                worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
                 markDirty()
             }
         }
@@ -397,7 +401,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
         }
         input = input.copy
         val recipeStackSize : Int = if (recipeResult.stackSize > 0) recipeResult.stackSize else 1
-        val outMax : Int = if (getInventoryStackLimit < output.getMaxStackSize) output.getMaxStackSize else getInventoryStackLimit()
+        val outMax : Int = if (getInventoryStackLimit < output.getMaxStackSize) output.getMaxStackSize else getInventoryStackLimit
         val outAvailable : Int = outMax - output.stackSize
         var avail : Int = if (values.multiplicity + 1 < input.stackSize) values.multiplicity.toInt + 1 else input.stackSize
         var count : Int = recipeStackSize * avail
@@ -496,17 +500,12 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
 
     /**
      * Used to define if an item is valid for a slot
-     * @param index The slot id
+      *
+      * @param index The slot id
      * @param stack The stack to check
      * @return True if you can put this there
      */
     override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = index == 0
 
     override def initialSize : Int = 2
-
-    /**
-     * Does this inventory has a custom name
-     * @return True if there is a name (localized)
-     */
-    override def hasCustomName(): Boolean = false
 }

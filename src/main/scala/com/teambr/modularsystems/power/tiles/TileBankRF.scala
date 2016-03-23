@@ -1,10 +1,10 @@
 package com.teambr.modularsystems.power.tiles
 
-import cofh.api.energy.{EnergyStorage, IEnergyHandler}
+import cofh.api.energy.EnergyStorage
+import com.teambr.bookshelf.common.tiles.traits.EnergyHandler
 import com.teambr.modularsystems.core.providers.FuelProvider.FuelProviderType
 import com.teambr.modularsystems.core.registries.ConfigRegistry
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
 
 /**
  * This file was created for Modular-Systems
@@ -16,13 +16,14 @@ import net.minecraft.util.EnumFacing
  * @author Dyonovan
  * @since August 10, 2015
  */
-class TileBankRF extends TileBankBase with IEnergyHandler {
+class TileBankRF extends TileBankBase with EnergyHandler {
 
     private val energy = new EnergyStorage(10000)
 
     /**
      * Used to scale the current power level
-     * @param scale The scale to move to
+      *
+      * @param scale The scale to move to
      * @return A number from 0 - { @param scale} for current level
      */
     override def getPowerLevelScaled(scale: Int): Double = energy.getEnergyStored * scale / energy.getMaxEnergyStored
@@ -31,19 +32,11 @@ class TileBankRF extends TileBankBase with IEnergyHandler {
       ******************************************** RF Energy Functions *************************************************
       ******************************************************************************************************************/
 
-    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
+    override def defaultEnergyStorageSize: Int = 80000
 
-    override def getEnergyStored(from: EnumFacing): Int = energy.getEnergyStored
+    override def isReceiver: Boolean = true
 
-    override def getMaxEnergyStored(from: EnumFacing): Int = energy.getMaxEnergyStored
-
-    override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
-        val actual = energy.receiveEnergy(maxReceive, simulate)
-        worldObj.markBlockForUpdate(pos)
-        actual
-    }
-
-    override def canConnectEnergy(from: EnumFacing): Boolean = true
+    override def isProvider: Boolean = false
 
     /*******************************************************************************************************************
       **************************************** Fuel Provider Functions *************************************************
@@ -51,7 +44,7 @@ class TileBankRF extends TileBankBase with IEnergyHandler {
 
     override def consume(): Double = {
         val actual = energy.extractEnergy(Math.round(ConfigRegistry.rfPower * 200).toInt, false)
-        worldObj.markBlockForUpdate(pos)
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
         (actual / (ConfigRegistry.rfPower * 200)) * 200
     }
 

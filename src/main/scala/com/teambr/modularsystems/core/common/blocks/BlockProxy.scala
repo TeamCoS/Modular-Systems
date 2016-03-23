@@ -9,13 +9,14 @@ import com.teambr.modularsystems.power.tiles.TileBankBase
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
-import net.minecraft.block.state.{BlockState, IBlockState}
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{BlockPos, EnumFacing, EnumWorldBlockLayer}
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util._
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -63,17 +64,20 @@ class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseB
         super.breakBlock(world, pos, state)
     }
 
-    override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, player : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer,
+                                  hand: EnumHand, heldItem: ItemStack, side:
+                                  EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         world.getTileEntity(pos) match {
             case tile: TileProxy =>
                 if (tile.getCore.isDefined) {
-                    player.openGui(Bookshelf, 0, world, tile.getCore.get.getPos.getX, tile.getCore.get.getPos.getY, tile.getCore.get.getPos.getZ)
+                    player.openGui(Bookshelf, 0, world,
+                        tile.getCore.get.getPos.getX, tile.getCore.get.getPos.getY, tile.getCore.get.getPos.getZ)
                 }
         }
         true
     }
 
-    override def createBlockState() : BlockState = {
+    override def createBlockState() : BlockStateContainer = {
         val listed = new Array[IProperty[_]](0)
         val unlisted = new Array[IUnlistedProperty[_]](0)
         new ExtendedBlockState(this, listed, unlisted)
@@ -83,19 +87,19 @@ class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseB
         new ProxyState(world.getTileEntity(pos).asInstanceOf[TileProxy], state.getBlock)
     }
 
-    override def getRenderType : Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
-    override def isOpaqueCube : Boolean =
+    override def isOpaqueCube(state : IBlockState) : Boolean =
         true
 
     @SideOnly(Side.CLIENT)
-    override def isTranslucent : Boolean =
+    override def isTranslucent(state : IBlockState) : Boolean =
         false
 
-    override def canRenderInLayer(layer : EnumWorldBlockLayer) : Boolean =
-        layer == EnumWorldBlockLayer.CUTOUT || layer == EnumWorldBlockLayer.TRANSLUCENT
+    override def canRenderInLayer(layer : BlockRenderLayer) : Boolean =
+        layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT
 
     @SideOnly(Side.CLIENT)
-    override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.SOLID
+    override def getBlockLayer : BlockRenderLayer = BlockRenderLayer.SOLID
 }
 

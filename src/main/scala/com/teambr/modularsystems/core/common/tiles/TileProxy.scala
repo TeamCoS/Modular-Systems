@@ -1,7 +1,6 @@
 package com.teambr.modularsystems.core.common.tiles
 
-import com.teambr.bookshelf.api.waila.Waila
-import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
+import com.teambr.bookshelf.common.tiles.traits.{UpdatingTile, InventorySided}
 import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.crusher.tiles.TileCrusherCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
@@ -10,30 +9,33 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.inventory.{ ISidedInventory, IInventory }
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{ EnumFacing, BlockPos, IChatComponent }
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
+import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.items.CapabilityItemHandler
 
 /**
- * This file was created for Modular-Systems
- *
- * Modular-Systems is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Paul Davis <pauljoda>
- * @since August 06, 2015
- */
-class TileProxy extends UpdatingTile with IInventory with ISidedInventory with Waila {
+  * This file was created for Modular-Systems
+  *
+  * Modular-Systems is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Paul Davis <pauljoda>
+  * @since August 06, 2015
+  */
+class TileProxy extends InventorySided with UpdatingTile {
     var coreLocation : Option[BlockPos] = None
     var storedBlock : Int = -1
     var metaData : Int = 0
 
     /**
-     * Get the core associated with this dummy
-     * @return The core object
-     */
+      * Get the core associated with this dummy
+      *
+      * @return The core object
+      */
     def getCore : Option[AbstractCore] = {
         if(coreLocation.isDefined && worldObj.getTileEntity(coreLocation.get).isInstanceOf[AbstractCore])
             Some(worldObj.getTileEntity(coreLocation.get).asInstanceOf[AbstractCore])
@@ -42,17 +44,19 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with W
     }
 
     /**
-     * Sets the coreLocation to a core
-     * @param core The core
-     */
+      * Sets the coreLocation to a core
+      *
+      * @param core The core
+      */
     def setCore(core : AbstractCore) : Unit = {
         coreLocation = Some(core.getPos)
     }
 
     /**
-     * Returns the blocks stored
-     * @return The blocks if found, air if not
-     */
+      * Returns the blocks stored
+      *
+      * @return The blocks if found, air if not
+      */
     def getStoredBlock : Block = {
         Block.getBlockById(storedBlock) match {
             case block : Block => block
@@ -96,9 +100,22 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with W
       ************************************************ Inventory methods ***********************************************
       * ****************************************************************************************************************/
 
+    override def initialSize: Int = 0
+
+    override def hasCapability(capability: Capability[_], facing : EnumFacing) = {
+        capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getCore.isDefined
+    }
+
+    override def getCapability[T](capability: Capability[T], facing: EnumFacing): T = {
+        getCore match {
+            case Some(core) => core.getCapability(capability, facing)
+            case _ => super[TileEntity].getCapability(capability, facing)
+        }
+    }
+
     override def getSizeInventory : Int = {
         getCore match {
-            case Some(core) => core.getSizeInventory()
+            case Some(core) => core.getSizeInventory
             case _ => 0
         }
     }
@@ -126,7 +143,7 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with W
 
     override def getInventoryStackLimit : Int = {
         getCore match {
-            case Some(core) => core.getInventoryStackLimit()
+            case Some(core) => core.getInventoryStackLimit
             case _ => 0
         }
     }
@@ -166,48 +183,6 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with W
         }
     }
 
-    override def getFieldCount : Int = {
-        getCore match {
-            case Some(core) => core.getFieldCount()
-            case _ => 0
-        }
-    }
-
-    override def getField(id : Int) : Int = {
-        getCore match {
-            case Some(core) => core.getField(id)
-            case _ => 0
-        }
-    }
-
-    override def setField(id : Int, value : Int) : Unit = {
-        getCore match {
-            case Some(core) => core.setField(id, value)
-            case _ =>
-        }
-    }
-
-    override def getDisplayName : IChatComponent = {
-        getCore match {
-            case Some(core) => core.getDisplayName()
-            case _ => null
-        }
-    }
-
-    override def getName : String = {
-        getCore match {
-            case Some(core) => core.getName()
-            case _ => ""
-        }
-    }
-
-    override def hasCustomName : Boolean = {
-        getCore match {
-            case Some(core) => core.hasCustomName()
-            case _ => false
-        }
-    }
-
     override def getSlotsForFace(side : EnumFacing) : Array[Int] = {
         getCore match {
             case Some(core) => core.getSlotsForFace(side)
@@ -235,16 +210,4 @@ class TileProxy extends UpdatingTile with IInventory with ISidedInventory with W
             case _ => null
         }
     }
-
-
-    /*******************************************************************************************************************
-      ************************************************ Inventory methods ***********************************************
-      ******************************************************************************************************************/
-
-    /*override def returnWailaStack(accessor: IWailaDataAccessor, config: IWailaConfigHandler): ItemStack = {
-        if (getStoredBlock != Blocks.air) {
-            return new ItemStack(getStoredBlock, 1, getBlockMetadata)
-        }
-        null
-    }*/
 }

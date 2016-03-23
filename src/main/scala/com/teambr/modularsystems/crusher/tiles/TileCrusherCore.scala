@@ -2,13 +2,13 @@ package com.teambr.modularsystems.crusher.tiles
 
 import com.teambr.bookshelf.collections.Location
 import com.teambr.bookshelf.helper.BlockHelper
+import com.teambr.bookshelf.util.InventoryUtils
 import com.teambr.modularsystems.core.common.blocks.BlockProxy
 import com.teambr.modularsystems.core.common.tiles.AbstractCore
 import com.teambr.modularsystems.core.functions.BlockCountFunction
 import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.core.registries.{BlockValueRegistry, CrusherRecipeRegistry, FurnaceBannedBlocks}
 import net.minecraft.block.Block
-import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 
@@ -92,6 +92,7 @@ class TileCrusherCore extends AbstractCore {
 
     /**
      * Get the output of the recipe
+ *
      * @param stack The input
      * @return The output
      */
@@ -107,6 +108,7 @@ class TileCrusherCore extends AbstractCore {
 
     /**
      * Take the blocks in this structure and generate the speed etc values
+ *
      * @param function The blocks count function
      */
     override def generateValues(function: BlockCountFunction): Unit = {
@@ -131,6 +133,7 @@ class TileCrusherCore extends AbstractCore {
 
     /**
      * Check if this blocks is not allowed in the structure
+ *
      * @param block The blocks to check
      * @param meta The meta data of said blocks
      * @return True if it is banned
@@ -152,13 +155,11 @@ class TileCrusherCore extends AbstractCore {
      *
      * @return int range 0 - 16
      */
-    override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
+    override def getRedstoneOutput: Int = InventoryUtils.calcRedstoneFromInventory(this)
 
     /*******************************************************************************************************************
       ************************************************* Inventory methods ***********************************************
       *******************************************************************************************************************/
-
-    override var inventoryName: String = "inventory.crusher.title"
 
     override def initialSize: Int = 3
 

@@ -22,7 +22,7 @@ class TileBankSolids extends TileBankBase with Inventory {
      * @param scale The scale to move to
      * @return A number from 0 - { @param scale} for current level
      */
-    override def getPowerLevelScaled(scale: Int): Double = getFuelCount * scale / getSizeInventory()
+    override def getPowerLevelScaled(scale: Int): Double = getFuelCount * scale / 27
 
     /**
      * Used to count how many slots have things in them
@@ -30,7 +30,7 @@ class TileBankSolids extends TileBankBase with Inventory {
      */
     private def getFuelCount: Int = {
         var count = 0
-        for (i <- 0 until getSizeInventory()) {
+        for (i <- 0 until getSizeInventory) {
             if (getStackInSlot(i) != null && getStackInSlot(i).stackSize > 0)
                 count += 1
         }
@@ -41,12 +41,12 @@ class TileBankSolids extends TileBankBase with Inventory {
      * Helper Method to consume solid fuels
      */
     private def consumeFuel(simulate: Boolean): Int = {
-        for (i<- 0 until getSizeInventory()) {
+        for (i<- 0 until getSizeInventory) {
             if (getStackInSlot(i) != null && getStackInSlot(i).stackSize > 0 && TileEntityFurnace.isItemFuel(getStackInSlot(i))) {
                 val burnValue = TileEntityFurnace.getItemBurnTime(getStackInSlot(i))
                 if (!simulate) {
                     decrStackSize(i, 1)
-                    worldObj.markBlockForUpdate(pos)
+                    worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
                 }
                 return burnValue
             }
@@ -70,8 +70,6 @@ class TileBankSolids extends TileBankBase with Inventory {
       ******************************************************************************************************************/
 
     override def initialSize: Int = 27
-
-    override var inventoryName: String = "inventory.solidspower.title"
 
     override def readFromNBT(tag: NBTTagCompound) : Unit = {
         super[TileBankBase].readFromNBT(tag)

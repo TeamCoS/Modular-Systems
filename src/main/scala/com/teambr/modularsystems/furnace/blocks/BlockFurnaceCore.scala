@@ -3,7 +3,7 @@ package com.teambr.modularsystems.furnace.blocks
 import java.util.Random
 
 import com.teambr.bookshelf.Bookshelf
-import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
+import com.teambr.bookshelf.common.blocks.properties.Properties
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
@@ -14,7 +14,9 @@ import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{ EnumParticleTypes, BlockPos, EnumFacing }
+import net.minecraft.item.ItemStack
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.{EnumHand, EnumParticleTypes, EnumFacing}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{ Side, SideOnly }
 
@@ -40,7 +42,9 @@ class BlockFurnaceCore(name: String) extends BaseBlock(Material.rock, name, clas
         super[DropsItems].breakBlock(world, pos, state)
     }
 
-    override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, player : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer,
+                                  hand: EnumHand, heldItem: ItemStack,
+                                  side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         world.getTileEntity(pos) match {
             case core: TileEntityFurnaceCore =>
                 if (core.wellFormed)
@@ -53,11 +57,11 @@ class BlockFurnaceCore(name: String) extends BaseBlock(Material.rock, name, clas
     }
 
     @SideOnly(Side.CLIENT)
-    override def randomDisplayTick(world : World, pos : BlockPos, state : IBlockState, rand : Random) {
+    override def randomDisplayTick(state: IBlockState, world: World, pos: BlockPos, rand: Random) {
         world.getTileEntity(pos) match {
             case tile : TileEntityFurnaceCore =>
                 if(tile.isBurning) {
-                    val facing = state.getValue(PropertyRotation.FOUR_WAY)
+                    val facing = state.getValue(Properties.FOUR_WAY)
                     val f : Float = pos.getX.toFloat + 0.5F
                     val f1 : Float = pos.getY.toFloat + 0.0F + rand.nextFloat * 6.0F / 16.0F
                     val f2 : Float = pos.getZ.toFloat + 0.5F

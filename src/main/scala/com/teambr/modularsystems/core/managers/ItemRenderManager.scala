@@ -1,7 +1,7 @@
 package com.teambr.modularsystems.core.managers
 
 import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.item.Item
 
 /**
@@ -13,7 +13,6 @@ object ItemRenderManager {
     def registerItemRenderer(): Unit = {
         registerItem(ItemManager.dustGold)
         registerItem(ItemManager.dustIron)
-        registerItem(ItemManager.itemStorageRemote)
     }
 
     def registerItem(item: Item): Unit = {

@@ -1,8 +1,7 @@
 package com.teambr.modularsystems.core.achievement
 
 import com.teambr.bookshelf.achievement.AchievementList
-import com.teambr.modularsystems.core.managers.BlockManager
-import net.minecraft.util.StatCollector
+import net.minecraft.util.text.translation.I18n
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent
 
@@ -16,7 +15,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent
  * @author Paul Davis <pauljoda>
  * @since August 05, 2015
  */
-object ModAchievements extends AchievementList(StatCollector.translateToLocal("achievement.modularsystems.title")) {
+object ModAchievements extends AchievementList(I18n.translateToLocal("achievement.modularsystems.title")) {
 
     def CRAFT_FURNACE : String = "craftFurnace"
     def CRAFT_CRUSHER : String = "craftCrusher"
@@ -25,9 +24,7 @@ object ModAchievements extends AchievementList(StatCollector.translateToLocal("a
     def CRAFT_IO : String = "craftIO"
     def CRAFT_REDSTONE : String = "craftRedstone"
 
-    override def initAchievements() : Unit = {
-        buildAchievement(CRAFT_STORAGE, 2, 0, BlockManager.storageCore, null)
-    }
+    override def initAchievements() : Unit = { }
 
     @SubscribeEvent
     def onCrafting(event : PlayerEvent.ItemCraftedEvent): Unit = {

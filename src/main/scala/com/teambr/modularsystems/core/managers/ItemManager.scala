@@ -1,7 +1,6 @@
 package com.teambr.modularsystems.core.managers
 
 import com.teambr.modularsystems.core.common.items.BaseItem
-import com.teambr.modularsystems.storage.items.ItemStorageRemote
 import net.minecraft.init.Items
 import net.minecraft.item.{ ItemStack, Item }
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -15,10 +14,8 @@ object ItemManager {
 
     var dustGold = new BaseItem("dustGold", 64)
     var dustIron = new BaseItem("dustIron", 64)
-    var itemStorageRemote = new ItemStorageRemote
 
     def preInit(): Unit = {
-        registerItem(itemStorageRemote, "itemStorageRemote")
     }
 
     def init(): Unit = {

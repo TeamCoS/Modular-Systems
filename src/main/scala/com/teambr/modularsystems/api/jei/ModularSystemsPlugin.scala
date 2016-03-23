@@ -1,9 +1,10 @@
 package com.teambr.modularsystems.api.jei
 
-import com.teambr.modularsystems.api.jei.modularcrusher.{CrusherRecipeMaker, CrusherRecipeHandler, CrusherRecipeCatagory}
-import com.teambr.modularsystems.core.managers.BlockManager
+import java.awt.Rectangle
+
+import com.teambr.bookshelf.client.gui.GuiBase
 import mezz.jei.api._
-import net.minecraft.item.ItemStack
+import mezz.jei.api.gui.IAdvancedGuiHandler
 
 /**
   * Created by Dyonovan on 1/18/2016.
@@ -15,19 +16,22 @@ object ModularSystemsPlugin {
 @JEIPlugin
 class ModularSystemsPlugin extends IModPlugin {
 
-    override def onRecipeRegistryAvailable(recipeRegistry: IRecipeRegistry): Unit = { }
-
     override def register(registry: IModRegistry): Unit = {
 
-        registry.addRecipeCategories(new CrusherRecipeCatagory)
-        registry.addRecipeHandlers(new CrusherRecipeHandler)
+       // registry.addRecipeCategories(new CrusherRecipeCatagory)
+       // registry.addRecipeHandlers(new CrusherRecipeHandler)
 
-        registry.addRecipes(CrusherRecipeMaker.getRecipes)
+       // registry.addRecipes(CrusherRecipeMaker.getRecipes)
 
-        ModularSystemsPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(BlockManager.proxy))
+      //  ModularSystemsPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(BlockManager.proxy))
+
+        // Register Tab holder
+        registry.addAdvancedGuiHandlers(new IAdvancedGuiHandler[GuiBase[_]] {
+            override def getGuiContainerClass: Class[GuiBase[_]] = classOf[GuiBase[_]]
+
+            override def getGuiExtraAreas(t: GuiBase[_]): java.util.List[Rectangle] = t.getCoveredAreas
+        })
     }
 
-    override def onItemRegistryAvailable(itemRegistry: IItemRegistry): Unit = { }
-
-    override def onJeiHelpersAvailable(jeiHelpers: IJeiHelpers): Unit = ModularSystemsPlugin.jeiHelpers = jeiHelpers
+    override def onRuntimeAvailable(jeiRuntime: IJeiRuntime): Unit = {}
 }
