@@ -1,6 +1,5 @@
 package com.teambr.modularsystems.core.client.models;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.teambr.bookshelf.client.TextureManager;
 import com.teambr.bookshelf.common.blocks.properties.Properties;
@@ -13,12 +12,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.TRSRTransformation;
 import org.apache.commons.lang3.tuple.Pair;
@@ -108,7 +104,6 @@ public class BakedFurnaceCore implements IBakedModel, IPerspectiveAwareModel {
         quads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0045F), new Vector3f(16.0F, 16.0F, 16.0045F),
                 face,
                 TextureManager.getTexture("modularsystems:blocks/border_corners"), EnumFacing.SOUTH, rot, null, true, true));
-
 
         return quads;
     }
