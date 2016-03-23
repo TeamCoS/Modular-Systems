@@ -87,11 +87,10 @@ public class BakedProxyModel implements IBakedModel, IPerspectiveAwareModel {
 
             // Reference values
             BlockPartFace face = new BlockPartFace(null, 0, "", new BlockFaceUV(new float[] {0.0F, 0.0F, 16.0F, 16.0F}, 0));
-            TextureAtlasSprite hopper =  Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("minecraft:blocks/hopper_top");
 
             if(MinecraftForgeClient.getRenderLayer() == BlockRenderLayer.TRANSLUCENT) {
                 // Inside
-                quads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.002F), new Vector3f(16.0F, 16.0F, 16.002F), face,
+               quads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.002F), new Vector3f(16.0F, 16.0F, 16.002F), face,
                         proxyTile.getOverlay(), EnumFacing.SOUTH, lookUpRotationForFace(side), null, true, true));
             } else {
                 IBlockState storedState = proxyTile.getStoredBlock().getStateFromMeta(proxyTile.metaData());
@@ -101,9 +100,28 @@ public class BakedProxyModel implements IBakedModel, IPerspectiveAwareModel {
                 if (model != Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelManager().getMissingModel())
                     quads.addAll(model.getQuads(storedState, side, rand));
 
-                // Border
-                quads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0045F), new Vector3f(16.0F, 16.0F, 16.0045F), face,
-                        hopper, EnumFacing.SOUTH, lookUpRotationForFace(side), null, true, true));
+                // Reference values
+                ModelRotation rot = lookUpRotationForFace(side);
+                boolean[] connections = proxyBlock.getConnectionArrayForFace(proxyTile.getWorld(), proxyTile.getPos(), side);
+
+                // Connected Textures Border
+                quads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0045F), new Vector3f(8.0F, 8.0F, 16.0045F),
+                        new BlockPartFace(null, 0, "", new BlockFaceUV(new float[] {0.0F, 8.0F, 8.0F, 0.0F}, 0)),
+                        proxyBlock.getConnectedTextures().getTextureForCorner(2, connections), EnumFacing.SOUTH, rot, null, false, true));
+
+                quads.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0045F), new Vector3f(16.0F, 8.0F, 16.0045F),
+                        new BlockPartFace(null, 0, "", new BlockFaceUV(new float[] {8.0F, 8.0F, 16.0F, 0.0F}, 0)),
+                        proxyBlock.getConnectedTextures().getTextureForCorner(3, connections), EnumFacing.SOUTH, rot, null, false, true));
+
+
+                quads.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0045F), new Vector3f(8.0F, 16.0F, 16.0045F),
+                        new BlockPartFace(null, 0, "", new BlockFaceUV(new float[] {0.0F, 16.0F, 8.0F, 8.0F}, 0)),
+                        proxyBlock.getConnectedTextures().getTextureForCorner(0, connections), EnumFacing.SOUTH, rot, null, false, true));
+
+
+                quads.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0045F), new Vector3f(16.0F, 16.0F, 16.0045F),
+                        new BlockPartFace(null, 0, "", new BlockFaceUV(new float[] {8.0F, 16.0F, 16.0F, 8.0F}, 0)),
+                        proxyBlock.getConnectedTextures().getTextureForCorner(1, connections), EnumFacing.SOUTH, rot, null, false, true));
             }
 
             return quads;

@@ -4,6 +4,8 @@ import java.util.Random
 import javax.annotation.Nonnull
 
 import com.teambr.bookshelf.Bookshelf
+import com.teambr.bookshelf.client.TextureManager
+import com.teambr.bookshelf.collections.ConnectedTextures
 import com.teambr.bookshelf.loadables.{CreatesTextures, ILoadActionProvider}
 import com.teambr.modularsystems.core.client.models.BakedProxyModel
 import com.teambr.modularsystems.core.common.tiles.{AbstractCore, TileIOExpansion, TileProxy}
@@ -144,8 +146,117 @@ class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseB
         }
     }
 
-    override def getTexturesToStitch: ArrayBuffer[String] =
-        ArrayBuffer(Reference.MOD_ID + ":blocks/furnaceOverlay",
-            Reference.MOD_ID + ":blocks/crusherOverlay")
+    /**
+      * Used to define the strings needed
+      */
+    override def getTexturesToStitch: ArrayBuffer[String] = ArrayBuffer(NoCornersTextureLocation, AntiCornersTextureLocation,
+        CornersTextureLocation, HorizontalTextureLocation, VerticalTextureLocation, Reference.MOD_ID + ":blocks/furnaceOverlay",
+        Reference.MOD_ID + ":blocks/crusherOverlay")
+
+    // Methods to move textures to lower class, handle others here
+    def NoCornersTextureLocation   : String = "modularsystems:blocks/border"
+    def AntiCornersTextureLocation : String = "modularsystems:blocks/border_anti_corners"
+    def CornersTextureLocation     : String = "modularsystems:blocks/border_corners"
+    def HorizontalTextureLocation  : String = "modularsystems:blocks/border_horizontal"
+    def VerticalTextureLocation    : String = "modularsystems:blocks/border_vertical"
+
+    @SideOnly(Side.CLIENT)
+    lazy val connectedTextures = new ConnectedTextures(TextureManager.getTexture(NoCornersTextureLocation),
+        TextureManager.getTexture(AntiCornersTextureLocation), TextureManager.getTexture(CornersTextureLocation),
+        TextureManager.getTexture(HorizontalTextureLocation), TextureManager.getTexture(VerticalTextureLocation))
+
+    /**
+      * Used to get the connected textures object for this block
+      *
+      * @return
+      */
+    @SideOnly(Side.CLIENT)
+    def getConnectedTextures : ConnectedTextures = if(connectedTextures != null) connectedTextures else {
+        new ConnectedTextures(TextureManager.getTexture(NoCornersTextureLocation),
+            TextureManager.getTexture(AntiCornersTextureLocation), TextureManager.getTexture(CornersTextureLocation),
+            TextureManager.getTexture(HorizontalTextureLocation), TextureManager.getTexture(VerticalTextureLocation))
+    }
+
+    /**
+      * Used to check if we are able to connect textures with the block
+      *
+      * @param block The block to check
+      * @return True if can connect
+      */
+    def canTextureConnect(block : Block) : Boolean = block == this
+
+    /**
+      * Kinds long, but the way to get the connection array for the face
+      */
+    def getConnectionArrayForFace(world: IBlockAccess, pos: BlockPos, facing: EnumFacing): Array[Boolean] = {
+        val connections = new Array[Boolean](16)
+        if (world.isAirBlock(pos.offset(facing)) || (!world.getBlockState(pos.offset(facing)).getBlock.isOpaqueCube(world.getBlockState(pos.offset(facing))) &&
+                !canTextureConnect(world.getBlockState(pos.offset(facing)).getBlock))) {
+            facing match {
+                case EnumFacing.UP =>
+                    connections(0) = canTextureConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock)
+                    connections(1) = canTextureConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock)
+                    connections(2) = canTextureConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock)
+                    connections(3) = canTextureConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock)
+                    connections(4) = canTextureConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock)
+                    connections(5) = canTextureConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock)
+                    connections(6) = canTextureConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock)
+                    connections(7) = canTextureConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock)
+                    return connections
+                case EnumFacing.DOWN =>
+                    connections(0) = canTextureConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock)
+                    connections(1) = canTextureConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock)
+                    connections(2) = canTextureConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock)
+                    connections(3) = canTextureConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock)
+                    connections(4) = canTextureConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock)
+                    connections(5) = canTextureConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock)
+                    connections(6) = canTextureConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock)
+                    connections(7) = canTextureConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock)
+                     return connections
+                case EnumFacing.NORTH =>
+                    connections(0) = canTextureConnect(world.getBlockState(pos.add(1, 1, 0)).getBlock)
+                    connections(1) = canTextureConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock)
+                    connections(2) = canTextureConnect(world.getBlockState(pos.add(-1, 1, 0)).getBlock)
+                    connections(3) = canTextureConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock)
+                    connections(4) = canTextureConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock)
+                    connections(5) = canTextureConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock)
+                    connections(6) = canTextureConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
+                    connections(7) = canTextureConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock)
+                    return connections
+                case EnumFacing.SOUTH =>
+                    connections(0) = canTextureConnect(world.getBlockState(pos.add(-1, 1, 0)).getBlock)
+                    connections(1) = canTextureConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock)
+                    connections(2) = canTextureConnect(world.getBlockState(pos.add(1, 1, 0)).getBlock)
+                    connections(3) = canTextureConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock)
+                    connections(4) = canTextureConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock)
+                    connections(5) = canTextureConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock)
+                    connections(6) = canTextureConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
+                    connections(7) = canTextureConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock)
+                    return connections
+                case EnumFacing.WEST =>
+                    connections(0) = canTextureConnect(world.getBlockState(pos.add(0, 1, -1)).getBlock)
+                    connections(1) = canTextureConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock)
+                    connections(2) = canTextureConnect(world.getBlockState(pos.add(0, 1, 1)).getBlock)
+                    connections(3) = canTextureConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock)
+                    connections(4) = canTextureConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock)
+                    connections(5) = canTextureConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock)
+                    connections(6) = canTextureConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
+                    connections(7) = canTextureConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock)
+                   return connections
+                case EnumFacing.EAST =>
+                    connections(0) = canTextureConnect(world.getBlockState(pos.add(0, 1, 1)).getBlock)
+                    connections(1) = canTextureConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock)
+                    connections(2) = canTextureConnect(world.getBlockState(pos.add(0, 1, -1)).getBlock)
+                    connections(3) = canTextureConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock)
+                    connections(4) = canTextureConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock)
+                    connections(5) = canTextureConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock)
+                    connections(6) = canTextureConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock)
+                    connections(7) = canTextureConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock)
+                    return connections
+                case _ => return connections
+            }
+        }
+        connections
+    }
 }
 

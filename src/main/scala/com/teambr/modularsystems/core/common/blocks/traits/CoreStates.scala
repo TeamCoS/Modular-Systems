@@ -22,8 +22,10 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Dyonovan
  * @since August 07, 2015
  */
-trait CoreStates extends Block {
+object CoreStates {
     lazy val PROPERTY_ACTIVE = PropertyBool.create("is_active")
+}
+trait CoreStates extends Block {
 
     /**
      * Called when the block is placed, we check which way the player is facing and put our value as the opposite of that
@@ -38,7 +40,7 @@ trait CoreStates extends Block {
      * Used to say what our block state is
      */
     override def createBlockState() : BlockStateContainer = {
-        val listed : Array[IProperty[_]] = Array(Properties.FOUR_WAY, PROPERTY_ACTIVE)
+        val listed : Array[IProperty[_]] = Array(Properties.FOUR_WAY, CoreStates.PROPERTY_ACTIVE)
         val unlisted = new Array[IUnlistedProperty[_]](0)
         new ExtendedBlockState(this, listed, unlisted)
     }
@@ -47,10 +49,10 @@ trait CoreStates extends Block {
         world.getTileEntity(pos) match {
             case core : AbstractCore =>
                 state.withProperty (Properties.FOUR_WAY, world.getBlockState (pos).getValue (Properties.FOUR_WAY))
-                        .withProperty(PROPERTY_ACTIVE, core.isBurning.asInstanceOf[java.lang.Boolean])
+                        .withProperty(CoreStates.PROPERTY_ACTIVE, core.isBurning.asInstanceOf[java.lang.Boolean])
             case _ =>
                 state.withProperty (Properties.FOUR_WAY, world.getBlockState (pos).getValue (Properties.FOUR_WAY))
-                    .withProperty(PROPERTY_ACTIVE, true.asInstanceOf[java.lang.Boolean])
+                    .withProperty(CoreStates.PROPERTY_ACTIVE, true.asInstanceOf[java.lang.Boolean])
         }
     }
 
@@ -62,7 +64,7 @@ trait CoreStates extends Block {
      */
     override def getStateFromMeta(meta : Int) : IBlockState = {
         getDefaultState.withProperty(Properties.FOUR_WAY, EnumFacing.getFront(meta & 5))
-                .withProperty(PROPERTY_ACTIVE, if((Integer.valueOf(meta & 15) >> 2) == 1)
+                .withProperty(CoreStates.PROPERTY_ACTIVE, if((Integer.valueOf(meta & 15) >> 2) == 1)
                     true.asInstanceOf[java.lang.Boolean] else false.asInstanceOf[java.lang.Boolean])
     }
 
@@ -75,7 +77,7 @@ trait CoreStates extends Block {
     override def getMetaFromState(state : IBlockState) = {
         val b0 : Byte = 0
         var i : Int = b0 | state.getValue(Properties.FOUR_WAY).getIndex
-        i |= (if(state.getValue(PROPERTY_ACTIVE).asInstanceOf[Boolean]) 1 else 0 ) << 2
+        i |= (if(state.getValue(CoreStates.PROPERTY_ACTIVE).asInstanceOf[Boolean]) 1 else 0 ) << 2
         i
     }
 

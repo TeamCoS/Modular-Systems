@@ -5,7 +5,7 @@ import java.util.Collections
 
 import com.teambr.bookshelf.collections.Location
 import com.teambr.bookshelf.common.blocks.properties.Properties
-import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
+import com.teambr.bookshelf.common.tiles.traits.{InventorySided, UpdatingTile}
 import com.teambr.bookshelf.util.WorldUtils
 import com.teambr.modularsystems.core.collections.StandardValues
 import com.teambr.modularsystems.core.functions.BlockCountFunction
@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Paul Davis <pauljoda>
  * @since August 05, 2015
  */
-abstract class AbstractCore extends UpdatingTile with Inventory {
+abstract class AbstractCore extends UpdatingTile with InventorySided {
     final val cookSpeed = 200
     final val MAX_SIZE = 100
 
@@ -433,7 +433,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
 
     override def markDirty() : Unit = {
         super[TileEntity].markDirty()
-        super[Inventory].markDirty()
+        super[InventorySided].markDirty()
     }
 
     /******************************************************************************************************************
@@ -449,7 +449,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
 
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super[TileEntity].writeToNBT(tag)
-        super[Inventory].writeToNBT(tag)
+        super[InventorySided].writeToNBT(tag)
         values.writeToNBT(tag)
         tag.setBoolean("IsDirty", isDirty)
         tag.setBoolean("WellFormed", wellFormed)
@@ -461,7 +461,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
     }
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super[TileEntity].readFromNBT(tag)
-        super[Inventory].readFromNBT(tag)
+        super[InventorySided].readFromNBT(tag)
         val oldBurn = values.burnTime
         values.readFromNBT(tag)
         isDirty = tag.getBoolean("IsDirty")
@@ -478,11 +478,15 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
       ************************************************* Inventory methods ***********************************************
       *******************************************************************************************************************/
 
+    def getSlotsForFace(side: EnumFacing): Array[Int] = {
+        Array(0, 1)
+    }
+
     /**
      * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
      * side
      */
-    def canInsertItem(index : Int, itemStackIn : ItemStack, direction : EnumFacing) : Boolean = {
+    override def canInsertItem(index : Int, itemStackIn : ItemStack, direction : EnumFacing) : Boolean = {
         if(index == 0) {
             return recipe(itemStackIn) != null
         }
@@ -493,7 +497,7 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
      * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
      * side
      */
-    def canExtractItem(index : Int, stack : ItemStack, direction : EnumFacing) : Boolean = index == 1
+    override def canExtractItem(index : Int, stack : ItemStack, direction : EnumFacing) : Boolean = index == 1
 
     /**
      * Used to define if an item is valid for a slot

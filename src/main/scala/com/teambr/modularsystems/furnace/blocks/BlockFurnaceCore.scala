@@ -1,11 +1,14 @@
 package com.teambr.modularsystems.furnace.blocks
 
 import java.util.Random
+import javax.annotation.Nonnull
 
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.properties.Properties
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
+import com.teambr.bookshelf.loadables.ILoadActionProvider
+import com.teambr.modularsystems.core.client.models.BakedFurnaceCore
 import com.teambr.modularsystems.core.common.blocks.BaseBlock
 import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
 import com.teambr.modularsystems.furnace.container.ContainerFurnaceCore
@@ -13,12 +16,14 @@ import com.teambr.modularsystems.furnace.gui.GuiFurnaceCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.{EnumHand, EnumParticleTypes, EnumFacing}
+import net.minecraft.util.{EnumFacing, EnumHand, EnumParticleTypes}
 import net.minecraft.world.World
-import net.minecraftforge.fml.relauncher.{ Side, SideOnly }
+import net.minecraftforge.client.event.ModelBakeEvent
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  * This file was created for Modular-Systems
@@ -31,7 +36,7 @@ import net.minecraftforge.fml.relauncher.{ Side, SideOnly }
  * @since August 07, 2015
  */
 class BlockFurnaceCore(name: String) extends BaseBlock(Material.rock, name, classOf[TileEntityFurnaceCore])
-        with OpensGui with CoreStates with DropsItems {
+        with OpensGui with CoreStates with DropsItems with ILoadActionProvider {
 
     //Block Methods
     override def breakBlock(world: World, pos: BlockPos, state: IBlockState) {
@@ -94,5 +99,24 @@ class BlockFurnaceCore(name: String) extends BaseBlock(Material.rock, name, clas
 
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         new GuiFurnaceCore(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileEntityFurnaceCore])
+    }
+
+
+    /**
+      * Performs the action at the given event
+      *
+      * @param event The event being called from
+      * @param isClient True if only on client side, false (default) for server side
+      */
+    def performLoadAction(@Nonnull event: AnyRef, isClient : Boolean = false) : Unit = {
+        event match  {
+            case modelBake : ModelBakeEvent =>
+                modelBake.getModelRegistry.putObject(
+                    new ModelResourceLocation(getUnlocalizedName.split("tile.")(1), "normal"), new BakedFurnaceCore)
+
+                // Add to registry
+                modelBake.getModelRegistry.putObject(BakedFurnaceCore.MODEL_RESOURCE_LOCATION_NORMAL, new BakedFurnaceCore)
+            case _ =>
+        }
     }
 }
