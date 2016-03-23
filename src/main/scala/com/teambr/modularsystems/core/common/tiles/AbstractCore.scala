@@ -477,9 +477,6 @@ abstract class AbstractCore extends UpdatingTile with Inventory {
     /*******************************************************************************************************************
       ************************************************* Inventory methods ***********************************************
       *******************************************************************************************************************/
-    def getSlotsForFace(side : EnumFacing) : Array[Int] = {
-        Array[Int](0, 1)
-    }
 
     /**
      * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
