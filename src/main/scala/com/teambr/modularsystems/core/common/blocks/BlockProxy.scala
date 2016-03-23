@@ -1,37 +1,46 @@
 package com.teambr.modularsystems.core.common.blocks
 
 import java.util.Random
+import javax.annotation.Nonnull
 
 import com.teambr.bookshelf.Bookshelf
-import com.teambr.modularsystems.core.common.tiles.{ TileIOExpansion, AbstractCore, TileProxy }
+import com.teambr.bookshelf.loadables.{CreatesTextures, ILoadActionProvider}
+import com.teambr.modularsystems.core.client.models.BakedProxyModel
+import com.teambr.modularsystems.core.common.tiles.{AbstractCore, TileIOExpansion, TileProxy}
+import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.crusher.tiles.TileCrusherExpansion
 import com.teambr.modularsystems.power.tiles.TileBankBase
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.{BlockStateContainer, IBlockState}
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.math.BlockPos
 import net.minecraft.util._
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
- * This file was created for Modular-Systems
- *
- * Modular-Systems is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Paul Davis <pauljoda>
- * @since August 06, 2015
- */
-class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseBlock(Material.rock, name, tileEntity) {
+  * This file was created for Modular-Systems
+  *
+  * Modular-Systems is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Paul Davis <pauljoda>
+  * @since August 06, 2015
+  */
+class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseBlock(Material.rock, name, tileEntity)
+        with ILoadActionProvider with CreatesTextures {
 
     override def getCreativeTab: CreativeTabs = {
         null
@@ -87,6 +96,27 @@ class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseB
         new ProxyState(world.getTileEntity(pos).asInstanceOf[TileProxy], state.getBlock)
     }
 
+
+    /**
+      * Used to convert the meta to state
+      *
+      * @param meta The meta
+      * @return
+      */
+    override def getStateFromMeta(meta : Int) : IBlockState = {
+        getDefaultState
+    }
+
+    /**
+      * Called to convert state from meta
+      *
+      * @param state The state
+      * @return
+      */
+    override def getMetaFromState(state : IBlockState) = {
+        0
+    }
+
     override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
     override def isOpaqueCube(state : IBlockState) : Boolean =
@@ -99,7 +129,23 @@ class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseB
     override def canRenderInLayer(layer : BlockRenderLayer) : Boolean =
         layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT
 
-    @SideOnly(Side.CLIENT)
-    override def getBlockLayer : BlockRenderLayer = BlockRenderLayer.SOLID
+    /**
+      * Performs the action at the given event
+      *
+      * @param event The event being called from
+      * @param isClient True if only on client side, false (default) for server side
+      */
+    def performLoadAction(@Nonnull event: AnyRef, isClient : Boolean = false) : Unit = {
+        event match  {
+            case modelBake : ModelBakeEvent =>
+                modelBake.getModelRegistry.putObject(
+                    new ModelResourceLocation(getUnlocalizedName.split("tile.")(1), "normal"), new BakedProxyModel)
+            case _ =>
+        }
+    }
+
+    override def getTexturesToStitch: ArrayBuffer[String] =
+        ArrayBuffer(Reference.MOD_ID + ":blocks/furnaceOverlay",
+            Reference.MOD_ID + ":blocks/crusherOverlay")
 }
 
