@@ -3,8 +3,11 @@ package com.teambr.modularsystems.api.jei
 import java.awt.Rectangle
 
 import com.teambr.bookshelf.client.gui.GuiBase
+import com.teambr.modularsystems.api.jei.modularcrusher.{CrusherRecipeCatagory, CrusherRecipeHandler, CrusherRecipeMaker}
+import com.teambr.modularsystems.core.managers.BlockManager
 import mezz.jei.api._
 import mezz.jei.api.gui.IAdvancedGuiHandler
+import net.minecraft.item.ItemStack
 
 /**
   * Created by Dyonovan on 1/18/2016.
@@ -18,12 +21,14 @@ class ModularSystemsPlugin extends IModPlugin {
 
     override def register(registry: IModRegistry): Unit = {
 
-       // registry.addRecipeCategories(new CrusherRecipeCatagory)
-       // registry.addRecipeHandlers(new CrusherRecipeHandler)
+        ModularSystemsPlugin.jeiHelpers = registry.getJeiHelpers
 
-       // registry.addRecipes(CrusherRecipeMaker.getRecipes)
+        registry.addRecipeCategories(new CrusherRecipeCatagory)
+        registry.addRecipeHandlers(new CrusherRecipeHandler)
 
-      //  ModularSystemsPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(BlockManager.proxy))
+        registry.addRecipes(CrusherRecipeMaker.getRecipes)
+
+        ModularSystemsPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(BlockManager.proxy))
 
         // Register Tab holder
         registry.addAdvancedGuiHandlers(new IAdvancedGuiHandler[GuiBase[_]] {
