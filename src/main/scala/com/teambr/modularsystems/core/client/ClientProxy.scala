@@ -27,12 +27,11 @@ class ClientProxy extends CommonProxy {
         ModelLoader.setCustomStateMapper(BlockManager.furnaceCore,
             (new Builder).ignore(Properties.FOUR_WAY)
                     .ignore(CoreStates.PROPERTY_ACTIVE).build())
-        ModelLoader.setCustomStateMapper(BlockManager.crusherCore,
-            (new Builder).ignore(Properties.FOUR_WAY)
-                    .ignore(CoreStates.PROPERTY_ACTIVE).build())
 
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.furnaceCore), 0,
             BakedFurnaceCore.MODEL_RESOURCE_LOCATION_NORMAL)
+
+        ItemRenderManager.registerBlockModel(BlockManager.crusherCore, "crusherCore", "facing=east,is_active=false")
 
         RenderRegistry.doTheThing()
     }

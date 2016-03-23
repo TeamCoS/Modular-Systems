@@ -1,0 +1,49 @@
+{
+  "parent": "block/cube",
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [ 0, 135, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.40, 0.40, 0.40 ]
+    }
+  },
+  "textures": {
+    "particle": "modularsystems:blocks/crusherFront_off",
+    "down": "blocks/furnace_top",
+    "up": "blocks/furnace_top",
+    "north": "modularsystems:blocks/crusherFront_off",
+    "east": "blocks/furnace_side",
+    "south": "blocks/furnace_side",
+    "west": "blocks/furnace_side",
+
+    "active" : "modularsystems:blocks/crusherFront_On",
+    "border" : "modularsystems:blocks/border_corners"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "texture": "#down", "cullface": "down" },
+        "up":    { "texture": "#up", "cullface": "up" },
+        "north": { "texture": "#north", "cullface": "north" },
+        "south": { "texture": "#south", "cullface": "south" },
+        "west":  { "texture": "#west", "cullface": "west" },
+        "east":  { "texture": "#east", "cullface": "east" }
+      }
+    },
+    {
+      "name": "Outline",
+      "from": [ -0.002, -0.002, -0.002],
+      "to" : [16.002, 16.002, 16.002],
+      "faces": {
+        "north": { "texture": "#border"},
+        "east": { "texture": "#border"},
+        "south": { "texture": "#border"},
+        "west": { "texture": "#border"},
+        "up": { "texture": "#border"},
+        "down": { "texture": "#border"}
+      }
+    }
+  ]
+}

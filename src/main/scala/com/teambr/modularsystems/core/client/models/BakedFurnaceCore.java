@@ -3,8 +3,8 @@ package com.teambr.modularsystems.core.client.models;
 import com.google.common.collect.ImmutableMap;
 import com.teambr.bookshelf.client.TextureManager;
 import com.teambr.bookshelf.common.blocks.properties.Properties;
-import com.teambr.bookshelf.lib.Reference;
 import com.teambr.modularsystems.core.common.blocks.traits.CoreStates$;
+import com.teambr.modularsystems.core.lib.Reference;
 import com.teambr.modularsystems.core.managers.BlockManager;
 import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore;
 import net.minecraft.block.BlockFurnace;
@@ -39,7 +39,7 @@ public class BakedFurnaceCore implements IBakedModel, IPerspectiveAwareModel {
 
     // The model resource location, reflect items to this if you want it to use this model, no need to register the model itself
     public static final ModelResourceLocation MODEL_RESOURCE_LOCATION_NORMAL =
-            new ModelResourceLocation(new ResourceLocation(Reference.MODID(), "furnaceCore"), "normal");
+            new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID(), "furnaceCore"), "normal");
 
     // The face bakery
     protected static final FaceBakery faceBakery = new FaceBakery();

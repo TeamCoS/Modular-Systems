@@ -1,11 +1,10 @@
 package com.teambr.modularsystems.core.client.models;
 
 import com.google.common.collect.ImmutableMap;
-import com.teambr.bookshelf.lib.Reference;
 import com.teambr.modularsystems.core.common.blocks.BlockProxy;
 import com.teambr.modularsystems.core.common.blocks.ProxyState;
 import com.teambr.modularsystems.core.common.tiles.TileProxy;
-import gnu.trove.map.hash.THashMap;
+import com.teambr.modularsystems.core.lib.Reference;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
@@ -13,7 +12,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -39,7 +37,7 @@ public class BakedProxyModel implements IBakedModel, IPerspectiveAwareModel {
 
     // The model resource location, reflect items to this if you want it to use this model, no need to register the model itself
     public static final ModelResourceLocation MODEL_RESOURCE_LOCATION_NORMAL =
-            new ModelResourceLocation(new ResourceLocation(Reference.MODID(), "proxy"), "normal");
+            new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID(), "proxy"), "normal");
 
     // The face bakery
     protected static final FaceBakery faceBakery = new FaceBakery();
