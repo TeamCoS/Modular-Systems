@@ -1,7 +1,9 @@
 package com.teambr.modularsystems.core.achievement
 
 import com.teambr.bookshelf.achievement.AchievementList
+import com.teambr.modularsystems.core.managers.BlockManager
 import net.minecraft.util.text.translation.I18n
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent
 
@@ -20,11 +22,14 @@ object ModAchievements extends AchievementList(I18n.translateToLocal("achievemen
     def CRAFT_FURNACE : String = "craftFurnace"
     def CRAFT_CRUSHER : String = "craftCrusher"
     def CRAFT_GENERATOR : String = "craftGenerator"
-    def CRAFT_STORAGE : String = "craftStorage"
     def CRAFT_IO : String = "craftIO"
-    def CRAFT_REDSTONE : String = "craftRedstone"
 
-    override def initAchievements() : Unit = { }
+    override def initAchievements() : Unit = {
+        MinecraftForge.EVENT_BUS.register(this)
+
+        buildAchievement(CRAFT_FURNACE, 0, 0, BlockManager.furnaceCore, null)
+        buildAchievement(CRAFT_CRUSHER, 2, 1, BlockManager.crusherCore, getAchievementByName(CRAFT_FURNACE))
+    }
 
     @SubscribeEvent
     def onCrafting(event : PlayerEvent.ItemCraftedEvent): Unit = {

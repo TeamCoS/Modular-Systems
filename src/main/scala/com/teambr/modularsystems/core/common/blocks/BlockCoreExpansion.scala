@@ -1,6 +1,7 @@
 package com.teambr.modularsystems.core.common.blocks
 
 import java.util.Random
+import javax.annotation.Nonnull
 
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.traits.KeepInventory
@@ -8,6 +9,7 @@ import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.modularsystems.core.ModularSystems
 import com.teambr.modularsystems.core.client.gui.GuiIOExpansion
+import com.teambr.modularsystems.core.client.models.BakedCoreExpansion
 import com.teambr.modularsystems.core.common.tiles.{TileIOExpansion, TileProxy}
 import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.power.container.{ContainerBankLiquids, ContainerBankSolids}
@@ -15,6 +17,7 @@ import com.teambr.modularsystems.power.gui.{GuiBankLiquids, GuiBankRF, GuiBankSo
 import com.teambr.modularsystems.power.tiles.{TileBankBase, TileBankLiquids, TileBankRF, TileBankSolids}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
@@ -24,6 +27,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{EnumFacing, EnumHand}
 import net.minecraft.world.World
+import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -37,7 +41,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @since August 07, 2015
   */
 class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], blockColor: Int) extends BlockProxy(name, tileEntity)
-    with KeepInventory with OpensGui {
+        with KeepInventory with OpensGui {
 
     override def getCreativeTab: CreativeTabs = {
         ModularSystems.tabModularSystems
@@ -138,6 +142,23 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
             case block : BlockManager.ioExpansion.type =>
                 new GuiIOExpansion(world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileIOExpansion])
             case _ => null
+        }
+    }
+
+    /**
+      * Performs the action at the given event
+      *
+      * @param event The event being called from
+      * @param isClient True if only on client side, false (default) for server side
+      */
+    override def performLoadAction(@Nonnull event: AnyRef, isClient : Boolean = false) : Unit = {
+        event match  {
+            case modelBake : ModelBakeEvent =>
+                modelBake.getModelRegistry.putObject(
+                    new ModelResourceLocation(getUnlocalizedName.split("tile.")(1), "normal"),
+                    new BakedCoreExpansion(modelBake.getModelRegistry
+                            .getObject(new ModelResourceLocation(getUnlocalizedName.split("tile.")(1), "normal"))))
+            case _ =>
         }
     }
 }

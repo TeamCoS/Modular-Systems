@@ -56,7 +56,9 @@ object ModularSystems {
         FluidFuelValues.init()
         proxy.preInit()
         CraftingManager.init()
+        ModAchievements.start()
 
+        //TODO: Why is this disabled?
         //MinecraftForge.EVENT_BUS.register(BlockValueRegistry)
     }
 

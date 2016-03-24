@@ -1,97 +1,71 @@
+PARSE_ESCAPES
+# Creative Tabs
 itemGroup.tabModularSystems=Modular Systems
 
+#######################
+# Blocks
+#######################
+
+# Furnace Core (active for Waila)
 tile.modularsystems:furnaceCore.name=Modular Furnace Core
 tile.modularsystems:furnaceCoreActive.name=Modular Furnace Core
 
+# Crusher Core (active for Waila)
 tile.modularsystems:crusherCore.name=Modular Crusher Core
 tile.modularsystems:crusherCoreActive.name=Modular Crusher Core
 
+# Generator Core (active for Waila)
 tile.modularsystems:generatorCore.name=Modular Generator Core
 tile.modularsystems:generatorCoreActive.name=Modular Generator Core
 
-tile.modularsystems:storageCore.name=Modular Storage Core
-tile.modularsystems:storageBasic.name=Basic Storage Expansion
-tile.modularsystems:storageCapacity.name=Capacity Storage Expansion
-tile.modularsystems:storageSearch.name=Search Storage Expansion
-tile.modularsystems:storageSort.name=Sorting Storage Expansion
-tile.modularsystems:storageSecurity.name=Security Storage Expansion
-tile.modularsystems:storageCrafting.name=Crafting Storage Expansion
-tile.modularsystems:storageHopping.name=Hopping Storage Expansion
-tile.modularsystems:storageSmashing.name=Smashing Storage Expansion
-tile.modularsystems:storageIO.name=I/O Storage Expansion
-tile.modularsystems:storageRemote.name=Remote Storage Terminal Receiver
-item.modularsystems:itemStorageRemote.name=Remote Storage Terminal
+# Proxy Name
+tile.modularsystems:proxy.name=Modular Furnace Proxy
 
-tile.modularsystems:proxy.name=Modular Furnace Dummy
+# Expansions
 tile.modularsystems:ioExpansion.name=Modular Systems I/O
-tile.modularsystems:redstoneIn.name=Modular Systems Redstone Input
-tile.modularsystems:redstoneOut.name=Modular Systems Redstone Output
 tile.modularsystems:crusherExpansion.name=Modular Crusher Seconday Output Expansion
 
+# Fuel Banks
 tile.modularsystems:bankRF.name=RedstoneFlux Power Bank
 tile.modularsystems:bankSolids.name=Solid Fuel Power Bank
 tile.modularsystems:bankLiquids.name=Liquid Fuel Power Bank
 
+# RF Output (For generator)
 tile.modularsystems:supplierRF.name=RF Power Output
 
+#######################
+# Items
+#######################
+
+# Dusts
 item.modularsystems:dustIron.name=Iron Dust
 item.modularsystems:dustGold.name=Gold Dust
 
+#######################
+# GUI
+#######################
+
+# Modular Furnace
 inventory.furnace.title=Modular Furnace
 
+# Modular Crusher
 inventory.crusher.title=Modular Crusher
 
+# Modular Generator
 inventory.generator.title=Modular Generator
 
-inventory.storageCore.title=Modular Storage
-inventory.storageCore.crafting=Modular Storage Crafting Inventory
-inventory.storageCore.sort=Sort
-inventory.storageCore.clear=Clear Crafting Grid
-
-inventory.storageSecurity.lock=Secure?
-
-inventory.storageHopping.title=Range Config
-
-inventory.storageSmashing.title=Internal Pick
-
-inventory.storageRemote.title=Remote Storage Terminal Linker
-
-inventory.storageIO.title=Storage I/O
-inventory.storageIO.import=Import Filter:
-inventory.storageIO.export=Export Filter:
-inventory.storageIO.importControls=Import Controls
-inventory.storageIO.exportControls=Export Controls
-inventory.storageIO.canImport=Import
-inventory.storageIO.importDamage=Damage
-inventory.storageIO.importNBT=NBT
-inventory.storageIO.importOre=OreDict
-inventory.storageIO.canExport=Export
-inventory.storageIO.exportDamage=Damage
-inventory.storageIO.exportNBT=NBT
-inventory.storageIO.exportOre=OreDict
-inventory.storageIO.listMode=List Mode:
-inventory.storageIO.white=White
-inventory.storageIO.black=Black
-inventory.storageIO.canImport.tip=Allow this block to import
-inventory.storageIO.importDamage.tip=Match Item Damage
-inventory.storageIO.importNBT.tip=Match NBT Tag
-inventory.storageIO.importOre.tip=Use Ore Dict Tag when matching
-inventory.storageIO.canExport.tip=Allow this block to export
-inventory.storageIO.exportDamage.tip=Match Item Damage
-inventory.storageIO.exportNBT.tip=Match NBT Tag
-inventory.storageIO.exportOre.tip=Use Ore Dict Tag when matching
-
+# IO Configure
 inventory.io.title=I/O Configure
 inventory.io.import=Import
 inventory.io.export=Export
 inventory.io.auto=Auto
 
-inventory.dummyRedstoneIn.title=Trigger Level
-
+# Fuel Banks
 inventory.rfpower.title=RedstoneFlux Power Bank
 inventory.liquidspower.title=Liquid Fuel Power Bank
 inventory.solidspower.title=Solid Fuel Power Bank
 
+# Block Values Config (YAY MATH!)
 inventory.blockValuesConfig.speed=Speed
 inventory.blockValuesConfig.efficiency=Efficiency
 inventory.blockValuesConfig.multiplicity=Multiplicity
@@ -115,12 +89,12 @@ inventory.blockValuesConfig.ceiling.toolTip=This is the upper limit of the funct
 inventory.blockValuesConfig.ignoreMeta=Meta?
 inventory.blockValuesConfig.ignoreMeta.toolTip=Disable to ignore metadata
 
-inventory.nei.recipes=Recipes
+# Used for arrows
+inventory.jei.recipes=Recipes
 
-modularsystems.nei.crusherrecipes=Modular Crusher
-modularsystems.nei.furnacerecipes=Modular Furnace
-modularsystems.nei.blockValues=Modular Systems Values
-
+#######################
+# Commands
+#######################
 commands.addBannedFurnaceBlock.usage=Usage: <TileName> or "this" to add what is in your hand
 commands.addBannedFurnaceBlock.failure=Failed to add value, must pass a block name
 commands.addBannedFurnaceBlock.success=Block successfully added to registry
@@ -131,7 +105,9 @@ commands.addFluidFuel.success=Liquid Fuel successfully added to registry
 
 commands.usage.configureBlockValues=Opens the GUI to change block values
 
-event.breakBlock.permission=You do not have permission to break this
+#######################
+# Achievements
+#######################
 
 achievement.modularsystems.title=Modular Systems
 achievement.craftFurnace=Even Hotter Topic
@@ -147,8 +123,11 @@ achievement.craftIO.desc=Craft a Modular Systems IO
 achievement.craftRedstone=Technical Builder
 achievement.craftRedstone.desc=Craft a Modular Systems Redstone Input
 
-modularsystems.versioncheck.start=Starting version check...
-modularsystems.versioncheck.current=Modular Systems is up to date...
-modularsystems.versioncheck.outdated=Modular Systems Outdated...
-modularsystems.versioncheck.mcversion=How the HELL did you get Modular Systems to work on this version of Minecraft...
-modularsystems.versioncheck.error=Could not get Current Version...
+#######################
+# JEI
+#######################
+
+modularsystems.jei.crusherrecipes=Modular Crusher
+modularsystems.jei.furnacerecipes=Modular Furnace
+modularsystems.jei.blockValues=Modular Systems Values
+

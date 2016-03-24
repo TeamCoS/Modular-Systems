@@ -1,10 +1,12 @@
 package com.teambr.modularsystems.core.client
 
 import com.teambr.bookshelf.common.blocks.properties.Properties
+import com.teambr.modularsystems.core.achievement.ModAchievements
 import com.teambr.modularsystems.core.client.models.BakedFurnaceCore
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
 import com.teambr.modularsystems.core.managers.{BlockManager, ItemRenderManager}
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.block.statemap.StateMap.Builder
 import net.minecraft.item.Item
 import net.minecraftforge.client.model.ModelLoader
@@ -30,6 +32,14 @@ class ClientProxy extends CommonProxy {
 
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.furnaceCore), 0,
             BakedFurnaceCore.MODEL_RESOURCE_LOCATION_NORMAL)
+
+        // Banks
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.bankSolids), 0,
+            new ModelResourceLocation(BlockManager.bankSolids.getUnlocalizedName.split("tile.")(1), "normal"))
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.bankLiquids), 0,
+            new ModelResourceLocation(BlockManager.bankLiquids.getUnlocalizedName.split("tile.")(1), "normal"))
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.bankRF), 0,
+            new ModelResourceLocation(BlockManager.bankRF.getUnlocalizedName.split("tile.")(1), "normal"))
 
         ItemRenderManager.registerBlockModel(BlockManager.crusherCore, "crusherCore", "facing=east,is_active=false")
 
