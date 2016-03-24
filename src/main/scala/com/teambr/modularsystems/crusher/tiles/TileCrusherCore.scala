@@ -115,18 +115,18 @@ class TileCrusherCore extends AbstractCore {
         for (i <- function.getBlockIds) {
             val t = (BlockHelper.getBlockFromString(i)._1, BlockHelper.getBlockFromString(i)._2)
 
-            if (BlockValueRegistry.isBlockRegistered(t._1, t._2)) {
-                values.speed += BlockValueRegistry.getSpeedValue(t._1, t._2, function.getBlockCount(t._1, t._2))
-                values.efficiency += BlockValueRegistry.getEfficiencyValue(t._1, t._2, function.getBlockCount(t._1, t._2))
-                values.multiplicity += BlockValueRegistry.getMultiplicityValue(t._1, t._2, function.getBlockCount(t._1, t._2))
+            if (BlockValueRegistry.INSTANCE.isBlockRegistered(t._1, t._2)) {
+                values.speed += BlockValueRegistry.INSTANCE.getSpeedValue(t._1, t._2, function.getBlockCount(t._1, t._2))
+                values.efficiency += BlockValueRegistry.INSTANCE.getEfficiencyValue(t._1, t._2, function.getBlockCount(t._1, t._2))
+                values.multiplicity += BlockValueRegistry.INSTANCE.getMultiplicityValue(t._1, t._2, function.getBlockCount(t._1, t._2))
             }
         }
 
         for (i <- function.getMaterialStrings) {
-            if (BlockValueRegistry.isMaterialRegistered(i)) {
-                values.speed += BlockValueRegistry.getSpeedValueMaterial(i, function.getMaterialCount(i))
-                values.efficiency += BlockValueRegistry.getEfficiencyValueMaterial(i, function.getMaterialCount(i))
-                values.multiplicity += BlockValueRegistry.getMultiplicityValueMaterial(i, function.getMaterialCount(i))
+            if (BlockValueRegistry.INSTANCE.isMaterialRegistered(i)) {
+                values.speed += BlockValueRegistry.INSTANCE.getSpeedValueMaterial(i, function.getMaterialCount(i))
+                values.efficiency += BlockValueRegistry.INSTANCE.getEfficiencyValueMaterial(i, function.getMaterialCount(i))
+                values.multiplicity += BlockValueRegistry.INSTANCE.getMultiplicityValueMaterial(i, function.getMaterialCount(i))
             }
         }
     }

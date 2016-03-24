@@ -24,6 +24,9 @@ public class PacketManager {
         net = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID().toUpperCase());
 
         registerMessage(OpenContainerPacket.class, OpenContainerPacket.class);
+        registerMessage(AddCalculationPacket.class, AddCalculationPacket.CalculationMessage.class);
+        registerMessage(SyncBlockValues.class, SyncBlockValues.class);
+        registerMessage(DeleteValuesPacket.class, DeleteValuesPacket.class);
     }
 
     @SuppressWarnings("unchecked")
