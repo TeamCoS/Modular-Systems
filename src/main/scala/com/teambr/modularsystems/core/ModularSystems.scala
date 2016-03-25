@@ -6,7 +6,7 @@ import com.teambr.modularsystems.core.achievement.ModAchievements
 import com.teambr.modularsystems.core.commands.OpenValueConfig
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.lib.Reference
-import com.teambr.modularsystems.core.managers.{GuiManager, BlockManager, CraftingManager, ItemManager}
+import com.teambr.modularsystems.core.managers._
 import com.teambr.modularsystems.core.network.PacketManager
 import com.teambr.modularsystems.core.registries._
 import net.minecraft.command.ServerCommandManager
@@ -17,7 +17,7 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent, FMLServerStartingEvent}
 import net.minecraftforge.fml.common.network.NetworkRegistry
-import net.minecraftforge.fml.common.{FMLCommonHandler, Mod, SidedProxy}
+import net.minecraftforge.fml.common.{Mod, SidedProxy}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.apache.logging.log4j.LogManager
 
@@ -67,6 +67,7 @@ object ModularSystems {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiManager)
 
         MinecraftForge.EVENT_BUS.register(BlockValueRegistry.INSTANCE)
+        MinecraftForge.EVENT_BUS.register(EventManager.INSTANCE)
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
@@ -74,7 +75,8 @@ object ModularSystems {
         CrusherRecipeRegistry.init() //Must be after ItemManager.init
         PacketManager.initPackets()
         proxy.init()
-        FMLCommonHandler.instance().bus().register(ModAchievements)
+        //FMLCommonHandler.instance().bus().register(ModAchievements)
+        MinecraftForge.EVENT_BUS.register(ModAchievements)
     }
 
     @EventHandler def postInit(event : FMLPostInitializationEvent) = {
