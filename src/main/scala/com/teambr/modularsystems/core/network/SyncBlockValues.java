@@ -3,6 +3,7 @@ package com.teambr.modularsystems.core.network;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.teambr.bookshelf.helper.LogHelper;
 import com.teambr.modularsystems.core.collections.BlockValues;
 import com.teambr.modularsystems.core.functions.CompressionFunctions;
 import com.teambr.modularsystems.core.registries.BlockValueRegistry;
@@ -65,6 +66,7 @@ public class SyncBlockValues implements IMessage, IMessageHandler<SyncBlockValue
     public IMessage onMessage(SyncBlockValues message, MessageContext ctx) {
 
         if (message.jsonBlockValues != null) {
+            LogHelper.info("Syncing data to client...");
             Gson gson = new Gson();
             BlockValueRegistry.INSTANCE.values = gson.fromJson(message.jsonBlockValues,
                     new TypeToken<LinkedHashMap<java.lang.String, BlockValues>>() {}.getType());

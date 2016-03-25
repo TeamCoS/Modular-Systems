@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.jcraft.jorbis.Block;
+import com.teambr.bookshelf.helper.LogHelper;
 import com.teambr.modularsystems.core.collections.BlockValues;
 import com.teambr.modularsystems.core.functions.CompressionFunctions;
 import com.teambr.modularsystems.core.registries.BlockValueRegistry;
@@ -45,6 +46,7 @@ public class ResetClientValues implements IMessage, IMessageHandler<ResetClientV
     public IMessage onMessage(ResetClientValues message, MessageContext ctx) {
 
         if (ctx.side.isClient()) {
+            LogHelper.info("Restoring client values...");
             BlockValueRegistry.INSTANCE.init();
         }
         return null;
