@@ -1,0 +1,10 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "model" : "modularsystems:expansionOther",
+    "textures" : {
+      "insideBlock" : "blocks/piston_top_normal"
+    }
+  },
+  "variants" : { "normal" : {  "model" : "modularsystems:expansionOther" } }
+}

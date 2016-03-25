@@ -1,21 +1,22 @@
 package com.teambr.modularsystems.core.common.tiles
 
 import com.teambr.bookshelf.common.tiles.traits.RedstoneAware
-import net.minecraft.inventory.IInventory
+import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 
 /**
- * This file was created for Modular-Systems
- *
- * Modular-Systems is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Paul Davis <pauljoda>
- * @since August 09, 2015
- */
+  * This file was created for Modular-Systems
+  *
+  * Modular-Systems is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Paul Davis <pauljoda>
+  * @since August 09, 2015
+  */
 class TileIOExpansion extends TileProxy with RedstoneAware {
     var input : Boolean = true
     var output : Boolean = true
@@ -41,15 +42,22 @@ class TileIOExpansion extends TileProxy with RedstoneAware {
 
     override def onServerTick() : Unit = {
         getCore match {
-            case Some(theCore) =>
-                if (worldObj != null && worldObj.rand.nextInt (20) == 10 && auto) {
+            case Some(theCore) if auto =>
+                if (worldObj != null && worldObj.rand.nextInt(20) == 10) {
                     if (!isPowered) {
                         for(dir <- EnumFacing.values()) {
                             worldObj.getTileEntity(pos.offset(dir)) match {
-                                case tile : IInventory =>
+                                case tile : TileEntity =>
                                     if (!tile.isInstanceOf[TileProxy] && !tile.isInstanceOf[AbstractCore]) {
-
-
+                                        if(output) {
+                                            for(i <- 1 until theCore.getSlots()) {
+                                                InventoryUtils.moveItemInto(theCore, i, tile, -1, 64, dir.getOpposite,
+                                                    doMove = true, checkSidedSource = false)
+                                            }
+                                        }
+                                        if(input)
+                                            InventoryUtils.moveItemInto(tile, -1, theCore, 0, 64, dir,
+                                                doMove = true, checkSidedTarget = false)
                                     }
                                 case _ =>
                             }

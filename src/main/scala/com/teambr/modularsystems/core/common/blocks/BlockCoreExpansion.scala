@@ -154,10 +154,12 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
     override def performLoadAction(@Nonnull event: AnyRef, isClient : Boolean = false) : Unit = {
         event match  {
             case modelBake : ModelBakeEvent =>
-                modelBake.getModelRegistry.putObject(
-                    new ModelResourceLocation(getUnlocalizedName.split("tile.")(1), "normal"),
-                    new BakedCoreExpansion(modelBake.getModelRegistry
-                            .getObject(new ModelResourceLocation(getUnlocalizedName.split("tile.")(1), "normal"))))
+                if(blockColor != -1) {
+                    modelBake.getModelRegistry.putObject(
+                        new ModelResourceLocation(getUnlocalizedName.split("tile.")(1), "normal"),
+                        new BakedCoreExpansion(modelBake.getModelRegistry
+                                .getObject(new ModelResourceLocation(getUnlocalizedName.split("tile.")(1), "normal"))))
+                }
             case _ =>
         }
     }

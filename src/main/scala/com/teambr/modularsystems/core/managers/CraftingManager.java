@@ -38,6 +38,12 @@ public class CraftingManager {
                 "HDH",
                 " P ", 'P', Blocks.piston, 'H', Blocks.hopper, 'D', Blocks.dispenser);
 
+        // Crusher Expansion
+        GameRegistry.addRecipe(new ItemStack(BlockManager.crusherExpansion()),
+                "PFP",
+                "PIP",
+                "PFP", 'P', Blocks.piston, 'F', Items.flint, 'I', Blocks.iron_block);
+
         //Solid Fuel Bank
         GameRegistry.addRecipe(new ItemStack(BlockManager.bankSolids(), 1),
                 "CIC",

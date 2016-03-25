@@ -1,0 +1,10 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "model" : "modularsystems:expansionOther",
+    "textures" : {
+      "insideBlock" : "blocks/cauldron_inner"
+    }
+  },
+  "variants" : { "normal" : {  "model" : "modularsystems:expansionOther" } }
+}

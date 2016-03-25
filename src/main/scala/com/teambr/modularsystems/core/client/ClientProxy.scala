@@ -1,7 +1,6 @@
 package com.teambr.modularsystems.core.client
 
 import com.teambr.bookshelf.common.blocks.properties.Properties
-import com.teambr.modularsystems.core.achievement.ModAchievements
 import com.teambr.modularsystems.core.client.models.BakedFurnaceCore
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
@@ -41,7 +40,9 @@ class ClientProxy extends CommonProxy {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.bankRF), 0,
             new ModelResourceLocation(BlockManager.bankRF.getUnlocalizedName.split("tile.")(1), "normal"))
 
+        ItemRenderManager.registerBlockModel(BlockManager.ioExpansion, "ioExpansion", "normal")
         ItemRenderManager.registerBlockModel(BlockManager.crusherCore, "crusherCore", "facing=east,is_active=false")
+        ItemRenderManager.registerBlockModel(BlockManager.crusherExpansion, "crusherExpansion", "normal")
 
         RenderRegistry.doTheThing()
     }

@@ -31,8 +31,8 @@ object BlockManager {
     val bankRF = new BlockCoreExpansion("bankRF", classOf[TileBankRF], new Color(174, 0, 36).getRGB)
 
     //Expansions
-    val crusherExpansion = new BlockCoreExpansion("crusherExpansion", classOf[TileCrusherExpansion], 0x555555)
-    val ioExpansion = new BlockCoreExpansion("ioExpansion", classOf[TileIOExpansion], 0xBBBBBB)
+    val crusherExpansion = new BlockCoreExpansion("crusherExpansion", classOf[TileCrusherExpansion], -1)
+    val ioExpansion = new BlockCoreExpansion("ioExpansion", classOf[TileIOExpansion], -1)
 
     val proxy = new BlockProxy("proxy", classOf[TileProxy])
 
