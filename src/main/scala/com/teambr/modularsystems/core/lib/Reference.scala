@@ -14,7 +14,7 @@ object Reference {
     final val MOD_NAME     = "Modular Systems"
     final val MOD_ID       = "modularsystems"
     final val VERSION      = "3.0.0"
-    final val DEPENDENCIES = "required-after:Forge@[11.15.0.1697,);required-after:bookshelfapi@[2.2.3,)"
+    final val DEPENDENCIES = "required-after:Forge@[11.15.0.1697,);required-after:bookshelfapi@[3.0.0,)"
 
     final val POWER        = "Power Bank Settings"
 }
