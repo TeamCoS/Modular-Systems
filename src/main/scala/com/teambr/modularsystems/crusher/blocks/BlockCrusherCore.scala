@@ -33,6 +33,8 @@ import net.minecraftforge.fml.relauncher.{ SideOnly, Side }
 class BlockCrusherCore(name: String) extends BaseBlock(Material.rock, name, classOf[TileCrusherCore])
         with OpensGui with CoreStates with DropsItems {
 
+    setDefaultState(getDefaultState.withProperty(CoreStates.PROPERTY_ACTIVE, false.asInstanceOf[java.lang.Boolean]))
+
     override def breakBlock(world: World, pos: BlockPos, state: IBlockState) {
         world.getTileEntity(pos) match {
             case core: TileCrusherCore => core.deconstructMultiblock()

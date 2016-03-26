@@ -8,6 +8,7 @@ import com.teambr.bookshelf.common.blocks.properties.Properties
 import com.teambr.bookshelf.common.tiles.traits.{InventorySided, UpdatingTile}
 import com.teambr.bookshelf.util.WorldUtils
 import com.teambr.modularsystems.core.collections.StandardValues
+import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
 import com.teambr.modularsystems.core.functions.BlockCountFunction
 import com.teambr.modularsystems.core.managers.BlockManager
 import com.teambr.modularsystems.core.providers.FuelProvider
@@ -160,7 +161,6 @@ abstract class AbstractCore extends UpdatingTile with InventorySided {
                         proxy.storedBlock = id
                         proxy.metaData = meta
                         worldObj.notifyBlockUpdate(loc, worldObj.getBlockState(loc), worldObj.getBlockState(loc), 3)
-                        worldObj.markBlockRangeForRenderUpdate(loc, loc)
                 }
             }
         }
@@ -278,8 +278,10 @@ abstract class AbstractCore extends UpdatingTile with InventorySided {
       ************************************************  Furnace Methods  ***********************************************
       ******************************************************************************************************************/
 
+    var wasBurning = false
     protected def doWork() : Unit = {
         var didWork : Boolean = false
+        wasBurning = this.values.burnTime > 0
         if (!worldObj.isRemote) {
             if (this.values.burnTime > 0) {
                 this.values.burnTime = values.burnTime - 1
@@ -301,7 +303,10 @@ abstract class AbstractCore extends UpdatingTile with InventorySided {
                     this.values.burnTime = scaledBurnTime
                     this.values.currentItemBurnTime = this.values.burnTime
                     cook
-                    didWork = true
+                    // Started Burn
+                    worldObj.setBlockState(pos, worldObj.getBlockState(pos).withProperty(CoreStates.PROPERTY_ACTIVE,
+                        (values.burnTime > 0).asInstanceOf[java.lang.Boolean]))
+                    worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3)
                 }
                 else if (isBurning) {
                     didWork = cook
@@ -309,16 +314,23 @@ abstract class AbstractCore extends UpdatingTile with InventorySided {
                 else {
                     this.values.cookTime = 0
                     this.values.burnTime = 0
-                    didWork = true
+                    // Back to not burning
+                    worldObj.setBlockState(pos, worldObj.getBlockState(pos).withProperty(CoreStates.PROPERTY_ACTIVE,
+                        (values.burnTime > 0).asInstanceOf[java.lang.Boolean]))
+                    worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3)
                 }
             }
-            else if (this.values.burnTime <= 0) {
+            else if (this.values.burnTime <= 0 && wasBurning) {
                 this.values.cookTime = 0
-                didWork = true
+                // Can't burn
+                worldObj.setBlockState(pos, worldObj.getBlockState(pos).withProperty(CoreStates.PROPERTY_ACTIVE,
+                    (values.burnTime > 0).asInstanceOf[java.lang.Boolean]))
+                worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3)
             }
             if (didWork) {
+                worldObj.setBlockState(pos, worldObj.getBlockState(pos).withProperty(CoreStates.PROPERTY_ACTIVE,
+                    (values.burnTime > 0).asInstanceOf[java.lang.Boolean]))
                 worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
-                markDirty()
             }
         }
     }
@@ -459,19 +471,15 @@ abstract class AbstractCore extends UpdatingTile with InventorySided {
             tag.setLong("Second", corners._2.toLong)
         }
     }
+
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super[TileEntity].readFromNBT(tag)
         super[InventorySided].readFromNBT(tag)
-        val oldBurn = values.burnTime
         values.readFromNBT(tag)
         isDirty = tag.getBoolean("IsDirty")
         wellFormed = tag.getBoolean("WellFormed")
 
         corners = (BlockPos.fromLong(tag.getLong("First")), BlockPos.fromLong(tag.getLong("Second")))
-        if(worldObj != null) { //We only want to update when there has been a state change
-            if(oldBurn == 0 && values.burnTime > 0 || oldBurn > 0 && values.burnTime <= 0)
-                worldObj.markBlockRangeForRenderUpdate(pos, pos)
-        }
     }
 
     /*******************************************************************************************************************
