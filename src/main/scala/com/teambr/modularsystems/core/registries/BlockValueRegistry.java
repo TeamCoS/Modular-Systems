@@ -167,7 +167,8 @@ public class BlockValueRegistry {
       * @return True if found
       */
     public boolean isBlockRegistered(Block block, int meta) {
-        return values.get(BlockHelper.getBlockString(block, meta)) != null || values.get(BlockHelper.getBlockString(block)) != null;
+        return (block != null && block.getUnlocalizedName() != null) &&
+                (values.get(BlockHelper.getBlockString(block, meta)) != null || values.get(BlockHelper.getBlockString(block)) != null);
     }
 
     /**

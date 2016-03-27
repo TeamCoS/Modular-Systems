@@ -16,9 +16,7 @@ import com.teambr.modularsystems.power.container.{ContainerBankLiquids, Containe
 import com.teambr.modularsystems.power.gui.{GuiBankLiquids, GuiBankRF, GuiBankSolids}
 import com.teambr.modularsystems.power.tiles.{TileBankBase, TileBankLiquids, TileBankRF, TileBankSolids}
 import net.minecraft.block.state.IBlockState
-import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
-import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
@@ -61,7 +59,7 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer,
                                   hand: EnumHand, heldItem: ItemStack,
                                   side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-        if (player.isSneaking) {
+        if (!player.isSneaking) {
             world.getTileEntity(pos) match {
                 case tile: TileBankBase =>
                     player.openGui(Bookshelf, 0, world, pos.getX, pos.getY, pos.getZ)
@@ -89,24 +87,6 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
 
     def colorMultiplier : Int = {
         blockColor
-    }
-
-    @SideOnly(Side.CLIENT)
-    def getTextureForItem(block : BlockCoreExpansion) : TextureAtlasSprite = {
-        block match {
-            case BlockManager.bankSolids =>
-                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry ("modularsystems:blocks/solidsOverlay")
-            case BlockManager.bankLiquids =>
-                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/liquidsOverlay")
-            case BlockManager.bankRF =>
-                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/rfOverlay")
-            case BlockManager.crusherExpansion =>
-                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/crusherExpansionOverlay")
-            case BlockManager.ioExpansion =>
-                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry("modularsystems:blocks/ioExpansionOverlay")
-            case _ =>
-                Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry ("modularsystems:blocks/solidsOverlay")
-        }
     }
 
     /*******************************************************************************************************************
