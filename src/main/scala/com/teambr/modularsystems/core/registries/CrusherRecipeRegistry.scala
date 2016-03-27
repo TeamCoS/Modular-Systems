@@ -41,6 +41,7 @@ object CrusherRecipeRegistry {
 
     /**
      * Load the values from the file
+ *
      * @return True if successful
      */
     def loadFromFile(): Boolean = {
@@ -133,6 +134,7 @@ object CrusherRecipeRegistry {
 
     /**
      * Get the oreDict tag for an item
+ *
      * @param itemstack The stack to try
      * @return The string for this stack or OreDict name
      */
@@ -171,6 +173,7 @@ object CrusherRecipeRegistry {
 
     /**
      * Checks if the item is a valid item for this registry
+ *
      * @param itemStack The stack to test
      * @return True if an output exists
      */
@@ -180,6 +183,7 @@ object CrusherRecipeRegistry {
 
     /**
      * Get the oreDict tag for an item
+ *
      * @param itemStack The stack to find
      * @return The string for this stack or OreDict name
      */
@@ -197,8 +201,7 @@ object CrusherRecipeRegistry {
     }
 
     private def getItemStackString(itemStack: ItemStack): String = {
-        val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(itemStack.getItem)
-        id.modId + ":" + id.name + ":" + itemStack.getItemDamage
+        itemStack.getItem.getUnlocalizedName.substring(5) + ":" + itemStack.getItemDamage
     }
 
     private def getItemStackFromString(item: String): ItemStack = {

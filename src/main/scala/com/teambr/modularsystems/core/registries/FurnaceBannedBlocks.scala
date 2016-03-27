@@ -10,7 +10,6 @@ import com.teambr.modularsystems.core.ModularSystems
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -108,9 +107,8 @@ object FurnaceBannedBlocks {
      * @param meta The blocks metadata
      */
     def addBannedBlock(block: Block, meta: Int) {
-        val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(block)
-        if (!bannedBlocks.contains(id.modId + ":" + id.name + ":" + meta))
-            bannedBlocks.add(id.modId + ":" + id.name + ":" + meta)
+        if (!bannedBlocks.contains(block.getUnlocalizedName.substring(5) + ":" + meta))
+            bannedBlocks.add(block.getUnlocalizedName.substring(5) + ":" + meta)
     }
 
     /**
@@ -129,9 +127,8 @@ object FurnaceBannedBlocks {
      * @return True if is banned
      */
     def isBlockBanned(block: Block, meta: Int): Boolean = {
-        val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(block)
-        val blockName: String = id.modId + ":" + id.name + ":" + meta
-        val blockWithNoMeta: String = id.modId + ":" + id.name + ":" + -1
+        val blockName: String = block.getUnlocalizedName.substring(5) + ":" + meta
+        val blockWithNoMeta: String = block.getUnlocalizedName.substring(5) + ":" + -1
         bannedBlocks.contains(blockName) || bannedBlocks.contains(blockWithNoMeta)
     }
 }
