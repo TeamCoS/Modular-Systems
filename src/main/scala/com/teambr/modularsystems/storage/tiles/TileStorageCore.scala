@@ -1,0 +1,343 @@
+package com.teambr.modularsystems.storage.tiles
+
+import java.util
+
+import com.teambr.bookshelf.common.tiles.traits.Syncable
+import net.minecraft.item.ItemStack
+import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraft.util.EnumFacing
+import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.items.{CapabilityItemHandler, IItemHandler}
+
+import scala.collection.JavaConversions._
+
+/**
+  * This file was created for Modular-Systems
+  *
+  * Modular-Systems is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Paul Davis "pauljoda"
+  * @since 3/27/2016
+  */
+class TileStorageCore extends Syncable with IItemHandler {
+
+    /*******************************************************************************************************************
+      * IItemHandler                                                                                                   *
+      ******************************************************************************************************************/
+
+    // The actual inventory
+    private lazy val inventory = new util.LinkedHashMap[ItemStack, Int]()
+
+    // Converts the keyset into a list
+    def keysToList = new util.ArrayList[ItemStack](inventory.keySet())
+
+    // Cached size
+    private var cachedSize = 0
+
+    // Maximum item count
+    private def maxItems = currentSlots * 64
+
+    // How many slots are allowed for this tile
+    private var currentSlots = 60
+
+    /**
+      * Used to get the instance of the inventory
+      * @return The inventory map
+      */
+    def getInventory : util.LinkedHashMap[ItemStack, Int] = inventory
+
+    /**
+      * Used to get how many slots are available
+      * @return How many slots this has
+      */
+    def getCurrentSlots : Int = 60
+
+    /**
+      * Used to get how many items can still fit
+      * @return
+      */
+    def getAmountRemaining : Int = maxItems - cachedSize
+
+    /**
+      * Used to get the stack object out of the inventory
+      *
+      * @param stack The stack to look for
+      * @return Returns out stack, meaning it found something and also works as the key to the inventory, null if not found
+      */
+    private def getStack(stack : ItemStack, slot : Int = -1) : ItemStack = {
+        if(slot == -1) {
+            for (ourStack <- inventory.keySet()) {
+                if (ourStack.getItem == stack.getItem &&
+                        ourStack.getItemDamage == stack.getItemDamage &&
+                        ItemStack.areItemStackTagsEqual(ourStack, stack))
+                    return ourStack
+            }
+            null
+        } else {
+            val list = keysToList
+            if(slot >= list.size())
+                null
+            else
+                list.get(slot)
+        }
+    }
+
+    /**
+      * Used to update how many items we have cached
+      */
+    private def updateCachedSize(): Unit = {
+        cachedSize = 0
+        for(stack <- inventory.keySet())
+            cachedSize += inventory.get(stack)
+    }
+
+    /**
+      * Returns the number of slots available
+      *
+      * @return The number of slots available
+      */
+    override def getSlots: Int = currentSlots
+
+    /**
+      * Returns the ItemStack in a given slot.
+      *
+      * The result's stack size may be greater than the itemstacks max size.
+      *
+      * If the result is null, then the slot is empty.
+      * If the result is not null but the stack size is zero, then it represents
+      * an empty slot that will only accept* a specific itemstack.
+      *
+      * <p/>
+      * IMPORTANT: This ItemStack MUST NOT be modified. This method is not for
+      * altering an inventories contents. Any implementers who are able to detect
+      * modification through this method should throw an exception.
+      * <p/>
+      * SERIOUSLY: DO NOT MODIFY THE RETURNED ITEMSTACK
+      *
+      * @param slot Slot to query
+      * @return ItemStack in given slot. May be null.
+      */
+    override def getStackInSlot(slot: Int): ItemStack = {
+        // Make sure we are within limits
+        if(slot >= inventory.keySet().size())
+            throw new ArrayIndexOutOfBoundsException("Attempted to access slot outside of bounds "
+                    + slot + " with inventory of size " + inventory.keySet().size())
+
+        keysToList.get(slot)
+    }
+
+    /**
+      * Inserts an ItemStack into the given slot and return the remainder.
+      * The ItemStack should not be modified in this function!
+      * Note: This behaviour is subtly different from IFluidHandlers.fill()
+      *
+      * @param slot     Slot to insert into, -1 just inserts no problem
+      * @param stack    ItemStack to insert.
+      * @param simulate If true, the insertion is only simulated
+      * @return The remaining ItemStack that was not inserted (if the entire stack is accepted, then return null).
+      *         May be the same as the input ItemStack if unchanged, otherwise a new ItemStack.
+      */
+    override def insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack = {
+        // Safe check
+        if(stack == null) return null
+
+        // Find out if we have this stack already
+        val ourKey = getStack(stack, slot)
+        if(ourKey != null) { // We already have an instance of this stack
+        // How much we can fit
+        val insertAmount = Math.min(stack.getMaxStackSize, maxItems - cachedSize) - stack.stackSize
+            if(stack.stackSize <= insertAmount) {
+                if(!simulate) {
+                    val copiedAmount = stack.stackSize
+                    inventory.put(ourKey, inventory.get(ourKey) + copiedAmount)
+                    updateCachedSize()
+                    markForUpdate()
+                }
+                null
+            } else {
+                if(!simulate) {
+                    val stackCopy = stack.splitStack(insertAmount)
+                    inventory.put(ourKey, inventory.get(ourKey) + stackCopy.stackSize)
+                    updateCachedSize()
+                    markForUpdate()
+                    stack
+                } else {
+                    stack.stackSize -= insertAmount
+                    stack
+                }
+            }
+        } else {
+            val insertAmount = Math.min(stack.getMaxStackSize, maxItems - cachedSize)
+            if(insertAmount < stack.stackSize) {
+                if(!simulate) {
+                    val insertStack = stack.splitStack(insertAmount)
+                    inventory.put(insertStack, insertStack.stackSize)
+                    updateCachedSize()
+                    stack
+                } else {
+                    stack.stackSize -= insertAmount
+                    stack
+                }
+            } else {
+                if(!simulate) {
+                    inventory.put(stack.copy(), stack.stackSize)
+                    updateCachedSize()
+                }
+                null
+            }
+        }
+    }
+
+    /**
+      * Extracts an ItemStack from the given slot. The returned value must be null
+      * if nothing is extracted, otherwise it's stack size must not be greater than amount or the
+      * itemstacks getMaxStackSize().
+      *
+      * @param slot  Slot to extract from.
+      * @param amount       Amount to extract (may be greater than the current stacks max limit)
+      * @param simulate     If true, the extraction is only simulated
+      * @return             ItemStack extracted from the slot, must be null, if nothing can be extracted
+      */
+    override def extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack = {
+        if(amount == 0) return null
+
+        val list = keysToList
+        if(slot >= list.size()) return null
+
+        val ourKey = list.get(slot)
+
+        if(ourKey == null) return null
+
+        if(simulate) {
+            if(inventory.get(ourKey) < amount) {
+                val returnStack = ourKey.copy()
+                ourKey.stackSize = inventory.get(ourKey)
+                returnStack
+            } else {
+                val returnStack = ourKey.copy()
+                ourKey.stackSize = amount
+                returnStack
+            }
+        } else {
+            val min = Math.min(inventory.get(ourKey), amount) // How much we can remove
+            val listAmount = inventory.get(ourKey) // The last value
+            inventory.put(ourKey, inventory.get(ourKey) - min) // Change our amount
+            var returnStack = ourKey.copy() // Copy the stack
+            val loweredSize = listAmount - inventory.get(ourKey) // Get the new size value
+            returnStack.stackSize = loweredSize // Set the size to the new amount
+            if(inventory.get(ourKey) == 0) // If we drain the inventory, update
+                inventory.remove(ourKey)
+
+            // Null stack
+            if(returnStack.stackSize == 0)
+                returnStack = null
+
+            returnStack
+        }
+    }
+
+    /*******************************************************************************************************************
+      * Tile Methods                                                                                                   *
+      ******************************************************************************************************************/
+
+    /**
+      * Used to mark block for update, makes it easier to call
+      *
+      * @param flags Optional flags, won't cause re-render by default. Set to 3 to render client change
+      */
+    def markForUpdate(flags : Int = 6): Unit = {
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), flags)
+    }
+
+    /**
+      * Checks if we have a certain capability
+      *
+      * @param capability The capability to check for
+      * @param facing Which face, can be different by face
+      * @return True if we have the said capability
+      */
+    override def hasCapability(capability: Capability[_], facing : EnumFacing) = {
+        capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+    }
+
+    /**
+      * Used to get an instance of a capability
+      *
+      * @param capability The capability
+      * @param facing Which face
+      * @tparam T The object to return
+      * @return The capability if valid
+      */
+    override def getCapability[T](capability: Capability[T], facing: EnumFacing): T = {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            this.asInstanceOf[T] else
+            super.getCapability[T](capability, facing)
+    }
+
+    private lazy val TAG_LIST_LOCATION = "InventoryTags"
+
+    /**
+      * Used to save the inventory to an NBT tag
+      *
+      * @param tag The tag to save to
+      */
+    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+        super[Syncable].writeToNBT(tag)
+
+        // Write inventory
+        val stackTagList = new NBTTagList
+        for(stack <- inventory.keySet()) {
+            val tagList = new NBTTagList
+            val stackTag = new NBTTagCompound
+            stack.writeToNBT(stackTag)
+            stackTag.setInteger("Amount", inventory.get(stack))
+            tagList.appendTag(stackTag)
+            stackTagList.appendTag(tagList)
+        }
+        tag.setTag(TAG_LIST_LOCATION, stackTagList)
+    }
+
+    /**
+      * Used to read the inventory from an NBT tag compound
+      *
+      * @param tag The tag to read from
+      */
+    override def readFromNBT(tag : NBTTagCompound) : Unit = {
+        super[Syncable].readFromNBT(tag)
+
+        // Read Inventory
+        inventory.clear()
+        val stackTagList = tag.getTagList(TAG_LIST_LOCATION, 9)
+        if(stackTagList != null) {
+            for (i <- 0 until stackTagList.tagCount()) {
+                val localList = stackTagList.get(i).asInstanceOf[NBTTagList]
+                val stackCompound = localList.getCompoundTagAt(0)
+                val stack = ItemStack.loadItemStackFromNBT(stackCompound)
+                val amount = stackCompound.getInteger("Amount")
+                inventory.put(stack, amount)
+            }
+        }
+    }
+
+    /*******************************************************************************************************************
+      * Syncable                                                                                                       *
+      ******************************************************************************************************************/
+
+    /**
+      * Used to set a variable, the packet to sync values will call this method
+      *
+      * @param id The variable ID, these should be constant values defined by the tile
+      * @param value The new value to set to, use it how you wish per case
+      */
+    override def setVariable(id: Int, value: Double): Unit = {}
+
+    /**
+      * Gets the variable, also forces the value to sync
+      *
+      * @param id The variable id
+      * @return The value from the other side, will sync values and return the new one
+      */
+    override def getVariable(id: Int): Double = { 0.0 }
+}

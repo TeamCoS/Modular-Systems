@@ -21,6 +21,9 @@ tile.modularsystems:generatorCoreActive.name=Modular Generator Core
 # Proxy Name
 tile.modularsystems:proxy.name=Modular Furnace Proxy
 
+# Storage
+tile.modularsystems:storageCore.name=Modular Storage Core
+
 # Expansions
 tile.modularsystems:ioExpansion.name=Modular Systems I/O
 tile.modularsystems:crusherExpansion.name=Modular Crusher Seconday Output Expansion
@@ -53,6 +56,9 @@ inventory.crusher.title=Modular Crusher
 
 # Modular Generator
 inventory.generator.title=Modular Generator
+
+# Modular Storage Core
+inventory.storage.title=Modular Storage
 
 # IO Configure
 inventory.io.title=I/O Configure

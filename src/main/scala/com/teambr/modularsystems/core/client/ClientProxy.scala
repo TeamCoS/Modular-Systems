@@ -40,9 +40,15 @@ class ClientProxy extends CommonProxy {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.bankRF), 0,
             new ModelResourceLocation(BlockManager.bankRF.getUnlocalizedName.split("tile.")(1), "normal"))
 
+        // IO Expansion
         ItemRenderManager.registerBlockModel(BlockManager.ioExpansion, "ioExpansion", "normal")
+
+        // Crusher
         ItemRenderManager.registerBlockModel(BlockManager.crusherCore, "crusherCore", "facing=east,is_active=false")
         ItemRenderManager.registerBlockModel(BlockManager.crusherExpansion, "crusherExpansion", "normal")
+
+        // Storage
+        ItemRenderManager.registerBlockModel(BlockManager.storageCore, "storageCore", "facing=east")
 
         RenderRegistry.doTheThing()
     }

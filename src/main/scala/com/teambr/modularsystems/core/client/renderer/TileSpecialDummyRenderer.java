@@ -17,10 +17,10 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
+public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer<TileBankBase> {
 
     @Override
-    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float tick, int i) {
+    public void renderTileEntityAt(TileBankBase tile, double x, double y, double z, float tick, int i) {
         GlStateManager.pushMatrix();
         GlStateManager.pushAttrib();
         GL11.glDisable(GL11.GL_CULL_FACE);
@@ -32,10 +32,8 @@ public class TileSpecialDummyRenderer extends TileEntitySpecialRenderer {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDisable(GL11.GL_LIGHTING);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
-        /*tess.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-        tess.setBrightness(15728880);*/
 
-        float level = (float) Math.max(3 / 16F, (((TileBankBase)tile).getPowerLevelScaled(8) + 4) / 16F);
+        float level = (float) Math.max(3 / 16F, (tile.getPowerLevelScaled(8) + 4) / 16F);
 
         if(tile instanceof TileBankLiquids) {
             TileBankLiquids fluidTile = (TileBankLiquids)tile;

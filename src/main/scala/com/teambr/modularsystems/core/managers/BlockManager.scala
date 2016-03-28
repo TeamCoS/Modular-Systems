@@ -9,6 +9,8 @@ import com.teambr.modularsystems.crusher.tiles.{TileCrusherExpansion, TileCrushe
 import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import com.teambr.modularsystems.power.tiles.{TileBankRF, TileBankLiquids, TileBankSolids}
+import com.teambr.modularsystems.storage.blocks.BlockStorageCore
+import com.teambr.modularsystems.storage.tiles.TileStorageCore
 import net.minecraft.block.Block
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -25,10 +27,13 @@ object BlockManager {
     val furnaceCore = new BlockFurnaceCore("furnaceCore")
     val crusherCore = new BlockCrusherCore("crusherCore")
 
-    //Power
+    // Power
     val bankSolids = new BlockCoreExpansion("bankSolids", classOf[TileBankSolids], 0x4A390E)
     val bankLiquids = new BlockCoreExpansion("bankLiquids", classOf[TileBankLiquids], 0x215045)
     val bankRF = new BlockCoreExpansion("bankRF", classOf[TileBankRF], new Color(174, 0, 36).getRGB)
+
+    // Storage
+    val storageCore = new BlockStorageCore
 
     //Expansions
     val crusherExpansion = new BlockCoreExpansion("crusherExpansion", classOf[TileCrusherExpansion], -1)
@@ -46,6 +51,9 @@ object BlockManager {
         registerBlock(bankSolids, "bankSolids", classOf[TileBankSolids])
         registerBlock(bankLiquids, "bankLiquids", classOf[TileBankLiquids])
         registerBlock(bankRF, "bankRF", classOf[TileBankRF])
+
+        // Storage
+        registerBlock(storageCore, "storageCore", classOf[TileStorageCore])
 
         //Expansions
         registerBlock(crusherExpansion, "crusherExpansion", classOf[TileCrusherExpansion])
