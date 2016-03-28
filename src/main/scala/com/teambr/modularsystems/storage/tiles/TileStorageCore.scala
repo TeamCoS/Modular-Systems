@@ -66,7 +66,7 @@ class TileStorageCore extends Syncable with IItemHandler {
       * @param stack The stack to look for
       * @return Returns out stack, meaning it found something and also works as the key to the inventory, null if not found
       */
-    private def getStack(stack : ItemStack, slot : Int = -1) : ItemStack = {
+    def getStack(stack : ItemStack, slot : Int = -1) : ItemStack = {
         if(slot == -1) {
             for (ourStack <- inventory.keySet()) {
                 if (ourStack.getItem == stack.getItem &&
@@ -91,6 +91,7 @@ class TileStorageCore extends Syncable with IItemHandler {
         cachedSize = 0
         for(stack <- inventory.keySet())
             cachedSize += inventory.get(stack)
+        markForUpdate()
     }
 
     /**
@@ -147,13 +148,12 @@ class TileStorageCore extends Syncable with IItemHandler {
         val ourKey = getStack(stack, slot)
         if(ourKey != null) { // We already have an instance of this stack
         // How much we can fit
-        val insertAmount = Math.min(stack.getMaxStackSize, maxItems - cachedSize) - stack.stackSize
+        val insertAmount = Math.min(stack.getMaxStackSize, maxItems - cachedSize)
             if(stack.stackSize <= insertAmount) {
                 if(!simulate) {
                     val copiedAmount = stack.stackSize
                     inventory.put(ourKey, inventory.get(ourKey) + copiedAmount)
                     updateCachedSize()
-                    markForUpdate()
                 }
                 null
             } else {
@@ -161,7 +161,6 @@ class TileStorageCore extends Syncable with IItemHandler {
                     val stackCopy = stack.splitStack(insertAmount)
                     inventory.put(ourKey, inventory.get(ourKey) + stackCopy.stackSize)
                     updateCachedSize()
-                    markForUpdate()
                     stack
                 } else {
                     stack.stackSize -= insertAmount

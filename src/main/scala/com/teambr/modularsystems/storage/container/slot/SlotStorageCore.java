@@ -22,11 +22,23 @@ public class SlotStorageCore extends Slot {
     private static IInventory emptyInventory = new InventoryBasic("[Null]", true, 0);
     private ItemStack heldStack = null;
     private TileStorageCore storageCore;
+    private int index;
 
     public SlotStorageCore(TileStorageCore storageCoreIn,
                            int index, int xPosition, int yPosition) {
         super(emptyInventory, index, xPosition, yPosition);
+        this.index = index;
         storageCore = storageCoreIn;
+        heldStack = null;
+        if(storageCore.keysToList().size() > index) {
+            heldStack = storageCore.keysToList().get(index);
+            int amount = (int) storageCore.getInventory().get(heldStack);
+            heldStack = heldStack.copy();
+            heldStack.stackSize = amount;
+        }
+    }
+
+    public void updateStackInformation() {
         heldStack = null;
         if(storageCore.keysToList().size() > index) {
             heldStack = storageCore.keysToList().get(index);
@@ -38,7 +50,7 @@ public class SlotStorageCore extends Slot {
 
     @Override
     public void onSlotChange(ItemStack firstStack, ItemStack secondStack) {
-       super.onSlotChange(firstStack, secondStack);
+        super.onSlotChange(firstStack, secondStack);
         storageCore.markForUpdate(6);
     }
 
@@ -47,7 +59,7 @@ public class SlotStorageCore extends Slot {
      */
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return stack != null;
+        return true;
     }
 
     /**
@@ -55,6 +67,7 @@ public class SlotStorageCore extends Slot {
      */
     @Override
     public ItemStack getStack() {
+        updateStackInformation();
         return heldStack;
     }
 
@@ -62,12 +75,19 @@ public class SlotStorageCore extends Slot {
      * Helper method to put a stack in the slot.
      */
     @Override
-    public void putStack(ItemStack stack) {
-        storageCore.insertItem(-1, stack, false);
-    }
+    public void putStack(ItemStack stack) {}
 
     @Override
     public int getItemStackLimit(ItemStack stack) {
+        return storageCore.getAmountRemaining();
+    }
+
+    /**
+     * Returns the maximum stack size for a given slot (usually the same as getInventoryStackLimit(), but 1 in the case
+     * of armor slots)
+     */
+    @Override
+    public int getSlotStackLimit() {
         return storageCore.getAmountRemaining();
     }
 
@@ -90,6 +110,9 @@ public class SlotStorageCore extends Slot {
 
             if(heldStack.stackSize <= amount) {
                 stack = heldStack;
+                ItemStack key = storageCore.getStack(heldStack, -1);
+                if(key != null)
+                    storageCore.getInventory().remove(key);
                 heldStack = null;
                 storageCore.markForUpdate(6);
                 return stack;
@@ -97,12 +120,16 @@ public class SlotStorageCore extends Slot {
 
             stack = heldStack.splitStack(amount);
 
-            if(heldStack.stackSize <= 0)
+            if(heldStack.stackSize <= 0) {
+                ItemStack key = storageCore.getStack(heldStack, -1);
+                if(key != null)
+                    storageCore.getInventory().remove(key);
                 heldStack = null;
+            }
 
             storageCore.markForUpdate(6);
             return stack;
         }
-       return null;
+        return null;
     }
 }
