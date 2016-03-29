@@ -24,6 +24,8 @@ tile.modularsystems:proxy.name=Modular Furnace Proxy
 # Storage
 tile.modularsystems:storageCore.name=Modular Storage Core
 tile.modularsystems:simpleStorageExpansion.name=Simple Storage Expansion
+tile.modularsystems:capacityStorageExpansion.name=Capacity Storage Expansion
+tile.modularsystems:searchStorageExpansion.name=Search Storage Expansion
 
 # Expansions
 tile.modularsystems:ioExpansion.name=Modular Systems I/O
@@ -60,6 +62,8 @@ inventory.generator.title=Modular Generator
 
 # Modular Storage Core
 inventory.storage.title=Modular Storage
+inventory.storageCore.capacity=Capacity
+inventory.storageCore.quantity=Quantity
 
 # IO Configure
 inventory.io.title=I/O Configure
@@ -71,6 +75,9 @@ inventory.io.auto=Auto
 inventory.rfpower.title=RedstoneFlux Power Bank
 inventory.liquidspower.title=Liquid Fuel Power Bank
 inventory.solidspower.title=Solid Fuel Power Bank
+
+# General
+inventory.info=Information
 
 # Block Values Config (YAY MATH!)
 inventory.blockValuesConfig.speed=Speed

@@ -10,7 +10,7 @@ import com.teambr.modularsystems.furnace.blocks.BlockFurnaceCore
 import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import com.teambr.modularsystems.power.tiles.{TileBankRF, TileBankLiquids, TileBankSolids}
 import com.teambr.modularsystems.storage.blocks.{BlockStorageExpansion, BlockStorageCore}
-import com.teambr.modularsystems.storage.tiles.{TileStorageExpansionBase, TileStorageCore}
+import com.teambr.modularsystems.storage.tiles.{TileStorageSearchExpansion, TileStorageCapacityExpansion, TileStorageExpansionBase, TileStorageCore}
 import net.minecraft.block.Block
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -35,6 +35,8 @@ object BlockManager {
     // Storage
     val storageCore = new BlockStorageCore
     val simpleStorageExpansion = new BlockStorageExpansion("simpleStorageExpansion", classOf[TileStorageExpansionBase])
+    val capacityStorageExpansion = new BlockStorageExpansion("capacityStorageExpansion", classOf[TileStorageCapacityExpansion])
+    val searchStorageExpansion = new BlockStorageExpansion("searchStorageExpansion", classOf[TileStorageSearchExpansion])
 
     //Expansions
     val crusherExpansion = new BlockCoreExpansion("crusherExpansion", classOf[TileCrusherExpansion], -1)
@@ -56,6 +58,8 @@ object BlockManager {
         // Storage
         registerBlock(storageCore, "storageCore", classOf[TileStorageCore])
         registerBlock(simpleStorageExpansion, "simpleStorageExpansion", classOf[TileStorageExpansionBase])
+        registerBlock(capacityStorageExpansion, "capacityStorageExpansion", classOf[TileStorageCapacityExpansion])
+        registerBlock(searchStorageExpansion, "searchStorageExpansion", classOf[TileStorageSearchExpansion])
 
         //Expansions
         registerBlock(crusherExpansion, "crusherExpansion", classOf[TileCrusherExpansion])

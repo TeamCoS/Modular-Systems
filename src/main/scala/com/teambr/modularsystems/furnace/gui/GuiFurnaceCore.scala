@@ -2,7 +2,7 @@ package com.teambr.modularsystems.furnace.gui
 
 import java.awt.Color
 
-import com.teambr.bookshelf.client.gui.GuiBase
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiBase}
 import com.teambr.bookshelf.client.gui.component.BaseComponent
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentFlame, GuiComponentText, GuiTabCollection}
 import com.teambr.modularsystems.furnace.container.ContainerFurnaceCore
@@ -10,6 +10,7 @@ import com.teambr.modularsystems.furnace.tiles.TileEntityFurnaceCore
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
+import net.minecraft.util.text.translation.I18n
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -52,7 +53,7 @@ class GuiFurnaceCore(player: EntityPlayer, tile: TileEntityFurnaceCore) extends
     override def addRightTabs(tabs: GuiTabCollection): Unit = {
         if (core != null) {
             var furnaceInfoSpeed = new ArrayBuffer[BaseComponent]()
-            furnaceInfoSpeed += new GuiComponentText("Information", 26, 6, new Color(255, 204, 0))
+            furnaceInfoSpeed += new GuiComponentText(GuiColor.ORANGE  + I18n.translateToLocal("inventory.info"), 26, 6)
             furnaceInfoSpeed += new GuiComponentText("Speed: ", 5, 23, new Color(255, 255, 255))
             val speed: Double = {
                 if ((-1 * (((core.values.speed + 200) / 200) - 1)) != 0) {

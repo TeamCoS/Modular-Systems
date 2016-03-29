@@ -13,6 +13,7 @@ import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.{CapabilityItemHandler, IItemHandler}
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for Modular-Systems
@@ -26,10 +27,15 @@ import scala.collection.JavaConversions._
   */
 class TileStorageCore extends Syncable with IItemHandler {
 
+    /*******************************************************************************************************************
+      * Storage Network                                                                                                *
+      ******************************************************************************************************************/
+
     var network = new StorageNetwork
 
     /**
       * Used to remove a node from the network
+      *
       * @param node The node to remove
       * @return True if found and removed
       */
@@ -39,6 +45,7 @@ class TileStorageCore extends Syncable with IItemHandler {
 
     /**
       * Used to get the storage network
+      *
       * @return The network of this tile
       */
     def getNetwork : StorageNetwork = network
@@ -65,7 +72,7 @@ class TileStorageCore extends Syncable with IItemHandler {
     private var cachedSize = 0
 
     // Maximum item count
-    private def maxItems = Integer.MAX_VALUE
+    private def maxItems = currentSlots * 64
 
     // How many slots are allowed for this tile
     private var currentSlots = 60
@@ -82,7 +89,7 @@ class TileStorageCore extends Syncable with IItemHandler {
       *
       * @return How many slots this has
       */
-    def getCurrentSlots : Int = 60
+    def getCurrentSlots : Int = 66
 
     /**
       * Used to get how many items can still fit
@@ -90,6 +97,81 @@ class TileStorageCore extends Syncable with IItemHandler {
       * @return
       */
     def getAmountRemaining : Int = maxItems - cachedSize
+
+    /**
+      * Used to get how many items this can hold
+      *
+      * @return How many items it can hold
+      */
+    def getMaxItems : Int = maxItems
+
+    /**
+      * Used to get how many items are currently held
+      *
+      * @return How many items contained
+      */
+    def getCachedSize : Int = cachedSize
+
+    /**
+      * Expands the inventory by the given slot count (multiplies by 64 for max items)
+      *
+      * @param count How many slots to add
+      */
+    def pushInventory(count : Int): Unit = {
+        currentSlots += count
+        updateCachedSize()
+    }
+
+    def popInventory(count : Int) : ArrayBuffer[ItemStack] = {
+        val buffer = new ArrayBuffer[ItemStack]()
+
+        currentSlots -= count
+
+        // Just in case
+        if(currentSlots <= 0)
+            currentSlots = 66
+
+        // Determine if we should return some stacks
+        if(maxItems <= cachedSize) {
+            var leftToRemove = cachedSize - maxItems
+            while(leftToRemove > 0) {
+                val stackOption = inventory.headOption
+                if(stackOption.isDefined) {
+                    // Extract values
+                    val stack  = stackOption.get._1
+                    val amount = stackOption.get._2
+                    var i = 0
+                    // Send in full stacks
+                    while(i < amount / stack.getMaxStackSize) {
+                        val toDrop = stack.copy()
+                        toDrop.stackSize = Math.min(stack.getMaxStackSize, leftToRemove)
+                        leftToRemove -= toDrop.stackSize
+                        inventory.put(stack, inventory.get(stack) - toDrop.stackSize)
+                        if(inventory.get(stack) <= 0) {
+                            inventory.remove(stack)
+                            // Max the loop break
+                            i = Integer.MAX_VALUE - 1
+                        }
+                        buffer += toDrop
+                        i += 1
+                    }
+                    // Send remainder
+                    val toDrop = stack.copy()
+                    toDrop.stackSize = Math.min(amount % stack.getMaxStackSize, leftToRemove)
+                    leftToRemove -= toDrop.stackSize
+                    inventory.put(stack, inventory.get(stack) - toDrop.stackSize)
+                    if(inventory.get(stack) <= 0)
+                        inventory.remove(stack)
+                    buffer += toDrop
+
+                } else
+                    leftToRemove = 0
+            }
+        }
+
+        updateCachedSize()
+        buffer
+    }
 
     /**
       * Used to get the stack object out of the inventory
@@ -313,6 +395,29 @@ class TileStorageCore extends Syncable with IItemHandler {
     }
 
     /*******************************************************************************************************************
+      * Upgrades                                                                                                       *
+      ******************************************************************************************************************/
+
+    // Variables
+    private var searchUpgradeStatus = false
+
+    // Search
+    /**
+      * Returns true if we have the search upgrade
+      * @return True if valid
+      */
+    def hasSearchUpgrade: Boolean = searchUpgradeStatus
+
+    /**
+      * Set the current status of the search upgrade
+      * @param bool The new value to set to
+      */
+    def setSearchUpgradeStatus(bool : Boolean) : Unit = {
+        searchUpgradeStatus = bool
+        markForUpdate()
+    }
+
+    /*******************************************************************************************************************
       * Tile Methods                                                                                                   *
       ******************************************************************************************************************/
 
@@ -355,6 +460,9 @@ class TileStorageCore extends Syncable with IItemHandler {
         tag.setInteger("CurrentSlots", currentSlots)
         tag.setInteger("CachedSize",   cachedSize)
 
+        // Upgrade Variables
+        tag.setBoolean("Search", searchUpgradeStatus)
+
         // Write inventory
         val stackTagList = new NBTTagList
         for(stack <- inventory.keySet()) {
@@ -379,6 +487,9 @@ class TileStorageCore extends Syncable with IItemHandler {
         // Read Value
         currentSlots = tag.getInteger("CurrentSlots")
         cachedSize   = tag.getInteger("CachedSize")
+
+        // Upgrade Variables
+        searchUpgradeStatus = tag.getBoolean("Search")
 
         // Read Inventory
         inventory.clear()

@@ -7,6 +7,7 @@ import com.teambr.modularsystems.storage.tiles.TileStorageCore
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.{ClickType, Container, IInventory, Slot}
 import net.minecraft.item.ItemStack
+import net.minecraftforge.oredict.OreDictionary
 
 import scala.util.control.Breaks._
 
@@ -31,13 +32,16 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
 
     var rowStart = 0
 
+    var filterString : String = ""
     lazy val listedItems = new java.util.ArrayList[ItemStack]()
 
-    addInventoryGrid(25, 27, 11, 6)
+    addInventoryGrid(25, 27, 11, rowCount)
 
     updateSlots()
 
-    addPlayerInventorySlots(140)
+    addPlayerInventorySlots(44, 160)
+
+    def rowCount : Int = 6
 
     /**
       * Adds an inventory grid to the container
@@ -180,11 +184,48 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
     def updateSlots(): Unit = {
         listedItems.clear()
         storageCore.updateCachedSize()
+        val list = storageCore.keysToList
+
+        // Add valid
         for(x <- 0 until PLAYER_INV_START_MAIN) {
-            if(storageCore.keysToList.size() > x + (rowStart * 11))
-                listedItems.add(storageCore.keysToList.get(x + (rowStart * 11)))
-            else
-                listedItems.add(null)
+            if(list.size() > x + (rowStart * 11) && isValidForFilter(list.get(x + (rowStart * 11))))
+                listedItems.add(list.get(x + (rowStart * 11)))
+        }
+
+        // Pad with nulls
+        for(i <- listedItems.size() until PLAYER_INV_START_MAIN)
+            listedItems.add(null)
+    }
+
+    def isValidForFilter(stack : ItemStack) : Boolean = {
+        if(stack == null || stack.getItem == null || filterString.isEmpty)
+            true
+        else {
+            filterString.charAt(0) match {
+                case '@' => // Matching by mod
+                    if(filterString.length > 1) {
+                        val uniqueName = stack.getItem.getRegistryName
+                        val modName = uniqueName.split(':')(0)
+                        modName.toLowerCase.contains(filterString.substring(1).toLowerCase)
+                    } else
+                        true
+                case '$' => // Ore Dict
+                    if(filterString.length > 1) {
+                        val oreDicts = OreDictionary.getOreIDs(stack)
+
+                        // Go though all registered IDS
+                        for(oreDictID <- oreDicts) {
+                            val oreName = OreDictionary.getOreName(oreDictID)
+                            if(oreName.toLowerCase.contains(filterString.substring(1).toLowerCase))
+                                return true
+                        }
+
+                        false
+                    }
+                    else true
+                case _ =>
+                    stack.getDisplayName.toLowerCase.contains(filterString.toLowerCase)
+            }
         }
     }
 
