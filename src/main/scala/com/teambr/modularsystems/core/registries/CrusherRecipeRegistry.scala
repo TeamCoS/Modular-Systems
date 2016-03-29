@@ -201,7 +201,7 @@ object CrusherRecipeRegistry {
     }
 
     private def getItemStackString(itemStack: ItemStack): String = {
-        itemStack.getItem.getUnlocalizedName.substring(5) + ":" + itemStack.getItemDamage
+        itemStack.getItem.getRegistryName + ":" + itemStack.getItemDamage
     }
 
     private def getItemStackFromString(item: String): ItemStack = {
