@@ -1,10 +1,13 @@
 package com.teambr.modularsystems.core.client
 
+import com.teambr.bookshelf.client.models.BakedConnectedTextures
+import com.teambr.bookshelf.common.blocks.BlockConnectedTextures
 import com.teambr.bookshelf.common.blocks.properties.Properties
 import com.teambr.modularsystems.core.client.models.BakedFurnaceCore
 import com.teambr.modularsystems.core.common.CommonProxy
 import com.teambr.modularsystems.core.common.blocks.traits.CoreStates
 import com.teambr.modularsystems.core.managers.{BlockManager, ItemRenderManager}
+import net.minecraft.block.Block
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.block.statemap.StateMap.Builder
 import net.minecraft.item.Item
@@ -49,6 +52,16 @@ class ClientProxy extends CommonProxy {
 
         // Storage
         ItemRenderManager.registerBlockModel(BlockManager.storageCore, "storageCore", "facing=east")
+        // Block Models, for items
+        val blockIterator = Block.blockRegistry.iterator()
+        while(blockIterator.hasNext) {
+            blockIterator.next() match {
+                case connectedTextures : BlockConnectedTextures =>
+                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(connectedTextures), 0,
+                        BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
+                case _ =>
+            }
+        }
 
         RenderRegistry.doTheThing()
     }

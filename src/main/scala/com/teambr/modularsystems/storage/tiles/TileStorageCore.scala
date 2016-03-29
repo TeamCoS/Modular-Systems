@@ -1,8 +1,11 @@
 package com.teambr.modularsystems.storage.tiles
 
 import java.util
+import java.util.{Comparator, Collections}
 
 import com.teambr.bookshelf.common.tiles.traits.Syncable
+import com.teambr.modularsystems.core.functions.ItemSorter
+import com.teambr.modularsystems.storage.collections.StorageNetwork
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.EnumFacing
@@ -23,12 +26,37 @@ import scala.collection.JavaConversions._
   */
 class TileStorageCore extends Syncable with IItemHandler {
 
+    var network = new StorageNetwork
+
+    /**
+      * Used to remove a node from the network
+      * @param node The node to remove
+      * @return True if found and removed
+      */
+    def deleteFromNetwork(node : TileStorageExpansion) : Boolean = {
+        network.deleteNode(node)
+    }
+
+    /**
+      * Used to get the storage network
+      * @return The network of this tile
+      */
+    def getNetwork : StorageNetwork = network
+
+    /**
+      * Used to destroy the network
+      */
+    def destroyNetwork() : Unit = {
+        network.destroyNetwork(worldObj)
+        network = null
+    }
+
     /*******************************************************************************************************************
       * IItemHandler                                                                                                   *
       ******************************************************************************************************************/
 
     // The actual inventory
-    private lazy val inventory = new util.LinkedHashMap[ItemStack, Int]()
+    private var inventory = new util.LinkedHashMap[ItemStack, Int]()
 
     // Converts the keyset into a list
     def keysToList = new util.ArrayList[ItemStack](inventory.keySet())
@@ -37,25 +65,28 @@ class TileStorageCore extends Syncable with IItemHandler {
     private var cachedSize = 0
 
     // Maximum item count
-    private def maxItems = currentSlots * 64
+    private def maxItems = Integer.MAX_VALUE
 
     // How many slots are allowed for this tile
     private var currentSlots = 60
 
     /**
       * Used to get the instance of the inventory
+      *
       * @return The inventory map
       */
     def getInventory : util.LinkedHashMap[ItemStack, Int] = inventory
 
     /**
       * Used to get how many slots are available
+      *
       * @return How many slots this has
       */
     def getCurrentSlots : Int = 60
 
     /**
       * Used to get how many items can still fit
+      *
       * @return
       */
     def getAmountRemaining : Int = maxItems - cachedSize
@@ -87,11 +118,49 @@ class TileStorageCore extends Syncable with IItemHandler {
     /**
       * Used to update how many items we have cached
       */
-    private def updateCachedSize(): Unit = {
-        cachedSize = 0
-        for(stack <- inventory.keySet())
-            cachedSize += inventory.get(stack)
-        markForUpdate()
+    def updateCachedSize(): Unit = {
+        cachedSize = 0 // Reset the size
+        for(stack <- inventory.keySet()) {
+            stack.stackSize = inventory.get(stack) // Set stack to same size, useful for a few reasons
+            cachedSize += inventory.get(stack) // Update the cached size
+        }
+
+        //TODO: Add different modes
+        sortInventory(0)
+        markForUpdate() // Send information to client
+    }
+
+    /**
+      * Used to sort the inventory. Int mode for how to do
+      *
+      * @param mode
+      *             0: By size
+      */
+    def sortInventory(mode : Int): Unit = {
+        mode match  {
+            case 0 =>
+                // Convert our map into a list
+                val list = new util.LinkedList[java.util.Map.Entry[ItemStack, Int]](inventory.entrySet())
+
+                // Sort the list
+                Collections.sort(list, new Comparator[java.util.Map.Entry[ItemStack, Int]] {
+                    override def compare(o1: java.util.Map.Entry[ItemStack, Int], o2: java.util.Map.Entry[ItemStack, Int]): Int =
+                        ItemSorter.INSTANCE.compare(o1.getKey, o2.getKey)
+                })
+
+                // Convert back into map
+                val newInventory = new util.LinkedHashMap[ItemStack, Int]()
+                val iterator = list.iterator()
+                while(iterator.hasNext) {
+                    val entry = iterator.next()
+                    newInventory.put(entry.getKey, entry.getValue)
+                }
+
+                // Reassign
+                inventory = newInventory
+
+            case _ =>
+        }
     }
 
     /**
@@ -145,7 +214,7 @@ class TileStorageCore extends Syncable with IItemHandler {
         if(stack == null) return null
 
         // Find out if we have this stack already
-        val ourKey = getStack(stack, slot)
+        val ourKey = getStack(stack, -1)
         if(ourKey != null) { // We already have an instance of this stack
         // How much we can fit
         val insertAmount = Math.min(stack.getMaxStackSize, maxItems - cachedSize)
@@ -164,6 +233,7 @@ class TileStorageCore extends Syncable with IItemHandler {
                     stack
                 } else {
                     stack.stackSize -= insertAmount
+                    updateCachedSize()
                     stack
                 }
             }
@@ -172,11 +242,13 @@ class TileStorageCore extends Syncable with IItemHandler {
             if(insertAmount < stack.stackSize) {
                 if(!simulate) {
                     val insertStack = stack.splitStack(insertAmount)
-                    inventory.put(insertStack, insertStack.stackSize)
+                    if(insertStack.stackSize > 0)
+                        inventory.put(insertStack, insertStack.stackSize)
                     updateCachedSize()
                     stack
                 } else {
                     stack.stackSize -= insertAmount
+                    updateCachedSize()
                     stack
                 }
             } else {
@@ -213,10 +285,12 @@ class TileStorageCore extends Syncable with IItemHandler {
             if(inventory.get(ourKey) < amount) {
                 val returnStack = ourKey.copy()
                 ourKey.stackSize = inventory.get(ourKey)
+                updateCachedSize()
                 returnStack
             } else {
                 val returnStack = ourKey.copy()
                 ourKey.stackSize = amount
+                updateCachedSize()
                 returnStack
             }
         } else {
@@ -233,6 +307,7 @@ class TileStorageCore extends Syncable with IItemHandler {
             if(returnStack.stackSize == 0)
                 returnStack = null
 
+            updateCachedSize()
             returnStack
         }
     }
@@ -240,15 +315,6 @@ class TileStorageCore extends Syncable with IItemHandler {
     /*******************************************************************************************************************
       * Tile Methods                                                                                                   *
       ******************************************************************************************************************/
-
-    /**
-      * Used to mark block for update, makes it easier to call
-      *
-      * @param flags Optional flags, won't cause re-render by default. Set to 3 to render client change
-      */
-    def markForUpdate(flags : Int = 6): Unit = {
-        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), flags)
-    }
 
     /**
       * Checks if we have a certain capability
@@ -283,7 +349,11 @@ class TileStorageCore extends Syncable with IItemHandler {
       * @param tag The tag to save to
       */
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
-        super[Syncable].writeToNBT(tag)
+        super[TileEntity].writeToNBT(tag)
+
+        // Send Current Amount
+        tag.setInteger("CurrentSlots", currentSlots)
+        tag.setInteger("CachedSize",   cachedSize)
 
         // Write inventory
         val stackTagList = new NBTTagList
@@ -304,7 +374,11 @@ class TileStorageCore extends Syncable with IItemHandler {
       * @param tag The tag to read from
       */
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
-        super[Syncable].readFromNBT(tag)
+        super[TileEntity].readFromNBT(tag)
+
+        // Read Value
+        currentSlots = tag.getInteger("CurrentSlots")
+        cachedSize   = tag.getInteger("CachedSize")
 
         // Read Inventory
         inventory.clear()

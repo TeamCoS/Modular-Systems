@@ -1,5 +1,6 @@
 package com.teambr.modularsystems.storage.container.slot;
 
+import com.teambr.modularsystems.storage.container.ContainerStorageCore;
 import com.teambr.modularsystems.storage.tiles.TileStorageCore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -22,12 +23,14 @@ public class SlotStorageCore extends Slot {
     private static IInventory emptyInventory = new InventoryBasic("[Null]", true, 0);
     private ItemStack heldStack = null;
     private TileStorageCore storageCore;
+    private ContainerStorageCore container;
     private int index;
 
-    public SlotStorageCore(TileStorageCore storageCoreIn,
+    public SlotStorageCore(ContainerStorageCore parent, TileStorageCore storageCoreIn,
                            int index, int xPosition, int yPosition) {
         super(emptyInventory, index, xPosition, yPosition);
         this.index = index;
+        container = parent;
         storageCore = storageCoreIn;
         heldStack = null;
         if(storageCore.keysToList().size() > index) {
@@ -40,11 +43,8 @@ public class SlotStorageCore extends Slot {
 
     public void updateStackInformation() {
         heldStack = null;
-        if(storageCore.keysToList().size() > index) {
-            heldStack = storageCore.keysToList().get(index);
-            int amount = (int) storageCore.getInventory().get(heldStack);
-            heldStack = heldStack.copy();
-            heldStack.stackSize = amount;
+        if(container.listedItems().size() > index) {
+            heldStack = container.listedItems().get(index);
         }
     }
 

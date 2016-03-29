@@ -1,6 +1,7 @@
 package com.teambr.modularsystems.core.network;
 
 import com.teambr.modularsystems.core.lib.Reference;
+import com.teambr.modularsystems.storage.network.ScrollStorageCore;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -27,6 +28,8 @@ public class PacketManager {
         registerMessage(AddCalculationPacket.class, AddCalculationPacket.CalculationMessage.class);
         registerMessage(SyncBlockValues.class, SyncBlockValues.class);
         registerMessage(DeleteValuesPacket.class, DeleteValuesPacket.class);
+
+        registerMessage(ScrollStorageCore.class, ScrollStorageCore.class);
     }
 
     @SuppressWarnings("unchecked")

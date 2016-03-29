@@ -9,6 +9,7 @@ import com.teambr.modularsystems.core.lib.Reference
 import com.teambr.modularsystems.core.managers._
 import com.teambr.modularsystems.core.network.PacketManager
 import com.teambr.modularsystems.core.registries._
+import com.teambr.modularsystems.storage.event.ToolTipEvent
 import net.minecraft.command.ServerCommandManager
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Blocks
@@ -68,6 +69,7 @@ object ModularSystems {
 
         MinecraftForge.EVENT_BUS.register(BlockValueRegistry.INSTANCE)
         MinecraftForge.EVENT_BUS.register(EventManager.INSTANCE)
+        MinecraftForge.EVENT_BUS.register(new ToolTipEvent)
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {

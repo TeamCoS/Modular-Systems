@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.{ClickType, Container, IInventory, Slot}
 import net.minecraft.item.ItemStack
 
-import scala.collection.JavaConversions._
+import scala.util.control.Breaks._
 
 /**
   * This file was created for Modular-Systems
@@ -21,7 +21,6 @@ import scala.collection.JavaConversions._
   * @since 3/27/2016
   */
 class ContainerStorageCore(val playerInventory: IInventory, val storageCore: TileStorageCore) extends Container {
-
     var INVENTORY_START = 0
     var INVENTORY_END = 0
 
@@ -30,7 +29,13 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
     var PLAYER_INV_START_HOTBAR = 0
     var PLAYER_INV_END_HOTBAR = 0
 
+    var rowStart = 0
+
+    lazy val listedItems = new java.util.ArrayList[ItemStack]()
+
     addInventoryGrid(25, 27, 11, 6)
+
+    updateSlots()
 
     addPlayerInventorySlots(140)
 
@@ -47,7 +52,7 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
         for(y <- 0 until height) {
             for(x <- 0 until width) {
                 slotId += 1
-                addSlotToContainer(new SlotStorageCore(storageCore, slotId, xOffset + x * 18, yOffset + y * 18))
+                addSlotToContainer(new SlotStorageCore(this, storageCore, slotId, xOffset + x * 18, yOffset + y * 18))
             }
         }
         INVENTORY_END = slotId
@@ -81,7 +86,7 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
             }
         }
 
-        PLAYER_INV_START_HOTBAR = PLAYER_INV_END_MAIN + 1
+        PLAYER_INV_START_HOTBAR = PLAYER_INV_END_MAIN
         PLAYER_INV_END_HOTBAR = PLAYER_INV_START_HOTBAR
         for (slot <- 0 until 9) {
             addSlotToContainer(new Slot(playerInventory, slot, offsetX + slot * 18, offsetY + 58))
@@ -90,41 +95,112 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
     }
 
     override def canInteractWith(entityPlayer: EntityPlayer): Boolean = true
-
-    override def func_184996_a(slotId : Int, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer) : ItemStack = {
-        if(!storageCore.getWorld.isRemote && slotId >= 0 && slotId < inventorySlots.size()) {
-            val slot = inventorySlots.get(slotId)
-            // Has something to drop
-            if (slot != null && slot.isInstanceOf[SlotStorageCore] && player.inventory.getItemStack != null) {
-                val stack = storageCore.insertItem(-1, player.inventory.getItemStack, simulate = false)
-                player.inventory.setItemStack(stack)
-                storageCore.markForUpdate()
-                return stack
-            }
-
-            // Trying to pick up something
-            if(slot != null && slot.isInstanceOf[SlotStorageCore] &&
-                    slotId >= 0 && slotId < storageCore.keysToList.size()) {
-                var stack = storageCore.keysToList.get(slotId)
-                stack = storageCore.extractItem(slotId, stack.getMaxStackSize, simulate = false)
-                player.inventory.setItemStack(stack)
-                storageCore.markForUpdate()
-                return stack
-            }
-            else if(slot != null && !slot.isInstanceOf[SlotStorageCore])
-                return super.func_184996_a(slotId, dragType, clickTypeIn, player)
-            null
-        } else super.func_184996_a(slotId, dragType, clickTypeIn, player)
+    /**
+      * Looks for changes made in the container, sends them to every listener.
+      */
+    override def detectAndSendChanges() : Unit = {
+        updateSlots()
     }
 
-    def updateSlots() : Unit = {
-        for(slot <- inventorySlots) {
-            slot match {
-                case storage : SlotStorageCore =>
-                    storage.updateStackInformation()
-                case _ =>
+    override def func_184996_a(slotId : Int, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer) : ItemStack = {
+        if(slotId >= 0 && slotId < inventorySlots.size()) {
+            val slot = inventorySlots.get(slotId)
+            // Is a storage slot
+            if(slot != null && slot.isInstanceOf[SlotStorageCore]) {
+                // Wanting to quick move
+                if(clickTypeIn == ClickType.QUICK_MOVE && slotId >= 0 && slotId < listedItems.size() && listedItems.get(slotId) != null) {
+                    var stack = listedItems.get(slotId)
+                    stack = storageCore.getStack(stack)
+                    var i = 0
+                    val list = storageCore.keysToList
+                    breakable {
+                        for (x <- 0 until list.size()) {
+                            if (list.get(x) == stack) {
+                                break
+                            }
+                            i += 1
+                        }
+                    }
+                    stack = storageCore.getStack(stack)
+                    val amount = storageCore.getInventory.get(stack)
+                    stack = stack.copy()
+                    stack.stackSize = amount
+                    stack.stackSize = if(stack.stackSize >= stack.getMaxStackSize) stack.getMaxStackSize else stack.stackSize
+                    if(stack != null && i < storageCore.getInventory.size()) {
+                        val copy = stack.copy()
+                        // Something was moved
+                        if (mergeItemStackSafe(copy, PLAYER_INV_START_MAIN, PLAYER_INV_END_HOTBAR, reverse = true)) {
+                            player.inventoryContainer.detectAndSendChanges()
+                            player.inventory.markDirty()
+                            storageCore.extractItem(i, stack.stackSize - copy.stackSize, simulate = false)
+                        }
+                    }
+                    return null
+                }
+
+                // Has something to drop
+                if (player.inventory.getItemStack != null) {
+                    val stack = storageCore.insertItem(-1, player.inventory.getItemStack, simulate = false)
+                    player.inventory.setItemStack(stack)
+                    storageCore.markForUpdate()
+                    return stack
+                }
+
+                // Trying to pick up something
+                if (slotId >= 0 && slotId < listedItems.size() && listedItems.get(slotId) != null) {
+                    var stack = listedItems.get(slotId)
+                    stack = storageCore.getStack(stack)
+                    var i = 0
+                    val list = storageCore.keysToList
+                    breakable {
+                        for (x <- 0 until list.size()) {
+                            if (list.get(x) == stack) {
+                                break
+                            }
+                            i += 1
+                        }
+                    }
+                    if(stack != null && i < storageCore.getInventory.size()) {
+                        stack = storageCore.extractItem(i, stack.getMaxStackSize, simulate = false)
+                        player.inventory.setItemStack(stack)
+                        storageCore.markForUpdate()
+                    }
+                    return stack
+                }
             }
+            else if(slot != null && !slot.isInstanceOf[SlotStorageCore]) {
+                val value =  super.func_184996_a(slotId, dragType, clickTypeIn, player)
+                return value
+            }
+            null
+        } else
+            super.func_184996_a(slotId, dragType, clickTypeIn, player)
+    }
+
+    def updateSlots(): Unit = {
+        listedItems.clear()
+        storageCore.updateCachedSize()
+        for(x <- 0 until PLAYER_INV_START_MAIN) {
+            if(storageCore.keysToList.size() > x + (rowStart * 11))
+                listedItems.add(storageCore.keysToList.get(x + (rowStart * 11)))
+            else
+                listedItems.add(null)
         }
+    }
+
+    def scrollTo(index : Float) : Unit = {
+        val outsideDisplaySize = ((storageCore.getInventory.size() / 11) + (if(storageCore.getInventory.size() % 11 > 0)  1 else 0)) - 6
+        this.rowStart = Math.round(index * outsideDisplaySize.toFloat)
+        if(rowStart < 0)
+            rowStart = 0
+    }
+
+    /**
+      * Returns true if the player can "drag-spilt" items into this slot,. returns true by default. Called to check if
+      * the slot can be added to a list of Slots to split the held ItemStack across.
+      */
+    override def canDragIntoSlot(slotIn: Slot) : Boolean = {
+        !slotIn.isInstanceOf[SlotStorageCore]
     }
 
     protected def mergeItemStackSafe(stackToMerge: ItemStack, start: Int, stop: Int, reverse: Boolean): Boolean = {
@@ -166,17 +242,23 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
 
     override def transferStackInSlot(player: EntityPlayer, slotId: Int): ItemStack = {
         val slot: Slot = inventorySlots.get(slotId)
-        if (slot != null && slot.getHasStack) {
-            val itemToTransfer: ItemStack = slot.getStack
+        if (slot != null && slot.getHasStack && !slot.isInstanceOf[SlotStorageCore]) { // Not the inventory
+        var itemToTransfer: ItemStack = slot.getStack
             val copy: ItemStack = itemToTransfer.copy
-            println(slotId)
-            if (slotId >= PLAYER_INV_START_HOTBAR &&
+
+            // Attempt from outside into inventory
+            val stackLeft = storageCore.insertItem(-1, itemToTransfer, simulate = false)
+            // If a change happened, update the held stack
+            if(stackLeft == null || stackLeft.stackSize != itemToTransfer.stackSize)
+                itemToTransfer = stackLeft
+
+            if (itemToTransfer != null && slotId >= PLAYER_INV_START_HOTBAR && // From main inv into hotbar
                     !mergeItemStackSafe(itemToTransfer, PLAYER_INV_START_MAIN, PLAYER_INV_END_MAIN, reverse = false)) return null
-            else if (slotId < PLAYER_INV_START_HOTBAR && slotId > INVENTORY_END
+            else if (itemToTransfer != null && slotId < PLAYER_INV_START_HOTBAR && slotId > INVENTORY_END // From hotbar into main inv
                     && !mergeItemStackSafe(itemToTransfer, PLAYER_INV_START_HOTBAR, PLAYER_INV_END_HOTBAR, reverse = false)) return null
-            if (itemToTransfer.stackSize == 0) slot.putStack(null)
+            if (itemToTransfer == null || itemToTransfer.stackSize == 0) slot.putStack(null)
             else slot.onSlotChanged()
-            if (itemToTransfer.stackSize != copy.stackSize) return copy
+            if (itemToTransfer == null || itemToTransfer.stackSize != copy.stackSize) return copy
         }
         null
     }

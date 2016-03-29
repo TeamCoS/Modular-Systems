@@ -23,6 +23,7 @@ tile.modularsystems:proxy.name=Modular Furnace Proxy
 
 # Storage
 tile.modularsystems:storageCore.name=Modular Storage Core
+tile.modularsystems:simpleStorageExpansion.name=Simple Storage Expansion
 
 # Expansions
 tile.modularsystems:ioExpansion.name=Modular Systems I/O
