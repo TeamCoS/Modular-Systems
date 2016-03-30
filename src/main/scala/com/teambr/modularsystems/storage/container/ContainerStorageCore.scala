@@ -403,6 +403,9 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
             if(stackLeft == null || stackLeft.stackSize != itemToTransfer.stackSize)
                 itemToTransfer = stackLeft
 
+            if(slot.isInstanceOf[SlotCraftingOutput])
+                slot.onPickupFromSlot(playerInventory.asInstanceOf[InventoryPlayer].player, copy)
+
             if (itemToTransfer != null && slotId >= PLAYER_INV_START_HOTBAR && // From main inv into hotbar
                     !mergeItemStackSafe(itemToTransfer, PLAYER_INV_START_MAIN, PLAYER_INV_END_MAIN, reverse = false)) return null
             else if (itemToTransfer != null && slotId < PLAYER_INV_START_HOTBAR && slotId > INVENTORY_END // From hotbar into main inv
@@ -440,8 +443,6 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
       * @param recipe The recipe NBTTagCompound
       */
     def fillCraftingGrid(recipe : NBTTagCompound): Unit = {
-        isDirty = true
-        sendPacket = true
         if(storageCore.hasCraftingUpgrade) {
             // Try and clear grid
             if(clearCraftingGrid) { // Grid cleared continue
