@@ -4,6 +4,7 @@ import java.awt.Rectangle
 
 import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambr.modularsystems.api.jei.modularcrusher.{CrusherRecipeCatagory, CrusherRecipeHandler, CrusherRecipeMaker}
+import com.teambr.modularsystems.api.jei.transfer.CraftingTransferHandler
 import com.teambr.modularsystems.core.managers.BlockManager
 import mezz.jei.api._
 import mezz.jei.api.gui.IAdvancedGuiHandler
@@ -27,6 +28,8 @@ class ModularSystemsPlugin extends IModPlugin {
         registry.addRecipeHandlers(new CrusherRecipeHandler)
 
         registry.addRecipes(CrusherRecipeMaker.getRecipes)
+
+        registry.getRecipeTransferRegistry.addRecipeTransferHandler(new CraftingTransferHandler)
 
         ModularSystemsPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(BlockManager.proxy))
 

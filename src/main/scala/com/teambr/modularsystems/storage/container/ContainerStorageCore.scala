@@ -2,13 +2,16 @@ package com.teambr.modularsystems.storage.container
 
 import com.teambr.bookshelf.common.container.slots.IPhantomSlot
 import com.teambr.bookshelf.util.InventoryUtils
-import com.teambr.modularsystems.storage.container.slot.SlotStorageCore
+import com.teambr.modularsystems.storage.container.slot.{SlotCraftingOutput, SlotStorageCore}
 import com.teambr.modularsystems.storage.tiles.TileStorageCore
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.{ClickType, Container, IInventory, Slot}
+import net.minecraft.entity.player.{InventoryPlayer, EntityPlayer}
+import net.minecraft.inventory._
 import net.minecraft.item.ItemStack
+import net.minecraft.item.crafting.CraftingManager
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.oredict.OreDictionary
 
+import scala.collection.mutable.ArrayBuffer
 import scala.util.control.Breaks._
 
 /**
@@ -25,6 +28,9 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
     var INVENTORY_START = 0
     var INVENTORY_END = 0
 
+    var CRAFTING_GRID_START = 0
+    var CRAFTING_GRID_END = 0
+
     var PLAYER_INV_START_MAIN = 0
     var PLAYER_INV_END_MAIN = 0
     var PLAYER_INV_START_HOTBAR = 0
@@ -37,11 +43,19 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
 
     addInventoryGrid(25, 27, 11, rowCount)
 
+    lazy val craftMatrix = new InventoryCrafting(this, 3, 3)
+    lazy val craftResult = new InventoryCraftResult
+
+    if(storageCore.hasCraftingUpgrade)
+        addCraftingGrid(98, 102, 3, 3)
+    else
+        CRAFTING_GRID_END = INVENTORY_END
+
     updateSlots()
 
     addPlayerInventorySlots(44, 160)
 
-    def rowCount : Int = 6
+    def rowCount : Int = if(storageCore.hasCraftingUpgrade) 4 else 6
 
     /**
       * Adds an inventory grid to the container
@@ -63,6 +77,28 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
     }
 
     /**
+      * Adds an inventory grid to the container
+      *
+      * @param xOffset X pixel offset
+      * @param yOffset Y pixel offset
+      * @param width How many wide
+      */
+    def addCraftingGrid(xOffset : Int, yOffset : Int, width : Int, height : Int) : Unit = {
+        CRAFTING_GRID_START = INVENTORY_END + 1
+        var slotId = -1
+        for(y <- 0 until height) {
+            for(x <- 0 until width) {
+                slotId += 1
+                addSlotToContainer(new Slot(this.craftMatrix, slotId, xOffset + x * 18, yOffset + y * 18))
+            }
+        }
+
+        addSlotToContainer(new SlotCraftingOutput(playerInventory.asInstanceOf[InventoryPlayer].player,
+            this.craftMatrix, this.craftResult, storageCore, 0, 171, 120))
+        CRAFTING_GRID_END = CRAFTING_GRID_START + slotId + 1
+    }
+
+    /**
       * Adds the player offset with Y offset
       *
       * @param offsetY How far down
@@ -78,7 +114,7 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
       * @param offsetY Y offset
       */
     def addPlayerInventorySlots(offsetX: Int, offsetY: Int): Unit = {
-        PLAYER_INV_START_MAIN = INVENTORY_END + 1
+        PLAYER_INV_START_MAIN = CRAFTING_GRID_END + 1
         PLAYER_INV_END_MAIN = PLAYER_INV_START_MAIN
         for (row <- 0 until 3) {
             for (column <- 0 until 9) {
@@ -104,6 +140,8 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
       */
     override def detectAndSendChanges() : Unit = {
         updateSlots()
+        this.craftResult.setInventorySlotContents(0,
+            CraftingManager.getInstance.findMatchingRecipe(this.craftMatrix, this.storageCore.getWorld))
     }
 
     override def func_184996_a(slotId : Int, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer) : ItemStack = {
@@ -302,5 +340,97 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
             if (itemToTransfer == null || itemToTransfer.stackSize != copy.stackSize) return copy
         }
         null
+    }
+
+    /**
+      * Clears the crafting grid and returns true if gone
+      *
+      * @return
+      */
+    def clearCraftingGrid : Boolean = {
+        if(storageCore.hasCraftingUpgrade) {
+            for (x <- CRAFTING_GRID_START to CRAFTING_GRID_END) {
+                func_184996_a(x, 0, ClickType.QUICK_MOVE, playerInventory.asInstanceOf[InventoryPlayer].player)
+            }
+        }
+
+        for(i <- 0 until this.craftMatrix.getSizeInventory)
+            if(this.craftMatrix.getStackInSlot(i) != null)
+                return false
+        true
+    }
+
+    /**
+      * Fills the crafting grid with the info sent by JEI
+      *
+      * @param recipe The recipe NBTTagCompound
+      */
+    def fillCraftingGrid(recipe : NBTTagCompound): Unit = {
+        if(storageCore.hasCraftingUpgrade) {
+            // Try and clear grid
+            if(clearCraftingGrid) { // Grid cleared continue
+            val recipeBuffer = new ArrayBuffer[ArrayBuffer[ItemStack]]()
+                // Create the slots objects
+                for(x <- 0 until 9) {
+                    // Get the list at the location
+                    val list = recipe.getTagList("Stack:" + x, 10)
+
+                    // If possible, read from the list
+                    if(list != null && list.tagCount() > 0) {
+                        // Create buffer that holds object
+                        val buffer = new ArrayBuffer[ItemStack]()
+
+                        // Iterate the list and add to held buffer
+                        for(i <- 0 until list.tagCount())
+                            buffer += ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(i))
+
+                        // Put slot stacks
+                        recipeBuffer += buffer
+                    } else // Nothing, put null to move around
+                        recipeBuffer += new ArrayBuffer[ItemStack]()
+                }
+
+                // Try to fill
+                for(x <- 0 until 9) {
+                    val recipeStacks = recipeBuffer(x)
+                    if(recipeStacks != null) {
+                        for(stack <- recipeStacks) {
+                            if (this.craftMatrix.getStackInSlot(x) == null && stack != null) {
+                                // Get the key
+                                var extractStack = storageCore.getStack(stack)
+
+                                // If we have extracted something
+                                if (extractStack != null) {
+                                    var i = 0
+                                    val list = storageCore.keysToList
+                                    breakable {
+                                        for (x <- 0 until list.size()) {
+                                            if (list.get(x) == extractStack) {
+                                                break
+                                            }
+                                            i += 1
+                                        }
+                                    }
+                                    if (i < storageCore.getInventory.size()) {
+                                        extractStack = storageCore.extractItem(i, stack.stackSize, simulate = false)
+                                        this.craftMatrix.setInventorySlotContents(x, extractStack)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override def onContainerClosed(playerIn: EntityPlayer): Unit = {
+        var i = 0
+        while(i < this.craftMatrix.getSizeInventory) {
+            val stack = storageCore.insertItem(-1, this.craftMatrix.getStackInSlot(i), simulate = false)
+            if(stack != null)
+                playerIn.dropPlayerItemWithRandomChoice(stack, false)
+            i += 1
+        }
     }
 }

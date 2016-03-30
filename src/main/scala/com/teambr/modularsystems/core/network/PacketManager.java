@@ -1,6 +1,7 @@
 package com.teambr.modularsystems.core.network;
 
 import com.teambr.modularsystems.core.lib.Reference;
+import com.teambr.modularsystems.storage.network.FillCraftingGrid;
 import com.teambr.modularsystems.storage.network.ScrollStorageCore;
 import com.teambr.modularsystems.storage.network.UpdateFilterString;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -32,6 +33,7 @@ public class PacketManager {
 
         registerMessage(ScrollStorageCore.class, ScrollStorageCore.class);
         registerMessage(UpdateFilterString.class, UpdateFilterString.class);
+        registerMessage(FillCraftingGrid.class, FillCraftingGrid.class);
     }
 
     @SuppressWarnings("unchecked")

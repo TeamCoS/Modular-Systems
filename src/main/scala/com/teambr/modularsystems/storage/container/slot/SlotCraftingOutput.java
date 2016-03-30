@@ -1,13 +1,19 @@
 package com.teambr.modularsystems.storage.container.slot;
 
+import com.teambr.bookshelf.common.container.slots.ICustomSlot;
+import com.teambr.bookshelf.common.container.slots.SLOT_SIZE;
 import com.teambr.modularsystems.storage.tiles.TileStorageCore;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import scala.Enumeration;
+import scala.Tuple2;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -20,7 +26,7 @@ import java.util.ArrayList;
  * @author Paul Davis "pauljoda"
  * @since 3/29/2016
  */
-public class SlotCraftingOutput extends SlotCrafting {
+public class SlotCraftingOutput extends SlotCrafting implements ICustomSlot {
 
     private TileStorageCore storageCore;
 
@@ -32,9 +38,9 @@ public class SlotCraftingOutput extends SlotCrafting {
     private int amountCrafted;
 
     public SlotCraftingOutput(EntityPlayer player,
-                              InventoryCrafting craftingInventory, TileStorageCore core,
+                              InventoryCrafting craftingInventory, IInventory craftResult, TileStorageCore core,
                               int slotIndex, int xPosition, int yPosition) {
-        super(player, craftingInventory, new InventoryBasic("[Null]", true, 0), slotIndex, xPosition, yPosition);
+        super(player, craftingInventory, craftResult, slotIndex, xPosition, yPosition);
         storageCore = core;
         this.thePlayer = player;
         this.craftMatrix = craftingInventory;
@@ -103,5 +109,25 @@ public class SlotCraftingOutput extends SlotCrafting {
                 }
             }
         }
+    }
+
+    @Override
+    public Enumeration.Value getSlotSize() {
+        return SLOT_SIZE.LARGE();
+    }
+
+    @Override
+    public Tuple2<Integer, Integer> getPoint() {
+        return new Tuple2<>(xDisplayPosition - 5, yDisplayPosition - 5);
+    }
+
+    @Override
+    public boolean hasColor() {
+        return false;
+    }
+
+    @Override
+    public Color getColor() {
+        return new Color(0, 0, 0, 0);
     }
 }

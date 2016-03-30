@@ -26,6 +26,7 @@ tile.modularsystems:storageCore.name=Modular Storage Core
 tile.modularsystems:simpleStorageExpansion.name=Simple Storage Expansion
 tile.modularsystems:capacityStorageExpansion.name=Capacity Storage Expansion
 tile.modularsystems:searchStorageExpansion.name=Search Storage Expansion
+tile.modularsystems:craftingStorageExpansion.name=Crafting Storage Expansion
 
 # Expansions
 tile.modularsystems:ioExpansion.name=Modular Systems I/O

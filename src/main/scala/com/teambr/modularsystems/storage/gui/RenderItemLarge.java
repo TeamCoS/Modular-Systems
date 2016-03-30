@@ -34,12 +34,12 @@ public class RenderItemLarge extends RenderItem {
         if(stack != null && yPosition < 140) {
             String s = String.valueOf(stack.stackSize);
             long value = Long.parseLong(s);
-            if (value / 1000000000 >= 1) // Billion
-                s = String.format("%.0f", value / 1000000000f) + "B";
-            else if (value / 100000000 >= 1) // Million
-                s = String.format("%.0f", value / 10000000f) + "M";
-            else if (value / 1000 >= 1) // Thousand
-                s = String.format("%.0f", value / 1000f) + "K";
+            if (value > 999999999) // Billion
+                s = String.format("%.0f", Math.floor(value / 1000000000)) + "B";
+            else if (value > 999999) // Million
+                s = String.format("%.0f", Math.floor(value / 10000000)) + "M";
+            else if (value > 999) // Thousand
+                s = String.format("%.0f", Math.floor(value / 1000)) + "K";
 
             super.renderItemOverlayIntoGUI(fr, stack, xPosition, yPosition, stack.stackSize == 1 ? null : s);
             fr.setUnicodeFlag(hasUnicode);

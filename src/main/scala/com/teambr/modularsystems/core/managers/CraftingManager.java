@@ -62,5 +62,34 @@ public class CraftingManager {
                 "IPI",
                 "RIR", 'R', Blocks.redstone_block, 'I', Items.iron_ingot, 'P', Blocks.piston);
 
+        // Storage Core
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageCore()),
+                "LWL",
+                "WCW",
+                "LWL", 'L', "logWood", 'W', "plankWood", 'C', Blocks.chest));
+
+        // Simple Storage Expansion
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.simpleStorageExpansion(), 8),
+                "WWW",
+                "WIW",
+                "WWW", 'W', "plankWood", 'I', "ingotIron"));
+
+        // Capacity Storage Expansion
+        GameRegistry.addRecipe(new ItemStack(BlockManager.capacityStorageExpansion()),
+                "CCC",
+                "CSC",
+                "CCC", 'C', Blocks.chest, 'S', BlockManager.simpleStorageExpansion());
+
+        // Search Storage Expansion
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.searchStorageExpansion()),
+                "GBG",
+                "GSG",
+                "WWW", 'G', "blockGlass", 'B', Blocks.bookshelf, 'S', BlockManager.simpleStorageExpansion(), 'W', "plankWood"));
+
+        // Crafting Storage Expansion
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.craftingStorageExpansion()),
+                "WWW",
+                "CSC",
+                "WWW", 'W', "plankWood", 'C', Blocks.crafting_table, 'S', BlockManager.simpleStorageExpansion()));
     }
 }
