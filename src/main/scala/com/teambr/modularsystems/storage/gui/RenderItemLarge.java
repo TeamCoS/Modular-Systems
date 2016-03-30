@@ -1,13 +1,43 @@
 package com.teambr.modularsystems.storage.gui;
 
+import net.minecraft.block.*;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.ModelManager;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFishFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityStructure;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ReportedException;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GLSync;
+
+import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * This file was created for Modular-Systems
@@ -20,6 +50,12 @@ import org.lwjgl.opengl.GLSync;
  * @since 3/28/2016
  */
 public class RenderItemLarge extends RenderItem {
+
+    public static RenderItemLarge INSTANCE = new RenderItemLarge(
+            Minecraft.getMinecraft().getTextureManager(),
+            Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager(),
+            Minecraft.getMinecraft().getItemColors());
+
     public RenderItemLarge(TextureManager textureManager, ModelManager modelManager, ItemColors itemColors) {
         super(textureManager, modelManager, itemColors);
     }

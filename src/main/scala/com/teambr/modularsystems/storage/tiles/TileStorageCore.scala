@@ -405,12 +405,14 @@ class TileStorageCore extends Syncable with IItemHandler {
     // Search
     /**
       * Returns true if we have the search upgrade
+      *
       * @return True if valid
       */
     def hasSearchUpgrade: Boolean = searchUpgradeStatus
 
     /**
       * Set the current status of the search upgrade
+      *
       * @param bool The new value to set to
       */
     def setSearchUpgradeStatus(bool : Boolean) : Unit = {
@@ -421,12 +423,14 @@ class TileStorageCore extends Syncable with IItemHandler {
     // Crafting
     /**
       * Checks if we have the crafting upgrade
+      *
       * @return True if upgrade is valid
       */
     def hasCraftingUpgrade : Boolean = craftingUpgradeStatus
 
     /**
       * Sets the current status of the crafting upgrade
+      *
       * @param bool Value to set to
       */
     def setCraftingUpgradeStatus(bool : Boolean) : Unit = {
@@ -484,12 +488,14 @@ class TileStorageCore extends Syncable with IItemHandler {
         // Write inventory
         val stackTagList = new NBTTagList
         for(stack <- inventory.keySet()) {
-            val tagList = new NBTTagList
-            val stackTag = new NBTTagCompound
-            stack.writeToNBT(stackTag)
-            stackTag.setInteger("Amount", inventory.get(stack))
-            tagList.appendTag(stackTag)
-            stackTagList.appendTag(tagList)
+            if(stack != null) {
+                val tagList = new NBTTagList
+                val stackTag = new NBTTagCompound
+                stack.writeToNBT(stackTag)
+                stackTag.setInteger("Amount", inventory.get(stack))
+                tagList.appendTag(stackTag)
+                stackTagList.appendTag(tagList)
+            }
         }
         tag.setTag(TAG_LIST_LOCATION, stackTagList)
     }

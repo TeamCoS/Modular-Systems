@@ -37,10 +37,6 @@ class GuiStorageCore(player: EntityPlayer, tile: TileStorageCore)
     if(tile.hasSearchUpgrade)
         components(0).setXPos(10)
 
-    lazy val ourRender = new RenderItemLarge(Minecraft.getMinecraft.getTextureManager,
-        Minecraft.getMinecraft.getRenderItem.getItemModelMesher.getModelManager,
-        Minecraft.getMinecraft.getItemColors)
-
     var currentScroll = 0.0F
 
     var updateBar = false
@@ -48,7 +44,7 @@ class GuiStorageCore(player: EntityPlayer, tile: TileStorageCore)
 
     override def setWorldAndResolution(mc: Minecraft, width: Int, height: Int): Unit = {
         super.setWorldAndResolution(mc, width, height)
-        itemRender = ourRender
+        itemRender = RenderItemLarge.INSTANCE
     }
 
     override def updateScreen(): Unit = {
