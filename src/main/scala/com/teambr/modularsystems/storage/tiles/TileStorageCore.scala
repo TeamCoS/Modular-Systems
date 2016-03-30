@@ -477,6 +477,14 @@ class TileStorageCore extends Syncable with IItemHandler {
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super[TileEntity].writeToNBT(tag)
 
+        // Clear nulls, caused when a mod is removed
+        val iterator = inventory.keySet().iterator()
+        while(iterator.hasNext) {
+            val stack = iterator.next()
+            if(stack == null)
+                iterator.remove()
+        }
+
         // Send Current Amount
         tag.setInteger("CurrentSlots", currentSlots)
         tag.setInteger("CachedSize",   cachedSize)
