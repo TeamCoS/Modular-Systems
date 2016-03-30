@@ -44,6 +44,7 @@ public class BlockStorageCore extends BlockContainer implements OpensGui {
         super(Material.wood);
         setUnlocalizedName(Reference.MOD_ID() + ":storageCore");
         setCreativeTab(ModularSystems.tabModularSystems());
+        setHardness(1.5F);
     }
 
     /**

@@ -2,19 +2,18 @@ package com.teambr.modularsystems.storage.gui
 
 import java.awt.Color
 
-import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor, GuiBase}
 import com.teambr.bookshelf.client.gui.component.BaseComponent
-import com.teambr.bookshelf.client.gui.component.control.{GuiComponentTextBox, GuiComponentScrollBar}
+import com.teambr.bookshelf.client.gui.component.control.{GuiComponentScrollBar, GuiComponentTextBox}
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentText, GuiTabCollection}
+import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.helper.LogHelper
 import com.teambr.modularsystems.core.network.PacketManager
 import com.teambr.modularsystems.core.utils.ClientUtils
 import com.teambr.modularsystems.storage.container.ContainerStorageCore
-import com.teambr.modularsystems.storage.network.{UpdateFilterString, ScrollStorageCore}
+import com.teambr.modularsystems.storage.network.{ScrollStorageCore, UpdateFilterString}
 import com.teambr.modularsystems.storage.tiles.TileStorageCore
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import net.minecraft.util.text.translation.I18n
 import org.lwjgl.input.{Keyboard, Mouse}
@@ -168,7 +167,7 @@ class GuiStorageCore(player: EntityPlayer, tile: TileStorageCore)
                 }
             }
 
-            tabs.addTab(infoTab.toList, 100, 100, new Color(150, 112, 50), new ItemStack(Items.book))
+            tabs.addTab(infoTab.toList, 100, 100, new Color(150, 112, 50), new ItemStack(tile.getBlockType))
         }
     }
 }

@@ -1,12 +1,15 @@
 package com.teambr.modularsystems.storage.container
 
+import java.util
+
 import com.teambr.bookshelf.common.container.slots.IPhantomSlot
 import com.teambr.bookshelf.util.InventoryUtils
+import com.teambr.modularsystems.core.utils.ClientUtils
 import com.teambr.modularsystems.storage.container.slot.{SlotCraftingOutput, SlotStorageCore}
 import com.teambr.modularsystems.storage.tiles.TileStorageCore
 import net.minecraft.entity.player.{InventoryPlayer, EntityPlayer}
 import net.minecraft.inventory._
-import net.minecraft.item.ItemStack
+import net.minecraft.item.{ItemTool, ItemFood, ItemStack}
 import net.minecraft.item.crafting.CraftingManager
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.oredict.OreDictionary
@@ -224,51 +227,94 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
         storageCore.updateCachedSize()
         val list = storageCore.keysToList
 
-        // Add valid
-        for(x <- 0 until PLAYER_INV_START_MAIN) {
-            if(list.size() > x + (rowStart * 11) && isValidForFilter(list.get(x + (rowStart * 11))))
-                listedItems.add(list.get(x + (rowStart * 11)))
-        }
+        // Fill with all for filter
+        val filteredList = new util.ArrayList[ItemStack]()
+        for(x <- 0 until list.size())
+            if(isValidForFilter(list.get(x)))
+                filteredList.add(list.get(x))
 
-        // Pad with nulls
+        // Add what we can to display
+        for(x <- 0 until PLAYER_INV_START_MAIN)
+            if(filteredList.size() > x + (rowStart * 11))
+                listedItems.add(filteredList.get(x + (rowStart * 11)))
+
+        // Pad with nulls if need be
         for(i <- listedItems.size() until PLAYER_INV_START_MAIN)
             listedItems.add(null)
     }
 
-    def isValidForFilter(stack : ItemStack) : Boolean = {
+    def isValidForFilter(stack : ItemStack, filter : String = filterString) : Boolean = {
         if(stack == null || stack.getItem == null || filterString.isEmpty)
             true
         else {
-            filterString.charAt(0) match {
-                case '@' => // Matching by mod
-                    if(filterString.length > 1) {
-                        val uniqueName = stack.getItem.getRegistryName
-                        val modName = uniqueName.split(':')(0)
-                        modName.toLowerCase.contains(filterString.substring(1).toLowerCase)
-                    } else
-                        true
-                case '$' => // Ore Dict
-                    if(filterString.length > 1) {
-                        val oreDicts = OreDictionary.getOreIDs(stack)
+            if (filter.split(',').length == 1) {
+                filter.charAt(0) match {
+                    case '@' => // Matching by mod
+                        if (filter.length > 1) {
+                            // Check for food first, then tools
+                            if (filter.substring(1).equalsIgnoreCase(ClientUtils.translate("inventory.modularsystems.food")))
+                                return stack.getItem.isInstanceOf[ItemFood]
+                            if (filter.substring(1).equalsIgnoreCase(ClientUtils.translate("inventory.modularsystems.tool")))
+                                return stack.getItem.isInstanceOf[ItemTool]
 
-                        // Go though all registered IDS
-                        for(oreDictID <- oreDicts) {
-                            val oreName = OreDictionary.getOreName(oreDictID)
-                            if(oreName.toLowerCase.contains(filterString.substring(1).toLowerCase))
-                                return true
+                            // Check by mod
+                            val uniqueName = stack.getItem.getRegistryName
+                            val modName = uniqueName.split(':')(0)
+                            modName.toLowerCase.contains(filter.substring(1).toLowerCase)
+                        } else
+                            true
+                    case '$' => // Ore Dict
+                        if (filter.length > 1) {
+                            val oreDicts = OreDictionary.getOreIDs(stack)
+
+                            // Go though all registered IDS
+                            for (oreDictID <- oreDicts) {
+                                val oreName = OreDictionary.getOreName(oreDictID)
+                                if (oreName.toLowerCase.contains(filter.substring(1).toLowerCase))
+                                    return true
+                            }
+                            false
                         }
+                        else true
+                    case '#' => // Stack size
+                        if (filter.length > 2) {
+                            filter.charAt(1) match {
+                                case '>' =>
+                                    if (filter.substring(2).matches("[0-9].*")) {
+                                        val stackSize = Integer.valueOf(filter.substring(2))
+                                        return stackSize < stack.stackSize
+                                    }
+                                case '<' =>
+                                    if (filter.substring(2).matches("[0-9].*")) {
+                                        val stackSize = Integer.valueOf(filter.substring(2))
+                                        return stackSize > stack.stackSize
+                                    }
+                                case '=' =>
+                                    if (filter.substring(2).matches("[0-9].*")) {
+                                        val stackSize = Integer.valueOf(filter.substring(2))
+                                        return stackSize == stack.stackSize
+                                    }
+                                case _ =>
 
-                        false
-                    }
-                    else true
-                case _ =>
-                    stack.getDisplayName.toLowerCase.contains(filterString.toLowerCase)
+                            }
+                        }
+                        true
+                    case _ =>
+                        stack.getDisplayName.toLowerCase.contains(filter.toLowerCase)
+                }
+            }
+            else {
+                for (string <- filterString.split(','))
+                    if (!isValidForFilter(stack, string))
+                        return false
+                true
             }
         }
     }
 
     def scrollTo(index : Float) : Unit = {
-        val outsideDisplaySize = ((storageCore.getInventory.size() / 11) + (if(storageCore.getInventory.size() % 11 > 0)  1 else 0)) - 6
+        val outsideDisplaySize = ((storageCore.getInventory.size() / 11) +
+                (if(storageCore.getInventory.size() % 11 > 0)  1 else 0)) - rowCount
         this.rowStart = Math.round(index * outsideDisplaySize.toFloat)
         if(rowStart < 0)
             rowStart = 0

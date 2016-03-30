@@ -30,6 +30,7 @@ class BlockStorageExpansion(name : String, tileEntity : Class[_ <: TileEntity], 
 
     setCreativeTab(ModularSystems.tabModularSystems)
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
+    setHardness(1.5F)
 
     override def isClear: Boolean = false
     override def NoCornersTextureLocation: String = Reference.MOD_ID + ":blocks/storage/" + name + "/noCorners"
