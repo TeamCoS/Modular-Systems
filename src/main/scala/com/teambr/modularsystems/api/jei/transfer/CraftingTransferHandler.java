@@ -60,7 +60,6 @@ public class CraftingTransferHandler implements IRecipeTransferHandler {
                 }
             }
 
-            ((ContainerStorageCore)container).fillCraftingGrid(tag);
             PacketManager.net.sendToServer(new FillCraftingGrid(tag));
         }
         return null;

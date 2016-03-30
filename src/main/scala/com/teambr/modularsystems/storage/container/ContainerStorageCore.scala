@@ -4,8 +4,10 @@ import java.util
 
 import com.teambr.bookshelf.common.container.slots.IPhantomSlot
 import com.teambr.bookshelf.util.InventoryUtils
+import com.teambr.modularsystems.core.network.PacketManager
 import com.teambr.modularsystems.core.utils.ClientUtils
 import com.teambr.modularsystems.storage.container.slot.{SlotCraftingOutput, SlotStorageCore}
+import com.teambr.modularsystems.storage.network.UpdateStorageContainer
 import com.teambr.modularsystems.storage.tiles.TileStorageCore
 import net.minecraft.entity.player.{InventoryPlayer, EntityPlayer}
 import net.minecraft.inventory._
@@ -45,6 +47,7 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
     lazy val listedItems = new java.util.ArrayList[ItemStack]()
 
     var isDirty = true
+    var sendPacket = true
 
     addInventoryGrid(25, 27, 11, rowCount)
 
@@ -147,6 +150,10 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
         if(isDirty) {
             updateSlots()
             isDirty = false
+            if(sendPacket) {
+                PacketManager.net.sendToAll(new UpdateStorageContainer)
+                sendPacket = false
+            }
         }
         this.craftResult.setInventorySlotContents(0,
             CraftingManager.getInstance.findMatchingRecipe(this.craftMatrix, this.storageCore.getWorld))
@@ -154,6 +161,8 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
 
     override def func_184996_a(slotId : Int, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer) : ItemStack = {
         isDirty = true
+        if(!player.worldObj.isRemote)
+            sendPacket = true
         if(slotId >= 0 && slotId < inventorySlots.size()) {
             val slot = inventorySlots.get(slotId)
             // Is a storage slot
@@ -326,6 +335,7 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
 
     def scrollTo(index : Float) : Unit = {
         isDirty = true
+        sendPacket = true
         val outsideDisplaySize = ((storageCore.getInventory.size() / 11) +
                 (if(storageCore.getInventory.size() % 11 > 0)  1 else 0)) - rowCount
         this.rowStart = Math.round(index * outsideDisplaySize.toFloat)
@@ -380,6 +390,8 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
 
     override def transferStackInSlot(player: EntityPlayer, slotId: Int): ItemStack = {
         isDirty = true
+        if(!player.worldObj.isRemote)
+            sendPacket = true
         val slot: Slot = inventorySlots.get(slotId)
         if (slot != null && slot.getHasStack && !slot.isInstanceOf[SlotStorageCore]) { // Not the inventory
         var itemToTransfer: ItemStack = slot.getStack
@@ -409,6 +421,7 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
       */
     def clearCraftingGrid : Boolean = {
         isDirty = true
+        sendPacket = true
         if(storageCore.hasCraftingUpgrade) {
             for (x <- CRAFTING_GRID_START to CRAFTING_GRID_END) {
                 func_184996_a(x, 0, ClickType.QUICK_MOVE, playerInventory.asInstanceOf[InventoryPlayer].player)
@@ -428,6 +441,7 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
       */
     def fillCraftingGrid(recipe : NBTTagCompound): Unit = {
         isDirty = true
+        sendPacket = true
         if(storageCore.hasCraftingUpgrade) {
             // Try and clear grid
             if(clearCraftingGrid) { // Grid cleared continue

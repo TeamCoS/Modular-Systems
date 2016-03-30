@@ -1,9 +1,12 @@
 package com.teambr.modularsystems.storage.network;
 
 import com.teambr.modularsystems.storage.container.ContainerStorageCore;
+import com.teambr.modularsystems.storage.gui.GuiStorageCore;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.PacketLoggingHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -16,37 +19,31 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
  * @author Paul Davis "pauljoda"
- * @since 3/29/2016
+ * @since 3/30/2016
  */
-public class UpdateFilterString implements IMessage, IMessageHandler<UpdateFilterString, IMessage> {
+public class UpdateStorageContainer implements IMessage, IMessageHandler<UpdateStorageContainer, UpdateStorageContainer> {
 
-    public String filterString;
-
-    public UpdateFilterString() {}
-
-    public UpdateFilterString(String toUpdate) {
-        filterString = toUpdate;
-    }
+    public UpdateStorageContainer() {}
 
     @Override
-    public void fromBytes(ByteBuf buf) {
-        filterString = ByteBufUtils.readUTF8String(buf);
-    }
+    public void fromBytes(ByteBuf buf) {}
 
     @Override
-    public void toBytes(ByteBuf buf) {
-        ByteBufUtils.writeUTF8String(buf, filterString);
-    }
+    public void toBytes(ByteBuf buf) {}
 
     @Override
-    public IMessage onMessage(UpdateFilterString message, MessageContext ctx) {
-        if (ctx.side.isServer()) {
+    public UpdateStorageContainer onMessage(UpdateStorageContainer message, MessageContext ctx) {
+        if(ctx.side.isClient()) {
+            if(Minecraft.getMinecraft().currentScreen instanceof GuiStorageCore) {
+                GuiStorageCore container = (GuiStorageCore) Minecraft.getMinecraft().currentScreen;
+                container.inventory().isDirty_$eq(true);
+                return new UpdateStorageContainer();
+            }
+        } else {
             EntityPlayer player = ctx.getServerHandler().playerEntity;
             if(player.openContainer instanceof ContainerStorageCore) {
                 ContainerStorageCore containerStorageCore = (ContainerStorageCore) player.openContainer;
-                containerStorageCore.filterString_$eq(message.filterString);
                 containerStorageCore.isDirty_$eq(true);
-                containerStorageCore.sendPacket_$eq(true);
             }
         }
         return null;

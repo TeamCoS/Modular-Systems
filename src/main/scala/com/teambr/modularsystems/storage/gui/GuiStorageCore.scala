@@ -48,6 +48,7 @@ class GuiStorageCore(player: EntityPlayer, tile: TileStorageCore)
     }
 
     override def updateScreen(): Unit = {
+        inventory.sendPacket = false
         inventory.detectAndSendChanges()
         super.updateScreen()
     }
