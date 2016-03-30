@@ -487,12 +487,14 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
     }
 
     override def onContainerClosed(playerIn: EntityPlayer): Unit = {
-        var i = 0
-        while(i < this.craftMatrix.getSizeInventory) {
-            val stack = storageCore.insertItem(-1, this.craftMatrix.getStackInSlot(i), simulate = false)
-            if(stack != null)
-                playerIn.dropPlayerItemWithRandomChoice(stack, false)
-            i += 1
+        if(!playerIn.worldObj.isRemote) {
+            var i = 0
+            while (i < this.craftMatrix.getSizeInventory) {
+                val stack = storageCore.insertItem(-1, this.craftMatrix.getStackInSlot(i), simulate = false)
+                if (stack != null)
+                    playerIn.dropPlayerItemWithRandomChoice(stack, false)
+                i += 1
+            }
         }
     }
 }
