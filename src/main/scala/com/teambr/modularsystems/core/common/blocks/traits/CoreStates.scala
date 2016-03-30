@@ -63,7 +63,10 @@ trait CoreStates extends Block {
      * @return
      */
     override def getStateFromMeta(meta : Int) : IBlockState = {
-        getDefaultState.withProperty(Properties.FOUR_WAY, EnumFacing.getFront(meta & 5))
+        var facing = meta & 5
+        if(facing == EnumFacing.DOWN.ordinal() || facing == EnumFacing.UP.ordinal())
+            facing = EnumFacing.SOUTH.ordinal()
+        getDefaultState.withProperty(Properties.FOUR_WAY, facing)
                 .withProperty(CoreStates.PROPERTY_ACTIVE, if((Integer.valueOf(meta & 15) >> 2) == 1)
                     true.asInstanceOf[java.lang.Boolean] else false.asInstanceOf[java.lang.Boolean])
     }
