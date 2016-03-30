@@ -533,7 +533,8 @@ class TileStorageCore extends Syncable with IItemHandler {
                 val stackCompound = localList.getCompoundTagAt(0)
                 val stack = ItemStack.loadItemStackFromNBT(stackCompound)
                 val amount = stackCompound.getInteger("Amount")
-                inventory.put(stack, amount)
+                if(stack != null)
+                    inventory.put(stack, amount)
             }
         }
     }
