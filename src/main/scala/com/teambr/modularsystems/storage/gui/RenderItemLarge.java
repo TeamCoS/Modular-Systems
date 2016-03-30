@@ -84,4 +84,10 @@ public class RenderItemLarge extends RenderItem {
             super.renderItemOverlayIntoGUI(fr, stack, xPosition, yPosition, text);
         }
     }
+
+    @Override
+    public IBakedModel getItemModelWithOverrides(ItemStack stack, World world, EntityLivingBase entity) {
+        IBakedModel ibakedmodel = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack);
+        return ibakedmodel.getOverrides().handleItemState(ibakedmodel, stack, world, entity);
+    }
 }
