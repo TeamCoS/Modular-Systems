@@ -66,7 +66,7 @@ trait CoreStates extends Block {
         var facing = meta & 5
         if(facing == EnumFacing.DOWN.ordinal() || facing == EnumFacing.UP.ordinal())
             facing = EnumFacing.SOUTH.ordinal()
-        getDefaultState.withProperty(Properties.FOUR_WAY, facing)
+        getDefaultState.withProperty(Properties.FOUR_WAY, EnumFacing.getFront(facing))
                 .withProperty(CoreStates.PROPERTY_ACTIVE, if((Integer.valueOf(meta & 15) >> 2) == 1)
                     true.asInstanceOf[java.lang.Boolean] else false.asInstanceOf[java.lang.Boolean])
     }
