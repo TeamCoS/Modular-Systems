@@ -3,14 +3,15 @@ package com.teambr.modularsystems.storage.gui
 import java.awt.Color
 
 import com.teambr.bookshelf.client.gui.component.BaseComponent
-import com.teambr.bookshelf.client.gui.component.control.{GuiComponentScrollBar, GuiComponentTextBox}
+import com.teambr.bookshelf.client.gui.component.control.{GuiComponentTexturedButton, GuiComponentScrollBar, GuiComponentTextBox}
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentText, GuiTabCollection}
 import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.helper.LogHelper
 import com.teambr.modularsystems.core.network.PacketManager
 import com.teambr.modularsystems.core.utils.ClientUtils
 import com.teambr.modularsystems.storage.container.ContainerStorageCore
-import com.teambr.modularsystems.storage.network.{ScrollStorageCore, UpdateFilterString}
+import com.teambr.modularsystems.storage.network.StorageMessage.MESSAGE_ACTION
+import com.teambr.modularsystems.storage.network.{StorageMessage, ScrollStorageCore, UpdateFilterString}
 import com.teambr.modularsystems.storage.tiles.TileStorageCore
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
@@ -127,6 +128,42 @@ class GuiStorageCore(player: EntityPlayer, tile: TileStorageCore)
                     inventory.filterString = value
                     PacketManager.net.sendToServer(new UpdateFilterString(value))
                 }
+            }
+        }
+
+        // Clear Crafting
+        if(tile != null && tile.hasCraftingUpgrade) {
+            components += new GuiComponentTexturedButton(153, 101, 76, 247, 7, 7, 11, 11) {
+                override def doAction(): Unit = {
+                    inventory.clearCraftingGrid(false)
+                    PacketManager.net.sendToServer(new StorageMessage(MESSAGE_ACTION.CLEAR_CRAFTING))
+                }
+
+                /**
+                  * Overwrite this when declaring the component to have this called for the tooltip
+                  *
+                  * @return The tooltip list
+                  */
+                override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
+                    ArrayBuffer(ClientUtils.translate("inventory.storageCore.clear"))
+                }
+            }
+        }
+
+        // Clear Player Inv
+        components += new GuiComponentTexturedButton(206, 153, 76, 247, 7, 7, 11, 11) {
+            override def doAction(): Unit = {
+                inventory.clearPlayerInv(false)
+                PacketManager.net.sendToServer(new StorageMessage(MESSAGE_ACTION.CLEAR_PLAYER))
+            }
+
+            /**
+              * Overwrite this when declaring the component to have this called for the tooltip
+              *
+              * @return The tooltip list
+              */
+            override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
+                ArrayBuffer(ClientUtils.translate("inventory.storageCore.clear"))
             }
         }
     }

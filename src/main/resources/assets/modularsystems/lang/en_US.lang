@@ -65,6 +65,7 @@ inventory.generator.title=Modular Generator
 inventory.storage.title=Modular Storage
 inventory.storageCore.capacity=Capacity
 inventory.storageCore.quantity=Quantity
+inventory.storageCore.clear=Clear
 
 # IO Configure
 inventory.io.title=I/O Configure

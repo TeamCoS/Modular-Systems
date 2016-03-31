@@ -3,11 +3,12 @@ package com.teambr.modularsystems.storage.tiles
 import java.util
 
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
-import net.minecraftforge.items.CapabilityItemHandler
+import net.minecraftforge.items.{IItemHandler, CapabilityItemHandler}
 
 import scala.collection.JavaConversions._
 
@@ -21,7 +22,7 @@ import scala.collection.JavaConversions._
   * @author Paul Davis "pauljoda"
   * @since 3/28/2016
   */
-abstract class TileStorageExpansion extends UpdatingTile {
+abstract class TileStorageExpansion extends UpdatingTile with IItemHandler {
     var core : BlockPos = null
     var children : java.util.List[BlockPos] = new util.ArrayList[BlockPos]()
 
@@ -143,5 +144,86 @@ abstract class TileStorageExpansion extends UpdatingTile {
             core = null
         if (worldObj != null)
             worldObj.markBlockRangeForRenderUpdate(pos, pos)
+    }
+
+    /*******************************************************************************************************************
+      * Proxied methods                                                                                                *
+      ******************************************************************************************************************/
+
+    /**
+      * Returns the number of slots available
+      *
+      * @return The number of slots available
+      **/
+    override def getSlots: Int = {
+        getCore match {
+            case core : TileStorageCore =>
+                core.getSlots
+            case _ => 0
+        }
+    }
+
+    /**
+      * Inserts an ItemStack into the given slot and return the remainder.
+      * The ItemStack should not be modified in this function!
+      * Note: This behaviour is subtly different from IFluidHandlers.fill()
+      *
+      * @param slot     Slot to insert into.
+      * @param stack    ItemStack to insert.
+      * @param simulate If true, the insertion is only simulated
+      * @return The remaining ItemStack that was not inserted (if the entire stack is accepted, then return null).
+      *         May be the same as the input ItemStack if unchanged, otherwise a new ItemStack.
+      **/
+    override def insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack = {
+        getCore match {
+            case core : TileStorageCore =>
+                core.insertItem(slot, stack, simulate)
+            case _ => stack
+        }
+    }
+
+    /**
+      * Returns the ItemStack in a given slot.
+      *
+      * The result's stack size may be greater than the itemstacks max size.
+      *
+      * If the result is null, then the slot is empty.
+      * If the result is not null but the stack size is zero, then it represents
+      * an empty slot that will only accept* a specific itemstack.
+      *
+      * <p/>
+      * IMPORTANT: This ItemStack MUST NOT be modified. This method is not for
+      * altering an inventories contents. Any implementers who are able to detect
+      * modification through this method should throw an exception.
+      * <p/>
+      * SERIOUSLY: DO NOT MODIFY THE RETURNED ITEMSTACK
+      *
+      * @param slot Slot to query
+      * @return ItemStack in given slot. May be null.
+      **/
+    override def getStackInSlot(slot: Int): ItemStack = {
+        getCore match {
+            case core : TileStorageCore =>
+                core.getStackInSlot(slot)
+            case _ => null
+        }
+    }
+
+    /**
+      * Extracts an ItemStack from the given slot. The returned value must be null
+      * if nothing is extracted, otherwise it's stack size must not be greater than amount or the
+      * itemstacks getMaxStackSize().
+      *
+      * @param slot     Slot to extract from.
+      * @param amount   Amount to extract (may be greater than the current stacks max limit)
+      * @param simulate If true, the extraction is only simulated
+      * @return ItemStack extracted from the slot, must be null, if nothing can be extracted
+      **/
+    override def extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack = {
+        getCore match {
+            case core : TileStorageCore =>
+                core.extractItem(slot, amount, simulate)
+            case _ => null
+        }
     }
 }

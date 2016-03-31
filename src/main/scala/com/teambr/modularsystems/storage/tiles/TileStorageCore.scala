@@ -5,7 +5,9 @@ import java.util.{Collections, Comparator}
 
 import com.teambr.bookshelf.common.tiles.traits.Syncable
 import com.teambr.modularsystems.core.functions.ItemSorter
+import com.teambr.modularsystems.core.network.PacketManager
 import com.teambr.modularsystems.storage.collections.StorageNetwork
+import com.teambr.modularsystems.storage.network.UpdateStorageContainer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.EnumFacing
@@ -210,6 +212,8 @@ class TileStorageCore extends Syncable with IItemHandler {
         //TODO: Add different modes
         sortInventory(0)
         markForUpdate() // Send information to client
+        if(!worldObj.isRemote)
+            PacketManager.net.sendToAll(new UpdateStorageContainer)
     }
 
     /**
@@ -274,8 +278,7 @@ class TileStorageCore extends Syncable with IItemHandler {
     override def getStackInSlot(slot: Int): ItemStack = {
         // Make sure we are within limits
         if(slot >= inventory.keySet().size())
-            throw new ArrayIndexOutOfBoundsException("Attempted to access slot outside of bounds "
-                    + slot + " with inventory of size " + inventory.keySet().size())
+            return null
 
         keysToList.get(slot)
     }
@@ -371,7 +374,7 @@ class TileStorageCore extends Syncable with IItemHandler {
                 returnStack
             } else {
                 val returnStack = ourKey.copy()
-                ourKey.stackSize = amount
+                returnStack.stackSize = amount
                 updateCachedSize()
                 returnStack
             }

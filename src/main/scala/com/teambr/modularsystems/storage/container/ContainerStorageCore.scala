@@ -227,7 +227,13 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
                         }
                     }
                     if(stack != null && i < storageCore.getInventory.size()) {
-                        stack = storageCore.extractItem(i, amount = if (dragType == 1) 1 else stack.getMaxStackSize, simulate = false)
+                        stack = storageCore.extractItem(i,
+                            amount = if (dragType == 1)
+                                if(stack.stackSize > 1)
+                                    Math.ceil(Math.min(stack.stackSize, stack.getMaxStackSize) / 2).toInt
+                                else
+                                    stack.stackSize
+                            else stack.getMaxStackSize, simulate = false)
                         player.inventory.setItemStack(stack)
                     }
                     return stack
@@ -421,9 +427,9 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
       *
       * @return
       */
-    def clearCraftingGrid : Boolean = {
+    def clearCraftingGrid(packetNeeded : Boolean = true) : Boolean = {
         isDirty = true
-        sendPacket = true
+        sendPacket = packetNeeded
         if(storageCore.hasCraftingUpgrade) {
             for (x <- CRAFTING_GRID_START to CRAFTING_GRID_END) {
                 func_184996_a(x, 0, ClickType.QUICK_MOVE, playerInventory.asInstanceOf[InventoryPlayer].player)
@@ -437,6 +443,21 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
     }
 
     /**
+      * Clears the crafting grid and returns true if gone
+      *
+      * @return
+      */
+    def clearPlayerInv(packetNeeded : Boolean = true) : Boolean = {
+        isDirty = true
+        sendPacket = packetNeeded
+
+        for (x <- PLAYER_INV_START_MAIN until PLAYER_INV_END_MAIN)
+            func_184996_a(x, 0, ClickType.QUICK_MOVE, playerInventory.asInstanceOf[InventoryPlayer].player)
+
+        true
+    }
+
+    /**
       * Fills the crafting grid with the info sent by JEI
       *
       * @param recipe The recipe NBTTagCompound
@@ -444,7 +465,7 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
     def fillCraftingGrid(recipe : NBTTagCompound): Unit = {
         if(storageCore.hasCraftingUpgrade) {
             // Try and clear grid
-            if(clearCraftingGrid) { // Grid cleared continue
+            if(clearCraftingGrid()) { // Grid cleared continue
             val recipeBuffer = new ArrayBuffer[ArrayBuffer[ItemStack]]()
                 // Create the slots objects
                 for(x <- 0 until 9) {

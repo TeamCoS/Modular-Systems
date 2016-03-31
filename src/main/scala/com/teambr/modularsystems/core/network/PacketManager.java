@@ -1,10 +1,7 @@
 package com.teambr.modularsystems.core.network;
 
 import com.teambr.modularsystems.core.lib.Reference;
-import com.teambr.modularsystems.storage.network.FillCraftingGrid;
-import com.teambr.modularsystems.storage.network.ScrollStorageCore;
-import com.teambr.modularsystems.storage.network.UpdateFilterString;
-import com.teambr.modularsystems.storage.network.UpdateStorageContainer;
+import com.teambr.modularsystems.storage.network.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,6 +33,7 @@ public class PacketManager {
         registerMessage(UpdateFilterString.class, UpdateFilterString.class);
         registerMessage(FillCraftingGrid.class, FillCraftingGrid.class);
         registerMessage(UpdateStorageContainer.class, UpdateStorageContainer.class);
+        registerMessage(StorageMessage.class, StorageMessage.class);
     }
 
     @SuppressWarnings("unchecked")

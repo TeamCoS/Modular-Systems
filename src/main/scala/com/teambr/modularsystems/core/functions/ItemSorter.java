@@ -30,7 +30,37 @@ public class ItemSorter implements Comparator<ItemStack> {
         else if(o1 == null)
             return 0;
 
+        // Same size, go ahead and organize by id
+        if(o1.stackSize == o2.stackSize) {
+            //Check if same type
+            if(o1.getItem() == o2.getItem()) {
+
+                //Check for special tags
+                if(o1.getTagCompound() != null && o2.getTagCompound() == null)
+                    return -1; //Lets put things with tags at the front
+                else if(o1.getTagCompound() == null && o2.getTagCompound() != null)
+                    return 1;
+                else if(o1.getTagCompound() != null)
+                    return o1.stackSize > o2.stackSize ? -1 : o1.stackSize == o2.stackSize ? 0 : 1;
+
+                //Look for different damage
+                if(o1.getItemDamage() != o2.getItemDamage()) {
+                    if(o1.getItemDamage() < o2.getItemDamage())
+                        return -1;
+                    else
+                        return 1;
+                }
+
+                if(o1.stackSize == o2.stackSize)
+                    return 0;
+                return o1.stackSize > o2.stackSize ? -1 : 1;
+            }
+
+            //Check by ID
+            return Item.getIdFromItem(o1.getItem()) < Item.getIdFromItem(o2.getItem()) ? -1 : 1;
+        }
+
         //Check by stack size
-        return o1.stackSize > o2.stackSize ? -1 : o1.stackSize == o2.stackSize ? 0 : 1;
+        return o1.stackSize > o2.stackSize ? -1 : 1;
     }
 }
