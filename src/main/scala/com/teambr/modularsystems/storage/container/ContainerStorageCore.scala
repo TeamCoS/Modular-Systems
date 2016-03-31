@@ -5,14 +5,13 @@ import java.util
 import com.teambr.bookshelf.common.container.slots.IPhantomSlot
 import com.teambr.bookshelf.util.InventoryUtils
 import com.teambr.modularsystems.core.network.PacketManager
-import com.teambr.modularsystems.core.utils.ClientUtils
 import com.teambr.modularsystems.storage.container.slot.{SlotCraftingOutput, SlotStorageCore}
 import com.teambr.modularsystems.storage.network.UpdateStorageContainer
 import com.teambr.modularsystems.storage.tiles.TileStorageCore
-import net.minecraft.entity.player.{InventoryPlayer, EntityPlayer}
+import net.minecraft.entity.player.{EntityPlayer, InventoryPlayer}
 import net.minecraft.inventory._
-import net.minecraft.item.{ItemTool, ItemFood, ItemStack}
 import net.minecraft.item.crafting.CraftingManager
+import net.minecraft.item.{ItemFood, ItemStack, ItemTool}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.oredict.OreDictionary
 
@@ -273,9 +272,9 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
                     case '@' => // Matching by mod
                         if (filter.length > 1) {
                             // Check for food first, then tools
-                            if (filter.substring(1).equalsIgnoreCase(ClientUtils.translate("inventory.modularsystems.food")))
+                            if (filter.substring(1).equalsIgnoreCase("food"))
                                 return stack.getItem.isInstanceOf[ItemFood]
-                            if (filter.substring(1).equalsIgnoreCase(ClientUtils.translate("inventory.modularsystems.tool")))
+                            if (filter.substring(1).equalsIgnoreCase("tool"))
                                 return stack.getItem.isInstanceOf[ItemTool]
 
                             // Check by mod

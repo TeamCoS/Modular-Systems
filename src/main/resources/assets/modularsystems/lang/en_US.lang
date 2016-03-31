@@ -107,10 +107,6 @@ inventory.blockValuesConfig.ignoreMeta.toolTip=Disable to ignore metadata
 # Used for arrows
 inventory.jei.recipes=Recipes
 
-# Needed for '@' searching in storage
-inventory.modularsystems.food=food
-inventory.modularsystems.tool=tool
-
 #######################
 # Commands
 #######################
