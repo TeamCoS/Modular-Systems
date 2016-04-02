@@ -1,6 +1,5 @@
 package com.teambr.modularsystems.core.common.blocks
 
-import java.util.Random
 import javax.annotation.Nonnull
 
 import com.teambr.bookshelf.Bookshelf
@@ -19,7 +18,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
@@ -74,15 +73,6 @@ class BlockCoreExpansion(name: String, tileEntity: Class[_ <: TileEntity], block
 
     override def breakBlock(world: World, pos: BlockPos, state: IBlockState): Unit = {
         super[BlockProxy].breakBlock(world, pos, state)
-    }
-
-    override def getItemDropped(state: IBlockState, rand: Random, fortune: Int): Item = {
-        if (state.getBlock == BlockManager.bankLiquids ||
-                state.getBlock == BlockManager.bankSolids ||
-                state.getBlock == BlockManager.bankRF)
-            super[KeepInventory].getItemDropped(state, rand, fortune)
-        else
-            null
     }
 
     def colorMultiplier : Int = {

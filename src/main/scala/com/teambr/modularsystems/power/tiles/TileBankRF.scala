@@ -1,6 +1,5 @@
 package com.teambr.modularsystems.power.tiles
 
-import cofh.api.energy.EnergyStorage
 import com.teambr.bookshelf.common.tiles.traits.EnergyHandler
 import com.teambr.modularsystems.core.providers.FuelProvider.FuelProviderType
 import com.teambr.modularsystems.core.registries.ConfigRegistry
@@ -18,15 +17,13 @@ import net.minecraft.nbt.NBTTagCompound
  */
 class TileBankRF extends TileBankBase with EnergyHandler {
 
-    private val energy = new EnergyStorage(10000)
-
     /**
      * Used to scale the current power level
       *
       * @param scale The scale to move to
      * @return A number from 0 - { @param scale} for current level
      */
-    override def getPowerLevelScaled(scale: Int): Double = energy.getEnergyStored * scale / energy.getMaxEnergyStored
+    override def getPowerLevelScaled(scale: Int): Double = energyStorage.getEnergyStored * scale / energyStorage.getMaxEnergyStored
 
     /*******************************************************************************************************************
       ******************************************** RF Energy Functions *************************************************
@@ -43,7 +40,7 @@ class TileBankRF extends TileBankBase with EnergyHandler {
       ******************************************************************************************************************/
 
     override def consume(): Double = {
-        val actual = energy.extractEnergy(Math.round(ConfigRegistry.rfPower * 200).toInt, false)
+        val actual = energyStorage.extractEnergy(Math.round(ConfigRegistry.rfPower * 200).toInt, false)
         worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
         (actual / (ConfigRegistry.rfPower * 200)) * 200
     }
@@ -51,23 +48,23 @@ class TileBankRF extends TileBankBase with EnergyHandler {
     override def `type`(): FuelProviderType = FuelProviderType.RF
 
     override def fuelProvided(): Double = {
-        val actual = energy.extractEnergy(Math.round(ConfigRegistry.rfPower * 200).toInt, false)
+        val actual = energyStorage.extractEnergy(Math.round(ConfigRegistry.rfPower * 200).toInt, false)
         (actual / (ConfigRegistry.rfPower * 200)) * 200
     }
 
-    override def canProvide: Boolean = energy.getEnergyStored > 0
+    override def canProvide: Boolean = energyStorage.getEnergyStored > 0
 
     /*******************************************************************************************************************
       ******************************************** Tile Methods ********************************************************
       ******************************************************************************************************************/
     override def readFromNBT (tags: NBTTagCompound) {
-        super.readFromNBT(tags)
-        energy.readFromNBT(tags)
+        super[TileBankBase].readFromNBT(tags)
+        super[EnergyHandler].readFromNBT(tags)
     }
 
 
     override def writeToNBT(tags: NBTTagCompound) {
-        super.writeToNBT(tags)
-        energy.writeToNBT(tags)
+        super[TileBankBase].writeToNBT(tags)
+        super[EnergyHandler].writeToNBT(tags)
     }
 }
