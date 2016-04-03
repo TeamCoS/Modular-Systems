@@ -163,7 +163,7 @@ object CrusherRecipeRegistry {
                             return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
                         }
                     case 1 =>
-                        if (checkOreDict(i.input, itemStack))
+                        if (stackOut != null && stackOut.getItem != null && checkOreDict(i.input, itemStack))
                             return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
                 }
             }

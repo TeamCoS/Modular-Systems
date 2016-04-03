@@ -514,7 +514,8 @@ abstract class AbstractCore extends UpdatingTile with InventorySided {
      * @param stack The stack to check
      * @return True if you can put this there
      */
-    override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = index == 0
+    override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = index == 0 &&
+            (stack != null && recipe(stack) != null)
 
     override def initialSize : Int = 2
 }
