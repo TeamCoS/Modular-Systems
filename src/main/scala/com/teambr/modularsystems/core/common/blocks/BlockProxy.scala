@@ -4,7 +4,6 @@ import java.util.Random
 import javax.annotation.Nonnull
 
 import com.teambr.bookshelf.Bookshelf
-import com.teambr.bookshelf.client.TextureManager
 import com.teambr.bookshelf.collections.ConnectedTextures
 import com.teambr.bookshelf.loadables.{CreatesTextures, ILoadActionProvider}
 import com.teambr.modularsystems.core.client.models.BakedProxyModel
@@ -161,9 +160,9 @@ class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseB
     def VerticalTextureLocation    : String = "modularsystems:blocks/border_vertical"
 
     @SideOnly(Side.CLIENT)
-    lazy val connectedTextures = new ConnectedTextures(TextureManager.getTexture(NoCornersTextureLocation),
-        TextureManager.getTexture(AntiCornersTextureLocation), TextureManager.getTexture(CornersTextureLocation),
-        TextureManager.getTexture(HorizontalTextureLocation), TextureManager.getTexture(VerticalTextureLocation))
+    lazy val connectedTextures = new ConnectedTextures(NoCornersTextureLocation,
+        AntiCornersTextureLocation, CornersTextureLocation,
+        HorizontalTextureLocation, VerticalTextureLocation)
 
     /**
       * Used to get the connected textures object for this block
@@ -172,9 +171,9 @@ class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseB
       */
     @SideOnly(Side.CLIENT)
     def getConnectedTextures : ConnectedTextures = if(connectedTextures != null) connectedTextures else {
-        new ConnectedTextures(TextureManager.getTexture(NoCornersTextureLocation),
-            TextureManager.getTexture(AntiCornersTextureLocation), TextureManager.getTexture(CornersTextureLocation),
-            TextureManager.getTexture(HorizontalTextureLocation), TextureManager.getTexture(VerticalTextureLocation))
+        new ConnectedTextures(NoCornersTextureLocation,
+            AntiCornersTextureLocation, CornersTextureLocation,
+            HorizontalTextureLocation, VerticalTextureLocation)
     }
 
     /**

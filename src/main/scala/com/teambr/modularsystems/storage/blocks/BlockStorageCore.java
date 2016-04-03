@@ -97,6 +97,8 @@ public class BlockStorageCore extends BlockContainer implements OpensGui {
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
+        if(meta == 0 || meta == 1)
+            meta = EnumFacing.SOUTH.ordinal();
         return getDefaultState().withProperty(Properties.FOUR_WAY(), EnumFacing.getFront(meta));
     }
 
