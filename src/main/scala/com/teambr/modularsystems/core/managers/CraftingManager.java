@@ -3,6 +3,7 @@ package com.teambr.modularsystems.core.managers;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -91,5 +92,11 @@ public class CraftingManager {
                 "WWW",
                 "CSC",
                 "WWW", 'W', "plankWood", 'C', Blocks.crafting_table, 'S', BlockManager.simpleStorageExpansion()));
+
+        // Armor Storage Expansion
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.armorStorageExpansion()),
+                "IWI",
+                "ISI",
+                "IWI", 'I', "ingotIron", 'W', "plankWood", 'S', BlockManager.simpleStorageExpansion()));
     }
 }

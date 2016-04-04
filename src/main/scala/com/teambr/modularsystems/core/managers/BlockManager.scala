@@ -38,6 +38,7 @@ object BlockManager {
     val capacityStorageExpansion = new BlockStorageExpansion("capacityStorageExpansion", classOf[TileStorageCapacityExpansion])
     val searchStorageExpansion = new BlockStorageExpansion("searchStorageExpansion", classOf[TileStorageSearchExpansion])
     val craftingStorageExpansion = new BlockStorageExpansion("craftingStorageExpansion", classOf[TileStorageCraftingExpansion])
+    val armorStorageExpansion = new BlockStorageExpansion("armorStorageExpansion", classOf[TileStorageArmorExpansion])
 
     //Expansions
     val crusherExpansion = new BlockCoreExpansion("crusherExpansion", classOf[TileCrusherExpansion], -1)
@@ -62,6 +63,7 @@ object BlockManager {
         registerBlock(capacityStorageExpansion, "capacityStorageExpansion", classOf[TileStorageCapacityExpansion])
         registerBlock(searchStorageExpansion, "searchStorageExpansion", classOf[TileStorageSearchExpansion])
         registerBlock(craftingStorageExpansion, "craftingStorageExpansion", classOf[TileStorageCraftingExpansion])
+        registerBlock(armorStorageExpansion, "armorStorageExpansion", classOf[TileStorageArmorExpansion])
 
         //Expansions
         registerBlock(crusherExpansion, "crusherExpansion", classOf[TileCrusherExpansion])

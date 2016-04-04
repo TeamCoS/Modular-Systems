@@ -5,7 +5,7 @@ import java.util
 import com.teambr.bookshelf.common.container.slots.IPhantomSlot
 import com.teambr.bookshelf.util.InventoryUtils
 import com.teambr.modularsystems.core.network.PacketManager
-import com.teambr.modularsystems.storage.container.slot.{SlotCraftingOutput, SlotStorageCore}
+import com.teambr.modularsystems.storage.container.slot.{PlayerArmorSlot, SlotCraftingOutput, SlotStorageCore}
 import com.teambr.modularsystems.storage.network.UpdateStorageContainer
 import com.teambr.modularsystems.storage.tiles.TileStorageCore
 import net.minecraft.entity.player.{EntityPlayer, InventoryPlayer}
@@ -28,7 +28,7 @@ import scala.util.control.Breaks._
   * @author Paul Davis "pauljoda"
   * @since 3/27/2016
   */
-class ContainerStorageCore(val playerInventory: IInventory, val storageCore: TileStorageCore) extends Container {
+class ContainerStorageCore(val playerInventory: InventoryPlayer, val storageCore: TileStorageCore) extends Container {
     var INVENTORY_START = 0
     var INVENTORY_END = 0
 
@@ -39,6 +39,8 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
     var PLAYER_INV_END_MAIN = 0
     var PLAYER_INV_START_HOTBAR = 0
     var PLAYER_INV_END_HOTBAR = 0
+    var PLAYER_INV_ARMOR_START = 0
+    var PLAYER_INV_ARMOR_END = 0
 
     var rowStart = 0
 
@@ -61,6 +63,10 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
     updateSlots()
 
     addPlayerInventorySlots(44, 160)
+
+    if(storageCore.hasArmorUpgrade) {
+        addPlayerArmor(15, 162)
+    }
 
     def rowCount : Int = if(storageCore.hasCraftingUpgrade) 4 else 6
 
@@ -141,11 +147,22 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
         }
     }
 
+    def addPlayerArmor(offsetX: Int, offsetY: Int): Unit = {
+        PLAYER_INV_ARMOR_START = PLAYER_INV_END_HOTBAR
+        PLAYER_INV_ARMOR_END = PLAYER_INV_ARMOR_START
+        for(x <- 0 until 4) {
+            addSlotToContainer(new PlayerArmorSlot(playerInventory, 36 + x, offsetX, offsetY + (18 * (3 - x))))
+            PLAYER_INV_ARMOR_END += 1
+        }
+    }
+
     override def canInteractWith(entityPlayer: EntityPlayer): Boolean = true
     /**
       * Looks for changes made in the container, sends them to every listener.
       */
     override def detectAndSendChanges() : Unit = {
+        super.detectAndSendChanges()
+        // Check us
         if(isDirty) {
             updateSlots()
             isDirty = false
@@ -189,7 +206,6 @@ class ContainerStorageCore(val playerInventory: IInventory, val storageCore: Til
                         val copy = stack.copy()
                         // Something was moved
                         if (mergeItemStackSafe(copy, PLAYER_INV_START_MAIN, PLAYER_INV_END_HOTBAR, reverse = true)) {
-                            player.inventoryContainer.detectAndSendChanges()
                             player.inventory.markDirty()
                             storageCore.extractItem(i, stack.stackSize - copy.stackSize, simulate = false)
                         }

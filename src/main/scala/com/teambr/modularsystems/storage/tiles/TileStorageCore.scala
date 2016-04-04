@@ -404,6 +404,7 @@ class TileStorageCore extends Syncable with IItemHandler {
     // Variables
     private var searchUpgradeStatus   = false
     private var craftingUpgradeStatus = false
+    private var armorUpgradeStatus    = false
 
     // Search
     /**
@@ -438,6 +439,25 @@ class TileStorageCore extends Syncable with IItemHandler {
       */
     def setCraftingUpgradeStatus(bool : Boolean) : Unit = {
         craftingUpgradeStatus = bool
+        markForUpdate()
+    }
+
+
+    // Armor
+    /**
+      * Checks if we have the crafting upgrade
+      *
+      * @return True if upgrade is valid
+      */
+    def hasArmorUpgrade : Boolean = armorUpgradeStatus
+
+    /**
+      * Sets the current status of the crafting upgrade
+      *
+      * @param bool Value to set to
+      */
+    def setArmorUpgradeStatus(bool : Boolean) : Unit = {
+        armorUpgradeStatus = bool
         markForUpdate()
     }
 
@@ -495,6 +515,7 @@ class TileStorageCore extends Syncable with IItemHandler {
         // Upgrade Variables
         tag.setBoolean("Search", searchUpgradeStatus)
         tag.setBoolean("Crafting", craftingUpgradeStatus)
+        tag.setBoolean("Armor", armorUpgradeStatus)
 
         // Write inventory
         val stackTagList = new NBTTagList
@@ -526,6 +547,7 @@ class TileStorageCore extends Syncable with IItemHandler {
         // Upgrade Variables
         searchUpgradeStatus = tag.getBoolean("Search")
         craftingUpgradeStatus = tag.getBoolean("Crafting")
+        armorUpgradeStatus = tag.getBoolean("Armor")
 
         // Read Inventory
         inventory.clear()
