@@ -107,8 +107,8 @@ object FurnaceBannedBlocks {
      * @param meta The blocks metadata
      */
     def addBannedBlock(block: Block, meta: Int) {
-        if (!bannedBlocks.contains(block.getRegistryName + ":" + meta))
-            bannedBlocks.add(block.getRegistryName + ":" + meta)
+        if (!bannedBlocks.contains(block.getRegistryName.toString + ":" + meta))
+            bannedBlocks.add(block.getRegistryName.toString + ":" + meta)
     }
 
     /**
@@ -127,8 +127,8 @@ object FurnaceBannedBlocks {
      * @return True if is banned
      */
     def isBlockBanned(block: Block, meta: Int): Boolean = {
-        val blockName: String = block.getRegistryName + ":" + meta
-        val blockWithNoMeta: String = block.getRegistryName + ":" + -1
+        val blockName: String = block.getRegistryName.toString + ":" + meta
+        val blockWithNoMeta: String = block.getRegistryName.toString + ":" + -1
         bannedBlocks.contains(blockName) || bannedBlocks.contains(blockWithNoMeta)
     }
 }

@@ -37,6 +37,11 @@ apply plugin: 'maven'
 
 ext.configFile = file "build.properties"
 
+String APIToken = ''
+if (file('APIToken').exists()) {
+    APIToken = new File('APIToken').text
+}
+
 configFile.withReader {
     def prop = new Properties()
     prop.load(it)
@@ -99,5 +104,18 @@ processResources
 dependencies {
     deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
     //compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
+}
+
+curseforge {
+    apiKey = APIToken
+    project {
+        id = '68528'
+        changelog = 'Updated to forge 1845'
+        releaseType = 'beta'
+        addGameVersion '1.9'
+        relations {
+            requiredLibrary 'bookshelf-api-library'
+        }
+    }
 }
 

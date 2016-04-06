@@ -300,7 +300,7 @@ class ContainerStorageCore(val playerInventory: InventoryPlayer, val storageCore
                                 return stack.getItem.isInstanceOf[ItemTool]
 
                             // Check by mod
-                            val uniqueName = stack.getItem.getRegistryName
+                            val uniqueName = stack.getItem.getRegistryName.toString
                             val modName = uniqueName.split(':')(0)
                             modName.toLowerCase.contains(filter.substring(1).toLowerCase)
                         } else
