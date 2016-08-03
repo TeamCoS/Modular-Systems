@@ -69,7 +69,7 @@ minecraft {
     replaceIn "core/lib/Reference.scala"
     replace "@VERSION@","${config.mod_version}"
 
-    mappings = "snapshot_20160312"
+    mappings = "${config.MAPPINGS}"
     makeObfSourceJar = false
 }
 
@@ -78,7 +78,7 @@ configurations.all {
 }
 
 dependencies {
-    compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "1.9-+", classifier: "dev", changing: true
+    compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "1.10.2-3+", classifier: "dev", changing: true
 }
 
 processResources

@@ -33,11 +33,12 @@ class TileIOExpansion extends TileProxy with RedstoneAware {
         auto = tagCompound.getBoolean("Auto")
     }
 
-    override def writeToNBT(tagCompound : NBTTagCompound) {
+    override def writeToNBT(tagCompound : NBTTagCompound) : NBTTagCompound = {
         super.writeToNBT(tagCompound)
         tagCompound.setBoolean("Input", input)
         tagCompound.setBoolean("Output", output)
         tagCompound.setBoolean("Auto", auto)
+        tagCompound
     }
 
     override def onServerTick() : Unit = {

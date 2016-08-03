@@ -59,24 +59,24 @@ object FurnaceBannedBlocks {
      */
     def generateDefaults(): Unit = {
         LogHelper.info("Either this is the first load of the file is missing, generating default banned blocks")
-        addBannedBlock(Blocks.log, -1)
-        addBannedBlock(Blocks.log2, -1)
-        addBannedBlock(Blocks.dirt, -1)
-        addBannedBlock(Blocks.ice, -1)
-        addBannedBlock(Blocks.snow, -1)
-        addBannedBlock(Blocks.snow_layer, -1)
-        addBannedBlock(Blocks.leaves, -1)
-        addBannedBlock(Blocks.leaves2, -1)
-        addBannedBlock(Blocks.pumpkin, -1)
-        addBannedBlock(Blocks.tnt, -1)
-        addBannedBlock(Blocks.hay_block, -1)
-        addBannedBlock(Blocks.wool, -1)
-        addBannedBlock(Blocks.grass, -1)
-        addBannedBlock(Blocks.bedrock, -1)
-        addBannedBlock(Blocks.diamond_ore, -1)
-        addBannedBlock(Blocks.emerald_ore, -1)
-        addBannedBlock(Blocks.gold_ore, -1)
-        addBannedBlock(Blocks.iron_door, -1)
+        addBannedBlock(Blocks.LOG, -1)
+        addBannedBlock(Blocks.LOG2, -1)
+        addBannedBlock(Blocks.DIRT, -1)
+        addBannedBlock(Blocks.ICE, -1)
+        addBannedBlock(Blocks.SNOW, -1)
+        addBannedBlock(Blocks.SNOW_LAYER, -1)
+        addBannedBlock(Blocks.LEAVES, -1)
+        addBannedBlock(Blocks.LEAVES2, -1)
+        addBannedBlock(Blocks.PUMPKIN, -1)
+        addBannedBlock(Blocks.TNT, -1)
+        addBannedBlock(Blocks.HAY_BLOCK, -1)
+        addBannedBlock(Blocks.WOOL, -1)
+        addBannedBlock(Blocks.GRASS, -1)
+        addBannedBlock(Blocks.BEDROCK, -1)
+        addBannedBlock(Blocks.DIAMOND_ORE, -1)
+        addBannedBlock(Blocks.EMERALD_ORE, -1)
+        addBannedBlock(Blocks.GOLD_ORE, -1)
+        addBannedBlock(Blocks.IRON_DOOR, -1)
         val path: File = new File(ModularSystems.configFolderLocation + File.separator + "Registries")
         if (!path.exists) path.mkdirs
         saveToFile()
@@ -88,7 +88,7 @@ object FurnaceBannedBlocks {
      * @return True if it shouldn't be there
      */
     def isBadBlockFromBlock(block: Block): Boolean = {
-        if (block eq Blocks.redstone_block) return false
+        if (block eq Blocks.REDSTONE_BLOCK) return false
         if (block.hasTileEntity(block.getDefaultState)) {
             return true
         }

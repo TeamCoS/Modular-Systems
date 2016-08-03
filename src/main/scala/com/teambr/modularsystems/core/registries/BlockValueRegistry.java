@@ -92,11 +92,11 @@ public class BlockValueRegistry {
         values = JsonUtils.<LinkedHashMap<String, BlockValues>>readFromJson(new TypeToken<LinkedHashMap<String, BlockValues>>() {
         }, ModularSystems.configFolderLocation() + File.separator + "Registries" + File.separator + "blockValues.json");
 
-        addMaterialValues(Material.rock,
+        addMaterialValues(Material.ROCK,
             new Calculation(-1, 200, 0, 1, 0, -100, 0),
             new Calculation(1, 100, 0, 1, 0, 0, 450),
             new Calculation(1, 1, 0, 1, 0, 0, 0));
-        addMaterialValues(Material.iron,
+        addMaterialValues(Material.IRON,
             new Calculation(1, 100, 0, 1, 0, 100, 0),
             new Calculation(10, 1, 0, 1, 0, 0, 1600),
             new Calculation(1, 1, 0, 1, 0, 0, 0));
@@ -195,35 +195,35 @@ public class BlockValueRegistry {
       * @return The string representation of this material
       */
     public static String getMaterialString(Material material) {
-        if(material == Material.air)
+        if(material == Material.AIR)
             return "air";
-        else if(material == Material.grass)
+        else if(material == Material.GRASS)
             return "grass";
-        else if(material == Material.ground)
+        else if(material == Material.GROUND)
             return "ground";
-        else if(material == Material.wood)
+        else if(material == Material.WOOD)
             return "wood";
-        else if(material == Material.rock)
+        else if(material == Material.ROCK)
             return "rock";
-        else if(material == Material.iron)
+        else if(material == Material.IRON)
             return "iron";
-        else if(material == Material.piston)
+        else if(material == Material.PISTON)
             return "piston";
-        else if(material == Material.web)
+        else if(material == Material.WEB)
             return "web";
-        else if(material == Material.cake)
+        else if(material == Material.CAKE)
             return "cake";
-        else if(material == Material.portal)
+        else if(material == Material.PORTAL)
             return "portal";
-        else if(material == Material.dragonEgg)
+        else if(material == Material.DRAGON_EGG)
             return "dragonEgg";
-        else if(material == Material.gourd)
+        else if(material == Material.GOURD)
             return "gourd";
-        else if(material == Material.clay)
+        else if(material == Material.CLAY)
             return "clay";
-        else if(material == Material.cactus)
+        else if(material == Material.CACTUS)
             return "cactus";
-        else if(material == Material.craftedSnow)
+        else if(material == Material.CRAFTED_SNOW)
             return "craftedSnow";
         return "NULL";
     }

@@ -76,7 +76,7 @@ object CrusherRecipeRegistry {
                     i.replaceFirst("dust", "ore") match {
                         case "oreRedstone" =>
                             crusherRecipes.add(new CrusherRecipes("oreRedstone",
-                                getItemStackString(new ItemStack(Items.redstone)), 6, getItemStackString(new ItemStack(Items.redstone))))
+                                getItemStackString(new ItemStack(Items.REDSTONE)), 6, getItemStackString(new ItemStack(Items.REDSTONE))))
                         /*case "oreLapis" =>
                             crusherRecipes.add(new CrusherRecipes("oreLapis",
                                 getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))*/
@@ -101,31 +101,31 @@ object CrusherRecipeRegistry {
         }
 
         crusherRecipes.add(new CrusherRecipes("oreLapis",
-            getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))
-        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Items.blaze_rod)),
-            getItemStackString(new ItemStack(Items.blaze_powder)), 5, getItemStackString(new ItemStack(Items.blaze_powder))))
+            getItemStackString(new ItemStack(Items.DYE, 1, 4)), 6, getItemStackString(new ItemStack(Items.DYE, 1, 4))))
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Items.BLAZE_ROD)),
+            getItemStackString(new ItemStack(Items.BLAZE_ROD)), 5, getItemStackString(new ItemStack(Items.BLAZE_ROD))))
         crusherRecipes.add(new CrusherRecipes("cobblestone",
-            getItemStackString(new ItemStack(Blocks.sand)), 1, ""))
-        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Items.bone)),
-            getItemStackString(new ItemStack(Items.dye, 1, 15)), 4, getItemStackString(new ItemStack(Items.dye, 1, 15))))
+            getItemStackString(new ItemStack(Blocks.SAND)), 1, ""))
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Items.BONE)),
+            getItemStackString(new ItemStack(Items.DYE, 1, 15)), 4, getItemStackString(new ItemStack(Items.DYE, 1, 15))))
         crusherRecipes.add(new CrusherRecipes("oreQuartz",
-            getItemStackString(new ItemStack(Items.quartz)), 3, getItemStackString(new ItemStack(Items.quartz))))
-        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.clay)),
-            getItemStackString(new ItemStack(Items.clay_ball)), 4, ""))
+            getItemStackString(new ItemStack(Items.QUARTZ)), 3, getItemStackString(new ItemStack(Items.QUARTZ))))
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.CLAY)),
+            getItemStackString(new ItemStack(Items.CLAY_BALL)), 4, ""))
         crusherRecipes.add(new CrusherRecipes("oreDiamond",
-            getItemStackString(new ItemStack(Items.diamond)), 2, getItemStackString(new ItemStack(Items.diamond))))
+            getItemStackString(new ItemStack(Items.DIAMOND)), 2, getItemStackString(new ItemStack(Items.DIAMOND))))
         crusherRecipes.add(new CrusherRecipes("oreEmerald",
-            getItemStackString(new ItemStack(Items.emerald)), 2, getItemStackString(new ItemStack(Items.emerald))))
+            getItemStackString(new ItemStack(Items.EMERALD)), 2, getItemStackString(new ItemStack(Items.EMERALD))))
         crusherRecipes.add(new CrusherRecipes("glowstone",
-            getItemStackString(new ItemStack(Items.glowstone_dust)), 3, getItemStackString(new ItemStack(Items.glowstone_dust))))
+            getItemStackString(new ItemStack(Items.GLOWSTONE_DUST)), 3, getItemStackString(new ItemStack(Items.GLOWSTONE_DUST))))
         crusherRecipes.add(new CrusherRecipes("oreCoal",
-            getItemStackString(new ItemStack(Items.coal, 1, 0)), 3, getItemStackString(new ItemStack(Items.coal, 1, 0))))
-        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.wool)),
-            getItemStackString(new ItemStack(Items.string)), 3, getItemStackString(new ItemStack(Items.string))))
+            getItemStackString(new ItemStack(Items.COAL, 1, 0)), 3, getItemStackString(new ItemStack(Items.COAL, 1, 0))))
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.WOOL)),
+            getItemStackString(new ItemStack(Items.STRING)), 3, getItemStackString(new ItemStack(Items.STRING))))
         crusherRecipes.add(new CrusherRecipes("blockGlass",
-            getItemStackString(new ItemStack(Blocks.sand)), 1, ""))
-        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.gravel)),
-            getItemStackString(new ItemStack(Items.flint)), 1, getItemStackString(new ItemStack(Items.flint))))
+            getItemStackString(new ItemStack(Blocks.SAND)), 1, ""))
+        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.GRAVEL)),
+            getItemStackString(new ItemStack(Items.FLINT)), 1, getItemStackString(new ItemStack(Items.FLINT))))
 
 
         saveToFile()

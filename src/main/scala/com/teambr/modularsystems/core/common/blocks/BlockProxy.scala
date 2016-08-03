@@ -40,7 +40,7 @@ import scala.collection.mutable.ArrayBuffer
   * @author Paul Davis <pauljoda>
   * @since August 06, 2015
   */
-class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseBlock(Material.rock, name, tileEntity)
+class BlockProxy(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseBlock(Material.ROCK, name, tileEntity)
         with ILoadActionProvider with CreatesTextures {
 
     override def getCreativeTab: CreativeTabs = {

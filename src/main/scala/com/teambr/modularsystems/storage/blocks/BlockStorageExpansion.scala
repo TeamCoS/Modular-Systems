@@ -25,7 +25,7 @@ import net.minecraft.world.{IBlockAccess, World}
   * @author Paul Davis "pauljoda"
   * @since 3/28/2016
   */
-class BlockStorageExpansion(name : String, tileEntity : Class[_ <: TileEntity], material : Material = Material.wood)
+class BlockStorageExpansion(name : String, tileEntity : Class[_ <: TileEntity], material : Material = Material.WOOD)
         extends BlockContainer(material) with BlockConnectedTextures {
 
     setCreativeTab(ModularSystems.tabModularSystems)

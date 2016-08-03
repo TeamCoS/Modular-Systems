@@ -15,4 +15,6 @@ class CrusherRecipeHandler extends IRecipeHandler[CrusherRecipeJEI] {
     override def isRecipeValid(recipe: CrusherRecipeJEI): Boolean = true
 
     override def getRecipeClass: Class[CrusherRecipeJEI] = classOf[CrusherRecipeJEI]
+
+    override def getRecipeCategoryUid(recipe: CrusherRecipeJEI): String =  Reference.MOD_ID + ":modularCrusher"
 }

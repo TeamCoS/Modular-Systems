@@ -143,9 +143,10 @@ class TileBankSolids extends TileBankBase with Inventory {
         super[Inventory].readFromNBT(tag)
     }
 
-    override def writeToNBT(tag: NBTTagCompound) {
+    override def writeToNBT(tag: NBTTagCompound) : NBTTagCompound = {
         super[TileBankBase].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
+        tag
     }
 
     override def markDirty(): Unit = {

@@ -38,6 +38,6 @@ public class ContainerBlockValueConfig extends BaseContainer {
         super.onContainerClosed(player);
         transferStackInSlot(player, 0);
         if(inventory().getStackInSlot(0) != null)
-            player.dropPlayerItemWithRandomChoice(inventory().getStackInSlot(0), false);
+            player.dropItem(inventory().getStackInSlot(0), false);
     }
 }

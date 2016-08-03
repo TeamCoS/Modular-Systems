@@ -34,9 +34,10 @@ abstract class TileBankBase extends TileProxy with FuelProvider {
         priority = tag.getInteger("priority")
     }
 
-    override def writeToNBT(tag: NBTTagCompound) {
+    override def writeToNBT(tag: NBTTagCompound) : NBTTagCompound = {
         super.writeToNBT(tag)
         tag.setInteger("priority", priority)
+        tag
     }
 
     /*******************************************************************************************************************

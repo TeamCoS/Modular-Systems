@@ -53,7 +53,7 @@ class ClientProxy extends CommonProxy {
         // Storage
         ItemRenderManager.registerBlockModel(BlockManager.storageCore, "storageCore", "facing=east")
         // Block Models, for items
-        val blockIterator = Block.blockRegistry.iterator()
+        val blockIterator = Block.REGISTRY.iterator()
         while(blockIterator.hasNext) {
             blockIterator.next() match {
                 case connectedTextures : BlockConnectedTextures =>

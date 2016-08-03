@@ -25,49 +25,49 @@ public class CraftingManager {
         GameRegistry.addRecipe(new ItemStack(BlockManager.furnaceCore(), 1),
                 "III",
                 "IFI",
-                "III", 'I', Items.iron_ingot, 'F', Blocks.furnace);
+                "III", 'I', Items.IRON_INGOT, 'F', Blocks.FURNACE);
 
         //Crusher
         GameRegistry.addRecipe(new ItemStack(BlockManager.crusherCore(), 1),
                 "FFF",
                 "FOF",
-                "FFF", 'F', Items.flint, 'O', Blocks.piston);
+                "FFF", 'F', Items.FLINT, 'O', Blocks.PISTON);
 
         //I/O
         GameRegistry.addRecipe(new ItemStack(BlockManager.ioExpansion(), 1),
                 " P ",
                 "HDH",
-                " P ", 'P', Blocks.piston, 'H', Blocks.hopper, 'D', Blocks.dispenser);
+                " P ", 'P', Blocks.PISTON, 'H', Blocks.HOPPER, 'D', Blocks.DISPENSER);
 
         // Crusher Expansion
         GameRegistry.addRecipe(new ItemStack(BlockManager.crusherExpansion()),
                 "PFP",
                 "PIP",
-                "PFP", 'P', Blocks.piston, 'F', Items.flint, 'I', Blocks.iron_block);
+                "PFP", 'P', Blocks.PISTON, 'F', Items.FLINT, 'I', Blocks.IRON_BLOCK);
 
         //Solid Fuel Bank
         GameRegistry.addRecipe(new ItemStack(BlockManager.bankSolids(), 1),
                 "CIC",
                 "ITI",
-                "CIC", 'C', Items.coal, 'I', Items.iron_ingot, 'T', Blocks.chest);
+                "CIC", 'C', Items.COAL, 'I', Items.IRON_INGOT, 'T', Blocks.CHEST);
 
         //Liquid Fuel Bank
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.bankLiquids(), 1),
                 "BIB",
                 "IGI",
-                "BIB", 'B', Items.bucket, 'I', Items.iron_ingot, 'G', "blockGlass"));
+                "BIB", 'B', Items.BUCKET, 'I', Items.IRON_INGOT, 'G', "blockGlass"));
 
         //RF Fuel Bank
         GameRegistry.addRecipe(new ItemStack(BlockManager.bankRF(), 1),
                 "RIR",
                 "IPI",
-                "RIR", 'R', Blocks.redstone_block, 'I', Items.iron_ingot, 'P', Blocks.piston);
+                "RIR", 'R', Blocks.REDSTONE_BLOCK, 'I', Items.IRON_INGOT, 'P', Blocks.PISTON);
 
         // Storage Core
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.storageCore()),
                 "LWL",
                 "WCW",
-                "LWL", 'L', "logWood", 'W', "plankWood", 'C', Blocks.chest));
+                "LWL", 'L', "logWood", 'W', "plankWood", 'C', Blocks.CHEST));
 
         // Simple Storage Expansion
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.simpleStorageExpansion(), 8),
@@ -79,19 +79,19 @@ public class CraftingManager {
         GameRegistry.addRecipe(new ItemStack(BlockManager.capacityStorageExpansion()),
                 "CCC",
                 "CSC",
-                "CCC", 'C', Blocks.chest, 'S', BlockManager.simpleStorageExpansion());
+                "CCC", 'C', Blocks.CHEST, 'S', BlockManager.simpleStorageExpansion());
 
         // Search Storage Expansion
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.searchStorageExpansion()),
                 "GBG",
                 "GSG",
-                "WWW", 'G', "blockGlass", 'B', Blocks.bookshelf, 'S', BlockManager.simpleStorageExpansion(), 'W', "plankWood"));
+                "WWW", 'G', "blockGlass", 'B', Blocks.BOOKSHELF, 'S', BlockManager.simpleStorageExpansion(), 'W', "plankWood"));
 
         // Crafting Storage Expansion
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.craftingStorageExpansion()),
                 "WWW",
                 "CSC",
-                "WWW", 'W', "plankWood", 'C', Blocks.crafting_table, 'S', BlockManager.simpleStorageExpansion()));
+                "WWW", 'W', "plankWood", 'C', Blocks.CRAFTING_TABLE, 'S', BlockManager.simpleStorageExpansion()));
 
         // Armor Storage Expansion
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.armorStorageExpansion()),

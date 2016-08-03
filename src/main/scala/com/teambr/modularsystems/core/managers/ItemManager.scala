@@ -22,9 +22,9 @@ object ItemManager {
         OreDictionary.getOres("dustIron").isEmpty match {
             case true =>
                 registerItem(dustGold, "dustGold", "dustGold")
-                GameRegistry.addSmelting(dustIron, new ItemStack(Items.iron_ingot), 1.0F)
+                GameRegistry.addSmelting(dustIron, new ItemStack(Items.IRON_INGOT), 1.0F)
                 registerItem(dustIron, "dustIron", "dustIron")
-                GameRegistry.addSmelting(dustGold, new ItemStack(Items.gold_ingot), 2.0F)
+                GameRegistry.addSmelting(dustGold, new ItemStack(Items.IRON_INGOT), 2.0F)
             case _ =>
         }
     }

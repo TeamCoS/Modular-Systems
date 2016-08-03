@@ -459,7 +459,7 @@ abstract class AbstractCore extends UpdatingTile with InventorySided {
 
     def setDirty() : Unit = isDirty = true
 
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+    override def writeToNBT(tag : NBTTagCompound) : NBTTagCompound = {
         super[TileEntity].writeToNBT(tag)
         super[InventorySided].writeToNBT(tag)
         values.writeToNBT(tag)
@@ -470,6 +470,7 @@ abstract class AbstractCore extends UpdatingTile with InventorySided {
             tag.setLong("First", corners._1.toLong)
             tag.setLong("Second", corners._2.toLong)
         }
+        tag
     }
 
     override def readFromNBT(tag : NBTTagCompound) : Unit = {

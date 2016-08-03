@@ -41,7 +41,7 @@ import net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer;
 public class BlockStorageCore extends BlockContainer implements OpensGui {
 
     public BlockStorageCore() {
-        super(Material.wood);
+        super(Material.WOOD);
         setUnlocalizedName(Reference.MOD_ID() + ":storageCore");
         setCreativeTab(ModularSystems.tabModularSystems());
         setHardness(1.5F);

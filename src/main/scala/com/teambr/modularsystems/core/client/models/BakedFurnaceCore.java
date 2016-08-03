@@ -89,8 +89,8 @@ public class BakedFurnaceCore implements IBakedModel, IPerspectiveAwareModel {
 
         IBlockState storedState =
                 isActive ?
-                        Blocks.lit_furnace.getDefaultState().withProperty(BlockFurnace.FACING, facingDir) :
-                        Blocks.furnace.getDefaultState().withProperty(BlockFurnace.FACING, facingDir);
+                        Blocks.LIT_FURNACE.getDefaultState().withProperty(BlockFurnace.FACING, facingDir) :
+                        Blocks.FURNACE.getDefaultState().withProperty(BlockFurnace.FACING, facingDir);
 
         IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(storedState);
 
@@ -145,7 +145,7 @@ public class BakedFurnaceCore implements IBakedModel, IPerspectiveAwareModel {
     @Override
     public TextureAtlasSprite getParticleTexture() {
         return Minecraft.getMinecraft().getBlockRendererDispatcher()
-                .getModelForState(Blocks.furnace.getDefaultState()).getParticleTexture();
+                .getModelForState(Blocks.FURNACE.getDefaultState()).getParticleTexture();
     }
 
     @Override

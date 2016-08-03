@@ -63,8 +63,9 @@ class TileBankRF extends TileBankBase with EnergyHandler {
     }
 
 
-    override def writeToNBT(tags: NBTTagCompound) {
+    override def writeToNBT(tags: NBTTagCompound) : NBTTagCompound = {
         super[TileBankBase].writeToNBT(tags)
         super[EnergyHandler].writeToNBT(tags)
+        tags
     }
 }

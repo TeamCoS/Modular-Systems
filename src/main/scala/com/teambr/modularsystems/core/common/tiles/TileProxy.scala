@@ -60,7 +60,7 @@ class TileProxy extends InventorySided with UpdatingTile {
     def getStoredBlock : Block = {
         Block.getBlockById(storedBlock) match {
             case block : Block => block
-            case _ => Blocks.stone
+            case _ => Blocks.STONE
         }
     }
 
@@ -88,12 +88,13 @@ class TileProxy extends InventorySided with UpdatingTile {
         metaData = tag.getInteger("MetaData")
     }
 
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+    override def writeToNBT(tag : NBTTagCompound) : NBTTagCompound = {
         super[TileEntity].writeToNBT(tag)
         if(coreLocation.isDefined)
             tag.setLong("CoreLocation", coreLocation.get.toLong)
         tag.setInteger("StoredBlock", storedBlock)
         tag.setInteger("MetaData", metaData)
+        tag
     }
 
     /*******************************************************************************************************************

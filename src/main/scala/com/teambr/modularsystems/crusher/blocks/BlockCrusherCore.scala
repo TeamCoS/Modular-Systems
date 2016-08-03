@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.{ SideOnly, Side }
  * @author Dyonovan
  * @since August 08, 2015
  */
-class BlockCrusherCore(name: String) extends BaseBlock(Material.rock, name, classOf[TileCrusherCore])
+class BlockCrusherCore(name: String) extends BaseBlock(Material.ROCK, name, classOf[TileCrusherCore])
         with OpensGui with CoreStates with DropsItems {
 
     setDefaultState(getDefaultState.withProperty(CoreStates.PROPERTY_ACTIVE, false.asInstanceOf[java.lang.Boolean])

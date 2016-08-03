@@ -51,7 +51,7 @@ public class SlotCraftingOutput extends SlotCrafting implements ICustomSlot {
         net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerCraftingEvent(playerIn, stack, craftMatrix);
         this.onCrafting(stack);
         net.minecraftforge.common.ForgeHooks.setCraftingPlayer(playerIn);
-        ItemStack[] remainingStacks = CraftingManager.getInstance().func_180303_b(this.craftMatrix, playerIn.worldObj);
+        ItemStack[] remainingStacks = CraftingManager.getInstance().getRemainingItems(this.craftMatrix, playerIn.worldObj);
         net.minecraftforge.common.ForgeHooks.setCraftingPlayer(null);
 
         for (int i = 0; i < remainingStacks.length; ++i) {
@@ -105,7 +105,7 @@ public class SlotCraftingOutput extends SlotCrafting implements ICustomSlot {
                     this.craftMatrix.setInventorySlotContents(i, remainedStack);
                 }
                 else if (!this.thePlayer.inventory.addItemStackToInventory(remainedStack)) {
-                    this.thePlayer.dropPlayerItemWithRandomChoice(remainedStack, false);
+                    this.thePlayer.dropItem(remainedStack, false);
                 }
             }
         }

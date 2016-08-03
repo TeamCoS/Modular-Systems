@@ -497,7 +497,7 @@ class TileStorageCore extends Syncable with IItemHandler {
       *
       * @param tag The tag to save to
       */
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+    override def writeToNBT(tag : NBTTagCompound) : NBTTagCompound = {
         super[TileEntity].writeToNBT(tag)
 
         // Clear nulls, caused when a mod is removed
@@ -530,6 +530,7 @@ class TileStorageCore extends Syncable with IItemHandler {
             }
         }
         tag.setTag(TAG_LIST_LOCATION, stackTagList)
+        tag
     }
 
     /**

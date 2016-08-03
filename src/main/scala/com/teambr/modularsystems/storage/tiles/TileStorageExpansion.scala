@@ -120,7 +120,7 @@ abstract class TileStorageExpansion extends UpdatingTile with IItemHandler {
         }
     }
 
-    override def writeToNBT(tag: NBTTagCompound) {
+    override def writeToNBT(tag: NBTTagCompound) : NBTTagCompound = {
         super[TileEntity].writeToNBT(tag)
         if (!children.isEmpty) {
             tag.setInteger("ChildSize", children.size)
@@ -130,6 +130,7 @@ abstract class TileStorageExpansion extends UpdatingTile with IItemHandler {
         if (core != null) {
             tag.setLong("IsInNetwork", core.toLong)
         }
+        tag
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {

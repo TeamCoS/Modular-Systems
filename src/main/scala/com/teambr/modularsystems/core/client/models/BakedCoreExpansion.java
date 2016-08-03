@@ -137,7 +137,7 @@ public class BakedCoreExpansion implements IBakedModel, IPerspectiveAwareModel {
     @Override
     public TextureAtlasSprite getParticleTexture() {
         return Minecraft.getMinecraft().getBlockRendererDispatcher()
-                .getModelForState(Blocks.iron_block.getDefaultState()).getParticleTexture();
+                .getModelForState(Blocks.IRON_BLOCK.getDefaultState()).getParticleTexture();
     }
 
     @Override

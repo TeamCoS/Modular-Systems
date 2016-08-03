@@ -74,7 +74,7 @@ class GuiFurnaceCore(player: EntityPlayer, tile: TileEntityFurnaceCore) extends
             val multi : Double = core.values.multiplicity + 1
             furnaceInfoSpeed += new GuiComponentText("Multiplicity: ", 5, 73, new Color(255, 255, 255))
             furnaceInfoSpeed += new GuiComponentText(f"$multi%.2f" + "x", 15, 83, if (core.values.multiplicity > 0) new Color(92, 230, 46) else new Color(0, 0, 0))
-            tabs.addTab(furnaceInfoSpeed.toList, 95, 100, new Color(150, 112, 50), new ItemStack(Items.book))
+            tabs.addTab(furnaceInfoSpeed.toList, 95, 100, new Color(150, 112, 50), new ItemStack(Items.BOOK))
         }
     }
 }

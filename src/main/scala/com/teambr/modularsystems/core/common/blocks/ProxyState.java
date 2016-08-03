@@ -84,6 +84,11 @@ public class ProxyState implements IBlockState {
     }
 
     @Override
+    public boolean func_189884_a(Entity p_189884_1_) {
+        return false;
+    }
+
+    @Override
     public int getLightOpacity() {
         return block.getLightOpacity(this);
     }
@@ -94,8 +99,8 @@ public class ProxyState implements IBlockState {
     }
 
     @Override
-    public int getlightValue() {
-        return block.getLightValue(this);
+    public int getLightValue() {
+        return 0;
     }
 
     @Override
@@ -251,5 +256,15 @@ public class ProxyState implements IBlockState {
     @Override
     public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
         return block.isSideSolid(this, world, pos, side);
+    }
+
+    @Override
+    public boolean onBlockEventReceived(World worldIn, BlockPos pos, int id, int param) {
+        return false;
+    }
+
+    @Override
+    public void neighborChanged(World worldIn, BlockPos pos, Block p_189546_3_) {
+
     }
 }

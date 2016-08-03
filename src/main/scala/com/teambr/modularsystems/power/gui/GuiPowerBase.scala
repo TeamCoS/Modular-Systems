@@ -46,7 +46,7 @@ abstract class GuiPowerBase[C <: Container](container : C, var tile: TileBankBas
         if (tile != null && core != null) {
             //Core Gui Tab
             val coreTab = new ArrayBuffer[BaseComponent]
-            tabs.addTab(coreTab.toList, 95, 100, new Color(100, 150, 150), new ItemStack(Blocks.furnace))
+            tabs.addTab(coreTab.toList, 95, 100, new Color(100, 150, 150), new ItemStack(Blocks.FURNACE))
 
             //Priority Tab
             var priorityTab = new ArrayBuffer[BaseComponent]
@@ -57,7 +57,7 @@ abstract class GuiPowerBase[C <: Container](container : C, var tile: TileBankBas
                     PacketManager.updateTileWithClientInfo(tile.getWorld.getTileEntity(tile.getPos))
                 }
             }
-            tabs.addTab(priorityTab.toList, 95, 55, new Color(255, 68, 51), new ItemStack(Blocks.anvil))
+            tabs.addTab(priorityTab.toList, 95, 55, new Color(255, 68, 51), new ItemStack(Blocks.ANVIL))
             tabs.getTabs.head.setToolTip(ArrayBuffer("Core Gui"))
             tabs.getTabs(1).setToolTip(ArrayBuffer("Fuel Priority"))
 

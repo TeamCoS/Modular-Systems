@@ -51,7 +51,7 @@ object ModularSystems {
 
     var tabModularSystems : CreativeTabs = new CreativeTabs("tabModularSystems") {
         @SideOnly(Side.CLIENT)
-        override def getTabIconItem: Item = Item.getItemFromBlock(Blocks.furnace)
+        override def getTabIconItem: Item = Item.getItemFromBlock(Blocks.FURNACE)
     }
 
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {

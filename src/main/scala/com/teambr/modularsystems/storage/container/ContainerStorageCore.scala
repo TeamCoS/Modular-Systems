@@ -175,7 +175,7 @@ class ContainerStorageCore(val playerInventory: InventoryPlayer, val storageCore
             CraftingManager.getInstance.findMatchingRecipe(this.craftMatrix, this.storageCore.getWorld))
     }
 
-    override def func_184996_a(slotId : Int, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer) : ItemStack = {
+    override def slotClick(slotId : Int, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer) : ItemStack = {
         isDirty = true
         if(!player.worldObj.isRemote)
             sendPacket = true
@@ -256,12 +256,12 @@ class ContainerStorageCore(val playerInventory: InventoryPlayer, val storageCore
                 }
             }
             else if(slot != null && !slot.isInstanceOf[SlotStorageCore]) {
-                val value =  super.func_184996_a(slotId, dragType, clickTypeIn, player)
+                val value =  super.slotClick(slotId, dragType, clickTypeIn, player)
                 return value
             }
             null
         } else
-            super.func_184996_a(slotId, dragType, clickTypeIn, player)
+            super.slotClick(slotId, dragType, clickTypeIn, player)
     }
 
     def updateSlots(): Unit = {
@@ -448,7 +448,7 @@ class ContainerStorageCore(val playerInventory: InventoryPlayer, val storageCore
         sendPacket = packetNeeded
         if(storageCore.hasCraftingUpgrade) {
             for (x <- CRAFTING_GRID_START to CRAFTING_GRID_END) {
-                func_184996_a(x, 0, ClickType.QUICK_MOVE, playerInventory.asInstanceOf[InventoryPlayer].player)
+                slotClick(x, 0, ClickType.QUICK_MOVE, playerInventory.asInstanceOf[InventoryPlayer].player)
             }
         }
 
@@ -468,7 +468,7 @@ class ContainerStorageCore(val playerInventory: InventoryPlayer, val storageCore
         sendPacket = packetNeeded
 
         for (x <- PLAYER_INV_START_MAIN until PLAYER_INV_END_MAIN)
-            func_184996_a(x, 0, ClickType.QUICK_MOVE, playerInventory.asInstanceOf[InventoryPlayer].player)
+            slotClick(x, 0, ClickType.QUICK_MOVE, playerInventory.asInstanceOf[InventoryPlayer].player)
 
         true
     }
@@ -543,7 +543,7 @@ class ContainerStorageCore(val playerInventory: InventoryPlayer, val storageCore
             while (i < this.craftMatrix.getSizeInventory) {
                 val stack = storageCore.insertItem(-1, this.craftMatrix.getStackInSlot(i), simulate = false)
                 if (stack != null)
-                    playerIn.dropPlayerItemWithRandomChoice(stack, false)
+                    playerIn.dropItem(stack, false)
                 i += 1
             }
         }

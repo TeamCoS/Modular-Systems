@@ -35,7 +35,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Dyonovan
  * @since August 07, 2015
  */
-class BlockFurnaceCore(name: String) extends BaseBlock(Material.rock, name, classOf[TileEntityFurnaceCore])
+class BlockFurnaceCore(name: String) extends BaseBlock(Material.ROCK, name, classOf[TileEntityFurnaceCore])
         with OpensGui with CoreStates with DropsItems with ILoadActionProvider {
 
     //Block Methods

@@ -31,7 +31,7 @@ class StandardValues extends NBTSavable {
         burnTime = 0
     }
 
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+    override def writeToNBT(tag : NBTTagCompound) : NBTTagCompound = {
         tag.setInteger("Burn Time", burnTime)
         tag.setInteger("Cook Time", cookTime)
         tag.setInteger("Current Burn", currentItemBurnTime)
@@ -41,6 +41,7 @@ class StandardValues extends NBTSavable {
         tag.setDouble("Multiplicity", multiplicity)
 
         tag.setBoolean("IsPowered", isPowered)
+        tag
     }
 
     override def readFromNBT(tag : NBTTagCompound) : Unit = {

@@ -15,7 +15,7 @@ import net.minecraft.util.text.translation.I18n
 /**
   * Created by Dyonovan on 1/18/2016.
   */
-class CrusherRecipeCatagory extends IRecipeCategory {
+class CrusherRecipeCatagory extends IRecipeCategory[CrusherRecipeJEI] {
 
     val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/background.png")
     val flameLocation = new ResourceLocation("minecraft", "textures/gui/container/furnace.png")
@@ -31,7 +31,7 @@ class CrusherRecipeCatagory extends IRecipeCategory {
 
     override def getBackground: IDrawable = background
 
-    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper): Unit = {
+    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: CrusherRecipeJEI): Unit = {
         val stacks: IGuiItemStackGroup = recipeLayout.getItemStacks
         stacks.init(0, true, 21, 10)
         stacks.init(1, false, 86, 10)

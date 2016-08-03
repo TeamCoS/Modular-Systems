@@ -23,7 +23,7 @@ import net.minecraft.world.World
  * @author Dyonovan
  * @since August 10, 2015
  */
-class BlockBatteryCore(name:String) extends BaseBlock(Material.rock, name, classOf[TileBatteryCore])
+class BlockBatteryCore(name:String) extends BaseBlock(Material.ROCK, name, classOf[TileBatteryCore])
         with OpensGui with DropsItems {
 
     override def breakBlock(world: World, pos: BlockPos, state: IBlockState) {

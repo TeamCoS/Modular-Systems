@@ -210,10 +210,11 @@ class TileBankLiquids extends TileBankBase with IFluidHandler with Inventory wit
         tank.readFromNBT(tag)
     }
 
-    override def writeToNBT(tag: NBTTagCompound) {
+    override def writeToNBT(tag: NBTTagCompound) : NBTTagCompound = {
         super[TileBankBase].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
         tank.writeToNBT(tag)
+        tag
     }
 
     override def markDirty(): Unit = {
