@@ -13,8 +13,8 @@ package com.teambr.modularsystems.core.lib
 object Reference {
     final val MOD_NAME     = "Modular Systems"
     final val MOD_ID       = "modularsystems"
-    final val VERSION      = "3.0.2"
-    final val DEPENDENCIES = "required-after:Forge@[11.15.0.1845,);required-after:bookshelfapi@[3.0.4,)"
+    final val VERSION      = "3.1.0"
+    final val DEPENDENCIES = "required-after:Forge@[12.18.1.2011,);required-after:bookshelfapi@[3.2.2,)"
 
     final val POWER        = "Power Bank Settings"
 }

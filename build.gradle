@@ -8,7 +8,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
 
@@ -110,9 +110,9 @@ curseforge {
     apiKey = APIToken
     project {
         id = '68528'
-        changelog = 'Updated to forge 1845'
+        changelog = 'Updated to 1.10.2'
         releaseType = 'beta'
-        addGameVersion '1.9'
+        addGameVersion '1.10.2'
         relations {
             requiredLibrary 'bookshelf-api-library'
         }
