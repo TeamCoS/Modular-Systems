@@ -424,8 +424,15 @@ class ContainerStorageCore(val playerInventory: InventoryPlayer, val storageCore
             if(stackLeft == null || stackLeft.stackSize != itemToTransfer.stackSize)
                 itemToTransfer = stackLeft
 
-            if(slot.isInstanceOf[SlotCraftingOutput])
-                slot.onPickupFromSlot(playerInventory.asInstanceOf[InventoryPlayer].player, copy)
+            if(slot.isInstanceOf[SlotCraftingOutput]) {
+                for(x <- 0 until copy.getMaxStackSize) {
+                    if (this.craftResult.getStackInSlot(0) != null) {
+                        mergeItemStackSafe(this.craftResult.getStackInSlot(0).copy(), PLAYER_INV_START_MAIN, PLAYER_INV_END_HOTBAR, reverse = true)
+                        slot.onPickupFromSlot(playerInventory.asInstanceOf[InventoryPlayer].player, this.craftResult.getStackInSlot(0).copy())
+                    }
+                }
+                return null
+            }
 
             if (itemToTransfer != null && slotId >= PLAYER_INV_START_HOTBAR && // From main inv into hotbar
                     !mergeItemStackSafe(itemToTransfer, PLAYER_INV_START_MAIN, PLAYER_INV_END_MAIN, reverse = false)) return null
